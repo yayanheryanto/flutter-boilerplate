@@ -1,6 +1,7 @@
 import 'package:boilerplate/core/constants/app_routes.dart';
 import 'package:boilerplate/core/ui/design_system/design_system.dart';
 import 'package:boilerplate/core/utils/navigator_key.dart';
+import 'package:boilerplate/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:boilerplate/features/auth/presentation/pages/login_page.dart';
 import 'package:boilerplate/features/auth/presentation/pages/register_page.dart';
 import 'package:boilerplate/features/demo/ui_demo_page.dart';
@@ -27,6 +28,12 @@ class AppRouter {
           path: AppRoutes.login,
           name: 'login',
           builder: (context, state) => const LoginPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.forgotPassword,
+          name: 'forgot-password',
+          builder: (context, state) => const ForgotPasswordPage(),
         ),
 
         // ── App ──────────────────────────────────────────────────────────────
