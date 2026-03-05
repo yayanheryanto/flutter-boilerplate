@@ -8,10 +8,10 @@ import 'package:boilerplate/core/ui/design_system/atoms/typography/app_text.dart
 import 'package:boilerplate/core/ui/design_system/molecules/snackbar/app_snackbar.dart';
 import 'package:boilerplate/core/ui/design_system/skeleton/organisms/skeleton_organisms.dart';
 import 'package:boilerplate/core/utils/app_form_utils.dart';
-import 'package:boilerplate/core/utils/navigator_key.dart';
 import 'package:boilerplate/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginFormSection extends StatefulWidget {
   const LoginFormSection({super.key});
@@ -48,7 +48,7 @@ class _LoginFormSectionState extends State<LoginFormSection>
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          AppNavigator.go(AppRoutes.dashboard);
+          context.go(AppRoutes.dashboard);
         }
         if (state is AuthError) {
           AppSnackbar.error(context, state.message);
@@ -106,7 +106,7 @@ class _LoginFormSectionState extends State<LoginFormSection>
                   alignment: Alignment.centerRight,
                   child: AppLinkText(
                     AppStrings.forgotPassword,
-                    onTap: () => AppNavigator.go(AppRoutes.forgotPassword),
+                    onTap: () async => context.push(AppRoutes.forgotPassword),
                   ),
                 ),
                 const AppSpacer(32),
@@ -122,7 +122,7 @@ class _LoginFormSectionState extends State<LoginFormSection>
                     const AppText("Don't have an account? "),
                     AppLinkText(
                       AppStrings.register,
-                      onTap: () => AppNavigator.go(AppRoutes.register),
+                      onTap: () async => context.push(AppRoutes.register),
                     ),
                   ],
                 ),
