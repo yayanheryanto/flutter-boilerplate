@@ -1,6 +1,6 @@
 # 🚀 Flutter Enterprise Boilerplate
 
-Enterprise-grade Flutter boilerplate dengan Clean Architecture, atomic design, dan responsive system.
+Enterprise-grade Flutter boilerplate with Clean Architecture, atomic design, dan responsive system.
 
 ## 📋 Specs
 - **Flutter**: 3.22.0
@@ -92,13 +92,13 @@ flutter pub run build_runner build --delete-conflicting-outputs
 ### 4. Run by Environment
 ```bash
 # Development
-flutter run --target lib/main.dart
+flutter run --flavor dev --target lib/main.dev.dart
 
 # Staging
-flutter run --target lib/main.stag.dart
+flutter run --flavor dev --target lib/main.stag.dart
 
 # Production
-flutter run --target lib/main.dev.dart
+flutter run --flavor prod --target lib/main.dart
 ```
 
 ---
