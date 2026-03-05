@@ -1,30 +1,30 @@
-import 'package:boilerplate/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:boilerplate/features/auth/presentation/organisms/auth_form_section.dart';
-import 'package:boilerplate/features/auth/presentation/templates/auth_template.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:boilerplate/core/di/injection.dart';
+import 'package:boilerplate/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:boilerplate/features/auth/presentation/organisms/login_form_section.dart';
+import 'package:boilerplate/features/auth/presentation/templates/auth_template.dart';
 
-class AuthPage extends StatelessWidget {
-  const AuthPage({super.key});
+class LoginPage extends StatelessWidget {
+  const LoginPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<AuthBloc>()..add(const AuthCheckCacheRequested()),
-      child: const _AuthPageContent(),
+      child: const _LoginPageContent(),
     );
   }
 }
 
-class _AuthPageContent extends StatelessWidget {
-  const _AuthPageContent();
+class _LoginPageContent extends StatelessWidget {
+  const _LoginPageContent();
 
   @override
   Widget build(BuildContext context) {
     return AuthTemplate(
-      formSection: const AuthFormSection(),
+      formSection: const LoginFormSection(),
       logoSection: _buildLogo(context),
     );
   }
@@ -50,8 +50,8 @@ class _AuthPageContent extends StatelessWidget {
         Text(
           'Boilerplate',
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );

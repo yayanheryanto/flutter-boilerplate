@@ -1,21 +1,27 @@
 import 'package:boilerplate/core/constants/app_routes.dart';
 import 'package:boilerplate/core/constants/app_strings.dart';
 import 'package:boilerplate/core/responsive/responsive_context_extension.dart';
-import 'package:boilerplate/core/ui/design_system/design_system.dart';
+import 'package:boilerplate/core/ui/design_system/atoms/buttons/app_button.dart';
+import 'package:boilerplate/core/ui/design_system/atoms/display/app_display.dart';
+import 'package:boilerplate/core/ui/design_system/atoms/input/app_text_field.dart';
+import 'package:boilerplate/core/ui/design_system/atoms/typography/app_text.dart';
+import 'package:boilerplate/core/ui/design_system/molecules/snackbar/app_snackbar.dart';
+import 'package:boilerplate/core/ui/design_system/skeleton/organisms/skeleton_organisms.dart';
 import 'package:boilerplate/core/utils/app_form_utils.dart';
 import 'package:boilerplate/core/utils/navigator_key.dart';
 import 'package:boilerplate/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class AuthFormSection extends StatefulWidget {
-  const AuthFormSection({super.key});
+class LoginFormSection extends StatefulWidget {
+  const LoginFormSection({super.key});
 
   @override
-  State<AuthFormSection> createState() => _AuthFormSectionState();
+  State<LoginFormSection> createState() => _LoginFormSectionState();
 }
 
-class _AuthFormSectionState extends State<AuthFormSection> with AppFormMixin<AuthFormSection> {
+class _LoginFormSectionState extends State<LoginFormSection>
+    with AppFormMixin<LoginFormSection> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
@@ -30,11 +36,11 @@ class _AuthFormSectionState extends State<AuthFormSection> with AppFormMixin<Aut
     if (!validateForm()) return;
 
     context.read<AuthBloc>().add(
-          AuthLoginRequested(
-            email: _emailController.text.trim(),
-            password: _passwordController.text,
-          ),
-        );
+      AuthLoginRequested(
+        email: _emailController.text.trim(),
+        password: _passwordController.text,
+      ),
+    );
   }
 
   @override
@@ -82,7 +88,7 @@ class _AuthFormSectionState extends State<AuthFormSection> with AppFormMixin<Aut
                   textInputAction: TextInputAction.next,
                   prefixIcon: Icons.email_outlined,
                   validator: AppValidators.compose([
-                    AppValidators.required(message: AppStrings.emailRequired),
+                    AppValidators.required(message: AppStrings.invalidEmail),
                     AppValidators.email(message: AppStrings.invalidEmail),
                   ]),
                 ),
@@ -103,7 +109,7 @@ class _AuthFormSectionState extends State<AuthFormSection> with AppFormMixin<Aut
                     onTap: () => AppNavigator.go(AppRoutes.forgotPassword),
                   ),
                 ),
-                const AppSpacer.xl(),
+                const AppSpacer(32),
                 AppButton(
                   label: AppStrings.login,
                   onPressed: _onSubmit,
@@ -116,7 +122,7 @@ class _AuthFormSectionState extends State<AuthFormSection> with AppFormMixin<Aut
                     const AppText("Don't have an account? "),
                     AppLinkText(
                       AppStrings.register,
-                      onTap: () async => AppNavigator.push<void>(AppRoutes.register),
+                      onTap: () => AppNavigator.go(AppRoutes.register),
                     ),
                   ],
                 ),

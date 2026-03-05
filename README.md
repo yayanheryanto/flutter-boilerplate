@@ -30,6 +30,22 @@ lib/
 │   ├── router/          # AppRouter (GoRouter)
 │   ├── services/        # TokenService, Camera, FilePicker, Permission, Connectivity
 │   ├── theme/           # AppTheme + Design Tokens
+│   ├── ui/
+│   │     ├── design_system/
+│   │     ├── atoms/
+│   │     │   ├── buttons/           # AppButton, AppIconButton, AppFAB
+│   │     │   ├── display/           # AppImage, AppAvatar, AppCard, AppChip, etc.
+│   │     │   ├── feedback/          # AppLoader, AppProgressIndicator, AppSnackBar
+│   │     │   ├── input/             # AppTextField, AppPasswordField, AppDropdown, etc.
+│   │     │   ├── navigation/        # AppAppBar, AppBackButton
+│   │     │   └── typography/        # AppText, AppRichText, AppLinkText
+│   │     ├── molecules/             # InfoCard, EmptyState, ErrorState, ConfirmationDialog, etc.
+│   │     ├── organisms/             # AppScaffoldWrapper (adaptive nav)
+│   │     ├── skeleton/
+│   │     │   ├── atoms/             # SkeletonBox, SkeletonCircle, SkeletonText, etc.
+│   │     │   ├── molecules/         # SkeletonListTile, SkeletonFormField, etc.
+│   │     │   └── organisms/         # AuthFormSkeleton, DashboardSkeleton, etc.
+│   │     └── templates/             # AuthTemplate (example)
 │   └── usecases/        # BaseUseCase abstractions
 │
 ├── features/
@@ -48,22 +64,7 @@ lib/
 │           ├── pages/             # AuthPage
 │           └── templates/         # AuthTemplate
 │
-└── presentation/
-    └── design_system/
-        ├── atoms/
-        │   ├── buttons/           # AppButton, AppIconButton, AppFAB
-        │   ├── display/           # AppImage, AppAvatar, AppCard, AppChip, etc.
-        │   ├── feedback/          # AppLoader, AppProgressIndicator, AppSnackBar
-        │   ├── input/             # AppTextField, AppPasswordField, AppDropdown, etc.
-        │   ├── navigation/        # AppAppBar, AppBackButton
-        │   └── typography/        # AppText, AppRichText, AppLinkText
-        ├── molecules/             # InfoCard, EmptyState, ErrorState, ConfirmationDialog, etc.
-        ├── organisms/             # AppScaffoldWrapper (adaptive nav)
-        ├── skeleton/
-        │   ├── atoms/             # SkeletonBox, SkeletonCircle, SkeletonText, etc.
-        │   ├── molecules/         # SkeletonListTile, SkeletonFormField, etc.
-        │   └── organisms/         # AuthFormSkeleton, DashboardSkeleton, etc.
-        └── templates/             # AuthTemplate (example)
+
 ```
 
 ---
