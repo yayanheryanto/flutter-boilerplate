@@ -133,9 +133,9 @@ context.screenHeight // double
 
 // Responsive value
 context.responsive(
-  mobile: 1,
-  tablet: 2,
-  desktop: 4,
+mobile: 1,
+tablet: 2,
+desktop: 4,
 )
 ```
 
@@ -146,7 +146,7 @@ context.responsive(
 ```dart
 // Show skeleton while loading
 if (state is AuthLoading) {
-  return const AuthFormSkeleton();
+return const AuthFormSkeleton();
 }
 
 // Available skeletons:
@@ -177,10 +177,10 @@ ConfirmationDialog.show(context, title: 'Delete?')
 
 // Organisms
 AppScaffoldWrapper(
-  body: ...,
-  navigationItems: items,
-  currentIndex: 0,
-  onNavigationTap: onTap,
+body: ...,
+navigationItems: items,
+currentIndex: 0,
+onNavigationTap: onTap,
 )
 ```
 
