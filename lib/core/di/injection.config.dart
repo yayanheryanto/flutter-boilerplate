@@ -18,6 +18,7 @@ import '../../features/auth/data/datasources/auth_remote_datasource.dart'
     as _i19;
 import '../../features/auth/data/repositories/auth_repository_impl.dart'
     as _i21;
+import '../../features/auth/di/auth_module.dart' as _i30;
 import '../../features/auth/domain/repositories/auth_repository.dart' as _i20;
 import '../../features/auth/domain/usecases/auth/auth_usecase.dart' as _i28;
 import '../../features/auth/domain/usecases/auth/forgot_password_usecase.dart'
@@ -55,6 +56,7 @@ extension GetItInjectableX on _i1.GetIt {
       environmentFilter,
     );
     final appModule = _$AppModule();
+    final authModule = _$AuthModule();
     gh.singleton<_i3.LoggingInterceptor>(() => _i3.LoggingInterceptor());
     gh.singleton<_i4.RetryInterceptor>(() => _i4.RetryInterceptor());
     gh.singleton<_i5.AppRouter>(() => _i5.AppRouter());
@@ -87,8 +89,8 @@ extension GetItInjectableX on _i1.GetIt {
           gh<_i3.LoggingInterceptor>(),
           gh<_i4.RetryInterceptor>(),
         ));
-    gh.factory<_i19.AuthRemoteDataSource>(
-        () => appModule.authRemoteDataSource(gh<_i18.DioClient>()));
+    gh.lazySingleton<_i19.AuthRemoteDataSource>(
+        () => authModule.authRemoteDataSource(gh<_i18.DioClient>()));
     gh.lazySingleton<_i20.AuthRepository>(() => _i21.AuthRepositoryImpl(
           gh<_i19.AuthRemoteDataSource>(),
           gh<_i8.AuthLocalDataSource>(),
@@ -118,3 +120,5 @@ extension GetItInjectableX on _i1.GetIt {
 }
 
 class _$AppModule extends _i29.AppModule {}
+
+class _$AuthModule extends _i30.AuthModule {}
