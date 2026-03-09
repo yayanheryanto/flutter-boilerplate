@@ -1,0 +1,77 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter (dev) - Debug",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main.dev.dart",
+      "toolArgs": ["--flavor", "dev"]
+    },
+    {
+      "name": "Flutter (dev) - Profile",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "program": "lib/main.dev.dart",
+      "toolArgs": ["--flavor", "dev"]
+    },
+    {
+      "name": "Flutter (dev) - Release",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "program": "lib/main.dev.dart",
+      "toolArgs": ["--flavor", "dev"]
+    },
+    {
+      "name": "Flutter (stag) - Debug",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main.stag.dart",
+      "toolArgs": ["--flavor", "stag"]
+    },
+    {
+      "name": "Flutter (stag) - Profile",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "program": "lib/main.stag.dart",
+      "toolArgs": ["--flavor", "stag"]
+    },
+    {
+      "name": "Flutter (stag) - Release",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "program": "lib/main.stag.dart",
+      "toolArgs": ["--flavor", "stag"]
+    },
+    {
+      "name": "Flutter (prod) - Debug",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "debug",
+      "program": "lib/main.dart",
+      "toolArgs": ["--flavor", "prod"]
+    },
+    {
+      "name": "Flutter (prod) - Profile",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "profile",
+      "program": "lib/main.dart",
+      "toolArgs": ["--flavor", "prod"]
+    },
+    {
+      "name": "Flutter (prod) - Release",
+      "request": "launch",
+      "type": "dart",
+      "flutterMode": "release",
+      "program": "lib/main.dart",
+      "toolArgs": ["--flavor", "prod"]
+    }
+  ]
+}

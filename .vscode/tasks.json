@@ -1,0 +1,29 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "flutter: build apk (dev, release)",
+      "type": "shell",
+      "command": "${workspaceFolder}\\.fvm\\flutter_sdk\\bin\\flutter.bat",
+      "args": ["build", "apk", "--release", "--flavor", "dev", "-t", "lib/main.dev.dart"],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "flutter: build apk (stag, release)",
+      "type": "shell",
+      "command": "${workspaceFolder}\\.fvm\\flutter_sdk\\bin\\flutter.bat",
+      "args": ["build", "apk", "--release", "--flavor", "stag", "-t", "lib/main.stag.dart"],
+      "group": "build",
+      "problemMatcher": []
+    },
+    {
+      "label": "flutter: build apk (prod, release)",
+      "type": "shell",
+      "command": "${workspaceFolder}\\.fvm\\flutter_sdk\\bin\\flutter.bat",
+      "args": ["build", "apk", "--release", "--flavor", "prod", "-t", "lib/main.dart"],
+      "group": "build",
+      "problemMatcher": []
+    }
+  ]
+}

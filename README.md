@@ -95,10 +95,61 @@ flutter pub run build_runner build --delete-conflicting-outputs
 flutter run --flavor dev --target lib/main.dev.dart
 
 # Staging
-flutter run --flavor dev --target lib/main.stag.dart
+flutter run --flavor stag --target lib/main.stag.dart
 
 # Production
 flutter run --flavor prod --target lib/main.dart
+```
+
+### 5. Build APK (Release) by Environment
+```bash
+# Development
+flutter build apk --release --flavor dev --target lib/main.dev.dart
+
+# Staging
+flutter build apk --release --flavor stag --target lib/main.stag.dart
+
+# Production
+flutter build apk --release --flavor prod --target lib/main.dart
+```
+
+### 6. Run / Build from Cursor (VSCode)
+Project ini sudah punya konfigurasi supaya lebih gampang dijalankan dari Cursor:
+
+#### Run (Debug / Profile / Release)
+- Buka menu **Run and Debug**
+- Pilih salah satu konfigurasi:
+  - `Flutter (dev) - Debug / Profile / Release`
+  - `Flutter (stag) - Debug / Profile / Release`
+  - `Flutter (prod) - Debug / Profile / Release`
+
+Konfigurasi ini ada di `.vscode/launch.json` dan otomatis pakai entrypoint:
+- **dev** → `lib/main.dev.dart`
+- **stag** → `lib/main.stag.dart`
+- **prod** → `lib/main.dart`
+
+#### Build APK (Release)
+- Buka **Terminal → Run Task**
+- Pilih task:
+  - `flutter: build apk (dev, release)`
+  - `flutter: build apk (stag, release)`
+  - `flutter: build apk (prod, release)`
+
+Task ini ada di `.vscode/tasks.json`.
+
+### 7. Alternatif: Script PowerShell
+Kalau kamu lebih suka satu command yang konsisten (dan otomatis pakai Flutter dari FVM jika ada), gunakan:
+
+```powershell
+# Run debug
+.\scripts\flutter.ps1 run dev
+.\scripts\flutter.ps1 run stag
+.\scripts\flutter.ps1 run prod
+
+# Build APK release
+.\scripts\flutter.ps1 build-apk dev
+.\scripts\flutter.ps1 build-apk stag
+.\scripts\flutter.ps1 build-apk prod
 ```
 
 ---
