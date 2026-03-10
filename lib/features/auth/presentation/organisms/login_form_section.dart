@@ -33,14 +33,16 @@ class _LoginFormSectionState extends State<LoginFormSection>
   }
 
   void _onSubmit() {
-    if (!validateForm()) return;
+    // if (!validateForm()) return;
+    //
+    // context.read<AuthBloc>().add(
+    //   AuthLoginRequested(
+    //     email: _emailController.text.trim(),
+    //     password: _passwordController.text,
+    //   ),
+    // );
 
-    context.read<AuthBloc>().add(
-      AuthLoginRequested(
-        email: _emailController.text.trim(),
-        password: _passwordController.text,
-      ),
-    );
+    context.go(AppRoutes.dashboard);
   }
 
   @override

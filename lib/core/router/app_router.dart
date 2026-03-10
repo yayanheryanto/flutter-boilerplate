@@ -4,6 +4,7 @@ import 'package:boilerplate/core/utils/navigator_key.dart';
 import 'package:boilerplate/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:boilerplate/features/auth/presentation/pages/login_page.dart';
 import 'package:boilerplate/features/auth/presentation/pages/register_page.dart';
+import 'package:boilerplate/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:boilerplate/features/demo/ui_demo_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -40,7 +41,7 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.dashboard,
           name: 'dashboard',
-          builder: (context, state) => const _PlaceholderPage(title: 'Dashboard'),
+          builder: (context, state) => const DashboardPage(),
         ),
         GoRoute(
           path: AppRoutes.profile,
