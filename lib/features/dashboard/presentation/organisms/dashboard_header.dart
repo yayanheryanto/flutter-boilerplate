@@ -13,32 +13,34 @@ class DashboardHeader extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return Container(
+      color: scheme.surface,
       padding: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top + SpacingTokens.sm,
+        top: MediaQuery.of(context).padding.top + SpacingTokens.md,
         left: SpacingTokens.md,
         right: SpacingTokens.md,
         bottom: SpacingTokens.md,
       ),
-      color: scheme.surface,
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              AppAvatar(initials: 'B', size: 44),
+              AppAvatar(initials: 'B', size: 40),
               const AppSpacer(SpacingTokens.sm, horizontal: true),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppText(
-                      'Halo, Budi! 👋',
-                      variant: AppTextVariant.titleMedium,
-                      fontWeight: FontWeight.w700,
+                      'Selamat pagi 👋',
+                      variant: AppTextVariant.labelSmall,
+                      color: scheme.onSurface.withOpacity(0.45),
                     ),
                     AppText(
-                      'Temukan penawaran terbaik hari ini',
-                      variant: AppTextVariant.bodySmall,
-                      color: scheme.onSurface.withOpacity(0.5),
+                      'Budi Santoso',
+                      variant: AppTextVariant.titleSmall,
+                      fontWeight: FontWeight.w700,
                     ),
                   ],
                 ),
@@ -49,9 +51,9 @@ class DashboardHeader extends StatelessWidget {
               ),
             ],
           ),
-          const AppSpacer.md(),
+          // const AppSpacer.md(),
           // AppSearchField(
-          //   hint: 'Cari motor, mobil, elektronik...',
+          //   hint: 'Cari barang lelang...',
           //   onChanged: (_) {},
           // ),
         ],

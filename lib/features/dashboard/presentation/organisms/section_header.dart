@@ -17,25 +17,32 @@ class DashboardSectionHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           AppText(
             title,
-            variant: AppTextVariant.titleMedium,
-            fontWeight: FontWeight.w800,
+            variant: AppTextVariant.titleSmall,
+            fontWeight: FontWeight.w700,
           ),
           if (trailing != null) ...[
-            const AppSpacer(SpacingTokens.sm, horizontal: true),
+            const AppSpacer(SpacingTokens.xs, horizontal: true),
             trailing!,
           ],
           const Spacer(),
           if (onSeeAll != null)
-            AppLinkText(
-              'Lihat Semua',
-              onTap: onSeeAll!,
-              variant: AppTextVariant.labelLarge,
+            GestureDetector(
+              onTap: onSeeAll,
+              child: AppText(
+                'Semua',
+                variant: AppTextVariant.labelMedium,
+                color: scheme.primary,
+                fontWeight: FontWeight.w600,
+              ),
             ),
         ],
       ),

@@ -1,6 +1,5 @@
 import 'package:boilerplate/core/theme/tokens/radius_tokens.dart';
 import 'package:boilerplate/core/theme/tokens/spacing_tokens.dart';
-import 'package:boilerplate/core/ui/design_system/atoms/buttons/app_button.dart';
 import 'package:boilerplate/core/ui/design_system/atoms/display/app_display.dart';
 import 'package:boilerplate/core/ui/design_system/atoms/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -8,24 +7,27 @@ import 'package:flutter/material.dart';
 const _bannerData = [
   (
     emoji: '🔥',
-    title: 'Flash Auction Hari Ini',
-    sub: '47 lot eksklusif — mulai jam 13.00',
+    tag: 'HARI INI',
+    title: 'Flash Auction',
+    sub: '47 lot eksklusif mulai jam 13.00',
     c1: Color(0xFFBF360C),
     c2: Color(0xFFEF6C00),
   ),
   (
     emoji: '💰',
+    tag: 'PROMO',
     title: 'Biaya Admin 0%',
-    sub: 'Untuk pemenang lelang perdana',
+    sub: 'Gratis untuk pemenang perdana',
     c1: Color(0xFF0D47A1),
-    c2: Color(0xFF1565C0),
+    c2: Color(0xFF1976D2),
   ),
   (
     emoji: '📖',
+    tag: 'PANDUAN',
     title: 'Cara Bid yang Benar',
-    sub: 'Pelajari strategi memenangkan lelang',
+    sub: 'Strategi memenangkan lelang',
     c1: Color(0xFF1B5E20),
-    c2: Color(0xFF2E7D32),
+    c2: Color(0xFF388E3C),
   ),
 ];
 
@@ -46,7 +48,7 @@ class BannerCarousel extends StatelessWidget {
     return Column(
       children: [
         SizedBox(
-          height: 180,
+          height: 172,
           child: PageView.builder(
             controller: ctrl,
             onPageChanged: onPageChanged,
@@ -56,24 +58,21 @@ class BannerCarousel extends StatelessWidget {
           ),
         ),
         const AppSpacer.sm(),
-        _DotIndicator(
-          count: _bannerData.length,
-          currentIndex: currentPage,
-        ),
+        _DotIndicator(count: _bannerData.length, currentIndex: currentPage),
       ],
     );
   }
 }
 
 class _BannerItem extends StatelessWidget {
-  final ({String emoji, String title, String sub, Color c1, Color c2}) data;
+  final ({String emoji, String tag, String title, String sub, Color c1, Color c2}) data;
 
   const _BannerItem({required this.data});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6),
+      padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.xs),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(RadiusTokens.xl),
@@ -83,19 +82,38 @@ class _BannerItem extends StatelessWidget {
             colors: [data.c1, data.c2],
           ),
         ),
-        padding: const EdgeInsets.all(SpacingTokens.md),
+        padding: const EdgeInsets.symmetric(
+          horizontal: SpacingTokens.lg,
+          vertical: SpacingTokens.sm,
+        ),
         child: Row(
           children: [
-            Text(data.emoji, style: const TextStyle(fontSize: 52)),
-            const AppSpacer(SpacingTokens.md, horizontal: true),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  // Pill tag
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: SpacingTokens.sm,
+                      vertical: 3,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(RadiusTokens.full),
+                    ),
+                    child: AppText(
+                      data.tag,
+                      variant: AppTextVariant.labelSmall,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const AppSpacer.xs(),
                   AppText(
                     data.title,
-                    variant: AppTextVariant.titleMedium,
+                    variant: AppTextVariant.headlineSmall,
                     color: Colors.white,
                     fontWeight: FontWeight.w800,
                   ),
@@ -103,19 +121,29 @@ class _BannerItem extends StatelessWidget {
                   AppText(
                     data.sub,
                     variant: AppTextVariant.bodySmall,
-                    color: Colors.white.withOpacity(0.75),
+                    color: Colors.white.withOpacity(0.8),
                   ),
                   const AppSpacer.sm(),
-                  AppButton(
-                    label: 'Lihat Sekarang',
-                    onPressed: () {},
-                    variant: AppButtonVariant.outlined,
-                    size: AppButtonSize.small,
-                    isExpanded: false,
+                  Row(
+                    children: [
+                      AppText(
+                        'Lihat detail',
+                        variant: AppTextVariant.labelMedium,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      const AppSpacer(4, horizontal: true),
+                      const Icon(
+                        Icons.arrow_forward_rounded,
+                        color: Colors.white,
+                        size: 14,
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
+            Text(data.emoji, style: const TextStyle(fontSize: 64)),
           ],
         ),
       ),

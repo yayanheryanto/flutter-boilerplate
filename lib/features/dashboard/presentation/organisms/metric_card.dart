@@ -1,4 +1,5 @@
-import 'package:boilerplate/core/ui/design_system/atoms/display/app_display.dart';
+import 'package:boilerplate/core/theme/tokens/radius_tokens.dart';
+import 'package:boilerplate/core/theme/tokens/spacing_tokens.dart';
 import 'package:boilerplate/core/ui/design_system/atoms/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
@@ -20,38 +21,54 @@ class MetricCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppCard(
+    final scheme = Theme.of(context).colorScheme;
+
+    return GestureDetector(
       onTap: onTap,
-      padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 8),
-      child: Column(
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: BoxDecoration(
-              color: color.withOpacity(0.12),
-              shape: BoxShape.circle,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          vertical: SpacingTokens.md,
+          horizontal: SpacingTokens.sm,
+        ),
+        decoration: BoxDecoration(
+          color: scheme.surface,
+          borderRadius: BorderRadius.circular(RadiusTokens.lg),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-            child: Center(
-              child: Text(emoji, style: const TextStyle(fontSize: 16)),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              width: 32,
+              height: 32,
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(RadiusTokens.sm),
+              ),
+              child: Center(
+                child: Text(emoji, style: const TextStyle(fontSize: 15)),
+              ),
             ),
-          ),
-          const AppSpacer.sm(),
-          AppText(
-            value,
-            variant: AppTextVariant.headlineSmall,
-            fontWeight: FontWeight.w800,
-            textAlign: TextAlign.center,
-          ),
-          const AppSpacer.xs(),
-          AppText(
-            label,
-            variant: AppTextVariant.labelSmall,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.45),
-            textAlign: TextAlign.center,
-            height: 1.3,
-          ),
-        ],
+            const SizedBox(height: SpacingTokens.sm),
+            AppText(
+              value,
+              variant: AppTextVariant.titleLarge,
+              fontWeight: FontWeight.w800,
+            ),
+            AppText(
+              label,
+              variant: AppTextVariant.labelSmall,
+              color: scheme.onSurface.withOpacity(0.45),
+              height: 1.3,
+            ),
+          ],
+        ),
       ),
     );
   }

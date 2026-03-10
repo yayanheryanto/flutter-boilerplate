@@ -39,6 +39,14 @@ class _DashboardPageState extends State<DashboardPage> {
     super.dispose();
   }
 
+  /// Dipanggil saat user pull-to-refresh di tab mana pun.
+  /// Ganti dengan pemanggilan BLoC/repository yang sesuai per tab.
+  Future<void> _onRefresh() async {
+    // TODO: dispatch refresh event ke BLoC masing-masing tab
+    await Future.delayed(const Duration(milliseconds: 800));
+    if (mounted) setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
@@ -77,13 +85,26 @@ class _DashboardPageState extends State<DashboardPage> {
           bannerCtrl: _bannerCtrl,
           bannerPage: _bannerPage,
           onBannerChanged: (i) => setState(() => _bannerPage = i),
+          onRefresh: _onRefresh,
         );
       default:
-        return Center(
-          child: AppText(
-            ['', 'Katalog', 'Transaksi', 'Profil'][_navIndex],
-            variant: AppTextVariant.titleMedium,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+        // Tab placeholder — bisa di-refresh juga
+        return RefreshIndicator(
+          onRefresh: _onRefresh,
+          child: ListView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.6,
+                child: Center(
+                  child: AppText(
+                    ['', 'Katalog', 'Transaksi', 'Profil'][_navIndex],
+                    variant: AppTextVariant.titleMedium,
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+                  ),
+                ),
+              ),
+            ],
           ),
         );
     }

@@ -53,12 +53,18 @@ class _AuctionCardState extends State<AuctionCard> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        width: 155,
+        width: 160,
         margin: const EdgeInsets.only(right: SpacingTokens.sm),
         decoration: BoxDecoration(
           color: scheme.surface,
           borderRadius: BorderRadius.circular(RadiusTokens.xl),
-          border: Border.all(color: scheme.outline.withOpacity(0.5)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.06),
+              blurRadius: 12,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -77,6 +83,8 @@ class _AuctionCardState extends State<AuctionCard> {
     );
   }
 }
+
+// ── Image area ────────────────────────────────────────────────────────────────
 
 class _CardImage extends StatelessWidget {
   final AuctionItem item;
@@ -102,21 +110,12 @@ class _CardImage extends StatelessWidget {
         top: Radius.circular(RadiusTokens.xl),
       ),
       child: Container(
-        height: 96,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              tint.withOpacity(0.15),
-              scheme.surfaceContainerHighest,
-            ],
-          ),
-        ),
+        height: 100,
+        color: tint.withOpacity(0.08),
         child: Stack(
           children: [
             Center(
-              child: Text(item.emoji, style: const TextStyle(fontSize: 46)),
+              child: Text(item.emoji, style: const TextStyle(fontSize: 48)),
             ),
             Positioned(
               top: SpacingTokens.sm,
@@ -154,13 +153,19 @@ class _WishlistButton extends StatelessWidget {
       width: 28,
       height: 28,
       decoration: BoxDecoration(
-        color: surfaceColor.withOpacity(0.85),
+        color: surfaceColor.withOpacity(0.9),
         shape: BoxShape.circle,
+        boxShadow: [
+          BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 4),
+        ],
       ),
       child: Center(
-        child: Text(
-          isWishlisted ? '❤️' : '🤍',
-          style: const TextStyle(fontSize: 13),
+        child: Icon(
+          isWishlisted
+              ? Icons.favorite_rounded
+              : Icons.favorite_border_rounded,
+          size: 14,
+          color: isWishlisted ? ColorTokens.error500 : Colors.black38,
         ),
       ),
     );
@@ -184,13 +189,13 @@ class _CountdownChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.timer_outlined, color: Colors.white, size: 11),
+          const Icon(Icons.timer_outlined, color: Colors.white, size: 10),
           const SizedBox(width: 3),
           Text(
             formatTimer(secs),
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: FontWeight.w700,
               fontFeatures: [FontFeature.tabularFigures()],
             ),
@@ -200,6 +205,8 @@ class _CountdownChip extends StatelessWidget {
     );
   }
 }
+
+// ── Info area ─────────────────────────────────────────────────────────────────
 
 class _CardInfo extends StatelessWidget {
   final AuctionItem item;
@@ -211,7 +218,12 @@ class _CardInfo extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.all(SpacingTokens.sm),
+      padding: const EdgeInsets.fromLTRB(
+        SpacingTokens.sm,
+        SpacingTokens.sm,
+        SpacingTokens.sm,
+        SpacingTokens.md,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -222,17 +234,17 @@ class _CardInfo extends StatelessWidget {
             maxLines: 2,
             height: 1.35,
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 6),
           AppText(
-            'Tawaran saat ini',
+            'Tawaran tertinggi',
             variant: AppTextVariant.labelSmall,
             color: scheme.onSurface.withOpacity(0.4),
           ),
           AppText(
             formatRupiah(item.bid),
-            variant: AppTextVariant.labelLarge,
+            variant: AppTextVariant.titleSmall,
             color: scheme.primary,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w700,
           ),
         ],
       ),

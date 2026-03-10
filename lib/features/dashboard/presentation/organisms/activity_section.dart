@@ -17,8 +17,8 @@ class ActivitySection extends StatelessWidget {
       children: [
         DashboardSectionHeader(title: 'Aktivitas Saya', onSeeAll: () {}),
         const AppSpacer.sm(),
-        _MetricRow(),
-        const AppSpacer.sm(),
+        const _MetricRow(),
+        const AppSpacer.md(),
         ...dummyMyBids.map(
           (item) => Padding(
             padding: const EdgeInsets.fromLTRB(
@@ -36,6 +36,8 @@ class ActivitySection extends StatelessWidget {
 }
 
 class _MetricRow extends StatelessWidget {
+  const _MetricRow();
+
   @override
   Widget build(BuildContext context) {
     return Padding(

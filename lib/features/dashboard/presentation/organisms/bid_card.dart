@@ -15,52 +15,90 @@ class BidCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    final statusColor =
-        item.winning ? ColorTokens.success500 : ColorTokens.error500;
+    final isWinning = item.winning;
+    final statusColor = isWinning ? ColorTokens.success500 : ColorTokens.error500;
+    final statusLabel = isWinning ? 'Tertinggi' : 'Tersalip';
 
-    return AppCard(
+    return GestureDetector(
       onTap: () {},
-      padding: const EdgeInsets.all(SpacingTokens.md),
-      child: Row(
-        children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: scheme.surfaceContainerHighest,
-              borderRadius: BorderRadius.circular(RadiusTokens.md),
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: SpacingTokens.md,
+          vertical: SpacingTokens.sm + 4,
+        ),
+        decoration: BoxDecoration(
+          color: scheme.surface,
+          borderRadius: BorderRadius.circular(RadiusTokens.lg),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
             ),
-            child: Center(
-              child: Text(item.emoji, style: const TextStyle(fontSize: 22)),
+          ],
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 48,
+              height: 48,
+              decoration: BoxDecoration(
+                color: scheme.surfaceContainerHighest,
+                borderRadius: BorderRadius.circular(RadiusTokens.md),
+              ),
+              child: Center(
+                child: Text(item.emoji, style: const TextStyle(fontSize: 24)),
+              ),
             ),
-          ),
-          const AppSpacer(SpacingTokens.sm, horizontal: true),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppText(
-                  item.title,
-                  variant: AppTextVariant.labelLarge,
-                  fontWeight: FontWeight.w600,
-                  maxLines: 1,
-                ),
-                const AppSpacer.xs(),
-                AppText(
-                  formatRupiah(item.bid),
-                  variant: AppTextVariant.titleSmall,
-                  color: scheme.primary,
-                  fontWeight: FontWeight.w700,
-                ),
-              ],
+            const AppSpacer(SpacingTokens.sm, horizontal: true),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppText(
+                    item.title,
+                    variant: AppTextVariant.labelLarge,
+                    fontWeight: FontWeight.w600,
+                    maxLines: 1,
+                  ),
+                  const SizedBox(height: 2),
+                  AppText(
+                    formatRupiah(item.bid),
+                    variant: AppTextVariant.bodySmall,
+                    color: scheme.onSurface.withOpacity(0.5),
+                  ),
+                ],
+              ),
             ),
-          ),
-          AppBadge(
-            label: item.winning ? '● Tertinggi' : '● Tersalip',
-            backgroundColor: statusColor.withOpacity(0.12),
-            textColor: statusColor,
-          ),
-        ],
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+              decoration: BoxDecoration(
+                color: statusColor.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(RadiusTokens.full),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 6,
+                    height: 6,
+                    decoration: BoxDecoration(
+                      color: statusColor,
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  const SizedBox(width: 5),
+                  AppText(
+                    statusLabel,
+                    variant: AppTextVariant.labelSmall,
+                    color: statusColor,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
