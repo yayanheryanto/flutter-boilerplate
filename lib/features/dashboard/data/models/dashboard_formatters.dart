@@ -3,7 +3,7 @@ String formatRupiah(int n) {
     final jt = n / 1000000;
     return 'Rp ${jt == jt.truncateToDouble() ? jt.toInt() : jt.toStringAsFixed(1)} jt';
   }
-  return 'Rp ${(n / 1000).toInt()} rb';
+  return 'Rp ${n ~/ 1000} rb';
 }
 
 String formatTimer(int s) {

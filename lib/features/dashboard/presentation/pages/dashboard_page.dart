@@ -22,9 +22,9 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     _bannerCtrl = PageController(viewportFraction: 0.92);
-    _bannerTimer = Timer.periodic(const Duration(seconds: 4), (_) {
-      if (!mounted) return;
-      _bannerCtrl.animateToPage(
+    _bannerTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
+      if (!mounted || !_bannerCtrl.hasClients) return;
+      await _bannerCtrl.animateToPage(
         (_bannerPage + 1) % 3,
         duration: const Duration(milliseconds: 500),
         curve: Curves.easeInOut,
@@ -43,7 +43,7 @@ class _DashboardPageState extends State<DashboardPage> {
   /// Ganti dengan pemanggilan BLoC/repository yang sesuai per tab.
   Future<void> _onRefresh() async {
     // TODO: dispatch refresh event ke BLoC masing-masing tab
-    await Future.delayed(const Duration(milliseconds: 800));
+    await Future<void>.delayed(const Duration(milliseconds: 800));
     if (mounted) setState(() {});
   }
 
@@ -79,34 +79,44 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   Widget _buildBody(BuildContext context) {
-    switch (_navIndex) {
-      case 0:
-        return HomeTab(
+    return IndexedStack(
+      index: _navIndex,
+      children: [
+        // Index 0
+        HomeTab(
           bannerCtrl: _bannerCtrl,
           bannerPage: _bannerPage,
           onBannerChanged: (i) => setState(() => _bannerPage = i),
           onRefresh: _onRefresh,
-        );
-      default:
-        // Tab placeholder — bisa di-refresh juga
-        return RefreshIndicator(
-          onRefresh: _onRefresh,
-          child: ListView(
-            physics: const AlwaysScrollableScrollPhysics(),
-            children: [
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.6,
-                child: Center(
-                  child: AppText(
-                    ['', 'Katalog', 'Transaksi', 'Profil'][_navIndex],
-                    variant: AppTextVariant.titleMedium,
-                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
-                  ),
-                ),
+        ),
+        // Index 1
+        _buildPlaceholder('Katalog'),
+        // Index 2
+        _buildPlaceholder('Transaksi'),
+        // Index 3
+        _buildPlaceholder('Profil'),
+      ],
+    );
+  }
+
+  Widget _buildPlaceholder(String title) {
+    return RefreshIndicator(
+      onRefresh: _onRefresh,
+      child: ListView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        children: [
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Center(
+              child: AppText(
+                title,
+                variant: AppTextVariant.titleMedium,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
               ),
-            ],
+            ),
           ),
-        );
-    }
+        ],
+      ),
+    );
   }
 }

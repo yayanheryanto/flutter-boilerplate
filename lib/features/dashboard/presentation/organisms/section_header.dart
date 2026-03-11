@@ -22,7 +22,6 @@ class DashboardSectionHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           AppText(
             title,

@@ -53,7 +53,7 @@ class MobileDashboardTemplate extends StatelessWidget {
                   const AppSpacer.xl(),
                   const ActivitySection(),
                   const AppSpacer.xl(),
-                  EndingSoonSection(items: dummyEndingSoon),
+                  const EndingSoonSection(items: dummyEndingSoon),
                   const AppSpacer.xl(),
                   // RecommendedSection(items: dummyRecommended),
                   // const AppSpacer.xl(),

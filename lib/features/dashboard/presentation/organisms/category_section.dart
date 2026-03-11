@@ -1,16 +1,15 @@
 import 'package:boilerplate/core/theme/tokens/radius_tokens.dart';
 import 'package:boilerplate/core/theme/tokens/spacing_tokens.dart';
 import 'package:boilerplate/core/ui/design_system/atoms/typography/app_text.dart';
+import 'package:boilerplate/features/dashboard/data/models/auction_item.dart';
 import 'package:boilerplate/features/dashboard/presentation/organisms/section_header.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 const _categories = [
-  (emoji: '🏍️', label: 'Motor',      color: Color(0xFFFF6F00)),
-  (emoji: '🚗',  label: 'Mobil',      color: Color(0xFF1565C0)),
-  (emoji: '📱',  label: 'Elektronik', color: Color(0xFF6A1B9A)),
-  (emoji: '🏠',  label: 'Properti',   color: Color(0xFF2E7D32)),
-  (emoji: '💎',  label: 'Mewah',      color: Color(0xFFAD1457)),
-  (emoji: '🛠️',  label: 'Lainnya',    color: Color(0xFF546E7A)),
+  (cat: AuctionCategory.motor),
+  (cat: AuctionCategory.mobil),
+  (cat: AuctionCategory.elektronik),
 ];
 
 class CategorySection extends StatelessWidget {
@@ -35,11 +34,7 @@ class CategorySection extends StatelessWidget {
               childAspectRatio: 1.1,
             ),
             itemCount: _categories.length,
-            itemBuilder: (_, i) => _CategoryCard(
-              emoji: _categories[i].emoji,
-              label: _categories[i].label,
-              color: _categories[i].color,
-            ),
+            itemBuilder: (_, i) => _CategoryCard(category: _categories[i].cat),
           ),
         ),
       ],
@@ -48,25 +43,22 @@ class CategorySection extends StatelessWidget {
 }
 
 class _CategoryCard extends StatelessWidget {
-  final String emoji;
-  final String label;
-  final Color color;
+  final AuctionCategory category;
 
-  const _CategoryCard({
-    required this.emoji,
-    required this.label,
-    required this.color,
-  });
+  const _CategoryCard({required this.category});
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    final color = category.color;
 
     return Material(
       color: Colors.white,
       borderRadius: BorderRadius.circular(RadiusTokens.lg),
       child: InkWell(
-        onTap: () {},
+        onTap: () async => context.pushNamed(
+          'category-detail',
+          pathParameters: {'slug': category.slug},
+        ),
         borderRadius: BorderRadius.circular(RadiusTokens.lg),
         splashColor: color.withOpacity(0.12),
         highlightColor: color.withOpacity(0.06),
@@ -81,23 +73,18 @@ class _CategoryCard extends StatelessWidget {
               ),
             ],
           ),
-          padding: const EdgeInsets.symmetric(
-            horizontal: SpacingTokens.sm,
-            vertical: SpacingTokens.sm,
-          ),
+          padding: const EdgeInsets.all(SpacingTokens.sm),
           child: Stack(
             children: [
-              // Chevron di pojok kanan atas
               Positioned(
                 top: 0,
                 right: 0,
                 child: Icon(
                   Icons.chevron_right_rounded,
                   size: 14,
-                  color: scheme.onSurface.withOpacity(0.25),
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
                 ),
               ),
-              // Konten utama
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -111,17 +98,17 @@ class _CategoryCard extends StatelessWidget {
                     ),
                     child: Center(
                       child: Text(
-                        emoji,
+                        category.emoji,
                         style: const TextStyle(fontSize: 20),
                       ),
                     ),
                   ),
                   const SizedBox(height: SpacingTokens.xs),
                   AppText(
-                    label,
+                    category.label,
                     variant: AppTextVariant.labelMedium,
                     fontWeight: FontWeight.w600,
-                    color: scheme.onSurface.withOpacity(0.8),
+                    color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
                   ),
                 ],
               ),

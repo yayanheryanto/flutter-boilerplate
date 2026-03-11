@@ -124,7 +124,7 @@ class _BannerItem extends StatelessWidget {
                     color: Colors.white.withOpacity(0.8),
                   ),
                   const AppSpacer.sm(),
-                  Row(
+                  const Row(
                     children: [
                       AppText(
                         'Lihat detail',
@@ -132,8 +132,8 @@ class _BannerItem extends StatelessWidget {
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
                       ),
-                      const AppSpacer(4, horizontal: true),
-                      const Icon(
+                      AppSpacer(4, horizontal: true),
+                      Icon(
                         Icons.arrow_forward_rounded,
                         color: Colors.white,
                         size: 14,
