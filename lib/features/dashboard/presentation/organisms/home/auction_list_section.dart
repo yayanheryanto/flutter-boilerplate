@@ -1,9 +1,9 @@
 import 'package:boilerplate/core/theme/tokens/spacing_tokens.dart';
 import 'package:boilerplate/core/ui/design_system/atoms/display/app_display.dart';
 import 'package:boilerplate/features/dashboard/data/models/auction_item.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/auction_card.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/live_badge.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/section_header.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/auction_card.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/live_badge.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/section_header.dart';
 import 'package:flutter/material.dart';
 
 class EndingSoonSection extends StatelessWidget {

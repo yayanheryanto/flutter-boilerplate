@@ -2,9 +2,9 @@ import 'package:boilerplate/core/theme/tokens/color_tokens.dart';
 import 'package:boilerplate/core/theme/tokens/spacing_tokens.dart';
 import 'package:boilerplate/core/ui/design_system/atoms/display/app_display.dart';
 import 'package:boilerplate/features/dashboard/data/models/dashboard_dummy_data.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/bid_card.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/metric_card.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/section_header.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/bid_card.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/metric_card.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/section_header.dart';
 import 'package:flutter/material.dart';
 
 class ActivitySection extends StatelessWidget {

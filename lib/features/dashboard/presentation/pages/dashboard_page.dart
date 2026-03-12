@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:boilerplate/core/ui/design_system/atoms/typography/app_text.dart';
 import 'package:boilerplate/core/ui/design_system/organisms/app_scaffold_wrapper.dart';
 import 'package:boilerplate/features/dashboard/presentation/pages/home_tab.dart';
+import 'package:boilerplate/features/dashboard/presentation/pages/profile_tab.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -94,7 +95,9 @@ class _DashboardPageState extends State<DashboardPage> {
         // Index 2
         _buildPlaceholder('Transaksi'),
         // Index 3
-        _buildPlaceholder('Profil'),
+        ProfileTab(
+          onRefresh: _onRefresh,
+        ),
       ],
     );
   }

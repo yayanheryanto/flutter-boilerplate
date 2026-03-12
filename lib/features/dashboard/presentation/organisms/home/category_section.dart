@@ -2,7 +2,7 @@ import 'package:boilerplate/core/theme/tokens/radius_tokens.dart';
 import 'package:boilerplate/core/theme/tokens/spacing_tokens.dart';
 import 'package:boilerplate/core/ui/design_system/atoms/typography/app_text.dart';
 import 'package:boilerplate/features/dashboard/data/models/auction_item.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/section_header.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/section_header.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

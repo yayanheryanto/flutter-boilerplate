@@ -1,11 +1,11 @@
 import 'package:boilerplate/core/responsive/responsive_context_extension.dart';
 import 'package:boilerplate/core/ui/design_system/atoms/display/app_display.dart';
 import 'package:boilerplate/features/dashboard/data/models/dashboard_dummy_data.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/activity_section.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/auction_list_section.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/banner_carousel.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/category_section.dart';
-import 'package:boilerplate/features/dashboard/presentation/organisms/dashboard_header.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/activity_section.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/auction_list_section.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/banner_carousel.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/category_section.dart';
+import 'package:boilerplate/features/dashboard/presentation/organisms/home/dashboard_header.dart';
 import 'package:flutter/material.dart';
 
 /// Dashboard layout templates for different devices.

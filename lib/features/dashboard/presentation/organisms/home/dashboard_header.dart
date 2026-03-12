@@ -36,7 +36,7 @@ class DashboardHeader extends StatelessWidget {
                       color: scheme.onSurface.withOpacity(0.45),
                     ),
                     const AppText(
-                      'Budi Santoso',
+                      'Taro Misaki',
                       variant: AppTextVariant.titleSmall,
                       fontWeight: FontWeight.w700,
                     ),
