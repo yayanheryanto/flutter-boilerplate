@@ -32,10 +32,13 @@ class _LiveBadgeState extends State<LiveBadge>
 
   @override
   Widget build(BuildContext context) {
-    return AppBadge(
-      label: '● LIVE',
-      backgroundColor: ColorTokens.error500.withOpacity(0.12),
-      textColor: ColorTokens.error500,
+    return FadeTransition(
+      opacity: _opacity,
+      child: AppBadge(
+        label: '● LIVE',
+        backgroundColor: ColorTokens.error500.withOpacity(0.12),
+        textColor: ColorTokens.error500,
+      ),
     );
   }
 }

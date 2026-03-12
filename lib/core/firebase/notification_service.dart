@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:injectable/injectable.dart';
 
+// ignore_for_file: unreachable_from_main
+
 // ─── Notification Payload Model ───────────────────────────────────────────────
 class AppNotificationPayload {
   final String? title;
@@ -52,7 +54,8 @@ class AppNotificationPayload {
   }
 
   @override
-  String toString() => 'AppNotificationPayload(title: $title, type: $type, route: $route, entityId: $entityId)';
+  String toString() =>
+      'AppNotificationPayload(title: $title, type: $type, route: $route, entityId: $entityId, imageUrl: $imageUrl, rawData: $rawData)';
 }
 
 // ─── Notification Channel Config ──────────────────────────────────────────────
