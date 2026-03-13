@@ -43,6 +43,25 @@ class AppTheme {
         elevation: 8,
         type: BottomNavigationBarType.fixed,
       ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: ColorTokens.white,
+        indicatorColor: ColorTokens.primary600,
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+
+            //selected item
+            return const TextStyle(
+              color: ColorTokens.primary600,
+              fontWeight: TypographyTokens.semiBold,
+            );
+          }
+
+          return const TextStyle(
+            color: ColorTokens.neutral400,
+            fontWeight: FontWeight.normal,
+          );
+        }),
+      ),
       navigationRailTheme: const NavigationRailThemeData(
         backgroundColor: ColorTokens.white,
         selectedIconTheme: IconThemeData(color: ColorTokens.primary600),
