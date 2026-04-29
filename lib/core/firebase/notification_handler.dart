@@ -1,6 +1,6 @@
-import 'package:boilerplate/core/firebase/notification_bloc.dart';
+import 'package:boilerplate/core/bloc/notification_bloc.dart';
 import 'package:boilerplate/core/firebase/notification_service.dart';
-import 'package:boilerplate/core/ui/design_system/molecules/toast/app_toast.dart';
+import 'package:boilerplate/shared/widgets/toast/app_toast.dart';
 import 'package:boilerplate/core/utils/app_logger.dart';
 import 'package:boilerplate/core/utils/navigator_key.dart';
 import 'package:flutter/material.dart';

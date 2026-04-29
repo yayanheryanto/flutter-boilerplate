@@ -3,8 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:boilerplate/core/di/injection.dart';
 import 'package:boilerplate/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:boilerplate/features/auth/presentation/organisms/login_form_section.dart';
-import 'package:boilerplate/features/auth/presentation/templates/auth_template.dart';
+import 'package:boilerplate/features/auth/presentation/sections/login_form_section.dart';
+import 'package:boilerplate/features/auth/presentation/layouts/auth_layout.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});

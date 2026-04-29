@@ -1,5 +1,5 @@
 import 'package:boilerplate/core/constants/app_routes.dart';
-import 'package:boilerplate/core/ui/design_system/design_system.dart';
+import 'package:boilerplate/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:boilerplate/core/utils/navigator_key.dart';
 import 'package:boilerplate/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:boilerplate/features/auth/presentation/pages/login_page.dart';

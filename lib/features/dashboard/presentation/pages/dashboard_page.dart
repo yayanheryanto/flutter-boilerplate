@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:boilerplate/core/ui/design_system/atoms/typography/app_text.dart';
-import 'package:boilerplate/core/ui/design_system/organisms/app_scaffold_wrapper.dart';
-import 'package:boilerplate/features/dashboard/presentation/pages/home_tab.dart';
-import 'package:boilerplate/features/dashboard/presentation/pages/profile_tab.dart';
+import 'package:boilerplate/shared/widgets/typography/app_text.dart';
+import 'package:boilerplate/shared/layouts/app_scaffold_wrapper.dart';
+import 'package:boilerplate/features/dashboard/presentation/layouts/home_tab_layout.dart';
+import 'package:boilerplate/features/dashboard/presentation/layouts/profile_tab_layout.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {

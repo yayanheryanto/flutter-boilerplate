@@ -7,10 +7,10 @@ import 'package:boilerplate/core/config/app_config.dart';
 import 'package:boilerplate/core/config/env.dart';
 import 'package:boilerplate/core/di/injection.dart';
 import 'package:boilerplate/core/firebase/firebase_options_dev.dart';
-import 'package:boilerplate/core/firebase/notification_bloc.dart';
+import 'package:boilerplate/core/bloc/notification_bloc.dart';
 import 'package:boilerplate/core/firebase/notification_service.dart';
 import 'package:boilerplate/core/router/app_router.dart';
-import 'package:boilerplate/core/theme/app_theme.dart';
+import 'package:boilerplate/shared/theme/app_theme.dart';
 import 'package:boilerplate/core/utils/app_bloc_observer.dart';
 
 Future<void> main() async {
