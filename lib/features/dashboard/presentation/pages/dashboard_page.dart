@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:boilerplate/shared/widgets/typography/app_text.dart';
 import 'package:boilerplate/shared/layouts/app_scaffold_wrapper.dart';
-import 'package:boilerplate/features/dashboard/presentation/layouts/home_tab_layout.dart';
-import 'package:boilerplate/features/dashboard/presentation/layouts/profile_tab_layout.dart';
+import 'package:boilerplate/features/dashboard/presentation/layouts/dashboard_layout.dart';
+import 'package:boilerplate/features/dashboard/presentation/layouts/profile_layout.dart';
 import 'package:flutter/material.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -40,10 +40,10 @@ class _DashboardPageState extends State<DashboardPage> {
     super.dispose();
   }
 
-  /// Dipanggil saat user pull-to-refresh di tab mana pun.
-  /// Ganti dengan pemanggilan BLoC/repository yang sesuai per tab.
+  /// Called when user pull-to-refreshes on any tab.
+  /// Replace with per-tab BLoC dispatch as needed.
   Future<void> _onRefresh() async {
-    // TODO: dispatch refresh event ke BLoC masing-masing tab
+    // TODO: dispatch refresh event to each tab's BLoC
     await Future<void>.delayed(const Duration(milliseconds: 800));
     if (mounted) setState(() {});
   }
@@ -75,29 +75,27 @@ class _DashboardPageState extends State<DashboardPage> {
           label: 'Profil',
         ),
       ],
-      body: _buildBody(context),
+      body: _buildBody(),
     );
   }
 
-  Widget _buildBody(BuildContext context) {
+  Widget _buildBody() {
     return IndexedStack(
       index: _navIndex,
       children: [
-        // Index 0
-        HomeTab(
+        // Index 0 — Home
+        DashboardLayout(
           bannerCtrl: _bannerCtrl,
           bannerPage: _bannerPage,
           onBannerChanged: (i) => setState(() => _bannerPage = i),
           onRefresh: _onRefresh,
         ),
-        // Index 1
+        // Index 1 — Katalog
         _buildPlaceholder('Katalog'),
-        // Index 2
+        // Index 2 — Transaksi
         _buildPlaceholder('Transaksi'),
-        // Index 3
-        ProfileTab(
-          onRefresh: _onRefresh,
-        ),
+        // Index 3 — Profil
+        ProfileLayout(onRefresh: _onRefresh),
       ],
     );
   }

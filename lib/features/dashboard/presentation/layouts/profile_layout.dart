@@ -1,3 +1,4 @@
+import 'package:boilerplate/core/responsive/responsive_builder.dart';
 import 'package:boilerplate/core/responsive/responsive_context_extension.dart';
 import 'package:boilerplate/shared/widgets/display/app_display.dart';
 import 'package:boilerplate/features/dashboard/presentation/sections/profile/profile_header.dart';
@@ -6,18 +7,34 @@ import 'package:boilerplate/features/dashboard/presentation/widgets/profile/prof
 import 'package:boilerplate/features/dashboard/presentation/sections/profile/profile_menu_section.dart';
 import 'package:flutter/material.dart';
 
-/// Profile layout templates for different devices.
+/// Responsive profile-tab layout.
 ///
-/// - [MobileProfileTemplate] : single-column scroll layout.
-/// - [TabletProfileTemplate]  : two-column layout for wider screens.
-
-class MobileProfileTemplate extends StatelessWidget {
+/// - Mobile  : single-column scroll.
+/// - Tablet/Desktop : two-column grid.
+class ProfileLayout extends StatelessWidget {
   final Future<void> Function() onRefresh;
 
-  const MobileProfileTemplate({
+  const ProfileLayout({
     super.key,
     required this.onRefresh,
   });
+
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveLayoutBuilder(
+      mobile: _MobileProfileLayout(onRefresh: onRefresh),
+      tablet: _TabletProfileLayout(onRefresh: onRefresh),
+      desktop: _TabletProfileLayout(onRefresh: onRefresh),
+    );
+  }
+}
+
+// ── Mobile layout ──────────────────────────────────────────────────────────────
+
+class _MobileProfileLayout extends StatelessWidget {
+  final Future<void> Function() onRefresh;
+
+  const _MobileProfileLayout({required this.onRefresh});
 
   @override
   Widget build(BuildContext context) {
@@ -51,13 +68,12 @@ class MobileProfileTemplate extends StatelessWidget {
   }
 }
 
-class TabletProfileTemplate extends StatelessWidget {
+// ── Tablet / Desktop layout ────────────────────────────────────────────────────
+
+class _TabletProfileLayout extends StatelessWidget {
   final Future<void> Function() onRefresh;
 
-  const TabletProfileTemplate({
-    super.key,
-    required this.onRefresh,
-  });
+  const _TabletProfileLayout({required this.onRefresh});
 
   @override
   Widget build(BuildContext context) {

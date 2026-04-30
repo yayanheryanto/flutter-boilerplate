@@ -1,5 +1,6 @@
 import 'package:boilerplate/core/constants/tokens/radius_tokens.dart';
 import 'package:boilerplate/core/constants/tokens/spacing_tokens.dart';
+import 'package:boilerplate/shared/widgets/display/app_display.dart';
 import 'package:boilerplate/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
@@ -79,13 +80,11 @@ class _Avatar extends StatelessWidget {
             ],
           ),
           child: const Center(
-            child: Text(
+            child: AppText(
               'AR',
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 24,
-              ),
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 24,
             ),
           ),
         ),
@@ -135,30 +134,11 @@ class _UserInfo extends StatelessWidget {
           variant: AppTextVariant.bodySmall,
           color: Colors.black54,
         ),
-        const SizedBox(height: SpacingTokens.xs),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-          decoration: BoxDecoration(
-            color: const Color(0xFFFF6B00).withOpacity(0.1),
-            borderRadius: BorderRadius.circular(RadiusTokens.full),
-          ),
-          child: const Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                Icons.verified_rounded,
-                size: 12,
-                color: Color(0xFFFF6B00),
-              ),
-              SizedBox(width: 4),
-              AppText(
-                'Member Aktif',
-                variant: AppTextVariant.labelSmall,
-                color: Color(0xFFFF6B00),
-                fontWeight: FontWeight.w600,
-              ),
-            ],
-          ),
+        const AppSpacer.xs(),
+        AppBadge(
+          label: 'Member Aktif',
+          backgroundColor: Color(0xFFFF6B00),
+          textColor: Colors.white,
         ),
       ],
     );

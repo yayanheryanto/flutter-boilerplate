@@ -1,19 +1,21 @@
 import 'package:boilerplate/core/responsive/responsive_builder.dart';
-import 'package:boilerplate/core/responsive/responsive_context_extension.dart';
 import 'package:boilerplate/shared/layouts/app_scaffold_wrapper.dart';
+import 'package:boilerplate/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 
-/// Template layout halaman auth — menggunakan [AppScaffoldWrapper] agar
-/// konsisten dengan scaffold system yang ada di design system.
+/// Layout for all auth pages (login, register, forgot password).
 ///
-/// - Mobile  : single-column, logo di atas form
-/// - Tablet/Desktop : two-column, logo panel kiri, form panel kanan
-class AuthTemplate extends StatelessWidget {
+/// Pass [logoSection] as an [AppLogo] from the shared design system.
+///
+/// Responsive behaviour:
+/// - Mobile  : single-column — logo above form.
+/// - Tablet/Desktop : two-column — logo panel left, form panel right.
+class AuthLayout extends StatelessWidget {
   final Widget formSection;
   final Widget? logoSection;
   final Color? backgroundColor;
 
-  const AuthTemplate({
+  const AuthLayout({
     super.key,
     required this.formSection,
     this.logoSection,
@@ -52,21 +54,19 @@ class _MobileAuthLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // AppScaffoldWrapper tanpa navigationItems → pure Scaffold tanpa nav bar,
-    // cocok untuk halaman auth yang memang tidak perlu navigasi bawah.
     return AppScaffoldWrapper(
       backgroundColor: backgroundColor,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
             children: [
-              const SizedBox(height: 48),
+              const AppSpacer(48),
               if (logoSection != null) ...[
                 logoSection!,
-                const SizedBox(height: 40),
+                const AppSpacer(40),
               ],
               formSection,
-              const SizedBox(height: 40),
+              const AppSpacer(40),
             ],
           ),
         ),
@@ -90,15 +90,17 @@ class _TabletAuthLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+
     return AppScaffoldWrapper(
       backgroundColor: backgroundColor,
       body: Row(
         children: [
-          // Panel kiri — dekoratif dengan logo
+          // Left panel — decorative with logo
           Expanded(
             flex: 5,
             child: ColoredBox(
-              color: Theme.of(context).colorScheme.primaryContainer,
+              color: scheme.primaryContainer,
               child: Center(
                 child: logoSection ??
                     Column(
@@ -107,22 +109,21 @@ class _TabletAuthLayout extends StatelessWidget {
                         Icon(
                           Icons.lock_rounded,
                           size: 80,
-                          color: Theme.of(context).colorScheme.primary,
+                          color: scheme.primary,
                         ),
-                        const SizedBox(height: 24),
-                        Text(
+                        const AppSpacer.lg(),
+                        AppText(
                           'Enterprise App',
-                          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                color: Theme.of(context).colorScheme.onPrimaryContainer,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          variant: AppTextVariant.headlineMedium,
+                          color: scheme.onPrimaryContainer,
+                          fontWeight: FontWeight.bold,
                         ),
                       ],
                     ),
               ),
             ),
           ),
-          // Panel kanan — form
+          // Right panel — form
           Expanded(
             flex: 5,
             child: Center(

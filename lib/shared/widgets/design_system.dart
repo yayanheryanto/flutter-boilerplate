@@ -22,6 +22,7 @@ export 'display/app_card.dart';
 export 'display/app_chip.dart';
 export 'display/app_divider.dart';
 export 'display/app_image.dart';
+export 'display/app_logo.dart';
 export 'display/app_spacer.dart';
 
 // ── FEEDBACK ──────────────────────────────────────────────────────────────────

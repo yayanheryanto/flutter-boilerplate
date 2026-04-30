@@ -8,6 +8,7 @@ import 'package:boilerplate/core/constants/tokens/radius_tokens.dart';
 import 'package:boilerplate/core/constants/tokens/spacing_tokens.dart';
 import 'package:boilerplate/shared/widgets/buttons/app_button.dart';
 import 'package:boilerplate/shared/widgets/display/app_display.dart';
+import 'package:boilerplate/shared/widgets/feedback/app_feedback.dart';
 import 'package:boilerplate/shared/widgets/input/app_text_field.dart';
 import 'package:boilerplate/shared/widgets/typography/app_text.dart';
 import 'package:boilerplate/shared/widgets/pickers/app_date_picker.dart';
@@ -295,13 +296,13 @@ class _KtpPhotoField extends StatelessWidget {
         Row(
           children: [
             Icon(Icons.badge_outlined, size: 16, color: scheme.onSurface.withOpacity(0.7)),
-            const SizedBox(width: 6),
+            const AppSpacer(6, horizontal: true),
             AppText(
               'Foto KTP',
               variant: AppTextVariant.labelLarge,
               color: scheme.onSurface.withOpacity(0.7),
             ),
-            const SizedBox(width: 4),
+            const AppSpacer(4, horizontal: true),
             AppText(
               '*',
               variant: AppTextVariant.labelLarge,
@@ -309,7 +310,7 @@ class _KtpPhotoField extends StatelessWidget {
             ),
           ],
         ),
-        const SizedBox(height: 10),
+        const AppSpacer(10),
 
         // Preview / placeholder
         AnimatedSwitcher(
@@ -320,7 +321,7 @@ class _KtpPhotoField extends StatelessWidget {
         ),
 
         // Keterangan
-        const SizedBox(height: 8),
+        const AppSpacer.sm(),
         AppText(
           'Pastikan foto KTP jelas, tidak buram, dan seluruh teks terbaca.',
           variant: AppTextVariant.bodySmall,
@@ -361,15 +362,8 @@ class _KtpPlaceholder extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    SizedBox(
-                      width: 28,
-                      height: 28,
-                      child: CircularProgressIndicator(
-                        strokeWidth: 2.5,
-                        color: scheme.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
+                    const AppLoader.small(),
+                    const AppSpacer(10),
                     AppText(
                       'Membuka kamera...',
                       variant: AppTextVariant.bodySmall,
@@ -394,14 +388,14 @@ class _KtpPlaceholder extends StatelessWidget {
                       color: scheme.primary,
                     ),
                   ),
-                  const SizedBox(height: 12),
+                  const AppSpacer.md(),
                   AppText(
                     'Ambil Foto KTP',
                     variant: AppTextVariant.titleSmall,
                     fontWeight: FontWeight.w600,
                     color: scheme.primary,
                   ),
-                  const SizedBox(height: 4),
+                  const AppSpacer.xs(),
                   AppText(
                     'Ketuk untuk membuka kamera',
                     variant: AppTextVariant.bodySmall,
@@ -460,10 +454,12 @@ class _KtpPreview extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(Icons.check_circle_rounded, size: 14, color: Colors.greenAccent[400]),
-                const SizedBox(width: 5),
-                const Text(
+                const AppSpacer(5, horizontal: true),
+                const AppText(
                   'Foto KTP',
-                  style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                  variant: AppTextVariant.labelSmall,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w500,
                 ),
               ],
             ),
@@ -486,10 +482,12 @@ class _KtpPreview extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.refresh_rounded, size: 14, color: Colors.white),
-                  SizedBox(width: 4),
-                  Text(
+                  const AppSpacer(4, horizontal: true),
+                  const AppText(
                     'Ambil ulang',
-                    style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w500),
+                    variant: AppTextVariant.labelSmall,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500,
                   ),
                 ],
               ),

@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:boilerplate/core/di/injection.dart';
 import 'package:boilerplate/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:boilerplate/features/auth/presentation/sections/login_form_section.dart';
 import 'package:boilerplate/features/auth/presentation/layouts/auth_layout.dart';
+import 'package:boilerplate/features/auth/presentation/sections/login_form_section.dart';
+import 'package:boilerplate/shared/widgets/design_system.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -23,37 +23,12 @@ class _LoginPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthTemplate(
+    return AuthLayout(
+      logoSection: const AppLogo(
+        icon: Icons.bolt_rounded,
+        label: 'Boilerplate',
+      ),
       formSection: const LoginFormSection(),
-      logoSection: _buildLogo(context),
-    );
-  }
-
-  Widget _buildLogo(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Container(
-          width: 72,
-          height: 72,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primary,
-            borderRadius: BorderRadius.circular(16),
-          ),
-          child: Icon(
-            Icons.bolt_rounded,
-            size: 40,
-            color: Theme.of(context).colorScheme.onPrimary,
-          ),
-        ),
-        const SizedBox(height: 12),
-        Text(
-          'Boilerplate',
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ],
     );
   }
 }

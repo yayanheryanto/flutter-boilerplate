@@ -34,14 +34,10 @@ class DashboardSectionHeader extends StatelessWidget {
           ],
           const Spacer(),
           if (onSeeAll != null)
-            GestureDetector(
-              onTap: onSeeAll,
-              child: AppText(
-                'Semua',
-                variant: AppTextVariant.labelMedium,
-                color: scheme.primary,
-                fontWeight: FontWeight.w600,
-              ),
+            AppLinkText(
+              'Semua',
+              color: scheme.primary,
+              onTap: onSeeAll!,
             ),
         ],
       ),

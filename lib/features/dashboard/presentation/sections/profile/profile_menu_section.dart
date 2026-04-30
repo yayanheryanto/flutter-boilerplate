@@ -19,58 +19,69 @@ class ProfileMenuSection extends StatelessWidget {
             _MenuItem(
               icon: Icons.person_outline_rounded,
               label: 'Edit Profil',
-              onTap: () {
-                //TODO: implement edit profile navigation,
-              },
+              onTap: () {},
             ),
             _MenuItem(
               icon: Icons.lock_outline_rounded,
               label: 'Ubah Kata Sandi',
-              onTap: () {
-                //TODO: implement edit profile navigation,
-              },
+              onTap: () {},
             ),
             _MenuItem(
               icon: Icons.phone_outlined,
               label: 'Verifikasi Nomor HP',
-              trailing: const _BadgeChip(label: 'Belum Terverifikasi'),
-              onTap: () {
-                //TODO: implement edit profile navigation,
-              },
+              trailing: AppBadge(
+                label: 'Belum Terverifikasi',
+                backgroundColor: Colors.orange.shade50,
+                textColor: Colors.orange.shade700,
+              ),
+              onTap: () {},
             ),
           ],
         ),
         const AppSpacer.md(),
-        const _MenuGroup(
+        _MenuGroup(
           title: 'Preferensi',
           items: [
             _MenuItem(
               icon: Icons.notifications_outlined,
               label: 'Notifikasi',
+              onTap: () {},
             ),
             _MenuItem(
               icon: Icons.language_outlined,
               label: 'Bahasa',
-              trailing: _ValueLabel(label: 'Indonesia'),
+              trailing: AppText(
+                'Indonesia',
+                variant: AppTextVariant.bodySmall,
+                color: Colors.black38,
+              ),
+              onTap: () {},
             ),
           ],
         ),
         const AppSpacer.md(),
-        const _MenuGroup(
+        _MenuGroup(
           title: 'Lainnya',
           items: [
             _MenuItem(
               icon: Icons.help_outline_rounded,
               label: 'Bantuan & FAQ',
+              onTap: () {},
             ),
             _MenuItem(
               icon: Icons.shield_outlined,
               label: 'Kebijakan Privasi',
+              onTap: () {},
             ),
             _MenuItem(
               icon: Icons.info_outline_rounded,
               label: 'Tentang Aplikasi',
-              trailing: _ValueLabel(label: 'v1.0.0'),
+              trailing: AppText(
+                'v1.0.0',
+                variant: AppTextVariant.bodySmall,
+                color: Colors.black38,
+              ),
+              onTap: () {},
             ),
           ],
         ),
@@ -79,9 +90,7 @@ class ProfileMenuSection extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// _MenuGroup
-// ---------------------------------------------------------------------------
+// ── _MenuGroup ─────────────────────────────────────────────────────────────────
 
 class _MenuGroup extends StatelessWidget {
   const _MenuGroup({required this.title, required this.items});
@@ -106,18 +115,9 @@ class _MenuGroup extends StatelessWidget {
             fontWeight: FontWeight.w600,
           ),
         ),
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(RadiusTokens.lg),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.05),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
+        // AppCard handles the white surface + border-radius + shadow
+        AppCard(
+          padding: EdgeInsets.zero,
           child: Column(
             children: List.generate(items.length, (index) {
               final isLast = index == items.length - 1;
@@ -142,9 +142,7 @@ class _MenuGroup extends StatelessWidget {
   }
 }
 
-// ---------------------------------------------------------------------------
-// _MenuItem
-// ---------------------------------------------------------------------------
+// ── _MenuItem ──────────────────────────────────────────────────────────────────
 
 class _MenuItem extends StatelessWidget {
   const _MenuItem({
@@ -161,87 +159,38 @@ class _MenuItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap ?? () {},
-      borderRadius: BorderRadius.circular(RadiusTokens.lg),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: SpacingTokens.md,
-          vertical: SpacingTokens.sm + 2,
-        ),
-        child: Row(
-          children: [
-            Container(
-              width: 36,
-              height: 36,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF4F6F9),
-                borderRadius: BorderRadius.circular(RadiusTokens.md),
-              ),
-              child: Icon(icon, size: 18, color: Colors.black54),
+    // AppCard with onTap provides the InkWell splash + rounded clip
+    return AppCard(
+      onTap: onTap,
+      borderRadius: BorderRadius.zero,
+      padding: const EdgeInsets.symmetric(
+        horizontal: SpacingTokens.md,
+        vertical: SpacingTokens.sm + 2,
+      ),
+      child: Row(
+        children: [
+          // Icon badge — reuses AppCard's surface pattern at small scale
+          AppCard(
+            padding: const EdgeInsets.all(SpacingTokens.xs),
+            backgroundColor: const Color(0xFFF4F6F9),
+            borderRadius: BorderRadius.circular(RadiusTokens.md),
+            child: Icon(icon, size: 18, color: Colors.black54),
+          ),
+          const AppSpacer(SpacingTokens.sm, horizontal: true),
+          Expanded(
+            child: AppText(label, fontWeight: FontWeight.w500),
+          ),
+          if (trailing != null) ...[
+            const AppSpacer(SpacingTokens.xs, horizontal: true),
+            trailing!,
+          ] else
+            const Icon(
+              Icons.chevron_right_rounded,
+              size: 18,
+              color: Colors.black38,
             ),
-            const SizedBox(width: SpacingTokens.sm),
-            Expanded(
-              child: AppText(
-                label,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            if (trailing != null) ...[
-              const SizedBox(width: SpacingTokens.xs),
-              trailing!,
-            ] else
-              const Icon(
-                Icons.chevron_right_rounded,
-                size: 18,
-                color: Colors.black38,
-              ),
-          ],
-        ),
+        ],
       ),
-    );
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Trailing widgets
-// ---------------------------------------------------------------------------
-
-class _BadgeChip extends StatelessWidget {
-  const _BadgeChip({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: Colors.orange.shade50,
-        borderRadius: BorderRadius.circular(RadiusTokens.full),
-        border: Border.all(color: Colors.orange.shade200),
-      ),
-      child: AppText(
-        label,
-        variant: AppTextVariant.labelSmall,
-        color: Colors.orange.shade700,
-        fontWeight: FontWeight.w600,
-      ),
-    );
-  }
-}
-
-class _ValueLabel extends StatelessWidget {
-  const _ValueLabel({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return AppText(
-      label,
-      variant: AppTextVariant.bodySmall,
-      color: Colors.black38,
     );
   }
 }

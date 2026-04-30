@@ -1,3 +1,4 @@
+import 'package:boilerplate/core/responsive/responsive_builder.dart';
 import 'package:boilerplate/core/responsive/responsive_context_extension.dart';
 import 'package:boilerplate/shared/widgets/display/app_display.dart';
 import 'package:boilerplate/features/dashboard/data/models/dashboard_dummy_data.dart';
@@ -8,19 +9,58 @@ import 'package:boilerplate/features/dashboard/presentation/sections/home/catego
 import 'package:boilerplate/features/dashboard/presentation/sections/home/dashboard_header.dart';
 import 'package:flutter/material.dart';
 
-/// Dashboard layout templates for different devices.
+/// Responsive home-tab layout.
 ///
-/// - [MobileDashboardTemplate] : single-column scroll layout.
-/// - [TabletDashboardTemplate] : two-column layout for wider screens.
-
-class MobileDashboardTemplate extends StatelessWidget {
+/// - Mobile  : single-column scroll.
+/// - Tablet/Desktop : two-column grid.
+class DashboardLayout extends StatelessWidget {
   final PageController bannerCtrl;
   final int bannerPage;
   final ValueChanged<int> onBannerChanged;
   final Future<void> Function() onRefresh;
 
-  const MobileDashboardTemplate({
+  const DashboardLayout({
     super.key,
+    required this.bannerCtrl,
+    required this.bannerPage,
+    required this.onBannerChanged,
+    required this.onRefresh,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return ResponsiveLayoutBuilder(
+      mobile: _MobileDashboardLayout(
+        bannerCtrl: bannerCtrl,
+        bannerPage: bannerPage,
+        onBannerChanged: onBannerChanged,
+        onRefresh: onRefresh,
+      ),
+      tablet: _TabletDashboardLayout(
+        bannerCtrl: bannerCtrl,
+        bannerPage: bannerPage,
+        onBannerChanged: onBannerChanged,
+        onRefresh: onRefresh,
+      ),
+      desktop: _TabletDashboardLayout(
+        bannerCtrl: bannerCtrl,
+        bannerPage: bannerPage,
+        onBannerChanged: onBannerChanged,
+        onRefresh: onRefresh,
+      ),
+    );
+  }
+}
+
+// ── Mobile layout ──────────────────────────────────────────────────────────────
+
+class _MobileDashboardLayout extends StatelessWidget {
+  final PageController bannerCtrl;
+  final int bannerPage;
+  final ValueChanged<int> onBannerChanged;
+  final Future<void> Function() onRefresh;
+
+  const _MobileDashboardLayout({
     required this.bannerCtrl,
     required this.bannerPage,
     required this.onBannerChanged,
@@ -55,8 +95,6 @@ class MobileDashboardTemplate extends StatelessWidget {
                   const AppSpacer.xl(),
                   const EndingSoonSection(items: dummyEndingSoon),
                   const AppSpacer.xl(),
-                  // RecommendedSection(items: dummyRecommended),
-                  // const AppSpacer.xl(),
                 ],
               ),
             ),
@@ -67,14 +105,15 @@ class MobileDashboardTemplate extends StatelessWidget {
   }
 }
 
-class TabletDashboardTemplate extends StatelessWidget {
+// ── Tablet / Desktop layout ────────────────────────────────────────────────────
+
+class _TabletDashboardLayout extends StatelessWidget {
   final PageController bannerCtrl;
   final int bannerPage;
   final ValueChanged<int> onBannerChanged;
   final Future<void> Function() onRefresh;
 
-  const TabletDashboardTemplate({
-    super.key,
+  const _TabletDashboardLayout({
     required this.bannerCtrl,
     required this.bannerPage,
     required this.onBannerChanged,
@@ -125,7 +164,6 @@ class TabletDashboardTemplate extends StatelessWidget {
                           children: [
                             EndingSoonSection(items: dummyEndingSoon),
                             AppSpacer.xl(),
-                            // RecommendedSection(items: dummyRecommended),
                           ],
                         ),
                       ),
