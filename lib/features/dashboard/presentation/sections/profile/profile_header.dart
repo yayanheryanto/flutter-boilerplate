@@ -1,4 +1,3 @@
-import 'package:boilerplate/core/constants/tokens/radius_tokens.dart';
 import 'package:boilerplate/core/constants/tokens/spacing_tokens.dart';
 import 'package:boilerplate/shared/widgets/display/app_display.dart';
 import 'package:boilerplate/shared/widgets/typography/app_text.dart';
@@ -119,22 +118,22 @@ class _Avatar extends StatelessWidget {
 class _UserInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return const Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const AppText(
+        AppText(
           'Taro Misaki',
           variant: AppTextVariant.titleLarge,
           fontWeight: FontWeight.w700,
         ),
-        const SizedBox(height: SpacingTokens.xs / 2),
-        const AppText(
+        SizedBox(height: SpacingTokens.xs / 2),
+        AppText(
           'taromisaki@email.com',
           variant: AppTextVariant.bodySmall,
           color: Colors.black54,
         ),
-        const AppSpacer.xs(),
+        AppSpacer.xs(),
         AppBadge(
           label: 'Member Aktif',
           backgroundColor: Color(0xFFFF6B00),

@@ -29,7 +29,7 @@ class ProfileLogoutButton extends StatelessWidget {
       type: AppDialogType.warning,
     );
 
-    if (confirmed == true && context.mounted) {
+    if ((confirmed ?? false) && context.mounted) {
       // TODO: dispatch AuthLogoutRequested BLoC event
       // context.read<AuthBloc>().add(const AuthLogoutRequested());
       context.go(AppRoutes.login);

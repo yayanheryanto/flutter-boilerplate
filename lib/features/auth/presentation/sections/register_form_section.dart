@@ -482,8 +482,8 @@ class _KtpPreview extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(Icons.refresh_rounded, size: 14, color: Colors.white),
-                  const AppSpacer(4, horizontal: true),
-                  const AppText(
+                  AppSpacer(4, horizontal: true),
+                  AppText(
                     'Ambil ulang',
                     variant: AppTextVariant.labelSmall,
                     color: Colors.white,

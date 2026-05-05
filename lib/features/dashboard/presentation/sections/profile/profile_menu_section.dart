@@ -50,7 +50,7 @@ class ProfileMenuSection extends StatelessWidget {
             _MenuItem(
               icon: Icons.language_outlined,
               label: 'Bahasa',
-              trailing: AppText(
+              trailing: const AppText(
                 'Indonesia',
                 variant: AppTextVariant.bodySmall,
                 color: Colors.black38,
@@ -76,7 +76,7 @@ class ProfileMenuSection extends StatelessWidget {
             _MenuItem(
               icon: Icons.info_outline_rounded,
               label: 'Tentang Aplikasi',
-              trailing: AppText(
+              trailing: const AppText(
                 'v1.0.0',
                 variant: AppTextVariant.bodySmall,
                 color: Colors.black38,

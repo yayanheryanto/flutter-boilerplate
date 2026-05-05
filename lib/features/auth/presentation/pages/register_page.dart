@@ -23,12 +23,12 @@ class _RegisterPageContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AuthLayout(
-      logoSection: const AppLogo(
+    return const AuthLayout(
+      logoSection: AppLogo(
         icon: Icons.person_add_rounded,
         label: 'Daftar Akun',
       ),
-      formSection: const RegisterFormSection(),
+      formSection: RegisterFormSection(),
     );
   }
 }
