@@ -1,14 +1,14 @@
-import 'package:boilerplate/shared/widgets/buttons/app_button.dart';
-import 'package:boilerplate/shared/widgets/input/app_text_field.dart';
-import 'package:boilerplate/shared/widgets/typography/app_text.dart';
-import 'package:boilerplate/shared/widgets/bottomsheets/app_bottom_sheet.dart';
-import 'package:boilerplate/shared/widgets/dialogs/app_dialog.dart';
-import 'package:boilerplate/shared/widgets/overlays/app_overlays.dart';
-import 'package:boilerplate/shared/widgets/pickers/app_date_picker.dart';
-import 'package:boilerplate/shared/widgets/pickers/app_pickers.dart';
-import 'package:boilerplate/shared/widgets/snackbar/app_snackbar.dart';
-import 'package:boilerplate/shared/widgets/toast/app_toast.dart';
-import 'package:boilerplate/core/utils/app_form_utils.dart';
+import 'package:emas/shared/widgets/buttons/app_button.dart';
+import 'package:emas/shared/widgets/input/app_text_field.dart';
+import 'package:emas/shared/widgets/typography/app_text.dart';
+import 'package:emas/shared/widgets/bottomsheets/app_bottom_sheet.dart';
+import 'package:emas/shared/widgets/dialogs/app_dialog.dart';
+import 'package:emas/shared/widgets/overlays/app_overlays.dart';
+import 'package:emas/shared/widgets/pickers/app_date_picker.dart';
+import 'package:emas/shared/widgets/pickers/app_pickers.dart';
+import 'package:emas/shared/widgets/snackbar/app_snackbar.dart';
+import 'package:emas/shared/widgets/toast/app_toast.dart';
+import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 

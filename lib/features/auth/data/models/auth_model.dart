@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:boilerplate/features/auth/domain/entities/auth_entity.dart';
+import 'package:emas/features/auth/domain/entities/auth_entity.dart';
 
 part 'auth_model.freezed.dart';
 part 'auth_model.g.dart';

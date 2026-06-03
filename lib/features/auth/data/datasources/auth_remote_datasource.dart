@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:retrofit/retrofit.dart';
 
-import 'package:boilerplate/features/auth/data/models/auth_model.dart';
+import 'package:emas/features/auth/data/models/auth_model.dart';
 
 part 'auth_remote_datasource.g.dart';
 

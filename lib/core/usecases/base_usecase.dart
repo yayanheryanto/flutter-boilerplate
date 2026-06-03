@@ -1,6 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 
-import 'package:boilerplate/core/errors/app_failure.dart';
+import 'package:emas/core/errors/app_failure.dart';
 
 /// Base use case with parameters
 abstract class UseCase<Type, Params> {

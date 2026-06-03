@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:boilerplate/core/responsive/responsive_breakpoints.dart';
+import 'package:emas/core/responsive/responsive_breakpoints.dart';
 
 extension ResponsiveContext on BuildContext {
   double get screenWidth => MediaQuery.of(this).size.width;

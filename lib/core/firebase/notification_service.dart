@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:boilerplate/core/config/app_config.dart';
-import 'package:boilerplate/core/utils/app_logger.dart';
-import 'package:boilerplate/core/utils/navigator_key.dart';
+import 'package:emas/core/config/app_config.dart';
+import 'package:emas/core/utils/app_logger.dart';
+import 'package:emas/core/utils/navigator_key.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';

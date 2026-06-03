@@ -2,15 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:boilerplate/core/errors/app_exception.dart';
-import 'package:boilerplate/core/errors/app_failure.dart';
-import 'package:boilerplate/core/errors/error_mapper.dart';
-import 'package:boilerplate/core/services/token_service.dart';
-import 'package:boilerplate/features/auth/domain/entities/auth_entity.dart';
-import 'package:boilerplate/features/auth/domain/repositories/auth_repository.dart';
-import 'package:boilerplate/features/auth/data/datasources/auth_local_datasource.dart';
-import 'package:boilerplate/features/auth/data/datasources/auth_remote_datasource.dart';
-import 'package:boilerplate/features/auth/data/models/auth_model.dart';
+import 'package:emas/core/errors/app_exception.dart';
+import 'package:emas/core/errors/app_failure.dart';
+import 'package:emas/core/errors/error_mapper.dart';
+import 'package:emas/core/services/token_service.dart';
+import 'package:emas/features/auth/domain/entities/auth_entity.dart';
+import 'package:emas/features/auth/domain/repositories/auth_repository.dart';
+import 'package:emas/features/auth/data/datasources/auth_local_datasource.dart';
+import 'package:emas/features/auth/data/datasources/auth_remote_datasource.dart';
+import 'package:emas/features/auth/data/models/auth_model.dart';
 
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {

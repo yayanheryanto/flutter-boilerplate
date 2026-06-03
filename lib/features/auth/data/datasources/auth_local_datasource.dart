@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:boilerplate/core/constants/app_constants.dart';
-import 'package:boilerplate/core/errors/app_exception.dart';
-import 'package:boilerplate/features/auth/data/models/auth_model.dart';
+import 'package:emas/core/constants/app_constants.dart';
+import 'package:emas/core/errors/app_exception.dart';
+import 'package:emas/features/auth/data/models/auth_model.dart';
 
 abstract class AuthLocalDataSource {
   Future<void> saveAuth(AuthModel model);

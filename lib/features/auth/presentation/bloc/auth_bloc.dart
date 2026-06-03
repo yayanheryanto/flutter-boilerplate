@@ -1,10 +1,10 @@
-import 'package:boilerplate/features/auth/domain/entities/auth_entity.dart';
-import 'package:boilerplate/features/auth/domain/usecases/auth/auth_usecase.dart';
+import 'package:emas/features/auth/domain/entities/auth_entity.dart';
+import 'package:emas/features/auth/domain/usecases/auth/auth_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:boilerplate/core/firebase/firebase_services.dart';
+import 'package:emas/core/firebase/firebase_services.dart';
 
 part 'auth_event.dart';
 

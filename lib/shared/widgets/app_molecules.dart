@@ -1,7 +1,7 @@
-import 'package:boilerplate/shared/widgets/buttons/app_button.dart';
-import 'package:boilerplate/shared/widgets/display/app_display.dart';
-import 'package:boilerplate/shared/widgets/feedback/app_feedback.dart';
-import 'package:boilerplate/shared/widgets/typography/app_text.dart';
+import 'package:emas/shared/widgets/buttons/app_button.dart';
+import 'package:emas/shared/widgets/display/app_display.dart';
+import 'package:emas/shared/widgets/feedback/app_feedback.dart';
+import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
 

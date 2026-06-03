@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:boilerplate/core/responsive/responsive_context_extension.dart';
+import 'package:emas/core/responsive/responsive_context_extension.dart';
 
 /// Responsive grid that adapts columns based on screen size
 class AppResponsiveGrid extends StatelessWidget {

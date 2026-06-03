@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:boilerplate/core/services/token_service.dart';
+import 'package:emas/core/services/token_service.dart';
 
 @singleton
 class AuthInterceptor extends Interceptor {

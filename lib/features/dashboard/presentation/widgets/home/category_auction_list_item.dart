@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:boilerplate/shared/theme/color_tokens.dart';
-import 'package:boilerplate/core/constants/tokens/radius_tokens.dart';
-import 'package:boilerplate/core/constants/tokens/spacing_tokens.dart';
-import 'package:boilerplate/shared/widgets/buttons/app_button.dart';
-import 'package:boilerplate/shared/widgets/typography/app_text.dart';
-import 'package:boilerplate/features/dashboard/data/models/auction_item.dart';
-import 'package:boilerplate/features/dashboard/data/models/dashboard_formatters.dart';
+import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/shared/widgets/buttons/app_button.dart';
+import 'package:emas/shared/widgets/typography/app_text.dart';
+import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/data/models/dashboard_formatters.dart';
 import 'package:flutter/material.dart';
 
 class CategoryAuctionListItem extends StatefulWidget {

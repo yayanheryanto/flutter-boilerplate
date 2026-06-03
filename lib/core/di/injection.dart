@@ -2,8 +2,8 @@ import 'package:get_it/get_it.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:boilerplate/core/constants/app_constants.dart';
-import 'package:boilerplate/core/di/injection.config.dart';
+import 'package:emas/core/constants/app_constants.dart';
+import 'package:emas/core/di/injection.config.dart';
 
 final getIt = GetIt.instance;
 

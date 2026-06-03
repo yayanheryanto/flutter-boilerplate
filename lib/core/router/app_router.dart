@@ -1,13 +1,14 @@
-import 'package:boilerplate/core/constants/app_routes.dart';
-import 'package:boilerplate/shared/layouts/app_scaffold_wrapper.dart';
-import 'package:boilerplate/core/utils/navigator_key.dart';
-import 'package:boilerplate/features/auth/presentation/pages/forgot_password_page.dart';
-import 'package:boilerplate/features/auth/presentation/pages/login_page.dart';
-import 'package:boilerplate/features/auth/presentation/pages/register_page.dart';
-import 'package:boilerplate/features/dashboard/data/models/auction_item.dart';
-import 'package:boilerplate/features/dashboard/presentation/pages/category_page.dart';
-import 'package:boilerplate/features/dashboard/presentation/pages/dashboard_page.dart';
-import 'package:boilerplate/features/demo/ui_demo_page.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
+import 'package:emas/core/utils/navigator_key.dart';
+import 'package:emas/features/auth/presentation/pages/forgot_password_page.dart';
+import 'package:emas/features/auth/presentation/pages/login_page.dart';
+import 'package:emas/features/auth/presentation/pages/otp_page.dart';
+import 'package:emas/features/auth/presentation/pages/register_page.dart';
+import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/presentation/pages/category_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:emas/features/demo/ui_demo_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
@@ -37,6 +38,16 @@ class AppRouter {
           path: AppRoutes.forgotPassword,
           name: 'forgot-password',
           builder: (context, state) => const ForgotPasswordPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.otp,
+          name: 'otp',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            final phone = extra['phone'] as String? ?? '';
+            return OtpPage(phone: phone);
+          },
         ),
 
         // ── App ──────────────────────────────────────────────────────────────

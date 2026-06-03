@@ -1,8 +1,8 @@
-import 'package:boilerplate/core/bloc/notification_bloc.dart';
-import 'package:boilerplate/core/firebase/notification_service.dart';
-import 'package:boilerplate/shared/widgets/toast/app_toast.dart';
-import 'package:boilerplate/core/utils/app_logger.dart';
-import 'package:boilerplate/core/utils/navigator_key.dart';
+import 'package:emas/core/bloc/notification_bloc.dart';
+import 'package:emas/core/firebase/notification_service.dart';
+import 'package:emas/shared/widgets/toast/app_toast.dart';
+import 'package:emas/core/utils/app_logger.dart';
+import 'package:emas/core/utils/navigator_key.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -3,8 +3,8 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:boilerplate/core/config/app_config.dart';
-import 'package:boilerplate/core/utils/app_logger.dart';
+import 'package:emas/core/config/app_config.dart';
+import 'package:emas/core/utils/app_logger.dart';
 
 // ─── Analytics Service ─────────────────────────────────────────────────────
 

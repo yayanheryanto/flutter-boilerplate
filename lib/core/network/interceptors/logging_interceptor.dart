@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:boilerplate/core/config/app_config.dart';
-import 'package:boilerplate/core/utils/app_logger.dart';
+import 'package:emas/core/config/app_config.dart';
+import 'package:emas/core/utils/app_logger.dart';
 
 @singleton
 class LoggingInterceptor extends Interceptor {

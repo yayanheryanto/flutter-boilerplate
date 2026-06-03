@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import 'package:boilerplate/shared/theme/color_tokens.dart';
-import 'package:boilerplate/core/constants/tokens/radius_tokens.dart';
-import 'package:boilerplate/shared/theme/typography_tokens.dart';
+import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/shared/theme/typography_tokens.dart';
 
 class AppTheme {
   AppTheme._();

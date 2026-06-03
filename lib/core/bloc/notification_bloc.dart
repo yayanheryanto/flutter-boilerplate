@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:boilerplate/core/firebase/notification_service.dart';
-import 'package:boilerplate/core/utils/app_logger.dart';
+import 'package:emas/core/firebase/notification_service.dart';
+import 'package:emas/core/utils/app_logger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 

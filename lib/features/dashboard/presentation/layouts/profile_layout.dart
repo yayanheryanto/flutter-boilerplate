@@ -1,10 +1,10 @@
-import 'package:boilerplate/core/responsive/responsive_builder.dart';
-import 'package:boilerplate/core/responsive/responsive_context_extension.dart';
-import 'package:boilerplate/shared/widgets/display/app_display.dart';
-import 'package:boilerplate/features/dashboard/presentation/sections/profile/profile_header.dart';
-import 'package:boilerplate/features/dashboard/presentation/sections/profile/profile_info_section.dart';
-import 'package:boilerplate/features/dashboard/presentation/widgets/profile/profile_logout_button.dart';
-import 'package:boilerplate/features/dashboard/presentation/sections/profile/profile_menu_section.dart';
+import 'package:emas/core/responsive/responsive_builder.dart';
+import 'package:emas/core/responsive/responsive_context_extension.dart';
+import 'package:emas/shared/widgets/display/app_display.dart';
+import 'package:emas/features/dashboard/presentation/sections/profile/profile_header.dart';
+import 'package:emas/features/dashboard/presentation/sections/profile/profile_info_section.dart';
+import 'package:emas/features/dashboard/presentation/widgets/profile/profile_logout_button.dart';
+import 'package:emas/features/dashboard/presentation/sections/profile/profile_menu_section.dart';
 import 'package:flutter/material.dart';
 
 /// Responsive profile-tab layout.

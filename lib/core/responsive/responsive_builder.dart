@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:boilerplate/core/responsive/responsive_breakpoints.dart';
-import 'package:boilerplate/core/responsive/responsive_context_extension.dart';
+import 'package:emas/core/responsive/responsive_breakpoints.dart';
+import 'package:emas/core/responsive/responsive_context_extension.dart';
 
 /// Builds different layouts based on device type
 class ResponsiveBuilder extends StatelessWidget {

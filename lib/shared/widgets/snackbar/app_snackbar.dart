@@ -1,5 +1,5 @@
-import 'package:boilerplate/core/constants/tokens/radius_tokens.dart';
-import 'package:boilerplate/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:flutter/material.dart';
 
 // ─── AppSnackbar ──────────────────────────────────────────────────────────────

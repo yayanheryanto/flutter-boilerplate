@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
-
 class ColorTokens {
   ColorTokens._();
 
   // Primary
-  static const Color primary50 = Color(0xFFFFF3E0);
-  static const Color primary100 = Color(0xFFFFE0B2);
-  static const Color primary200 = Color(0xFFFFCC80);
-  static const Color primary300 = Color(0xFFFFB74D);
-  static const Color primary400 = Color(0xFFFFA726);
-  static const Color primary500 = Color(0xFFF57C00); // Your Primary
-  static const Color primary600 = Color(0xFFFB8C00);
-  static const Color primary700 = Color(0xFFF57C00);
-  static const Color primary800 = Color(0xFFEF6C00);
-  static const Color primary900 = Color(0xFFE65100);
+  static const Color primary50 = Color(0xFFFFF8E8);
+  static const Color primary100 = Color(0xFFFFEDC2);
+  static const Color primary200 = Color(0xFFFFE199);
+  static const Color primary300 = Color(0xFFFED470);
+  static const Color primary400 = Color(0xFFFCC14A);
+  static const Color primary500 = Color(0xFFF99D1C);
+  static const Color primary600 = Color(0xFFF08F12);
+  static const Color primary700 = Color(0xFFE07F0D);
+  static const Color primary800 = Color(0xFFCC700A);
+  static const Color primary900 = Color(0xFFAA5A07);
 
   // Neutral
   static const Color neutral50 = Color(0xFFF8FAFC);
@@ -26,6 +25,17 @@ class ColorTokens {
   static const Color neutral700 = Color(0xFF334155);
   static const Color neutral800 = Color(0xFF1E293B);
   static const Color neutral900 = Color(0xFF0F172A);
+
+  // Form / Text Colors
+  static const Color textPrimary = Color(0xFF242424);
+  static const Color textSecondary = Color(0xFF757575);
+  static const Color textHint = Color(0xFF9E9E9E);
+  static const Color textLabel = Color(0xFF737373);
+
+  static const Color border = Color(0xFFD9D9D9);
+  static const Color borderFocused = primary500;
+
+  static const Color inputBackground = Color(0xFFFFFFFF);
 
   // Success
   static const Color success50 = Color(0xFFF0FDF4);
@@ -47,7 +57,6 @@ class ColorTokens {
   static const Color info500 = Color(0xFF3B82F6);
   static const Color info600 = Color(0xFF2563EB);
 
-  // White / Black
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
   static const Color transparent = Colors.transparent;

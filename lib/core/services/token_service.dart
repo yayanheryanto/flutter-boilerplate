@@ -1,7 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:boilerplate/core/constants/app_constants.dart';
+import 'package:emas/core/constants/app_constants.dart';
 
 abstract class TokenService {
   Future<String?> getToken();

@@ -1,26 +1,30 @@
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:emas/features/auth/presentation/widgets/register_form_widget.dart';
+import 'package:emas/features/auth/presentation/widgets/otp_form_widget.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/color_tokens.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class RegisterPage extends StatelessWidget {
-  const RegisterPage({super.key});
+class OtpPage extends StatelessWidget {
+  /// The phone number the OTP was sent to — shown in the subtitle.
+  final String phone;
+
+  const OtpPage({super.key, required this.phone});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<AuthBloc>(),
-      child: const _RegisterPageContent(),
+      child: _OtpPageContent(phone: phone),
     );
   }
 }
 
-class _RegisterPageContent extends StatelessWidget {
-  const _RegisterPageContent();
+class _OtpPageContent extends StatelessWidget {
+  final String phone;
+  const _OtpPageContent({required this.phone});
 
   @override
   Widget build(BuildContext context) {
@@ -40,18 +44,9 @@ class _RegisterPageContent extends StatelessWidget {
         ),
         automaticallyImplyLeading: false,
       ),
-      body: const SafeArea(
+      body: SafeArea(
         top: false,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 16),
-              RegisterFormWidget(),
-              SizedBox(height: 40),
-            ],
-          ),
-        ),
+        child: OtpFormWidget(phone: phone),
       ),
     );
   }

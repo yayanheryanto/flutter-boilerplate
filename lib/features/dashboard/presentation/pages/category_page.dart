@@ -1,10 +1,10 @@
-import 'package:boilerplate/core/constants/tokens/radius_tokens.dart';
-import 'package:boilerplate/core/constants/tokens/spacing_tokens.dart';
-import 'package:boilerplate/shared/widgets/input/app_text_field.dart';
-import 'package:boilerplate/shared/widgets/typography/app_text.dart';
-import 'package:boilerplate/features/dashboard/data/models/auction_item.dart';
-import 'package:boilerplate/features/dashboard/data/models/dashboard_dummy_data.dart';
-import 'package:boilerplate/features/dashboard/presentation/widgets/home/category_auction_list_item.dart';
+import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/shared/widgets/input/app_text_field.dart';
+import 'package:emas/shared/widgets/typography/app_text.dart';
+import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/data/models/dashboard_dummy_data.dart';
+import 'package:emas/features/dashboard/presentation/widgets/home/category_auction_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

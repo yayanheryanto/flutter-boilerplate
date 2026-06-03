@@ -85,7 +85,7 @@ class AppValidators {
     return (v) {
       if (v == null || v.isEmpty) return null;
       final digits = v.replaceAll(RegExp(r'[\s\-\(\)\+]'), '');
-      return (digits.length >= 7 && digits.length <= 15 && RegExp(r'^\d+$').hasMatch(digits))
+      return (digits.length >= 9 && digits.length <= 15 && RegExp(r'^\d+$').hasMatch(digits))
           ? null
           : message;
     };

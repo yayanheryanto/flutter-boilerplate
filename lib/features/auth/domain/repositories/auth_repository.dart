@@ -1,7 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 
-import 'package:boilerplate/core/errors/app_failure.dart';
-import 'package:boilerplate/features/auth/domain/entities/auth_entity.dart';
+import 'package:emas/core/errors/app_failure.dart';
+import 'package:emas/features/auth/domain/entities/auth_entity.dart';
 
 abstract class AuthRepository {
   Future<Either<AppFailure, AuthEntity>> login({

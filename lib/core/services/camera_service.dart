@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:boilerplate/core/constants/app_constants.dart';
+import 'package:emas/core/constants/app_constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 

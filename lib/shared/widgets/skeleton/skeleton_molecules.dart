@@ -1,4 +1,4 @@
-import 'package:boilerplate/shared/widgets/skeleton/skeleton_atoms.dart';
+import 'package:emas/shared/widgets/skeleton/skeleton_atoms.dart';
 import 'package:flutter/material.dart';
 
 

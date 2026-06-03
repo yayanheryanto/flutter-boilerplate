@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:boilerplate/core/responsive/responsive_context_extension.dart';
+import 'package:emas/core/responsive/responsive_context_extension.dart';
 
 class NavigationItem {
   final IconData icon;

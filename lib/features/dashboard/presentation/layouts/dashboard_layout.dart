@@ -1,12 +1,12 @@
-import 'package:boilerplate/core/responsive/responsive_builder.dart';
-import 'package:boilerplate/core/responsive/responsive_context_extension.dart';
-import 'package:boilerplate/shared/widgets/display/app_display.dart';
-import 'package:boilerplate/features/dashboard/data/models/dashboard_dummy_data.dart';
-import 'package:boilerplate/features/dashboard/presentation/sections/home/activity_section.dart';
-import 'package:boilerplate/features/dashboard/presentation/sections/home/auction_list_section.dart';
-import 'package:boilerplate/features/dashboard/presentation/sections/home/banner_carousel.dart';
-import 'package:boilerplate/features/dashboard/presentation/sections/home/category_section.dart';
-import 'package:boilerplate/features/dashboard/presentation/sections/home/dashboard_header.dart';
+import 'package:emas/core/responsive/responsive_builder.dart';
+import 'package:emas/core/responsive/responsive_context_extension.dart';
+import 'package:emas/shared/widgets/display/app_display.dart';
+import 'package:emas/features/dashboard/data/models/dashboard_dummy_data.dart';
+import 'package:emas/features/dashboard/presentation/sections/home/activity_section.dart';
+import 'package:emas/features/dashboard/presentation/sections/home/auction_list_section.dart';
+import 'package:emas/features/dashboard/presentation/sections/home/banner_carousel.dart';
+import 'package:emas/features/dashboard/presentation/sections/home/category_section.dart';
+import 'package:emas/features/dashboard/presentation/sections/home/dashboard_header.dart';
 import 'package:flutter/material.dart';
 
 /// Responsive home-tab layout.

@@ -1,6 +1,6 @@
-import 'package:boilerplate/core/constants/app_routes.dart';
-import 'package:boilerplate/shared/widgets/buttons/app_button.dart';
-import 'package:boilerplate/shared/widgets/dialogs/app_dialog.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/shared/widgets/buttons/app_button.dart';
+import 'package:emas/shared/widgets/dialogs/app_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

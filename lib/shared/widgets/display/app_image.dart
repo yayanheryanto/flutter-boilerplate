@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import 'package:boilerplate/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/tokens/radius_tokens.dart';
 
 // AppImage
 class AppImage extends StatelessWidget {

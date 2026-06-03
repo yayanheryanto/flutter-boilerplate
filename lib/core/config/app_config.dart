@@ -1,4 +1,4 @@
-import 'package:boilerplate/core/config/env.dart';
+import 'package:emas/core/config/env.dart';
 
 class AppConfig {
   AppConfig._();

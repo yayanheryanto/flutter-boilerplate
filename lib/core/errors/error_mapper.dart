@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import 'package:boilerplate/core/errors/app_exception.dart';
-import 'package:boilerplate/core/errors/app_failure.dart';
+import 'package:emas/core/errors/app_exception.dart';
+import 'package:emas/core/errors/app_failure.dart';
 
 class ErrorMapper {
   ErrorMapper._();

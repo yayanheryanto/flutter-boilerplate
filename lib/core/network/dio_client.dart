@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:boilerplate/core/config/app_config.dart';
-import 'package:boilerplate/core/constants/app_constants.dart';
-import 'package:boilerplate/core/network/interceptors/auth_interceptor.dart';
-import 'package:boilerplate/core/network/interceptors/logging_interceptor.dart';
-import 'package:boilerplate/core/network/interceptors/retry_interceptor.dart';
+import 'package:emas/core/config/app_config.dart';
+import 'package:emas/core/constants/app_constants.dart';
+import 'package:emas/core/network/interceptors/auth_interceptor.dart';
+import 'package:emas/core/network/interceptors/logging_interceptor.dart';
+import 'package:emas/core/network/interceptors/retry_interceptor.dart';
 
 @singleton
 class DioClient {

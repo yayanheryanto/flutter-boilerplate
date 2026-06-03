@@ -1,4 +1,4 @@
-import 'package:boilerplate/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/data/models/auction_item.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -8,6 +8,7 @@ class AppRoutes {
   static const String login = '/login';
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
+  static const String otp = '/otp';
   static const String dashboard = '/dashboard';
 
   // ── Category ──────────────────────────────────────────────────────────────

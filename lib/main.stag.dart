@@ -3,15 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'package:boilerplate/core/config/app_config.dart';
-import 'package:boilerplate/core/config/env.dart';
-import 'package:boilerplate/core/di/injection.dart';
-import 'package:boilerplate/core/firebase/firebase_options_dev.dart';
-import 'package:boilerplate/core/bloc/notification_bloc.dart';
-import 'package:boilerplate/core/firebase/notification_service.dart';
-import 'package:boilerplate/core/router/app_router.dart';
-import 'package:boilerplate/shared/theme/app_theme.dart';
-import 'package:boilerplate/core/utils/app_bloc_observer.dart';
+import 'package:emas/core/config/app_config.dart';
+import 'package:emas/core/config/env.dart';
+import 'package:emas/core/di/injection.dart';
+import 'package:emas/core/firebase/firebase_options_dev.dart';
+import 'package:emas/core/bloc/notification_bloc.dart';
+import 'package:emas/core/firebase/notification_service.dart';
+import 'package:emas/core/router/app_router.dart';
+import 'package:emas/shared/theme/app_theme.dart';
+import 'package:emas/core/utils/app_bloc_observer.dart';
+import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -52,30 +53,31 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final router = getIt<AppRouter>().router;
 
-    return MultiBlocProvider(
-      providers: [
-        // NotificationBloc disediakan secara global agar bisa diakses
-        // dari mana saja di widget tree, termasuk AppNotificationWrapper.
-        BlocProvider<NotificationBloc>(
-          create: (_) => getIt<NotificationBloc>()
-            ..add(NotificationStartListening()),
-        ),
-      ],
-      child: MaterialApp.router(
-        title: AppConfig.appName,
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        routerConfig: router,
-        builder: (context, child) {
-          return MediaQuery(
-            data: MediaQuery.of(context).copyWith(
-              textScaler: TextScaler.noScaling,
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<NotificationBloc>(
+              create: (_) => getIt<NotificationBloc>()..add(NotificationStartListening()),
             ),
-            child: child!,
-          );
-        },
-      ),
+          ],
+          child: MaterialApp.router(
+            title: AppConfig.appName,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            routerConfig: router,
+            builder: (context, child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  textScaler: TextScaler.noScaling,
+                ),
+                child: child!,
+              );
+            },
+          ),
+        );
+      },
     );
   }
 }

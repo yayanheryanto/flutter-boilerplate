@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:boilerplate/core/constants/tokens/radius_tokens.dart';
-import 'package:boilerplate/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 
 enum AppButtonVariant { primary, secondary, outlined, text, danger }
 
@@ -22,6 +22,9 @@ class AppButton extends StatelessWidget {
   /// Used internally by AppConfirmDialog.
   final bool dangerOverride;
 
+  /// Override the default corner radius. Defaults to [RadiusTokens.md].
+  final double? borderRadius;
+
   const AppButton({
     super.key,
     required this.label,
@@ -34,6 +37,7 @@ class AppButton extends StatelessWidget {
     this.isExpanded = true,
     this.width,
     this.dangerOverride = false,
+    this.borderRadius,
   });
 
   @override
@@ -102,7 +106,7 @@ class AppButton extends StatelessWidget {
   }
 
   ButtonStyle _buildStyle(BuildContext context, ColorScheme colorScheme) {
-    final radius = BorderRadius.circular(RadiusTokens.md);
+    final radius = BorderRadius.circular(borderRadius ?? RadiusTokens.md);
 
     // dangerOverride wins over variant
     if (dangerOverride || variant == AppButtonVariant.danger) {

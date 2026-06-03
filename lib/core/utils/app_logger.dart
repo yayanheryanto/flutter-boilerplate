@@ -1,6 +1,6 @@
 import 'package:logger/logger.dart';
 
-import 'package:boilerplate/core/config/app_config.dart';
+import 'package:emas/core/config/app_config.dart';
 
 class AppLogger {
   AppLogger._();
