@@ -1,4 +1,6 @@
 import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/features/auth/presentation/pages/ktp_guide_page.dart';
+import 'package:emas/features/auth/presentation/pages/verification_preparation_page.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 import 'package:emas/features/auth/presentation/pages/forgot_password_page.dart';
@@ -49,6 +51,19 @@ class AppRouter {
             return OtpPage(phone: phone);
           },
         ),
+
+        GoRoute(
+          path: AppRoutes.verificationPreparation,
+          name: 'verification-preparation',
+          builder: (context, state) => const VerificationPreparationPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.ktpGuide,
+          name: 'ktp-guide',
+          builder: (context, state) => const KtpGuidePage(),
+        ),
+
 
         // ── App ──────────────────────────────────────────────────────────────
         GoRoute(

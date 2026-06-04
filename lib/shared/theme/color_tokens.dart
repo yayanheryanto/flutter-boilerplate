@@ -49,7 +49,7 @@ class ColorTokens {
 
   // Error
   static const Color error50 = Color(0xFFFFF1F2);
-  static const Color error500 = Color(0xFFEF4444);
+  static const Color error500 = Color(0xFFE7000B);
   static const Color error600 = Color(0xFFDC2626);
 
   // Info

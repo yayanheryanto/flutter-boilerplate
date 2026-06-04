@@ -1,11 +1,13 @@
 import 'dart:async';
 
 import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/phone_number_masker.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:emas/shared/theme/color_tokens.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
+import 'package:emas/shared/widgets/display/app_spacer.dart';
 import 'package:emas/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -76,12 +78,9 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
     _startTimer();
   }
 
-  // ── Input handling ─────────────────────────────────────────────────────────
-
   String get _otpValue => _controllers.map((c) => c.text).join();
 
   void _onDigitChanged(int index, String value) {
-    // 1. Handle Paste / Input banyak karakter sekaligus
     if (value.length > 1) {
       final digits = value.replaceAll(RegExp(r'\D'), '');
       for (int i = 0; i < _kOtpLength; i++) {
@@ -91,19 +90,16 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
           _controllers[i].text = '';
         }
       }
-      // Pindahkan fokus ke kotak terakhir yang terisi atau kotak paling akhir
       final nextFocusIndex = (digits.length).clamp(0, _kOtpLength - 1);
       _focusNodes[nextFocusIndex].requestFocus();
       setState(() {});
       return;
     }
 
-    // 2. Handle Input Normal (Ketik Maju)
     if (value.isNotEmpty) {
       if (index < _kOtpLength - 1) {
         _focusNodes[index + 1].requestFocus();
       } else {
-        // Jika sudah di kotak terakhir, hilangkan fokus keyboard/dismiss
         _focusNodes[index].unfocus();
       }
     }
@@ -116,8 +112,6 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
     context.go(AppRoutes.dashboard);
   }
 
-  // ── Build ──────────────────────────────────────────────────────────────────
-
   @override
   Widget build(BuildContext context) {
     return BlocListener<AuthBloc, AuthState>(
@@ -128,35 +122,36 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
       },
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
-          horizontal: context.responsive(mobile: 24.0, tablet: 48.0),
+          horizontal: context.responsive(
+            mobile: SpacingTokens.lg,
+            tablet: SpacingTokens.xxl,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 16),
+            const AppSpacer.md(),
             const AppText(
               'Masukkan Kode OTP',
               variant: AppTextVariant.headlineLarge,
               color: ColorTokens.primary500,
               fontWeight: FontWeight.w800,
             ),
-            const SizedBox(height: 8),
+            const AppSpacer.sm(),
 
             AppText(
               'Kami akan kirim kode Verifikasi ke $_phoneNumberMasker',
               variant: AppTextVariant.titleSmall,
             ),
-            const SizedBox(height: 40),
+            const AppSpacer(40),
 
-            // ── OTP boxes ────────────────────────────────────────────────────
             _OtpBoxRow(
               controllers: _controllers,
               focusNodes: _focusNodes,
               onChanged: _onDigitChanged,
             ),
-            const SizedBox(height: 32),
+            const AppSpacer.xl(),
 
-            // ── Resend ───────────────────────────────────────────────────────
             Center(
               child: Column(
                 children: [
@@ -164,8 +159,7 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
                     'Belum menerima kode OTP?',
                     variant: AppTextVariant.titleMedium,
                   ),
-
-                  const SizedBox(height: 8),
+                  const AppSpacer.sm(),
                   _ResendButton(
                     secondsLeft: _secondsLeft,
                     resendCount: _resendCount,
@@ -175,23 +169,13 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
                 ],
               ),
             ),
-            const SizedBox(height: 40),
-
-            // ── Submit ───────────────────────────────────────────────────────
-            // AppButton(
-            //   label: 'Verifikasi',
-            //   onPressed: _otpValue.length == _kOtpLength ? _onSubmit : null,
-            //   borderRadius: 100,
-            // ),
-            // const SizedBox(height: 40),
+            const AppSpacer(40),
           ],
         ),
       ),
     );
   }
 }
-
-// ─── OTP Box Row ──────────────────────────────────────────────────────────────
 
 class _OtpBoxRow extends StatelessWidget {
   final List<TextEditingController> controllers;
@@ -210,19 +194,16 @@ class _OtpBoxRow extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: List.generate(
         _kOtpLength,
-            (i) => _OtpBox(
+        (i) => _OtpBox(
           controller: controllers[i],
           focusNode: focusNodes[i],
           onChanged: (v) => onChanged(i, v),
-          // Melemparkan focusNode sebelumnya untuk handle backspace yang smooth
           previousFocusNode: i > 0 ? focusNodes[i - 1] : null,
         ),
       ),
     );
   }
 }
-
-// ─── Single OTP Box ───────────────────────────────────────────────────────────
 
 class _OtpBox extends StatefulWidget {
   final TextEditingController controller;
@@ -251,9 +232,9 @@ class _OtpBoxState extends State<_OtpBox> {
       height: 52,
       child: CallbackShortcuts(
         bindings: <ShortcutActivator, VoidCallback>{
-          // Menangani tombol backspace fisik/sofware keyboard dengan andal via Shortcuts
           const SingleActivator(LogicalKeyboardKey.backspace): () {
-            if (widget.controller.text.isEmpty && widget.previousFocusNode != null) {
+            if (widget.controller.text.isEmpty &&
+                widget.previousFocusNode != null) {
               widget.previousFocusNode!.requestFocus();
             } else {
               widget.controller.clear();
@@ -267,20 +248,16 @@ class _OtpBoxState extends State<_OtpBox> {
           keyboardType: TextInputType.number,
           textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.titleLarge?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-          // Mengizinkan 2 karakter sementara agar `onChanged` mendeteksi backspace di Android
+                fontWeight: FontWeight.w600,
+              ),
           inputFormatters: [
             LengthLimitingTextInputFormatter(2),
             FilteringTextInputFormatter.digitsOnly,
           ],
           onChanged: (value) {
-            // JIKA kursor mendeteksi backspace saat box sudah kosong
             if (value.isEmpty && widget.previousFocusNode != null) {
               widget.previousFocusNode!.requestFocus();
-            }
-            // JIKA user mengetik karakter baru saat box sudah ada isinya (mengganti angka)
-            else if (value.length > 1) {
+            } else if (value.length > 1) {
               widget.controller.text = value.substring(value.length - 1);
               widget.controller.selection = TextSelection.fromPosition(
                 TextPosition(offset: widget.controller.text.length),
@@ -318,8 +295,6 @@ class _OtpBoxState extends State<_OtpBox> {
   }
 }
 
-// ─── Resend Button ────────────────────────────────────────────────────────────
-
 class _ResendButton extends StatelessWidget {
   final int secondsLeft;
   final int resendCount;
@@ -339,39 +314,36 @@ class _ResendButton extends StatelessWidget {
     final canResend = secondsLeft == 0 && !exhausted;
 
     if (exhausted) {
-      return Text(
+      return AppText(
         'Batas pengiriman ulang telah tercapai',
-        style: TextStyle(
-          fontSize: 13,
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
-        ),
+        variant: AppTextVariant.bodySmall,
+        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
       );
     }
 
     return GestureDetector(
       onTap: canResend ? onResend : null,
-      child: RichText(
-        text: TextSpan(
-          style: const TextStyle(fontSize: 14),
-          children: [
+      child: AppRichText(
+        children: [
+          TextSpan(
+            text: 'Kirim ulang ($resendCount/$maxResend)',
+            style: TextStyle(
+              fontSize: 14,
+              color: ColorTokens.primary500,
+              fontWeight: FontWeight.w600,
+              decoration: canResend ? TextDecoration.underline : null,
+            ),
+          ),
+          if (secondsLeft > 0)
             TextSpan(
-              text: 'Kirim ulang ($resendCount/$maxResend)',
+              text: ' dalam $secondsLeft detik',
               style: TextStyle(
-                color: ColorTokens.primary500,
-                fontWeight: FontWeight.w600,
-                decoration: canResend ? TextDecoration.underline : null,
+                fontSize: 14,
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                fontWeight: FontWeight.normal,
               ),
             ),
-            if (secondsLeft > 0)
-              TextSpan(
-                text: ' dalam $secondsLeft detik',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

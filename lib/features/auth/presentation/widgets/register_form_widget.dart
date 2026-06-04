@@ -1,13 +1,11 @@
 import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
-import 'package:emas/shared/theme/color_tokens.dart';
-import 'package:emas/shared/widgets/buttons/app_button.dart';
-import 'package:emas/shared/widgets/input/app_text_field.dart';
-import 'package:emas/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
+import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,20 +48,11 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
       return;
     }
 
-    // context.read<AuthBloc>().add(
-    //   AuthRegisterRequested(
-    //     email: _emailController.text.trim(),
-    //     password: _passwordController.text,
-    //     name: _nameController.text.trim(),
-    //   ),
-    // );
     context.go(AppRoutes.otp, extra: {'phone': _phoneController.text});
   }
 
   @override
   Widget build(BuildContext context) {
-    final primary = Theme.of(context).colorScheme.primary;
-
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
@@ -80,27 +69,28 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
           key: formKey,
           child: Padding(
             padding: EdgeInsets.symmetric(
-              horizontal: context.responsive(mobile: 24.0, tablet: 48.0),
+              horizontal: context.responsive(
+                mobile: SpacingTokens.lg,
+                tablet: SpacingTokens.xxl,
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // ── Header ──────────────────────────────────────────────────
                 const AppText(
                   'Daftar Sekarang',
                   variant: AppTextVariant.headlineLarge,
                   color: ColorTokens.primary500,
                   fontWeight: FontWeight.w800,
                 ),
-                const SizedBox(height: 10),
+                const AppSpacer(10),
                 const AppText(
                   'Dengan punya akun, kamu bisa akses semua layanan di EMAS',
                   variant: AppTextVariant.titleSmall,
                 ),
-                const SizedBox(height: 32),
+                const AppSpacer.xl(),
 
-                // ── Nama Lengkap ─────────────────────────────────────────────
                 AppTextField(
                   controller: _nameController,
                   label: 'Nama Lengkap',
@@ -116,9 +106,8 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                     ),
                   ]),
                 ),
-                const SizedBox(height: 16),
+                const AppSpacer.md(),
 
-                // ── Nomor Handphone ──────────────────────────────────────────
                 AppTextField(
                   controller: _phoneController,
                   label: 'Nomor Handphone',
@@ -135,9 +124,8 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                     ),
                   ]),
                 ),
-                const SizedBox(height: 16),
+                const AppSpacer.md(),
 
-                // ── Email ────────────────────────────────────────────────────
                 AppTextField(
                   controller: _emailController,
                   label: 'Email',
@@ -149,9 +137,8 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                     AppValidators.email(message: 'Format email tidak valid'),
                   ]),
                 ),
-                const SizedBox(height: 16),
+                const AppSpacer.md(),
 
-                // ── Password ─────────────────────────────────────────────────
                 AppPasswordField(
                   controller: _passwordController,
                   hint: 'Masukkan password Anda',
@@ -164,9 +151,8 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                     ),
                   ]),
                 ),
-                const SizedBox(height: 16),
+                const AppSpacer.md(),
 
-                // ── Konfirmasi Password ──────────────────────────────────────
                 AppPasswordField(
                   controller: _confirmPasswordController,
                   label: 'Konfirmasi Password',
@@ -182,25 +168,22 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                     ),
                   ]),
                 ),
-                const SizedBox(height: 20),
+                const AppSpacer(20),
 
-                // ── Terms & Conditions ───────────────────────────────────────
                 _TermsCheckbox(
                   value: _agreedToTerms,
                   onChanged: (v) => setState(() => _agreedToTerms = v ?? false),
                 ),
-                const SizedBox(height: 28),
+                const AppSpacer(28),
 
-                // ── Submit ───────────────────────────────────────────────────
                 AppButton(
                   label: 'Daftar',
                   onPressed: isLoading ? null : _onSubmit,
                   isLoading: isLoading,
                   borderRadius: 25,
                 ),
-                const SizedBox(height: 20),
+                const AppSpacer(20),
 
-                // ── Login link ───────────────────────────────────────────────
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -208,14 +191,11 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                       'Belum punya akun? ',
                       variant: AppTextVariant.titleMedium,
                     ),
-                    GestureDetector(
+                    AppLinkText(
+                      'Masuk',
+                      variant: AppTextVariant.titleMedium,
+                      color: ColorTokens.primary500,
                       onTap: () => AppNavigator.go(AppRoutes.login),
-                      child: const AppText(
-                        'Masuk',
-                        variant: AppTextVariant.titleMedium,
-                        color: ColorTokens.primary500,
-                        fontWeight: FontWeight.w700,
-                      ),
                     ),
                   ],
                 ),
@@ -228,8 +208,6 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
   }
 }
 
-// ─── Terms Checkbox ───────────────────────────────────────────────────────────
-
 class _TermsCheckbox extends StatelessWidget {
   final bool value;
   final ValueChanged<bool?> onChanged;
@@ -239,6 +217,16 @@ class _TermsCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final primary = Theme.of(context).colorScheme.primary;
+    const linkStyle = TextStyle(
+      color: Color(0xFF2196F3),
+      fontWeight: FontWeight.w600,
+    );
+    const bodyStyle = TextStyle(
+      fontSize: 14,
+      fontWeight: FontWeight.w400,
+      color: ColorTokens.textPrimary,
+      height: 1.3,
+    );
 
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -256,52 +244,29 @@ class _TermsCheckbox extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        const AppSpacer(10, horizontal: true),
         Expanded(
-          child: RichText(
-            text: TextSpan(
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
-                color: ColorTokens.textPrimary,
-                height: 1.3,
+          child: AppRichText(
+            children: [
+              const TextSpan(
+                text: 'Dengan mendaftar, saya menyetujui ',
+                style: bodyStyle,
               ),
-              children: [
-                const TextSpan(
-                  text: 'Dengan mendaftar, saya menyetujui ',
-                ),
-                TextSpan(
-                  text: 'Syarat &\nKetentuan',
-                  style: const TextStyle(
-                    color: Color(0xFF2196F3),
-                    fontWeight: FontWeight.w600,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      // terms
-                    },
-                ),
-                const TextSpan(
-                  text: ' dan ',
-                ),
-                TextSpan(
-                  text: 'Kebijakan Privasi',
-                  style: const TextStyle(
-                    color: Color(0xFF2196F3),
-                    fontWeight: FontWeight.w600,
-                  ),
-                  recognizer: TapGestureRecognizer()
-                    ..onTap = () {
-                      // privacy
-                    },
-                ),
-                const TextSpan(
-                  text: ' Mega Finance',
-                ),
-              ],
-            ),
+              TextSpan(
+                text: 'Syarat &\nKetentuan',
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()..onTap = () {},
+              ),
+              const TextSpan(text: ' dan ', style: bodyStyle),
+              TextSpan(
+                text: 'Kebijakan Privasi',
+                style: linkStyle,
+                recognizer: TapGestureRecognizer()..onTap = () {},
+              ),
+              const TextSpan(text: ' Mega Finance', style: bodyStyle),
+            ],
           ),
-        )
+        ),
       ],
     );
   }

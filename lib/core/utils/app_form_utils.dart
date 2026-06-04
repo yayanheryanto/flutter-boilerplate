@@ -25,11 +25,15 @@ class AppValidators {
     };
   }
 
-  static String? Function(String?) required({String message = 'This field is required'}) {
+  static String? Function(String?) required({
+    String message = 'Kolom ini wajib diisi',
+  }) {
     return (v) => (v == null || v.trim().isEmpty) ? message : null;
   }
 
-  static String? Function(String?) email({String message = 'Enter a valid email address'}) {
+  static String? Function(String?) email({
+    String message = 'Masukkan alamat email yang valid',
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       final regex = RegExp(r'^[\w\.\-+]+@[\w\-]+\.[\w\-]{2,}$');
@@ -38,69 +42,88 @@ class AppValidators {
   }
 
   static String? Function(String?) minLength(
-    int min, {
-    String? message,
-  }) {
+      int min, {
+        String? message,
+      }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
-      return v.length < min ? (message ?? 'Minimum $min characters required') : null;
+      return v.length < min
+          ? (message ?? 'Minimal $min karakter')
+          : null;
     };
   }
 
   static String? Function(String?) maxLength(
-    int max, {
-    String? message,
-  }) {
+      int max, {
+        String? message,
+      }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
-      return v.length > max ? (message ?? 'Maximum $max characters allowed') : null;
+      return v.length > max
+          ? (message ?? 'Maksimal $max karakter')
+          : null;
     };
   }
 
   static String? Function(String?) exactLength(
-    int length, {
-    String? message,
-  }) {
+      int length, {
+        String? message,
+      }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
-      return v.length != length ? (message ?? 'Must be exactly $length characters') : null;
+      return v.length != length
+          ? (message ?? 'Harus tepat $length karakter')
+          : null;
     };
   }
 
-  static String? Function(String?) numeric({String message = 'Only numbers allowed'}) {
+  static String? Function(String?) numeric({
+    String message = 'Hanya angka yang diperbolehkan',
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       return double.tryParse(v) == null ? message : null;
     };
   }
 
-  static String? Function(String?) integer({String message = 'Enter a valid integer'}) {
+  static String? Function(String?) integer({
+    String message = 'Masukkan bilangan bulat yang valid',
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       return int.tryParse(v) == null ? message : null;
     };
   }
 
-  static String? Function(String?) phone({String message = 'Enter a valid phone number'}) {
+  static String? Function(String?) phone({
+    String message = 'Masukkan nomor telepon yang valid',
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       final digits = v.replaceAll(RegExp(r'[\s\-\(\)\+]'), '');
-      return (digits.length >= 9 && digits.length <= 15 && RegExp(r'^\d+$').hasMatch(digits))
+      return (digits.length >= 9 &&
+          digits.length <= 15 &&
+          RegExp(r'^\d+$').hasMatch(digits))
           ? null
           : message;
     };
   }
 
-  static String? Function(String?) url({String message = 'Enter a valid URL'}) {
+  static String? Function(String?) url({
+    String message = 'Masukkan URL yang valid',
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       final uri = Uri.tryParse(v);
-      return (uri != null && uri.hasScheme && uri.host.isNotEmpty) ? null : message;
+      return (uri != null && uri.hasScheme && uri.host.isNotEmpty)
+          ? null
+          : message;
     };
   }
 
   static String? Function(String?) strongPassword({
-    String message = 'Password must be 8+ chars with uppercase, lowercase, digit & special char',
+    String message =
+    'Password harus terdiri dari minimal 8 karakter, huruf besar, huruf kecil, angka, dan karakter khusus',
     int minLength = 8,
     bool requireUppercase = true,
     bool requireLowercase = true,
@@ -109,21 +132,30 @@ class AppValidators {
   }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
-      if (v.length < minLength) return 'Password must be at least $minLength characters';
-      if (requireUppercase && !v.contains(RegExp(r'[A-Z]'))) return 'Include at least one uppercase letter';
-      if (requireLowercase && !v.contains(RegExp(r'[a-z]'))) return 'Include at least one lowercase letter';
-      if (requireDigit && !v.contains(RegExp(r'\d'))) return 'Include at least one digit';
-      if (requireSpecial && !v.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
-        return 'Include at least one special character';
+      if (v.length < minLength) {
+        return 'Password minimal $minLength karakter';
+      }
+      if (requireUppercase && !v.contains(RegExp(r'[A-Z]'))) {
+        return 'Password harus mengandung minimal 1 huruf besar';
+      }
+      if (requireLowercase && !v.contains(RegExp(r'[a-z]'))) {
+        return 'Password harus mengandung minimal 1 huruf kecil';
+      }
+      if (requireDigit && !v.contains(RegExp(r'\d'))) {
+        return 'Password harus mengandung minimal 1 angka';
+      }
+      if (requireSpecial &&
+          !v.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
+        return 'Password harus mengandung minimal 1 karakter khusus';
       }
       return null;
     };
   }
 
   static String? Function(String?) matchesOther(
-    String? Function() getOtherValue, {
-    String message = 'Values do not match',
-  }) {
+      String? Function() getOtherValue, {
+        String message = 'Nilai tidak cocok',
+      }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       return v != getOtherValue() ? message : null;
@@ -131,22 +163,24 @@ class AppValidators {
   }
 
   static String? Function(String?) range(
-    num min,
-    num max, {
-    String? message,
-  }) {
+      num min,
+      num max, {
+        String? message,
+      }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       final n = num.tryParse(v);
-      if (n == null) return 'Enter a valid number';
-      return (n < min || n > max) ? (message ?? 'Value must be between $min and $max') : null;
+      if (n == null) return 'Masukkan angka yang valid';
+      return (n < min || n > max)
+          ? (message ?? 'Nilai harus antara $min dan $max')
+          : null;
     };
   }
 
   static String? Function(String?) pattern(
-    RegExp regex, {
-    required String message,
-  }) {
+      RegExp regex, {
+        required String message,
+      }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       return regex.hasMatch(v) ? null : message;
@@ -154,11 +188,13 @@ class AppValidators {
   }
 
   static String? Function(String?) noSpecialChars({
-    String message = 'Special characters are not allowed',
+    String message = 'Karakter khusus tidak diperbolehkan',
   }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
-      return RegExp(r'[^a-zA-Z0-9\s]').hasMatch(v) ? message : null;
+      return RegExp(r'[^a-zA-Z0-9\s]').hasMatch(v)
+          ? message
+          : null;
     };
   }
 }

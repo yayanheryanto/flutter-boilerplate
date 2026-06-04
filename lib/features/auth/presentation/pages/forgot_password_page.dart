@@ -3,6 +3,8 @@ import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:emas/features/auth/presentation/widgets/forgot_password_form_widget.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -26,31 +28,18 @@ class _ForgotPasswordPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
       backgroundColor: ColorTokens.white,
-      appBar: AppBar(
-        backgroundColor: ColorTokens.white,
-        elevation: 0,
-        scrolledUnderElevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.chevron_left_rounded,
-            size: 28,
-            color: ColorTokens.primary500,
-          ),
-          onPressed: () => context.pop(),
-        ),
-        automaticallyImplyLeading: false,
+      appBar: AppPageAppBar(
+        onBack: () => context.pop(),
       ),
       body: const SafeArea(
         top: false,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 16),
-              ForgotPasswordFormWidget(),
-              SizedBox(height: 40),
-            ],
-          ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            AppSpacer.md(),
+            Expanded(child: ForgotPasswordFormWidget()),
+            AppSpacer(40),
+          ],
         ),
       ),
     );

@@ -9,6 +9,8 @@ class AppRoutes {
   static const String register = '/register';
   static const String forgotPassword = '/forgot-password';
   static const String otp = '/otp';
+  static const String verificationPreparation = '/verification-preparation';
+  static const String ktpGuide = '/ktp-guide';
   static const String dashboard = '/dashboard';
 
   // ── Category ──────────────────────────────────────────────────────────────
