@@ -15,7 +15,6 @@ import 'package:emas/features/auth/presentation/pages/register_page.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
 import 'package:emas/features/dashboard/presentation/pages/category_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/dashboard_page.dart';
-import 'package:emas/features/demo/ui_demo_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
@@ -31,9 +30,6 @@ class AppRouter {
       initialLocation: AppRoutes.login,
       debugLogDiagnostics: true,
       routes: [
-        // ── Dev only: remove for production ──────────────────────────────────
-        GoRoute(path: AppRoutes.uiDemo, builder: (_, __) => const UiDemoPage()),
-
         // ── Auth ─────────────────────────────────────────────────────────────
         GoRoute(
           path: AppRoutes.login,
