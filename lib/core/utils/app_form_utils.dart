@@ -42,38 +42,32 @@ class AppValidators {
   }
 
   static String? Function(String?) minLength(
-      int min, {
-        String? message,
-      }) {
+    int min, {
+    String? message,
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
-      return v.length < min
-          ? (message ?? 'Minimal $min karakter')
-          : null;
+      return v.length < min ? (message ?? 'Minimal $min karakter') : null;
     };
   }
 
   static String? Function(String?) maxLength(
-      int max, {
-        String? message,
-      }) {
+    int max, {
+    String? message,
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
-      return v.length > max
-          ? (message ?? 'Maksimal $max karakter')
-          : null;
+      return v.length > max ? (message ?? 'Maksimal $max karakter') : null;
     };
   }
 
   static String? Function(String?) exactLength(
-      int length, {
-        String? message,
-      }) {
+    int length, {
+    String? message,
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
-      return v.length != length
-          ? (message ?? 'Harus tepat $length karakter')
-          : null;
+      return v.length != length ? (message ?? 'Harus tepat $length karakter') : null;
     };
   }
 
@@ -101,11 +95,7 @@ class AppValidators {
     return (v) {
       if (v == null || v.isEmpty) return null;
       final digits = v.replaceAll(RegExp(r'[\s\-\(\)\+]'), '');
-      return (digits.length >= 9 &&
-          digits.length <= 15 &&
-          RegExp(r'^\d+$').hasMatch(digits))
-          ? null
-          : message;
+      return (digits.length >= 9 && digits.length <= 15 && RegExp(r'^\d+$').hasMatch(digits)) ? null : message;
     };
   }
 
@@ -115,16 +105,13 @@ class AppValidators {
     return (v) {
       if (v == null || v.isEmpty) return null;
       final uri = Uri.tryParse(v);
-      return (uri != null && uri.hasScheme && uri.host.isNotEmpty)
-          ? null
-          : message;
+      return (uri != null && uri.hasScheme && uri.host.isNotEmpty) ? null : message;
     };
   }
 
   static String? Function(String?) strongPassword({
-    String message =
-    'Password harus terdiri dari minimal 8 karakter, huruf besar, huruf kecil, angka, dan karakter khusus',
-    int minLength = 8,
+    String message = 'Password harus terdiri dari minimal 6 karakter, huruf besar-kecil, angka, dan simbol',
+    int minLength = 6,
     bool requireUppercase = true,
     bool requireLowercase = true,
     bool requireDigit = true,
@@ -144,18 +131,17 @@ class AppValidators {
       if (requireDigit && !v.contains(RegExp(r'\d'))) {
         return 'Password harus mengandung minimal 1 angka';
       }
-      if (requireSpecial &&
-          !v.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
-        return 'Password harus mengandung minimal 1 karakter khusus';
+      if (requireSpecial && !v.contains(RegExp(r'[!@#\$%^&*(),.?":{}|<>]'))) {
+        return 'Password harus mengandung minimal 1 simbol';
       }
       return null;
     };
   }
 
   static String? Function(String?) matchesOther(
-      String? Function() getOtherValue, {
-        String message = 'Nilai tidak cocok',
-      }) {
+    String? Function() getOtherValue, {
+    String message = 'Nilai tidak cocok',
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       return v != getOtherValue() ? message : null;
@@ -163,24 +149,22 @@ class AppValidators {
   }
 
   static String? Function(String?) range(
-      num min,
-      num max, {
-        String? message,
-      }) {
+    num min,
+    num max, {
+    String? message,
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       final n = num.tryParse(v);
       if (n == null) return 'Masukkan angka yang valid';
-      return (n < min || n > max)
-          ? (message ?? 'Nilai harus antara $min dan $max')
-          : null;
+      return (n < min || n > max) ? (message ?? 'Nilai harus antara $min dan $max') : null;
     };
   }
 
   static String? Function(String?) pattern(
-      RegExp regex, {
-        required String message,
-      }) {
+    RegExp regex, {
+    required String message,
+  }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
       return regex.hasMatch(v) ? null : message;
@@ -192,9 +176,7 @@ class AppValidators {
   }) {
     return (v) {
       if (v == null || v.isEmpty) return null;
-      return RegExp(r'[^a-zA-Z0-9\s]').hasMatch(v)
-          ? message
-          : null;
+      return RegExp(r'[^a-zA-Z0-9\s]').hasMatch(v) ? message : null;
     };
   }
 }
@@ -242,8 +224,7 @@ class AppInputFormatters {
   /// Uppercase only
   static List<TextInputFormatter> uppercase() => [
         TextInputFormatter.withFunction(
-          (oldValue, newValue) =>
-              newValue.copyWith(text: newValue.text.toUpperCase()),
+          (oldValue, newValue) => newValue.copyWith(text: newValue.text.toUpperCase()),
         ),
       ];
 

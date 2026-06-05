@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-class ColorTokens {
-  ColorTokens._();
+class AppColors {
+  AppColors._();
 
   // Primary
   static const Color primary50 = Color(0xFFFFF8E8);
@@ -34,6 +34,7 @@ class ColorTokens {
 
   static const Color border = Color(0xFFD9D9D9);
   static const Color borderFocused = primary500;
+  static const Color bgCard = Color(0xFFFFEBE0);
 
   static const Color inputBackground = Color(0xFFFFFFFF);
 

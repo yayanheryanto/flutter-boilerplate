@@ -25,6 +25,12 @@ class AppButton extends StatelessWidget {
   /// Override the default corner radius. Defaults to [RadiusTokens.md].
   final double? borderRadius;
 
+  final Color? backgroundColor;
+  final Color? foregroundColor;
+  final Color? borderColor;
+  final double? borderWidth;
+  final Color? colorSide;
+
   const AppButton({
     super.key,
     required this.label,
@@ -38,6 +44,11 @@ class AppButton extends StatelessWidget {
     this.width,
     this.dangerOverride = false,
     this.borderRadius,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.borderColor,
+    this.borderWidth,
+    this.colorSide,
   });
 
   @override
@@ -106,13 +117,15 @@ class AppButton extends StatelessWidget {
   }
 
   ButtonStyle _buildStyle(BuildContext context, ColorScheme colorScheme) {
-    final radius = BorderRadius.circular(borderRadius ?? RadiusTokens.md);
+    final radius = BorderRadius.circular(
+      borderRadius ?? RadiusTokens.md,
+    );
 
     // dangerOverride wins over variant
     if (dangerOverride || variant == AppButtonVariant.danger) {
       return ElevatedButton.styleFrom(
-        backgroundColor: colorScheme.error,
-        foregroundColor: colorScheme.onError,
+        backgroundColor: backgroundColor ?? colorScheme.error,
+        foregroundColor: foregroundColor ?? colorScheme.onError,
         shape: RoundedRectangleBorder(borderRadius: radius),
       );
     }
@@ -120,22 +133,31 @@ class AppButton extends StatelessWidget {
     switch (variant) {
       case AppButtonVariant.secondary:
         return ElevatedButton.styleFrom(
-          backgroundColor: colorScheme.surfaceContainerHighest,
-          foregroundColor: colorScheme.onSurface,
+          backgroundColor: backgroundColor ?? colorScheme.surfaceContainerHighest,
+          foregroundColor: foregroundColor ?? colorScheme.onSurface,
           shape: RoundedRectangleBorder(borderRadius: radius),
           elevation: 0,
         );
       case AppButtonVariant.outlined:
         return OutlinedButton.styleFrom(
-          side: BorderSide(color: colorScheme.primary),
+          backgroundColor: backgroundColor,
+          foregroundColor: foregroundColor,
+          side: BorderSide(
+            color: colorSide ?? colorScheme.primary,
+            width: borderWidth ?? 1,
+          ),
           shape: RoundedRectangleBorder(borderRadius: radius),
         );
       case AppButtonVariant.text:
         return TextButton.styleFrom(
+          backgroundColor: backgroundColor,
+          foregroundColor: foregroundColor,
           shape: RoundedRectangleBorder(borderRadius: radius),
         );
       default:
         return ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          foregroundColor: foregroundColor,
           shape: RoundedRectangleBorder(borderRadius: radius),
         );
     }

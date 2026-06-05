@@ -1,6 +1,6 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
-import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/input/app_text_field.dart';
 import 'package:emas/shared/widgets/snackbar/app_snackbar.dart';
@@ -11,7 +11,6 @@ import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sizer/sizer.dart';
 
 class ForgotPasswordFormWidget extends StatefulWidget {
   const ForgotPasswordFormWidget({super.key});
@@ -91,7 +90,7 @@ class _FormView extends StatelessWidget {
             const AppText(
               'Lupa Password',
               variant: AppTextVariant.headlineLarge,
-              color: ColorTokens.primary500,
+              color: AppColors.primary500,
               fontWeight: FontWeight.w800,
             ),
             const SizedBox(height: 8),
@@ -119,7 +118,7 @@ class _FormView extends StatelessWidget {
                 ),
               ]),
             ),
-            SizedBox(height: 24.h),
+            const SizedBox(height: 24),
 
             // ── Submit ───────────────────────────────────────────────────────
             AppButton(

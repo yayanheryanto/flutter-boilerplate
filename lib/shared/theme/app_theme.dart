@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/shared/theme/typography_tokens.dart';
 
@@ -9,15 +9,15 @@ class AppTheme {
 
   static ThemeData get lightTheme {
     const colorScheme = ColorScheme.light(
-      primary: ColorTokens.primary500,
-      primaryContainer: ColorTokens.primary100,
-      onPrimaryContainer: ColorTokens.primary900,
-      secondary: ColorTokens.neutral600,
-      onSecondary: ColorTokens.white,
-      onSurface: ColorTokens.neutral900,
-      error: ColorTokens.error500,
-      outline: ColorTokens.neutral200,
-      surfaceContainerHighest: ColorTokens.neutral100,
+      primary: AppColors.primary500,
+      primaryContainer: AppColors.primary100,
+      onPrimaryContainer: AppColors.primary900,
+      secondary: AppColors.neutral600,
+      onSecondary: AppColors.white,
+      onSurface: AppColors.neutral900,
+      error: AppColors.error500,
+      outline: AppColors.neutral200,
+      surfaceContainerHighest: AppColors.neutral100,
     );
 
     return ThemeData(
@@ -32,42 +32,42 @@ class AppTheme {
       inputDecorationTheme: _buildInputDecorationTheme(colorScheme),
       cardTheme: _buildCardTheme(),
       dividerTheme: const DividerThemeData(
-        color: ColorTokens.neutral200,
+        color: AppColors.neutral200,
         thickness: 1,
       ),
-      scaffoldBackgroundColor: ColorTokens.neutral50,
+      scaffoldBackgroundColor: AppColors.neutral50,
       bottomNavigationBarTheme: const BottomNavigationBarThemeData(
-        backgroundColor: ColorTokens.white,
-        selectedItemColor: ColorTokens.primary600,
-        unselectedItemColor: ColorTokens.neutral400,
+        backgroundColor: AppColors.white,
+        selectedItemColor: AppColors.primary600,
+        unselectedItemColor: AppColors.neutral400,
         elevation: 8,
         type: BottomNavigationBarType.fixed,
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: ColorTokens.white,
-        indicatorColor: ColorTokens.primary600,
+        backgroundColor: AppColors.white,
+        indicatorColor: AppColors.primary600,
         labelTextStyle: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
 
             //selected item
             return const TextStyle(
-              color: ColorTokens.primary600,
+              color: AppColors.primary600,
               fontWeight: TypographyTokens.semiBold,
             );
           }
 
           return const TextStyle(
-            color: ColorTokens.neutral400,
+            color: AppColors.neutral400,
             fontWeight: FontWeight.normal,
           );
         }),
       ),
       navigationRailTheme: const NavigationRailThemeData(
-        backgroundColor: ColorTokens.white,
-        selectedIconTheme: IconThemeData(color: ColorTokens.primary600),
-        unselectedIconTheme: IconThemeData(color: ColorTokens.neutral400),
+        backgroundColor: AppColors.white,
+        selectedIconTheme: IconThemeData(color: AppColors.primary600),
+        unselectedIconTheme: IconThemeData(color: AppColors.neutral400),
         selectedLabelTextStyle: TextStyle(
-          color: ColorTokens.primary600,
+          color: AppColors.primary600,
           fontWeight: TypographyTokens.semiBold,
         ),
       ),
@@ -76,19 +76,19 @@ class AppTheme {
 
   static ThemeData get darkTheme {
     const colorScheme = ColorScheme.dark(
-      primary: ColorTokens.primary400,
-      onPrimary: ColorTokens.primary900,
-      primaryContainer: ColorTokens.primary800,
-      onPrimaryContainer: ColorTokens.primary100,
-      secondary: ColorTokens.neutral400,
-      onSecondary: ColorTokens.neutral900,
-      surface: ColorTokens.neutral900,
-      onSurface: ColorTokens.neutral100,
-      error: ColorTokens.error500,
-      onError: ColorTokens.white,
-      outline: ColorTokens.neutral700,
-      outlineVariant: ColorTokens.neutral800,
-      surfaceContainerHighest: ColorTokens.neutral800,
+      primary: AppColors.primary400,
+      onPrimary: AppColors.primary900,
+      primaryContainer: AppColors.primary800,
+      onPrimaryContainer: AppColors.primary100,
+      secondary: AppColors.neutral400,
+      onSecondary: AppColors.neutral900,
+      surface: AppColors.neutral900,
+      onSurface: AppColors.neutral100,
+      error: AppColors.error500,
+      onError: AppColors.white,
+      outline: AppColors.neutral700,
+      outlineVariant: AppColors.neutral800,
+      surfaceContainerHighest: AppColors.neutral800,
     );
 
     return ThemeData(
@@ -102,7 +102,7 @@ class AppTheme {
       textButtonTheme: _buildTextButtonTheme(colorScheme),
       inputDecorationTheme: _buildInputDecorationTheme(colorScheme),
       cardTheme: _buildCardTheme(),
-      scaffoldBackgroundColor: ColorTokens.neutral900,
+      scaffoldBackgroundColor: AppColors.neutral900,
     );
   }
 

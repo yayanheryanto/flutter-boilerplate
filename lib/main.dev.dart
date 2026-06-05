@@ -13,6 +13,7 @@ import 'package:emas/core/router/app_router.dart';
 import 'package:emas/shared/theme/app_theme.dart';
 import 'package:emas/core/utils/app_bloc_observer.dart';
 import 'package:sizer/sizer.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,6 +41,8 @@ Future<void> main() async {
 
   // Initialize notification service
   await getIt<NotificationService>().initialize();
+
+  await initializeDateFormatting('id_ID');
 
   Bloc.observer = AppBlocObserver();
 

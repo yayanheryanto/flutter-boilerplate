@@ -1,5 +1,6 @@
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/shared/widgets/pickers/wheel_date_picker.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -33,6 +34,13 @@ import 'package:intl/intl.dart';
 /// ```dart
 /// final date = await AppDatePicker.pickMonthYear(context);
 /// ```
+
+
+enum AppDatePickerStyle {
+  material,
+  wheel,
+}
+
 class AppDatePicker {
   AppDatePicker._();
 
@@ -47,7 +55,17 @@ class AppDatePicker {
     String? confirmText,
     String? cancelText,
     SelectableDayPredicate? selectableDayPredicate,
+    AppDatePickerStyle style = AppDatePickerStyle.material,
   }) async {
+    if (style == AppDatePickerStyle.wheel) {
+      return _showWheelDatePicker(
+        context,
+        initialDate: initialDate,
+        firstDate: firstDate,
+        lastDate: lastDate,
+      );
+    }
+
     final now = DateTime.now();
     return showDatePicker(
       context: context,
@@ -59,6 +77,24 @@ class AppDatePicker {
       cancelText: cancelText,
       selectableDayPredicate: selectableDayPredicate,
       builder: _themeWrapper,// Force US locale for consistent date formatting in pickers
+    );
+  }
+
+  static Future<DateTime?> _showWheelDatePicker(
+      BuildContext context, {
+        DateTime? initialDate,
+        DateTime? firstDate,
+        DateTime? lastDate,
+      }) {
+    return showModalBottomSheet<DateTime>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => WheelDatePicker(
+        initialDate: initialDate ?? DateTime.now(),
+        firstDate: firstDate ?? DateTime(1900),
+        lastDate: lastDate ?? DateTime.now(),
+      ),
     );
   }
 

@@ -1,4 +1,4 @@
-import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -14,7 +14,7 @@ class AppPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   const AppPageAppBar({
     super.key,
     this.title,
-    this.backgroundColor = ColorTokens.white,
+    this.backgroundColor = AppColors.white,
     this.showBackButton = true,
     this.onBack,
     this.elevation = 0,
@@ -24,17 +24,18 @@ class AppPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: backgroundColor,
-      elevation: elevation,
+      elevation: elevation ?? 0,
+      shadowColor: AppColors.black,
       scrolledUnderElevation: 0,
       titleSpacing: titleSpacing,
       automaticallyImplyLeading: false,
+      surfaceTintColor: Colors.transparent,
       leading: showBackButton
           ? IconButton(
               icon: const Icon(
                 Icons.chevron_left_rounded,
                 size: 28,
-                color: ColorTokens.primary500,
+                color: AppColors.primary500,
               ),
               onPressed: onBack ?? () => context.pop(),
             )

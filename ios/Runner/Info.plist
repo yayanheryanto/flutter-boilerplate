@@ -50,5 +50,11 @@
       <string>fetch</string>
       <string>remote-notification</string>
     </array>
+    <key>NSCameraUsageDescription</key>
+    <string>Digunakan untuk mengambil foto KTP dan verifikasi wajah.</string>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Digunakan untuk memilih foto KTP dari galeri.</string>
+    <key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Digunakan untuk menyimpan foto ke galeri.</string>
 </dict>
 </plist>

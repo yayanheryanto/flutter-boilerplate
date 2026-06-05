@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -165,7 +165,7 @@ class _WishlistButton extends StatelessWidget {
               ? Icons.favorite_rounded
               : Icons.favorite_border_rounded,
           size: 14,
-          color: isWishlisted ? ColorTokens.error500 : Colors.black38,
+          color: isWishlisted ? AppColors.error500 : Colors.black38,
         ),
       ),
     );
@@ -183,7 +183,7 @@ class _CountdownChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
-        color: urgent ? ColorTokens.error500 : Colors.black54,
+        color: urgent ? AppColors.error500 : Colors.black54,
         borderRadius: BorderRadius.circular(RadiusTokens.sm),
       ),
       child: Row(

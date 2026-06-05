@@ -1,5 +1,10 @@
 import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/features/auth/presentation/pages/account_processed_page.dart';
+import 'package:emas/features/auth/presentation/pages/address_verification_page.dart';
+import 'package:emas/features/auth/presentation/pages/bank_verification_page.dart';
+import 'package:emas/features/auth/presentation/pages/change_password_page.dart';
 import 'package:emas/features/auth/presentation/pages/ktp_guide_page.dart';
+import 'package:emas/features/auth/presentation/pages/ktp_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/verification_preparation_page.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/core/utils/navigator_key.dart';
@@ -64,6 +69,35 @@ class AppRouter {
           builder: (context, state) => const KtpGuidePage(),
         ),
 
+        GoRoute(
+          path: AppRoutes.changePassword,
+          name: 'change-password',
+          builder: (context, state) => const ChangePasswordPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.ktpVerification,
+          name: 'ktp-verification',
+          builder: (context, state) => const KtpVerificationPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.addressVerification,
+          name: 'address-verification',
+          builder: (context, state) => const AddressVerificationPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.bankVerification,
+          name: 'bank-verification',
+          builder: (context, state) => const BankVerificationPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.accountProcessed,
+          name: 'account-processed',
+          builder: (context, state) => const AccountProcessedPage(),
+        ),
 
         // ── App ──────────────────────────────────────────────────────────────
         GoRoute(

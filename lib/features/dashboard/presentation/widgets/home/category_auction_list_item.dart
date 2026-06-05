@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
@@ -132,7 +132,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
                               key: ValueKey(_wishlisted),
                               size: 18,
                               color: _wishlisted
-                                  ? ColorTokens.error500
+                                  ? AppColors.error500
                                   : scheme.onSurface.withOpacity(0.28),
                             ),
                           ),
@@ -188,7 +188,7 @@ class _TimerChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
-        color: urgent ? ColorTokens.error500 : Colors.black54,
+        color: urgent ? AppColors.error500 : Colors.black54,
         borderRadius: BorderRadius.circular(RadiusTokens.sm),
       ),
       child: Row(

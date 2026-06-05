@@ -4,7 +4,7 @@ import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -81,7 +81,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                 const AppText(
                   'Daftar Sekarang',
                   variant: AppTextVariant.headlineLarge,
-                  color: ColorTokens.primary500,
+                  color: AppColors.primary500,
                   fontWeight: FontWeight.w800,
                 ),
                 const AppSpacer(10),
@@ -194,7 +194,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                     AppLinkText(
                       'Masuk',
                       variant: AppTextVariant.titleMedium,
-                      color: ColorTokens.primary500,
+                      color: AppColors.primary500,
                       onTap: () => AppNavigator.go(AppRoutes.login),
                     ),
                   ],
@@ -224,7 +224,7 @@ class _TermsCheckbox extends StatelessWidget {
     const bodyStyle = TextStyle(
       fontSize: 14,
       fontWeight: FontWeight.w400,
-      color: ColorTokens.textPrimary,
+      color: AppColors.textPrimary,
       height: 1.3,
     );
 

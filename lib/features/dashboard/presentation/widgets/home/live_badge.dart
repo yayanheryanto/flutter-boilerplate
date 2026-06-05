@@ -1,4 +1,4 @@
-import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:flutter/material.dart';
 
@@ -36,8 +36,8 @@ class _LiveBadgeState extends State<LiveBadge>
       opacity: _opacity,
       child: AppBadge(
         label: '● LIVE',
-        backgroundColor: ColorTokens.error500.withOpacity(0.12),
-        textColor: ColorTokens.error500,
+        backgroundColor: AppColors.error500.withOpacity(0.12),
+        textColor: AppColors.error500,
       ),
     );
   }

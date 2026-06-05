@@ -2,11 +2,10 @@ import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:emas/features/auth/presentation/widgets/login_form_widget.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
-import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
@@ -26,8 +25,10 @@ class _LoginPageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const AppScaffoldWrapper(
-      backgroundColor: ColorTokens.white,
-      appBar: AppPageAppBar(),
+      backgroundColor: AppColors.white,
+      appBar: AppPageAppBar(
+        showBackButton: false,
+      ),
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(

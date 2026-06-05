@@ -1,7 +1,7 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
-import 'package:emas/core/utils/app_form_utils.dart'; // AppFormMixin, AppValidators, AppInputFormatters
+import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/design_system.dart';
@@ -9,20 +9,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginFormWidget extends StatefulWidget {
-  const LoginFormWidget({super.key});
+class ChangePasswordFormWidget extends StatefulWidget {
+  const ChangePasswordFormWidget({super.key});
 
   @override
-  State<LoginFormWidget> createState() => _LoginFormWidgetState();
+  State<ChangePasswordFormWidget> createState() => _ChangePasswordFormWidgetState();
 }
 
-class _LoginFormWidgetState extends State<LoginFormWidget> with AppFormMixin<LoginFormWidget> {
-  final _phoneController = TextEditingController();
+class _ChangePasswordFormWidgetState extends State<ChangePasswordFormWidget> with AppFormMixin<ChangePasswordFormWidget> {
+  final _passwordConfirmationController = TextEditingController();
   final _passwordController = TextEditingController();
 
   @override
   void dispose() {
-    _phoneController.dispose();
+    _passwordConfirmationController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -32,7 +32,7 @@ class _LoginFormWidgetState extends State<LoginFormWidget> with AppFormMixin<Log
 
     context.read<AuthBloc>().add(
           AuthLoginRequested(
-            email: _phoneController.text.trim(),
+            email: _passwordConfirmationController.text.trim(),
             password: _passwordController.text,
           ),
         );
@@ -68,89 +68,43 @@ class _LoginFormWidgetState extends State<LoginFormWidget> with AppFormMixin<Log
               mainAxisSize: MainAxisSize.min,
               children: [
                 const AppText(
-                  'Masuk ke Akun',
+                  'Ubah Password',
                   variant: AppTextVariant.headlineLarge,
                   color: AppColors.primary500,
                   fontWeight: FontWeight.w800,
                 ),
                 const AppSpacer(10),
                 const AppText(
-                  'Yuk masuk ke akun EMAS kamu sekarang',
+                  'Masukan Password Baru',
                   variant: AppTextVariant.titleMedium,
                 ),
                 const AppSpacer.xl(),
-
-                AppTextField(
-                  controller: _phoneController,
-                  label: 'Nomor Handphone',
-                  hint: 'Masukkan nomor handphone Anda',
-                  keyboardType: TextInputType.phone,
-                  textInputAction: TextInputAction.next,
-                  inputFormatters: AppInputFormatters.phone(),
-                  validator: AppValidators.compose([
-                    AppValidators.required(
-                      message: 'Nomor handphone belum diisi',
-                    ),
-                    AppValidators.phone(
-                      message: 'Nomor handphone tidak valid',
-                    ),
-                  ]),
-                ),
-                const AppSpacer.md(),
-
                 AppPasswordField(
-                  controller: _passwordController,
-                  hint: 'Masukkan password Anda',
+                  controller: _passwordConfirmationController,
+                  hint: 'Masukkan password baru',
                   textInputAction: TextInputAction.done,
                   validator: AppValidators.compose([
                     AppValidators.required(message: 'Password belum diisi'),
                     AppValidators.strongPassword(),
                   ]),
                 ),
-                const AppSpacer(12),
-
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: AppLinkText(
-                    'Lupa Password?',
-                    variant: AppTextVariant.titleMedium,
-                    color: AppColors.primary500,
-                    onTap: () async => context.push(AppRoutes.forgotPassword),
-                  ),
+                const AppSpacer.md(),
+                AppPasswordField(
+                  controller: _passwordController,
+                  hint: 'Masukkan password baru',
+                  label: 'Konfirmasi Password',
+                  textInputAction: TextInputAction.done,
+                  validator: AppValidators.compose([
+                    AppValidators.required(message: 'Konfirmasi password belum diisi'),
+                    AppValidators.strongPassword(),
+                  ]),
                 ),
                 const AppSpacer(56),
-
                 AppButton(
-                  label: 'Masuk',
+                  label: 'Lanjutkan',
                   onPressed: _onSubmit,
                   isLoading: state is AuthLoading,
                   borderRadius: 25,
-                ),
-                const AppSpacer(20),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const AppText(
-                      'Belum punya akun? ',
-                      variant: AppTextVariant.titleMedium,
-                    ),
-                    AppLinkText(
-                      'Daftar',
-                      variant: AppTextVariant.titleMedium,
-                      color: AppColors.primary500,
-                      onTap: () async => context.push(AppRoutes.register),
-                    ),
-                  ],
-                ),
-                const AppSpacer.md(),
-                Center(
-                  child: AppLinkText(
-                    'Verifikasi Akun',
-                    variant: AppTextVariant.titleMedium,
-                    color: AppColors.primary500,
-                    onTap: () async => context.push(AppRoutes.verificationPreparation),
-                  ),
                 ),
               ],
             ),

@@ -1,4 +1,4 @@
-import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -66,7 +66,7 @@ class AppTextField extends StatelessWidget {
       focusNode: focusNode,
       autofocus: autofocus,
       style: const TextStyle(
-        color: ColorTokens.textPrimary,
+        color: AppColors.textPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       ),
@@ -81,27 +81,28 @@ class AppTextField extends StatelessWidget {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: ColorTokens.border,
+            color: AppColors.border,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: ColorTokens.borderFocused,
+            color: AppColors.borderFocused,
             width: 1.5,
           ),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: ColorTokens.border,
+            color: AppColors.border,
           ),
         ),
         hintStyle: const TextStyle(
-          color: ColorTokens.textHint,
+          color: AppColors.textHint,
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
+        suffixIcon: suffix,
       ),
     );
 
@@ -114,9 +115,9 @@ class AppTextField extends StatelessWidget {
         Text(
           label!,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: ColorTokens.textLabel,
-            fontWeight: FontWeight.w500,
-          ),
+                color: AppColors.textLabel,
+                fontWeight: FontWeight.w500,
+              ),
         ),
         const SizedBox(height: 6),
         field,
@@ -154,7 +155,7 @@ class AppPasswordField extends StatefulWidget {
 }
 
 class _AppPasswordFieldState extends State<AppPasswordField> {
-  final bool _obscureText = true;
+  bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -169,6 +170,17 @@ class _AppPasswordFieldState extends State<AppPasswordField> {
         hintText: widget.hint,
         filled: true,
         fillColor: Colors.white,
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+            color: AppColors.textHint,
+          ),
+          onPressed: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+        ),
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 16,
           vertical: 14,
@@ -176,24 +188,24 @@ class _AppPasswordFieldState extends State<AppPasswordField> {
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: ColorTokens.border,
+            color: AppColors.border,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: ColorTokens.borderFocused,
+            color: AppColors.borderFocused,
             width: 1.5,
           ),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
           borderSide: const BorderSide(
-            color: ColorTokens.border,
+            color: AppColors.border,
           ),
         ),
         hintStyle: const TextStyle(
-          color: ColorTokens.textHint,
+          color: AppColors.textHint,
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),
@@ -209,9 +221,9 @@ class _AppPasswordFieldState extends State<AppPasswordField> {
         Text(
           widget.label!,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: ColorTokens.textLabel,
-            fontWeight: FontWeight.w500,
-          ),
+                color: AppColors.textLabel,
+                fontWeight: FontWeight.w500,
+              ),
         ),
         const SizedBox(height: 6),
         field,
@@ -244,7 +256,7 @@ class AppSearchField extends StatelessWidget {
       onFieldSubmitted: onSubmitted,
       textInputAction: TextInputAction.search,
       style: const TextStyle(
-        color: ColorTokens.textPrimary,
+        color: AppColors.textPrimary,
         fontSize: 16,
         fontWeight: FontWeight.w400,
       ),

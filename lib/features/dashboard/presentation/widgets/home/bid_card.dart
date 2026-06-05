@@ -1,4 +1,4 @@
-import 'package:emas/shared/theme/color_tokens.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
@@ -16,7 +16,7 @@ class BidCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     final isWinning = item.winning;
-    final statusColor = isWinning ? ColorTokens.success500 : ColorTokens.error500;
+    final statusColor = isWinning ? AppColors.success500 : AppColors.error500;
     final statusLabel = isWinning ? 'Tertinggi' : 'Tersalip';
 
     return GestureDetector(

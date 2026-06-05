@@ -11,6 +11,11 @@ class AppRoutes {
   static const String otp = '/otp';
   static const String verificationPreparation = '/verification-preparation';
   static const String ktpGuide = '/ktp-guide';
+  static const String ktpVerification = '/ktp-verification';
+  static const String addressVerification = '/address-verification';
+  static const String bankVerification = '/bank-verification';
+  static const String accountProcessed = '/account-processed';
+  static const String changePassword = '/change-password';
   static const String dashboard = '/dashboard';
 
   // ── Category ──────────────────────────────────────────────────────────────

@@ -5,8 +5,7 @@ import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/phone_number_masker.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:emas/shared/theme/color_tokens.dart';
-import 'package:emas/shared/widgets/buttons/app_button.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/display/app_spacer.dart';
 import 'package:emas/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -80,9 +79,10 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
 
   String get _otpValue => _controllers.map((c) => c.text).join();
 
-  void _onDigitChanged(int index, String value) {
+  Future<void> _onDigitChanged(int index, String value) async {
     if (value.length > 1) {
       final digits = value.replaceAll(RegExp(r'\D'), '');
+
       for (int i = 0; i < _kOtpLength; i++) {
         if (i < digits.length) {
           _controllers[i].text = digits[i];
@@ -90,8 +90,12 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
           _controllers[i].text = '';
         }
       }
+
       final nextFocusIndex = (digits.length).clamp(0, _kOtpLength - 1);
       _focusNodes[nextFocusIndex].requestFocus();
+
+      await _checkOtpCompleted();
+
       setState(() {});
       return;
     }
@@ -103,7 +107,24 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
         _focusNodes[index].unfocus();
       }
     }
+
+    await _checkOtpCompleted();
+
     setState(() {});
+  }
+
+  Future<void> _checkOtpCompleted() async {
+    final otp = _controllers.map((e) => e.text).join();
+
+    if (otp.length == _kOtpLength) {
+      debugPrint('OTP lengkap: $otp');
+
+      await context.push(AppRoutes.changePassword);
+      // Trigger API / Bloc
+      // context.read<AuthBloc>().add(
+      //   VerifyOtpRequested(otp),
+      // );
+    }
   }
 
   void _onSubmit() {
@@ -134,7 +155,7 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
             const AppText(
               'Masukkan Kode OTP',
               variant: AppTextVariant.headlineLarge,
-              color: ColorTokens.primary500,
+              color: AppColors.primary500,
               fontWeight: FontWeight.w800,
             ),
             const AppSpacer.sm(),
@@ -270,13 +291,13 @@ class _OtpBoxState extends State<_OtpBox> {
             contentPadding: EdgeInsets.zero,
             filled: true,
             fillColor: filled
-                ? ColorTokens.primary50
+                ? AppColors.primary50
                 : Theme.of(context).colorScheme.surfaceContainerHighest,
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: BorderSide(
                 color: filled
-                    ? ColorTokens.primary500
+                    ? AppColors.primary500
                     : Theme.of(context).colorScheme.outline,
                 width: filled ? 1.5 : 1,
               ),
@@ -284,7 +305,7 @@ class _OtpBoxState extends State<_OtpBox> {
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),
               borderSide: const BorderSide(
-                color: ColorTokens.primary500,
+                color: AppColors.primary500,
                 width: 2,
               ),
             ),
@@ -329,7 +350,7 @@ class _ResendButton extends StatelessWidget {
             text: 'Kirim ulang ($resendCount/$maxResend)',
             style: TextStyle(
               fontSize: 14,
-              color: ColorTokens.primary500,
+              color: AppColors.primary500,
               fontWeight: FontWeight.w600,
               decoration: canResend ? TextDecoration.underline : null,
             ),
