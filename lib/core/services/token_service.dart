@@ -1,4 +1,4 @@
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:emas/core/constants/app_constants.dart';

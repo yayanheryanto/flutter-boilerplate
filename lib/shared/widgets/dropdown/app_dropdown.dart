@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 ///
 /// Advantages over [DropdownButtonFormField]:
 /// - Native `menuStyle` with full margin/padding/shape control
-/// - Built-in search/filter support via [enableSearch]
+/// - Built-in search/filter support via [-enableSearch]
 /// - Consistent Material 3 appearance
 ///
 /// Generic over [T] — works with String, enums, or any value type.

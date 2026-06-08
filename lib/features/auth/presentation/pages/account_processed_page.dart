@@ -43,7 +43,9 @@ class _AccountProcessedPageContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              const Icon(Icons.now_wallpaper_rounded, size: 86,),
+              Image.asset(
+                'assets/images/png/account_proccessed.png',
+              ),
               const AppSpacer.lg(),
               const AppText(
                 'Verifikasi Akun Anda',

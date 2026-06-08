@@ -7,7 +7,6 @@ import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 class KtpGuidePage extends StatelessWidget {
@@ -83,14 +82,14 @@ class KtpGuidePage extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: SvgPicture.asset(
-                              'assets/images/wrong_idcard_sample.svg',
+                            child: Image.asset(
+                              'assets/images/png/sample_incorrect_idcard.png',
                             ),
                           ),
                           const AppSpacer.sm(horizontal: true),
                           Expanded(
-                            child: SvgPicture.asset(
-                              'assets/images/correct_idcard_sample.svg',
+                            child: Image.asset(
+                              'assets/images/png/sample_correct_idcard.png',
                             ),
                           ),
                         ],

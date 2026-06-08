@@ -348,8 +348,8 @@ class _KtpPhotoCard extends StatelessWidget {
                     child: SizedBox(
                       height: 18.h,
                       width: 58.w,
-                      child: SvgPicture.asset(
-                        'assets/images/correct_idcard_sample.svg',
+                      child: Image.asset(
+                        'assets/images/png/sample_correct_idcard.png',
                       ),
                     ),
                   ),
@@ -422,12 +422,14 @@ class _PhotoPickerContent extends StatelessWidget {
                 icon: Icons.camera_alt_outlined,
                 label: 'Foto dari kamera',
                 onTap: onCamera,
+                image: 'assets/images/svg/camera.svg',
               ),
             ),
             Expanded(
               child: _PhotoOption(
                 icon: Icons.photo_library_outlined,
                 label: 'Pilih dari gallery',
+                image: 'assets/images/svg/gallery.svg',
                 onTap: onGallery,
               ),
             ),
@@ -443,8 +445,14 @@ class _PhotoOption extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+  final String image;
 
-  const _PhotoOption({required this.icon, required this.label, required this.onTap});
+  const _PhotoOption({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    required this.image,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -454,7 +462,10 @@ class _PhotoOption extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 64, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75)),
+          SvgPicture.asset(
+            image,
+            width: 42,
+          ),
           const AppSpacer.md(),
           AppText(
             label,

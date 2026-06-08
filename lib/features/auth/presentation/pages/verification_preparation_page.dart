@@ -4,6 +4,7 @@ import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
+import 'package:emas/shared/widgets/avatar/app_avatar_image.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/display/app_spacer.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -56,12 +57,16 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                     const AppSpacer.lg(),
 
                     // ── Account type selector ────────────────────────────────
+
                     _AccountTypeCard(
                       type: _AccountType.personal,
                       title: 'Personal',
                       description: 'Mengikuti lelang atas nama sendiri',
                       selected: _selected == _AccountType.personal,
-                      onTap: () => setState(() => _selected = _AccountType.personal),
+                      image: 'assets/images/svg/personal.svg',
+                      onTap: () => setState(
+                        () => _selected = _AccountType.personal,
+                      ),
                     ),
                     const AppSpacer.sm(),
                     _AccountTypeCard(
@@ -69,7 +74,10 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                       title: 'Perusahaan',
                       description: 'Mengikuti lelang atas nama perusahaan',
                       selected: _selected == _AccountType.perusahaan,
-                      onTap: () => setState(() => _selected = _AccountType.perusahaan),
+                      image: 'assets/images/svg/company.svg',
+                      onTap: () => setState(
+                        () => _selected = _AccountType.perusahaan,
+                      ),
                     ),
                     const AppSpacer.xl(),
 
@@ -133,6 +141,7 @@ class _AccountTypeCard extends StatelessWidget {
   final String description;
   final bool selected;
   final VoidCallback onTap;
+  final String image;
 
   const _AccountTypeCard({
     required this.type,
@@ -140,6 +149,7 @@ class _AccountTypeCard extends StatelessWidget {
     required this.description,
     required this.selected,
     required this.onTap,
+    required this.image,
   });
 
   @override
@@ -154,7 +164,11 @@ class _AccountTypeCard extends StatelessWidget {
           vertical: SpacingTokens.sm,
         ),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary500.withOpacity(0.06,) : AppColors.white,
+          color: selected
+              ? AppColors.primary500.withOpacity(
+                  0.06,
+                )
+              : AppColors.white,
           borderRadius: BorderRadius.circular(
             RadiusTokens.lg,
           ),
@@ -184,7 +198,7 @@ class _AccountTypeCard extends StatelessWidget {
               horizontal: true,
             ),
             // Avatar
-            _PersonAvatar(selected: selected),
+            AppAvatarImage(assetPath: image),
             const AppSpacer.md(horizontal: true),
 
             // Text
@@ -203,59 +217,6 @@ class _AccountTypeCard extends StatelessWidget {
                     variant: AppTextVariant.bodySmall,
                   ),
                 ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-// ─── Person Avatar Illustration ───────────────────────────────────────────────
-
-class _PersonAvatar extends StatelessWidget {
-  final bool selected;
-
-  const _PersonAvatar({required this.selected});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 44,
-      height: 44,
-      decoration: const BoxDecoration(
-        color: Color(0xFFD6EAF8),
-        shape: BoxShape.circle,
-      ),
-      child: ClipOval(
-        child: Stack(
-          alignment: Alignment.center,
-          children: [
-            // Body (shirt)
-            Positioned(
-              bottom: -4,
-              child: Container(
-                width: 36,
-                height: 24,
-                decoration: BoxDecoration(
-                  color: selected ? AppColors.primary400 : Colors.blueGrey.shade300,
-                  borderRadius: const BorderRadius.vertical(
-                    top: Radius.circular(12),
-                  ),
-                ),
-              ),
-            ),
-            // Head
-            Positioned(
-              top: 6,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFDDB4),
-                  shape: BoxShape.circle,
-                ),
               ),
             ),
           ],
@@ -299,49 +260,8 @@ class _PreparationItem extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        const AppSpacer.sm(horizontal: true),
 
-        // Person avatar illustration
-        Container(
-          width: 36,
-          height: 36,
-          decoration: const BoxDecoration(
-            color: Color(0xFFD6EAF8),
-            shape: BoxShape.circle,
-          ),
-          child: ClipOval(
-            child: Stack(
-              alignment: Alignment.center,
-              children: [
-                Positioned(
-                  bottom: -3,
-                  child: Container(
-                    width: 28,
-                    height: 18,
-                    decoration: BoxDecoration(
-                      color: Colors.blueGrey.shade300,
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(10),
-                      ),
-                    ),
-                  ),
-                ),
-                Positioned(
-                  top: 5,
-                  child: Container(
-                    width: 16,
-                    height: 16,
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFFFDDB4),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-        const AppSpacer.sm(horizontal: true),
+        const AppSpacer.md(horizontal: true),
 
         // Text
         Expanded(
