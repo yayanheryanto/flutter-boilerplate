@@ -6,6 +6,7 @@ import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/services/camera_service.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
+import 'package:emas/core/utils/images/app_images.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
@@ -349,7 +350,7 @@ class _KtpPhotoCard extends StatelessWidget {
                       height: 18.h,
                       width: 58.w,
                       child: Image.asset(
-                        'assets/images/png/sample_correct_idcard.png',
+                        AppImages.sampleCorrectIdCard,
                       ),
                     ),
                   ),

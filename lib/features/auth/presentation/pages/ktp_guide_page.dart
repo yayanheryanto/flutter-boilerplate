@@ -1,6 +1,7 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/utils/images/app_images.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -83,13 +84,13 @@ class KtpGuidePage extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Image.asset(
-                              'assets/images/png/sample_incorrect_idcard.png',
+                              AppImages.sampleIncorrectIdCard,
                             ),
                           ),
                           const AppSpacer.sm(horizontal: true),
                           Expanded(
                             child: Image.asset(
-                              'assets/images/png/sample_correct_idcard.png',
+                              AppImages.sampleCorrectIdCard,
                             ),
                           ),
                         ],

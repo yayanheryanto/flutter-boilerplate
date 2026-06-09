@@ -1,6 +1,7 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/utils/images/app_images.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
@@ -63,7 +64,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                       title: 'Personal',
                       description: 'Mengikuti lelang atas nama sendiri',
                       selected: _selected == _AccountType.personal,
-                      image: 'assets/images/svg/personal.svg',
+                      image: AppImages.personalIcon,
                       onTap: () => setState(
                         () => _selected = _AccountType.personal,
                       ),
@@ -74,7 +75,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                       title: 'Perusahaan',
                       description: 'Mengikuti lelang atas nama perusahaan',
                       selected: _selected == _AccountType.perusahaan,
-                      image: 'assets/images/svg/company.svg',
+                      image: AppImages.companyIcon,
                       onTap: () => setState(
                         () => _selected = _AccountType.perusahaan,
                       ),
