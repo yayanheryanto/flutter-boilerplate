@@ -1,6 +1,7 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/images/app_images.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -13,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
 
-enum _AccountType { personal, perusahaan }
 
 class VerificationPreparationPage extends StatefulWidget {
   const VerificationPreparationPage({super.key});
@@ -23,12 +23,12 @@ class VerificationPreparationPage extends StatefulWidget {
 }
 
 class _VerificationPreparationPageState extends State<VerificationPreparationPage> {
-  _AccountType _selected = _AccountType.personal;
+  AccountType _selected = AccountType.personal;
 
   @override
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
-      appBar: AppPageAppBar(
+      appBar: AppPageBar(
         title: 'Verifikasi Akun',
         elevation: 1,
         onBack: () => context.pop(),
@@ -60,24 +60,24 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                     // ── Account type selector ────────────────────────────────
 
                     _AccountTypeCard(
-                      type: _AccountType.personal,
+                      type: AccountType.personal,
                       title: 'Personal',
                       description: 'Mengikuti lelang atas nama sendiri',
-                      selected: _selected == _AccountType.personal,
+                      selected: _selected == AccountType.personal,
                       image: AppImages.personalIcon,
                       onTap: () => setState(
-                        () => _selected = _AccountType.personal,
+                        () => _selected = AccountType.personal,
                       ),
                     ),
                     const AppSpacer.sm(),
                     _AccountTypeCard(
-                      type: _AccountType.perusahaan,
+                      type: AccountType.company,
                       title: 'Perusahaan',
                       description: 'Mengikuti lelang atas nama perusahaan',
-                      selected: _selected == _AccountType.perusahaan,
+                      selected: _selected == AccountType.company,
                       image: AppImages.companyIcon,
                       onTap: () => setState(
-                        () => _selected = _AccountType.perusahaan,
+                        () => _selected = AccountType.company,
                       ),
                     ),
                     const AppSpacer.xl(),
@@ -91,15 +91,15 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                     const AppSpacer.md(),
 
                     // ── Preparation items ────────────────────────────────────
-                    const _PreparationItem(
+                    _PreparationItem(
                       number: 1,
-                      title: 'Foto e-KTP',
+                      title: _selected == AccountType.personal ? 'Foto e-KTP' : 'Foto NPWP',
                       description: 'Melindungi akun Anda dari tindakan penipuan',
                     ),
                     const AppSpacer.sm(),
-                    const _PreparationItem(
+                    _PreparationItem(
                       number: 2,
-                      title: 'Informasi Alamat',
+                      title: _selected == AccountType.personal ? 'Informasi Alamat' : 'Dokumen Perusahaan',
                       description: 'Digunakan untuk verifikasi identitas saat pengambilan barang lelang',
                     ),
                     const AppSpacer.sm(),
@@ -123,7 +123,10 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
               ),
               child: AppButton(
                 label: 'Mulai Verifikasi Akun',
-                onPressed: () async => context.push(AppRoutes.ktpGuide),
+                onPressed: () async => context.push(
+                  AppRoutes.ktpGuide,
+                  extra: {'account_type': _selected},
+                ),
                 borderRadius: 25,
               ),
             ),
@@ -137,7 +140,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
 // ─── Account Type Card ────────────────────────────────────────────────────────
 
 class _AccountTypeCard extends StatelessWidget {
-  final _AccountType type;
+  final AccountType type;
   final String title;
   final String description;
   final bool selected;

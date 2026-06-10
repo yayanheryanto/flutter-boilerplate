@@ -31,7 +31,7 @@ class _OtpPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
-      appBar: AppPageAppBar(
+      appBar: AppPageBar(
         onBack: () => context.pop(),
       ),
       body: SafeArea(

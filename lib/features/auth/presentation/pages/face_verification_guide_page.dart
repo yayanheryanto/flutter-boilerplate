@@ -1,7 +1,6 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
-import 'package:emas/core/utils/images/app_images.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -10,8 +9,8 @@ import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class KtpGuidePage extends StatelessWidget {
-  const KtpGuidePage({super.key});
+class FaceVerificationGuidePage extends StatelessWidget {
+  const FaceVerificationGuidePage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +27,7 @@ class KtpGuidePage extends StatelessWidget {
           children: [
             // ── Stepper ────────────────────────────────────────────────────
             const AppSpacer.sm(),
-            const VerificationStepper(currentStep: 0),
+            const VerificationStepper(currentStep: 1),
 
             // ── Content ────────────────────────────────────────────────────
             Expanded(
@@ -61,65 +60,40 @@ class KtpGuidePage extends StatelessWidget {
                     ),
                   ),
                   padding: const EdgeInsets.all(SpacingTokens.md),
-                  child: Column(
+                  child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // ── Card header ──────────────────────────────────────
-                      const AppText(
-                        'Panduan Foto KTP',
+                      AppText(
+                        'Verifikasi Wajah',
                         variant: AppTextVariant.titleMedium,
                         fontWeight: FontWeight.bold,
                       ),
-                      const AppSpacer.md(),
-                      const AppText(
-                        'Berikut beberapa panduan agar proses verifikasi KTP lebih mudah',
-                        variant: AppTextVariant.bodySmall,
-                        color: AppColors.textPrimary,
-                        height: 1.4,
-                      ),
-                      const AppSpacer.md(),
-
-                      // ── KTP example images ───────────────────────────────
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Image.asset(
-                              AppImages.sampleIncorrectIdCard,
-                            ),
-                          ),
-                          const AppSpacer.sm(horizontal: true),
-                          Expanded(
-                            child: Image.asset(
-                              AppImages.sampleCorrectIdCard,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const AppSpacer.md(),
+                      AppSpacer.md(),
 
                       // ── Tips list ────────────────────────────────────────
-                      const _TipItem(
+                      _TipItem(
                         text: 'Ambil foto KTP ',
                         boldParts: ['dengan jelas', 'di dalam bingkai'],
                         suffix: ' dan ',
                         trailingSuffix: '.',
                       ),
-                      const AppSpacer.sm(),
-                      const _TipItem(
+                      AppSpacer.sm(),
+                      _TipItem(
                         text: 'Pastikan ',
                         boldParts: ['isi terbaca seluruhnya', 'tidak buram'],
                         suffix: ' dan ',
                         trailingSuffix: '.',
                       ),
-                      const AppSpacer.sm(),
-                      const _TipItem(
+                      AppSpacer.sm(),
+                      _TipItem(
                         text: 'Pastikan ',
                         boldParts: ['pencahayaan bagus', 'tidak ada pantulan cahaya'],
                         suffix: ' dan ',
                         trailingSuffix: '.',
                       ),
-                      const AppSpacer.sm(),
-                      const _TipItem(
+                      AppSpacer.sm(),
+                      _TipItem(
                         text: 'KTP harus ',
                         boldParts: ['asli, bukan salinan', '\nkondisinya baik'],
                         suffix: ', dan ',
@@ -140,9 +114,9 @@ class KtpGuidePage extends StatelessWidget {
                 SpacingTokens.lg,
               ),
               child: AppButton(
-                label: 'Mulai Verifikasi KTP',
+                label: 'Mulai Verifikasi Wajah',
                 onPressed: () async {
-                  await context.push(AppRoutes.ktpVerification);
+                  await context.push(AppRoutes.faceVerification);
                 },
                 borderRadius: 25,
               ),
@@ -172,9 +146,9 @@ class _TipItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final normal = Theme.of(context).textTheme.bodySmall?.copyWith(
-          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75),
-          height: 1.5,
-        );
+      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75),
+      height: 1.5,
+    );
     final bold = normal?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface);
 
     // Build rich text spans

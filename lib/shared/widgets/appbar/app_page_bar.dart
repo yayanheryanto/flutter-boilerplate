@@ -3,7 +3,7 @@ import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class AppPageAppBar extends StatelessWidget implements PreferredSizeWidget {
+class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Color backgroundColor;
   final bool showBackButton;
@@ -11,7 +11,7 @@ class AppPageAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double? elevation;
   final double? titleSpacing;
 
-  const AppPageAppBar({
+  const AppPageBar({
     super.key,
     this.title,
     this.backgroundColor = AppColors.white,

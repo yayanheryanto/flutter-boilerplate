@@ -1,3 +1,4 @@
+import 'package:emas/hive_registrar.g.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:injectable/injectable.dart';
@@ -14,6 +15,7 @@ final getIt = GetIt.instance;
 )
 Future<void> configureDependencies(String environment) async {
   await Hive.initFlutter();
+  Hive.registerAdapters(); // ← tambahkan ini, siap untuk nanti
   // Use Box<dynamic> so HiveTokenService and AuthLocalDataSource can use Hive.box() without type mismatch.
   if (!Hive.isBoxOpen(AppConstants.authBox)) {
     await Hive.openBox<dynamic>(AppConstants.authBox);

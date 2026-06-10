@@ -151,7 +151,7 @@ class _KtpVerificationContentState extends State<_KtpVerificationContent> with A
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
-      appBar: AppPageAppBar(
+      appBar: AppPageBar(
         title: 'Verifikasi Akun',
         onBack: () => context.pop(),
         elevation: 1,
@@ -164,7 +164,7 @@ class _KtpVerificationContentState extends State<_KtpVerificationContent> with A
             child: Column(
               children: [
                 const AppSpacer.md(),
-                const VerificationStepper(currentStep: 1),
+                const VerificationStepper(currentStep: 0),
                 Container(
                   margin: const EdgeInsets.symmetric(
                     horizontal: SpacingTokens.md,
@@ -270,7 +270,7 @@ class _KtpVerificationContentState extends State<_KtpVerificationContent> with A
                       AppButton(
                         label: 'Lanjut',
                         onPressed: () async {
-                          await context.push(AppRoutes.addressVerification);
+                          await context.push(AppRoutes.faceGuide);
                           // _onSubmit
                         },
                         borderRadius: 25,

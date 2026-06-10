@@ -29,7 +29,7 @@ class _AccountProcessedPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
-      appBar: const AppPageAppBar(
+      appBar: const AppPageBar(
         title: 'Verifikasi Akun',
         showBackButton: false,
         titleSpacing: 16,

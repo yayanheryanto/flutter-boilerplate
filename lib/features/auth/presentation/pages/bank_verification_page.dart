@@ -69,7 +69,7 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
-      appBar: AppPageAppBar(
+      appBar: AppPageBar(
         title: 'Verifikasi Akun',
         onBack: () => context.pop(),
         elevation: 1,

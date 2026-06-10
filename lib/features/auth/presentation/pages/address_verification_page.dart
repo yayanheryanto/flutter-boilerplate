@@ -85,7 +85,7 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
-      appBar: AppPageAppBar(
+      appBar: AppPageBar(
         title: 'Verifikasi Akun',
         onBack: () => context.pop(),
         elevation: 1,

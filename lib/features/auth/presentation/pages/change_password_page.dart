@@ -26,7 +26,7 @@ class _ChangePasswordPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return const AppScaffoldWrapper(
       backgroundColor: AppColors.white,
-      appBar: AppPageAppBar(),
+      appBar: AppPageBar(),
       body: SafeArea(
         top: false,
         child: SingleChildScrollView(

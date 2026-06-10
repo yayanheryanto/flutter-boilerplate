@@ -28,7 +28,7 @@ class _ForgotPasswordPageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
-      appBar: AppPageAppBar(
+      appBar: AppPageBar(
         onBack: () => context.pop(),
       ),
       body: const SafeArea(
