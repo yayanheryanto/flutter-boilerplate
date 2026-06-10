@@ -13,6 +13,7 @@ class AppRoutes {
   static const String ktpGuide = '/ktp-guide';
   static const String faceGuide = '/face-guide';
   static const String ktpVerification = '/ktp-verification';
+  static const String npwpVerification = '/npwp-verification';
   static const String faceVerification = '/face-verification';
   static const String camerPick = '/camera-pick';
   static const String addressVerification = '/address-verification';

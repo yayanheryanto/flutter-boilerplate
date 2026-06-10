@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/core/utils/images/app_images.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -15,28 +16,22 @@ import 'package:go_router/go_router.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:sizer/sizer.dart';
 
-class FaceVerificationPage extends StatelessWidget {
-  const FaceVerificationPage({super.key});
+class FaceVerificationPage extends StatefulWidget {
+  final AccountType accountType;
+
+  const FaceVerificationPage({
+    super.key,
+    required this.accountType,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return const _KtpVerificationContent();
-  }
+  State<FaceVerificationPage> createState() => FaceVerificationPageState();
 }
 
-class _KtpVerificationContent extends StatefulWidget {
-  const _KtpVerificationContent();
-
-  @override
-  State<_KtpVerificationContent> createState() => _KtpVerificationContentState();
-}
-
-class _KtpVerificationContentState extends State<_KtpVerificationContent> with AppFormMixin<_KtpVerificationContent> {
-
+class FaceVerificationPageState extends State<FaceVerificationPage> with AppFormMixin<FaceVerificationPage> {
   // ── State ─────────────────────────────────────────────────────────────────────
   File? _ktpPhoto;
   bool _isLoadingPhoto = false;
-
 
   @override
   void dispose() {
@@ -62,7 +57,6 @@ class _KtpVerificationContentState extends State<_KtpVerificationContent> with A
     }
   }
 
-
   // ── Build ─────────────────────────────────────────────────────────────────────
 
   @override
@@ -82,7 +76,10 @@ class _KtpVerificationContentState extends State<_KtpVerificationContent> with A
             child: Column(
               children: [
                 const AppSpacer.md(),
-                const VerificationStepper(currentStep: 1),
+                VerificationStepper(
+                  currentStep: 1,
+                  accountType: widget.accountType,
+                ),
                 Container(
                   margin: const EdgeInsets.symmetric(
                     horizontal: SpacingTokens.md,
@@ -171,22 +168,22 @@ class _KtpPhotoCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(RadiusTokens.md),
             child: photo != null
                 ? Center(
-              child: Image.file(
-                photo!,
-                height: 18.h,
-                width: 58.w,
-                fit: BoxFit.cover,
-              ),
-            )
+                    child: Image.file(
+                      photo!,
+                      height: 18.h,
+                      width: 58.w,
+                      fit: BoxFit.cover,
+                    ),
+                  )
                 : Center(
-              child: SizedBox(
-                height: 18.h,
-                width: 58.w,
-                child: Image.asset(
-                  AppImages.sampleCorrectIdCard,
-                ),
-              ),
-            ),
+                    child: SizedBox(
+                      height: 18.h,
+                      width: 58.w,
+                      child: Image.asset(
+                        AppImages.sampleCorrectIdCard,
+                      ),
+                    ),
+                  ),
           ),
           const AppSpacer.md(),
 

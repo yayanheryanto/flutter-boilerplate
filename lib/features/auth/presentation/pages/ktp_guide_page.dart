@@ -1,6 +1,7 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/images/app_images.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -11,7 +12,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class KtpGuidePage extends StatelessWidget {
-  const KtpGuidePage({super.key});
+  final AccountType accountType;
+
+  const KtpGuidePage({
+    super.key,
+    required this.accountType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +34,10 @@ class KtpGuidePage extends StatelessWidget {
           children: [
             // ── Stepper ────────────────────────────────────────────────────
             const AppSpacer.sm(),
-            const VerificationStepper(currentStep: 0),
+            VerificationStepper(
+              currentStep: 0,
+              accountType: accountType,
+            ),
 
             // ── Content ────────────────────────────────────────────────────
             Expanded(
@@ -65,8 +74,8 @@ class KtpGuidePage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       // ── Card header ──────────────────────────────────────
-                      const AppText(
-                        'Panduan Foto KTP',
+                      AppText(
+                        'Panduan Foto ${accountType == AccountType.personal ? 'KTP' : 'NPWP'}',
                         variant: AppTextVariant.titleMedium,
                         fontWeight: FontWeight.bold,
                       ),
@@ -142,7 +151,10 @@ class KtpGuidePage extends StatelessWidget {
               child: AppButton(
                 label: 'Mulai Verifikasi KTP',
                 onPressed: () async {
-                  await context.push(AppRoutes.ktpVerification);
+                  await context.push(
+                    accountType == AccountType.personal ? AppRoutes.ktpVerification : AppRoutes.npwpVerification,
+                    extra: accountType,
+                  );
                 },
                 borderRadius: 25,
               ),

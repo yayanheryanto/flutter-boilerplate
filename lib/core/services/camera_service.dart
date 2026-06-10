@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 
 abstract class CameraService {
   Future<File?> takePhoto({int? imageQuality, int? maxWidth});
+  Future<File?> takeSelfie({int? imageQuality, int? maxWidth});
   Future<File?> pickFromGallery({int? imageQuality, int? maxWidth});
   Future<List<File>> pickMultipleFromGallery({int? imageQuality});
 }
@@ -24,6 +25,20 @@ class CameraServiceImpl implements CameraService {
   }) async {
     final picked = await _picker.pickImage(
       source: ImageSource.camera,
+      imageQuality: imageQuality ?? AppConstants.imageQuality,
+      maxWidth: (maxWidth ?? AppConstants.maxImageWidth).toDouble(),
+    );
+    return picked != null ? File(picked.path) : null;
+  }
+
+  @override
+  Future<File?> takeSelfie({
+    int? imageQuality,
+    int? maxWidth,
+  }) async {
+    final picked = await _picker.pickImage(
+      source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
       imageQuality: imageQuality ?? AppConstants.imageQuality,
       maxWidth: (maxWidth ?? AppConstants.maxImageWidth).toDouble(),
     );

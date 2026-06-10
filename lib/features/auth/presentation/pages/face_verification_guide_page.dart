@@ -1,6 +1,7 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -10,7 +11,12 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 class FaceVerificationGuidePage extends StatelessWidget {
-  const FaceVerificationGuidePage({super.key});
+  final AccountType accountType;
+
+  const FaceVerificationGuidePage({
+    super.key,
+    required this.accountType,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +33,10 @@ class FaceVerificationGuidePage extends StatelessWidget {
           children: [
             // ── Stepper ────────────────────────────────────────────────────
             const AppSpacer.sm(),
-            const VerificationStepper(currentStep: 1),
+            VerificationStepper(
+              currentStep: 1,
+              accountType: accountType,
+            ),
 
             // ── Content ────────────────────────────────────────────────────
             Expanded(
@@ -146,9 +155,9 @@ class _TipItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final normal = Theme.of(context).textTheme.bodySmall?.copyWith(
-      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75),
-      height: 1.5,
-    );
+          color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75),
+          height: 1.5,
+        );
     final bold = normal?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface);
 
     // Build rich text spans

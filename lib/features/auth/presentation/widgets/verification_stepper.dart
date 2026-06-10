@@ -1,4 +1,5 @@
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -6,16 +7,14 @@ import 'package:flutter/material.dart';
 enum VerificationStepState { completed, active, inactive }
 
 class VerificationStepper extends StatefulWidget {
-  final int currentStep; // 0-indexed
+  final int currentStep;
+  final AccountType? accountType;
 
-  static const steps = [
-    'Verifikasi KTP',
-    'Verifikasi Wajah',
-    'Informasi Alamat',
-    'Informasi Data Bank',
-  ];
-
-  const VerificationStepper({super.key, required this.currentStep});
+  const VerificationStepper({
+    super.key,
+    required this.currentStep,
+    this.accountType,
+  });
 
   @override
   State<VerificationStepper> createState() => _VerificationStepperState();
@@ -24,10 +23,17 @@ class VerificationStepper extends StatefulWidget {
 class _VerificationStepperState extends State<VerificationStepper> {
   final _scrollController = ScrollController();
 
+  List<String> get steps => [
+        'Verifikasi ${widget.accountType == AccountType.personal ? 'KTP' : 'NPWP'}',
+        'Verifikasi Wajah',
+        'Informasi Alamat',
+        'Informasi Data Bank',
+      ];
+
   // One key per step (not per row item) to measure exact position
   late final List<GlobalKey> _stepKeys = List.generate(
-    VerificationStepper.steps.length,
-        (_) => GlobalKey(),
+    steps.length,
+    (_) => GlobalKey(),
   );
 
   @override
@@ -61,14 +67,11 @@ class _VerificationStepperState extends State<VerificationStepper> {
     if (box == null) return;
 
     // Position of the active step relative to the scroll view's content
-    final scrollBox = _scrollController.position.context.storageContext
-        .findRenderObject() as RenderBox?;
+    final scrollBox = _scrollController.position.context.storageContext.findRenderObject() as RenderBox?;
     if (scrollBox == null) return;
 
     final localOffset = box.localToGlobal(Offset.zero, ancestor: scrollBox);
-    final targetOffset =
-    (_scrollController.offset + localOffset.dx)
-        .clamp(0.0, _scrollController.position.maxScrollExtent);
+    final targetOffset = (_scrollController.offset + localOffset.dx).clamp(0.0, _scrollController.position.maxScrollExtent);
 
     await _scrollController.animateTo(
       targetOffset,
@@ -89,7 +92,7 @@ class _VerificationStepperState extends State<VerificationStepper> {
         controller: _scrollController,
         scrollDirection: Axis.horizontal,
         child: Row(
-          children: List.generate(VerificationStepper.steps.length * 2 - 1, (i) {
+          children: List.generate(steps.length * 2 - 1, (i) {
             if (i.isOdd) {
               return _StepConnector(isCompleted: widget.currentStep > i ~/ 2);
             }
@@ -97,12 +100,12 @@ class _VerificationStepperState extends State<VerificationStepper> {
             return _StepItem(
               key: _stepKeys[idx],
               index: idx,
-              label: VerificationStepper.steps[idx],
+              label: steps[idx],
               state: idx < widget.currentStep
                   ? VerificationStepState.completed
                   : idx == widget.currentStep
-                  ? VerificationStepState.active
-                  : VerificationStepState.inactive,
+                      ? VerificationStepState.active
+                      : VerificationStepState.inactive,
             );
           }),
         ),
@@ -143,11 +146,11 @@ class _StepItem extends StatelessWidget {
           child: isCompleted
               ? const Icon(Icons.check, size: 13, color: Colors.white)
               : AppText(
-            '${index + 1}',
-            variant: AppTextVariant.labelSmall,
-            fontWeight: FontWeight.bold,
-            color: isInactive ? Colors.grey.shade500 : Colors.white,
-          ),
+                  '${index + 1}',
+                  variant: AppTextVariant.labelSmall,
+                  fontWeight: FontWeight.bold,
+                  color: isInactive ? Colors.grey.shade500 : Colors.white,
+                ),
         ),
         const SizedBox(width: 6),
         AppText(
@@ -163,6 +166,7 @@ class _StepItem extends StatelessWidget {
 
 class _StepConnector extends StatelessWidget {
   final bool isCompleted;
+
   const _StepConnector({required this.isCompleted});
 
   @override

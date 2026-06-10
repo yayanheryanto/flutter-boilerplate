@@ -31,9 +31,9 @@ class FilePickerServiceImpl implements FilePickerService {
       allowedExtensions: allowedExtensions,
     );
     return result?.files
-            .where((f) => f.path != null)
-            .map((f) => File(f.path!))
-            .toList() ??
+        .where((f) => f.path != null)
+        .map((f) => File(f.path!))
+        .toList() ??
         [];
   }
 

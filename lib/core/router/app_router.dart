@@ -1,4 +1,5 @@
 import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/features/auth/presentation/pages/account_processed_page.dart';
 import 'package:emas/features/auth/presentation/pages/address_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/bank_verification_page.dart';
@@ -8,6 +9,7 @@ import 'package:emas/features/auth/presentation/pages/face_verification_guide_pa
 import 'package:emas/features/auth/presentation/pages/face_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/ktp_guide_page.dart';
 import 'package:emas/features/auth/presentation/pages/ktp_verification_page.dart';
+import 'package:emas/features/auth/presentation/pages/npwp_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/verification_preparation_page.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/core/utils/navigator_key.dart';
@@ -65,31 +67,62 @@ class AppRouter {
         GoRoute(
           path: AppRoutes.ktpGuide,
           name: 'ktp-guide',
-          builder: (context, state) => const KtpGuidePage(),
+          builder: (context, state) {
+            final accountType = state.extra as AccountType? ?? AccountType.personal;
+            return KtpGuidePage(
+              accountType: accountType,
+            );
+          },
+        ),
+
+        GoRoute(
+          path: AppRoutes.ktpVerification,
+          name: 'ktp-verification',
+          builder: (context, state) {
+            final accountType = state.extra as AccountType? ?? AccountType.personal;
+            return KtpVerificationPage(
+              accountType: accountType,
+            );
+          },
+        ),
+
+        GoRoute(
+          path: AppRoutes.npwpVerification,
+          name: 'npwp-verification',
+          builder: (context, state) {
+            final accountType = state.extra as AccountType? ?? AccountType.personal;
+            return NPWPVerificationPage(
+              accountType: accountType,
+            );
+          },
         ),
 
         GoRoute(
           path: AppRoutes.faceGuide,
           name: 'face-guide',
-          builder: (context, state) => const FaceVerificationGuidePage(),
+          builder: (context, state) {
+            final accountType = state.extra as AccountType? ?? AccountType.personal;
+            return FaceVerificationGuidePage(
+              accountType: accountType,
+            );
+          },
+        ),
+
+        GoRoute(
+          path: AppRoutes.faceVerification,
+          name: 'face-verification',
+          builder: (context, state) {
+            final accountType = state.extra as AccountType? ?? AccountType.personal;
+            return FaceVerificationPage(
+              accountType: accountType,
+            );
+          },
         ),
 
         GoRoute(
           path: AppRoutes.changePassword,
           name: 'change-password',
           builder: (context, state) => const ChangePasswordPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.ktpVerification,
-          name: 'ktp-verification',
-          builder: (context, state) => const KtpVerificationPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.faceVerification,
-          name: 'face-verification',
-          builder: (context, state) => const FaceVerificationPage(),
         ),
 
         GoRoute(
@@ -170,6 +203,7 @@ class AppRouter {
 
 class _PlaceholderPage extends StatelessWidget {
   final String title;
+
   const _PlaceholderPage({required this.title});
 
   @override
@@ -183,6 +217,7 @@ class _PlaceholderPage extends StatelessWidget {
 
 class _ErrorPage extends StatelessWidget {
   final Exception? error;
+
   const _ErrorPage({this.error});
 
   @override

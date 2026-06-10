@@ -5,6 +5,7 @@ import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/services/camera_service.dart';
+import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/core/utils/images/app_images.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -20,23 +21,19 @@ import 'package:intl/intl.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:sizer/sizer.dart';
 
-class KtpVerificationPage extends StatelessWidget {
-  const KtpVerificationPage({super.key});
+class KtpVerificationPage extends StatefulWidget {
+  final AccountType accountType;
+
+  const KtpVerificationPage({
+    super.key,
+    required this.accountType,
+  });
 
   @override
-  Widget build(BuildContext context) {
-    return const _KtpVerificationContent();
-  }
+  State<KtpVerificationPage> createState() => KtpVerificationPageState();
 }
 
-class _KtpVerificationContent extends StatefulWidget {
-  const _KtpVerificationContent();
-
-  @override
-  State<_KtpVerificationContent> createState() => _KtpVerificationContentState();
-}
-
-class _KtpVerificationContentState extends State<_KtpVerificationContent> with AppFormMixin<_KtpVerificationContent> {
+class KtpVerificationPageState extends State<KtpVerificationPage> with AppFormMixin<KtpVerificationPage> {
   // ── Controllers ──────────────────────────────────────────────────────────────
   final _nikController = TextEditingController();
   final _namaController = TextEditingController();
@@ -145,8 +142,6 @@ class _KtpVerificationContentState extends State<_KtpVerificationContent> with A
     context.go(AppRoutes.dashboard);
   }
 
-  // ── Build ─────────────────────────────────────────────────────────────────────
-
   @override
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
@@ -164,7 +159,10 @@ class _KtpVerificationContentState extends State<_KtpVerificationContent> with A
             child: Column(
               children: [
                 const AppSpacer.md(),
-                const VerificationStepper(currentStep: 0),
+                VerificationStepper(
+                  currentStep: 0,
+                  accountType: widget.accountType,
+                ),
                 Container(
                   margin: const EdgeInsets.symmetric(
                     horizontal: SpacingTokens.md,
@@ -179,6 +177,7 @@ class _KtpVerificationContentState extends State<_KtpVerificationContent> with A
                         photo: _ktpPhoto,
                         isLoading: _isLoadingPhoto,
                         onTap: _showPhotoPicker,
+                        accountType: widget.accountType,
                       ),
                       const AppSpacer.lg(),
 
@@ -294,11 +293,13 @@ class _KtpPhotoCard extends StatelessWidget {
   final File? photo;
   final bool isLoading;
   final VoidCallback onTap;
+  final AccountType accountType;
 
   const _KtpPhotoCard({
     required this.photo,
     required this.isLoading,
     required this.onTap,
+    required this.accountType,
   });
 
   @override
@@ -330,7 +331,11 @@ class _KtpPhotoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const AppText('Verifikasi KTP', variant: AppTextVariant.titleMedium, fontWeight: FontWeight.bold),
+          AppText(
+            'Verifikasi ${accountType == AccountType.personal ? 'KTP' : 'NPWP'}',
+            variant: AppTextVariant.titleMedium,
+            fontWeight: FontWeight.bold,
+          ),
           const AppSpacer.md(),
 
           // Photo area

@@ -14,7 +14,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
 
-
 class VerificationPreparationPage extends StatefulWidget {
   const VerificationPreparationPage({super.key});
 
@@ -125,7 +124,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                 label: 'Mulai Verifikasi Akun',
                 onPressed: () async => context.push(
                   AppRoutes.ktpGuide,
-                  extra: {'account_type': _selected},
+                  extra: _selected,
                 ),
                 borderRadius: 25,
               ),
