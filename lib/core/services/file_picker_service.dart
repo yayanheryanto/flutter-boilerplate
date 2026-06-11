@@ -5,7 +5,9 @@ import 'package:injectable/injectable.dart';
 
 abstract class FilePickerService {
   Future<File?> pickFile({List<String>? allowedExtensions});
+
   Future<List<File>> pickMultipleFiles({List<String>? allowedExtensions});
+
   Future<File?> pickPDF();
 }
 
@@ -30,11 +32,7 @@ class FilePickerServiceImpl implements FilePickerService {
       type: allowedExtensions != null ? FileType.custom : FileType.any,
       allowedExtensions: allowedExtensions,
     );
-    return result?.files
-        .where((f) => f.path != null)
-        .map((f) => File(f.path!))
-        .toList() ??
-        [];
+    return result?.files.where((f) => f.path != null).map((f) => File(f.path!)).toList() ?? [];
   }
 
   @override

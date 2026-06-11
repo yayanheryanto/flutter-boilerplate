@@ -1,6 +1,6 @@
 import 'package:emas/core/firebase/notification_handler.dart';
 import 'package:emas/core/constants/tokens/spacing_tokens.dart';
-import 'package:emas/shared/widgets/display/app_display.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
@@ -9,51 +9,78 @@ class DashboardHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-
     return Container(
-      color: scheme.surface,
+      color: Colors.white,
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top + SpacingTokens.md,
         left: SpacingTokens.md,
         right: SpacingTokens.md,
         bottom: SpacingTokens.md,
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      child: Row(
         children: [
-          Row(
+          // ── EMAS logo ─────────────────────────────────────────────────
+          const Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
-              const AppAvatar(initials: 'B'),
-              const AppSpacer(SpacingTokens.sm, horizontal: true),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppText(
-                      'Selamat pagi 👋',
-                      variant: AppTextVariant.labelSmall,
-                      color: scheme.onSurface.withOpacity(0.45),
-                    ),
-                    const AppText(
-                      'Taro Misaki',
-                      variant: AppTextVariant.titleSmall,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ],
+              Text(
+                'EMAS',
+                style: TextStyle(
+                  fontSize: 28,
+                  fontWeight: FontWeight.w900,
+                  color: AppColors.primary500,
+                  letterSpacing: 1.5,
+                  height: 1.0,
                 ),
               ),
-              NotificationBadge(
-                onTap: () {},
-                child: const Icon(Icons.notifications_outlined),
+              Row(
+                children: [
+                  Text(
+                    'Powered by ',
+                    style: TextStyle(fontSize: 9, color: Colors.grey),
+                  ),
+                  // Mega Finance logo text
+                  Text(
+                    'M',
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w900,
+                      color: Colors.teal,
+                    ),
+                  ),
+                  Text(
+                    ' MEGAFINANCE',
+                    style: TextStyle(
+                      fontSize: 9,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black87,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-          // const AppSpacer.md(),
-          // AppSearchField(
-          //   hint: 'Cari barang lelang...',
-          //   onChanged: (_) {},
-          // ),
+
+          const Spacer(),
+
+          // ── Notification bell ─────────────────────────────────────────
+          NotificationBadge(
+            onTap: () {},
+            child: Container(
+              width: 40,
+              height: 40,
+              decoration: const BoxDecoration(
+                color: AppColors.primary500,
+                shape: BoxShape.circle,
+              ),
+              child: const Icon(
+                Icons.notifications_outlined,
+                color: Colors.white,
+                size: 22,
+              ),
+            ),
+          ),
         ],
       ),
     );

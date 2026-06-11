@@ -217,7 +217,7 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
                       AppButton(
                         label: 'Lanjut',
                         onPressed: () async {
-                          await context.push(AppRoutes.bankVerification);
+                          await context.push(AppRoutes.confirmationVerification);
                           // _onSubmit
                         },
                         borderRadius: 25,

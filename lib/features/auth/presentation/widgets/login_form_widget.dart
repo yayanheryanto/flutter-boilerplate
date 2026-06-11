@@ -122,7 +122,10 @@ class _LoginFormWidgetState extends State<LoginFormWidget> with AppFormMixin<Log
 
                 AppButton(
                   label: 'Masuk',
-                  onPressed: _onSubmit,
+                  onPressed: () async {
+                    await context.push(AppRoutes.dashboard);
+                    // _onSubmit();
+                  },
                   isLoading: state is AuthLoading,
                   borderRadius: 25,
                 ),

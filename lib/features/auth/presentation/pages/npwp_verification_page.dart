@@ -63,7 +63,7 @@ class _NPWPVerificationPageState extends State<NPWPVerificationPage> with AppFor
     'Bekasi',
     'Tangerang',
     'Depok',
-    'Bogor'
+    'Bogor',
   ];
 
   @override
@@ -376,7 +376,6 @@ class _UploadPhotoField extends StatelessWidget {
               borderRadius: BorderRadius.circular(RadiusTokens.lg),
               border: Border.all(
                 color: const Color(0xFFB2EBE8),
-                width: 1,
               ),
             ),
             child: file != null ? _FilePreview(file: file!, isPdf: isPdf) : _UploadPlaceholder(acceptFormat: acceptFormat, isPdf: isPdf),

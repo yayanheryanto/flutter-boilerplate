@@ -28,6 +28,7 @@ class _VerificationStepperState extends State<VerificationStepper> {
         'Verifikasi Wajah',
         'Informasi Alamat',
         'Informasi Data Bank',
+        'Review Informasi Data',
       ];
 
   // One key per step (not per row item) to measure exact position

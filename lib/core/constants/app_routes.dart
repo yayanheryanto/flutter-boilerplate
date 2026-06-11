@@ -20,6 +20,7 @@ class AppRoutes {
   static const String bankVerification = '/bank-verification';
   static const String accountProcessed = '/account-processed';
   static const String changePassword = '/change-password';
+  static const String confirmationVerification = '/confirmation-verification';
   static const String dashboard = '/dashboard';
 
   // ── Category ──────────────────────────────────────────────────────────────

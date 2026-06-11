@@ -1,16 +1,27 @@
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
-import 'package:emas/shared/widgets/display/app_display.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
+import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
-import 'package:emas/features/dashboard/presentation/widgets/home/section_header.dart';
+import 'package:emas/shared/theme/app_colors.dart';
+import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+// Maps each category to a Material icon that resembles the illustration style
+const _categoryIcons = {
+  AuctionCategory.mobil: Icons.directions_car_rounded,
+  AuctionCategory.motor: Icons.two_wheeler_rounded,
+  AuctionCategory.elektronik: Icons.laptop_rounded,
+};
+
+const _categoryIconColors = {
+  AuctionCategory.mobil: Color(0xFFF5C842),
+  AuctionCategory.motor: Color(0xFFE8834A),
+  AuctionCategory.elektronik: Color(0xFF7B9FD4),
+};
+
 const _categories = [
-  (cat: AuctionCategory.motor),
-  (cat: AuctionCategory.mobil),
-  (cat: AuctionCategory.elektronik),
+  AuctionCategory.mobil,
+  AuctionCategory.motor,
+  AuctionCategory.elektronik,
 ];
 
 class CategorySection extends StatelessWidget {
@@ -18,82 +29,48 @@ class CategorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        DashboardSectionHeader(title: 'Kategori', onSeeAll: () {}),
-        const AppSpacer.sm(),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              mainAxisSpacing: SpacingTokens.sm,
-              crossAxisSpacing: SpacingTokens.sm,
-              childAspectRatio: 1.1,
-            ),
-            itemCount: _categories.length,
-            itemBuilder: (_, i) => _CategoryCard(category: _categories[i].cat),
-          ),
-        ),
-      ],
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: _categories.map((cat) => _CategoryItem(category: cat)).toList(),
     );
   }
 }
 
-class _CategoryCard extends StatelessWidget {
+class _CategoryItem extends StatelessWidget {
   final AuctionCategory category;
 
-  const _CategoryCard({required this.category});
+  const _CategoryItem({required this.category});
 
   @override
   Widget build(BuildContext context) {
-    final color = category.color;
+    final iconColor = _categoryIconColors[category] ?? AppColors.primary500;
+    final icon = _categoryIcons[category] ?? Icons.category_rounded;
 
-    return AppCard(
-      onTap: () async => context.pushNamed(
+    return GestureDetector(
+      onTap: () => context.pushNamed(
         'category-detail',
         pathParameters: {'slug': category.slug},
       ),
-      padding: const EdgeInsets.all(SpacingTokens.sm),
-      child: Stack(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Icon(
-              Icons.chevron_right_rounded,
-              size: 14,
-              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.25),
+          Container(
+            width: 72,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.grey.shade100,
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: Center(
+              child: Icon(icon, color: iconColor, size: 36),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
-                  borderRadius: BorderRadius.circular(RadiusTokens.md),
-                ),
-                child: Center(
-                  // Emoji requires raw Text with explicit fontSize — AppText
-                  // maps to TextTheme variants which don't expose raw fontSize.
-                  child: Text(category.emoji, style: const TextStyle(fontSize: 20)),
-                ),
-              ),
-              const AppSpacer.xs(),
-              AppText(
-                category.label,
-                variant: AppTextVariant.labelMedium,
-                fontWeight: FontWeight.w600,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
-              ),
-            ],
+          const SizedBox(height: 6),
+          AppText(
+            category.label,
+            variant: AppTextVariant.bodySmall,
+            fontWeight: FontWeight.w500,
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75),
           ),
         ],
       ),
