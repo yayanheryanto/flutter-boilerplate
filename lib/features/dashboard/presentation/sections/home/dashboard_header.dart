@@ -1,5 +1,5 @@
 import 'package:emas/core/firebase/notification_handler.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -12,10 +12,10 @@ class DashboardHeader extends StatelessWidget {
     return Container(
       color: Colors.white,
       padding: EdgeInsets.only(
-        top: MediaQuery.of(context).padding.top + SpacingTokens.md,
-        left: SpacingTokens.md,
-        right: SpacingTokens.md,
-        bottom: SpacingTokens.md,
+        top: MediaQuery.of(context).padding.top + AppSpacings.md,
+        left: AppSpacings.md,
+        right: AppSpacings.md,
+        bottom: AppSpacings.md,
       ),
       child: Row(
         children: [

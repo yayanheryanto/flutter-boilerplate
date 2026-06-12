@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 import 'package:flutter/material.dart';
 
@@ -241,10 +241,10 @@ class _ToastWidgetState extends State<_ToastWidget>
                 child: Material(
                   color: Colors.transparent,
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: SpacingTokens.xl),
+                    margin: const EdgeInsets.symmetric(horizontal: AppSpacings.xl),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: SpacingTokens.md,
-                      vertical: SpacingTokens.sm + 2,
+                      horizontal: AppSpacings.md,
+                      vertical: AppSpacings.sm + 2,
                     ),
                     decoration: BoxDecoration(
                       color: bgColor,
@@ -261,7 +261,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(iconData, color: Colors.white, size: 18),
-                        const SizedBox(width: SpacingTokens.sm),
+                        const SizedBox(width: AppSpacings.sm),
                         Flexible(
                           child: Text(
                             widget.message,

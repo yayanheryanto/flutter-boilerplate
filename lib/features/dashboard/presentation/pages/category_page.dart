@@ -1,5 +1,5 @@
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/input/app_text_field.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
@@ -90,9 +90,9 @@ class _CategoryPageState extends State<CategoryPage> {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  SpacingTokens.md,
-                  SpacingTokens.sm,
-                  SpacingTokens.md,
+                  AppSpacings.md,
+                  AppSpacings.sm,
+                  AppSpacings.md,
                   0,
                 ),
                 child: AppText(
@@ -108,10 +108,10 @@ class _CategoryPageState extends State<CategoryPage> {
               delegate: SliverChildBuilderDelegate(
                     (_, i) => i < items.length
                     ? Padding(
-                  padding: const EdgeInsets.only(top: SpacingTokens.xs),
+                  padding: const EdgeInsets.only(top: AppSpacings.xs),
                   child: CategoryAuctionListItem(item: items[i]),
                 )
-                    : const SizedBox(height: SpacingTokens.xl),
+                    : const SizedBox(height: AppSpacings.xl),
                 childCount: items.length + 1,
               ),
             ),
@@ -174,7 +174,7 @@ class _CategorySliverAppBar extends StatelessWidget {
           tooltip: 'Urutkan',
           onPressed: onSort,
         ),
-        const SizedBox(width: SpacingTokens.xs),
+        const SizedBox(width: AppSpacings.xs),
       ],
       flexibleSpace: FlexibleSpaceBar(
         background: Container(
@@ -187,8 +187,8 @@ class _CategorySliverAppBar extends StatelessWidget {
           ),
           padding: EdgeInsets.only(
             top: MediaQuery.of(context).padding.top + 56,
-            left: SpacingTokens.md,
-            right: SpacingTokens.md,
+            left: AppSpacings.md,
+            right: AppSpacings.md,
             bottom: 48,
           ),
           child: Row(
@@ -207,7 +207,7 @@ class _CategorySliverAppBar extends StatelessWidget {
                   ),
                 ),
               ),
-              const SizedBox(width: SpacingTokens.sm),
+              const SizedBox(width: AppSpacings.sm),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,10 +234,10 @@ class _CategorySliverAppBar extends StatelessWidget {
         child: Container(
           height: 52,
           padding: const EdgeInsets.fromLTRB(
-            SpacingTokens.md,
+            AppSpacings.md,
             0,
-            SpacingTokens.md,
-            SpacingTokens.sm,
+            AppSpacings.md,
+            AppSpacings.sm,
           ),
           child: AppSearchField(
             controller: searchCtrl,
@@ -269,10 +269,10 @@ class _SortPillRow extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       physics: const BouncingScrollPhysics(),
       padding: const EdgeInsets.fromLTRB(
-        SpacingTokens.md,
-        SpacingTokens.sm,
-        SpacingTokens.md,
-        SpacingTokens.sm,
+        AppSpacings.md,
+        AppSpacings.sm,
+        AppSpacings.md,
+        AppSpacings.sm,
       ),
       child: Row(
         children: _SortOption.values.map((s) {
@@ -281,7 +281,7 @@ class _SortPillRow extends StatelessWidget {
             onTap: () => onSelected(s),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 180),
-              margin: const EdgeInsets.only(right: SpacingTokens.xs),
+              margin: const EdgeInsets.only(right: AppSpacings.xs),
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
               decoration: BoxDecoration(
                 color: active ? color : Colors.white,
@@ -332,7 +332,7 @@ class _SortSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: SpacingTokens.md),
+          const SizedBox(height: AppSpacings.md),
           // Handle bar
           Container(
             width: 36,
@@ -342,9 +342,9 @@ class _SortSheet extends StatelessWidget {
               borderRadius: BorderRadius.circular(2),
             ),
           ),
-          const SizedBox(height: SpacingTokens.md),
+          const SizedBox(height: AppSpacings.md),
           const Padding(
-            padding: EdgeInsets.symmetric(horizontal: SpacingTokens.md),
+            padding: EdgeInsets.symmetric(horizontal: AppSpacings.md),
             child: Row(
               children: [
                 AppText(
@@ -355,11 +355,11 @@ class _SortSheet extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(height: SpacingTokens.xs),
+          const SizedBox(height: AppSpacings.xs),
           ..._SortOption.values.map(
                 (s) => ListTile(
               contentPadding: const EdgeInsets.symmetric(
-                horizontal: SpacingTokens.md,
+                horizontal: AppSpacings.md,
               ),
               title: AppText(s.label),
               trailing: s == selected
@@ -368,7 +368,7 @@ class _SortSheet extends StatelessWidget {
               onTap: () => onSelected(s),
             ),
           ),
-          const SizedBox(height: SpacingTokens.sm),
+          const SizedBox(height: AppSpacings.sm),
         ],
       ),
     );
@@ -391,13 +391,13 @@ class _EmptyState extends StatelessWidget {
             query.isEmpty ? '📦' : '🔍',
             style: const TextStyle(fontSize: 52),
           ),
-          const SizedBox(height: SpacingTokens.md),
+          const SizedBox(height: AppSpacings.md),
           AppText(
             query.isEmpty ? 'Belum ada item' : 'Tidak ditemukan',
             variant: AppTextVariant.titleSmall,
             fontWeight: FontWeight.w700,
           ),
-          const SizedBox(height: SpacingTokens.xs),
+          const SizedBox(height: AppSpacings.xs),
           AppText(
             query.isEmpty
                 ? 'Item lelang untuk kategori ini\nakan segera tersedia.'

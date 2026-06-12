@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -85,8 +85,8 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
                 const VerificationStepper(currentStep: 3),
                 Container(
                   margin: const EdgeInsets.symmetric(
-                    horizontal: SpacingTokens.md,
-                    vertical: SpacingTokens.sm,
+                    horizontal: AppSpacings.md,
+                    vertical: AppSpacings.sm,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

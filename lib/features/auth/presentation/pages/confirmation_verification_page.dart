@@ -1,5 +1,5 @@
 import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
@@ -48,7 +48,7 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
             // ── Content ──────────────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(SpacingTokens.md),
+                padding: const EdgeInsets.all(AppSpacings.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -88,10 +88,10 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
             Container(
               color: AppColors.white,
               padding: const EdgeInsets.fromLTRB(
-                SpacingTokens.lg,
-                SpacingTokens.md,
-                SpacingTokens.lg,
-                SpacingTokens.lg,
+                AppSpacings.lg,
+                AppSpacings.md,
+                AppSpacings.lg,
+                AppSpacings.lg,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -168,17 +168,17 @@ class _ReviewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(SpacingTokens.md),
+      borderRadius: BorderRadius.circular(AppSpacings.md),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(SpacingTokens.md),
+        borderRadius: BorderRadius.circular(AppSpacings.md),
         child: Container(
           padding: const EdgeInsets.symmetric(
-            horizontal: SpacingTokens.md,
-            vertical: SpacingTokens.md,
+            horizontal: AppSpacings.md,
+            vertical: AppSpacings.md,
           ),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(SpacingTokens.md),
+            borderRadius: BorderRadius.circular(AppSpacings.md),
             border: Border.all(
               color: AppColors.border,
               width: 1.2,

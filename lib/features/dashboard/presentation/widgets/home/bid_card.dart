@@ -1,6 +1,6 @@
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
@@ -23,8 +23,8 @@ class BidCard extends StatelessWidget {
       onTap: () {},
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: SpacingTokens.md,
-          vertical: SpacingTokens.sm + 4,
+          horizontal: AppSpacings.md,
+          vertical: AppSpacings.sm + 4,
         ),
         decoration: BoxDecoration(
           color: scheme.surface,
@@ -50,7 +50,7 @@ class BidCard extends StatelessWidget {
                 child: Text(item.emoji, style: const TextStyle(fontSize: 24)),
               ),
             ),
-            const AppSpacer(SpacingTokens.sm, horizontal: true),
+            const AppSpacer(AppSpacings.sm, horizontal: true),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

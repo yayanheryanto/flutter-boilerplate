@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 import 'package:flutter/material.dart';
@@ -43,13 +43,13 @@ class AppBanner {
       MaterialBanner(
         backgroundColor: bgColor,
         padding: const EdgeInsets.symmetric(
-          horizontal: SpacingTokens.md,
-          vertical: SpacingTokens.sm,
+          horizontal: AppSpacings.md,
+          vertical: AppSpacings.sm,
         ),
         content: Row(
           children: [
             Icon(iconData, color: Colors.white, size: 20),
-            const SizedBox(width: SpacingTokens.sm),
+            const SizedBox(width: AppSpacings.sm),
             Expanded(
               child: Text(
                 message,
@@ -78,7 +78,7 @@ class AppBanner {
           IconButton(
             icon: const Icon(Icons.close_rounded, color: Colors.white, size: 18),
             onPressed: () => hide(context),
-            padding: const EdgeInsets.only(right: SpacingTokens.sm),
+            padding: const EdgeInsets.only(right: AppSpacings.sm),
             constraints: const BoxConstraints(),
           ),
         ],
@@ -188,8 +188,8 @@ class _ProgressOverlayWidget extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 48),
           padding: const EdgeInsets.symmetric(
-            horizontal: SpacingTokens.xl,
-            vertical: SpacingTokens.lg,
+            horizontal: AppSpacings.xl,
+            vertical: AppSpacings.lg,
           ),
           decoration: BoxDecoration(
             color: scheme.surface,
@@ -208,7 +208,7 @@ class _ProgressOverlayWidget extends StatelessWidget {
                     color: scheme.primary,
                   ),
                 ),
-                const SizedBox(height: SpacingTokens.md),
+                const SizedBox(height: AppSpacings.md),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(3),
                   child: LinearProgressIndicator(
@@ -223,7 +223,7 @@ class _ProgressOverlayWidget extends StatelessWidget {
                 ),
               ],
               if (message != null) ...[
-                const SizedBox(height: SpacingTokens.md),
+                const SizedBox(height: AppSpacings.md),
                 AppText(message!, textAlign: TextAlign.center),
               ],
             ],
@@ -271,7 +271,7 @@ class AppTooltipWrapper extends StatelessWidget {
         borderRadius: BorderRadius.circular(RadiusTokens.sm),
       ),
       textStyle: TextStyle(color: scheme.onInverseSurface, fontSize: 12),
-      padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.sm, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.sm, vertical: 6),
       child: child,
     );
   }
@@ -349,7 +349,7 @@ class AppPopover {
                       ],
                       border: Border.all(color: scheme.outline.withOpacity(0.2)),
                     ),
-                    padding: const EdgeInsets.all(SpacingTokens.md),
+                    padding: const EdgeInsets.all(AppSpacings.md),
                     child: content,
                   ),
                 ),
@@ -466,7 +466,7 @@ class AppStepperOverlay {
           ),
           const SizedBox(height: 4),
           AppText(step.description, variant: AppTextVariant.bodySmall),
-          const SizedBox(height: SpacingTokens.sm),
+          const SizedBox(height: AppSpacings.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

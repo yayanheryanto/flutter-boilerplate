@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/core/utils/images/app_images.dart';
@@ -51,7 +51,8 @@ class FaceVerificationPageState extends State<FaceVerificationPage> with AppForm
   }
 
   Future<void> _openCamera() async {
-    final result = await context.push<File?>(AppRoutes.camerPick);
+    // final result = await context.push<File?>(AppRoutes.camerPick);
+    final result = await context.push<File?>(AppRoutes.facePick);
     if (result != null && mounted) {
       setState(() => _ktpPhoto = result);
     }
@@ -72,45 +73,57 @@ class FaceVerificationPageState extends State<FaceVerificationPage> with AppForm
         top: false,
         child: Form(
           key: formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                const AppSpacer.md(),
-                VerificationStepper(
-                  currentStep: 1,
-                  accountType: widget.accountType,
-                ),
-                Container(
-                  margin: const EdgeInsets.symmetric(
-                    horizontal: SpacingTokens.md,
-                    vertical: SpacingTokens.sm,
-                  ),
+          child: Column(
+            children: [
+              // 1. Scrollable Main Content
+              Expanded(
+                child: SingleChildScrollView(
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const AppSpacer.sm(),
-                      // Card with photo
-                      _KtpPhotoCard(
-                        photo: _ktpPhoto,
-                        isLoading: _isLoadingPhoto,
-                        onTap: _openCamera,
-                      ),
-                      const AppSpacer.lg(),
-
-                      AppButton(
-                        label: 'Lanjut',
-                        onPressed: () async {
-                          await context.push(AppRoutes.addressVerification);
-                          // _onSubmit
-                        },
-                        borderRadius: 25,
-                      ),
                       const AppSpacer.md(),
+                      VerificationStepper(
+                        currentStep: 1,
+                        accountType: widget.accountType,
+                      ),
+                      Container(
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: AppSpacings.md,
+                          vertical: AppSpacings.sm,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const AppSpacer.sm(),
+                            // Card with photo
+                            _KtpPhotoCard(
+                              photo: _ktpPhoto,
+                              isLoading: _isLoadingPhoto,
+                              onTap: _openCamera,
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ],
-            ),
+              ),
+
+              // 2. Fixed Bottom Button Container
+              Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacings.md,
+                  vertical: AppSpacings.md,
+                ),
+                child: AppButton(
+                  label: 'Lanjut',
+                  onPressed: () async {
+                    await context.push(AppRoutes.addressVerification);
+                    // _onSubmit
+                  },
+                  borderRadius: 25,
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -138,29 +151,18 @@ class _KtpPhotoCard extends StatelessWidget {
         color: const Color(0xFFFDF6EE),
         borderRadius: BorderRadius.circular(RadiusTokens.lg),
         border: const Border(
-          left: BorderSide(
-            color: AppColors.neutral200,
-            width: 0.8,
-          ),
-          right: BorderSide(
-            color: AppColors.neutral200,
-            width: 0.8,
-          ),
-          bottom: BorderSide(
-            color: AppColors.neutral200,
-            width: 0.8,
-          ),
-          top: BorderSide(
-            color: AppColors.neutral200,
-            width: 0.8,
-          ),
+          left: BorderSide(color: AppColors.neutral200, width: 0.8),
+          right: BorderSide(color: AppColors.neutral200, width: 0.8),
+          bottom: BorderSide(color: AppColors.neutral200, width: 0.8),
+          top: BorderSide(color: AppColors.neutral200, width: 0.8),
         ),
       ),
-      padding: const EdgeInsets.all(SpacingTokens.md),
+      padding: const EdgeInsets.all(AppSpacings.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min, // Ensures card only takes needed space
         children: [
-          const AppText('Verifikasi KTP', variant: AppTextVariant.titleMedium, fontWeight: FontWeight.bold),
+          const AppText('Verifikasi Wajah', variant: AppTextVariant.titleMedium, fontWeight: FontWeight.bold),
           const AppSpacer.md(),
 
           // Photo area
@@ -168,28 +170,28 @@ class _KtpPhotoCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(RadiusTokens.md),
             child: photo != null
                 ? Center(
-                    child: Image.file(
-                      photo!,
-                      height: 18.h,
-                      width: 58.w,
-                      fit: BoxFit.cover,
-                    ),
-                  )
+              child: Image.file(
+                photo!,
+                height: 18.h,
+                width: 58.w,
+                fit: BoxFit.cover,
+              ),
+            )
                 : Center(
-                    child: SizedBox(
-                      height: 18.h,
-                      width: 58.w,
-                      child: Image.asset(
-                        AppImages.sampleCorrectIdCard,
-                      ),
-                    ),
-                  ),
+              child: SizedBox(
+                height: 18.h,
+                width: 58.w,
+                child: Image.asset(
+                  AppImages.sampleCorrectIdCard,
+                ),
+              ),
+            ),
           ),
           const AppSpacer.md(),
 
-          // Foto Ulang button
+          // Foto Ulang button (Removed Expanded to prevent layout crashes)
           AppButton(
-            label: isLoading ? 'Memproses...' : 'Foto Ulang',
+            label: isLoading ? 'Memproses...' : photo == null ? 'Ambil Foto' : 'Foto Ulang',
             variant: AppButtonVariant.outlined,
             backgroundColor: AppColors.bgCard,
             onPressed: isLoading ? null : onTap,

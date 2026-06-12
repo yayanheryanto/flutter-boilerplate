@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/services/camera_service.dart';
 import 'package:emas/core/utils/account_type.dart';
@@ -70,10 +70,10 @@ class KtpVerificationPageState extends State<KtpVerificationPage> with AppFormMi
       context,
       showCloseButton: false,
       contentPadding: const EdgeInsets.fromLTRB(
-        SpacingTokens.lg,
-        SpacingTokens.sm,
-        SpacingTokens.lg,
-        SpacingTokens.lg,
+        AppSpacings.lg,
+        AppSpacings.sm,
+        AppSpacings.lg,
+        AppSpacings.lg,
       ),
       content: _PhotoPickerContent(
         onCamera: () async {
@@ -165,8 +165,8 @@ class KtpVerificationPageState extends State<KtpVerificationPage> with AppFormMi
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(
-                    horizontal: SpacingTokens.md,
-                    vertical: SpacingTokens.sm,
+                    horizontal: AppSpacings.md,
+                    vertical: AppSpacings.sm,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,7 +327,7 @@ class _KtpPhotoCard extends StatelessWidget {
           ),
         ),
       ),
-      padding: const EdgeInsets.all(SpacingTokens.md),
+      padding: const EdgeInsets.all(AppSpacings.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -364,7 +364,7 @@ class _KtpPhotoCard extends StatelessWidget {
 
           // Foto Ulang button
           AppButton(
-            label: isLoading ? 'Memproses...' : 'Foto Ulang',
+            label: isLoading ? 'Memproses...' : photo == null ? 'Ambil Foto' : 'Foto Ulang',
             variant: AppButtonVariant.outlined,
             backgroundColor: AppColors.bgCard,
             onPressed: isLoading ? null : onTap,

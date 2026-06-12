@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/shared/widgets/bottomsheets/app_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -79,10 +79,10 @@ class _AppColorPickerState extends State<AppColorPicker> {
             variant: AppTextVariant.labelLarge,
             color: scheme.onSurface.withOpacity(0.7),
           ),
-          const SizedBox(height: SpacingTokens.sm),
+          const SizedBox(height: AppSpacings.sm),
           Wrap(
-            spacing: SpacingTokens.sm,
-            runSpacing: SpacingTokens.sm,
+            spacing: AppSpacings.sm,
+            runSpacing: AppSpacings.sm,
             children: [
               ...widget.colors.map(
                 (c) => _ColorSwatch(
@@ -115,7 +115,7 @@ class _AppColorPickerState extends State<AppColorPicker> {
             ),
           ],
           if (_selected != null) ...[
-            const SizedBox(height: SpacingTokens.sm),
+            const SizedBox(height: AppSpacings.sm),
             Row(
               children: [
                 Container(
@@ -429,7 +429,7 @@ class _AppImagePickerFieldState extends State<AppImagePickerField> {
             variant: AppTextVariant.labelLarge,
             color: scheme.onSurface.withOpacity(0.7),
           ),
-          const SizedBox(height: SpacingTokens.sm),
+          const SizedBox(height: AppSpacings.sm),
           GestureDetector(
             onTap: _showPicker,
             child: Stack(

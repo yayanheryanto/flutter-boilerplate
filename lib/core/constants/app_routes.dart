@@ -16,6 +16,7 @@ class AppRoutes {
   static const String npwpVerification = '/npwp-verification';
   static const String faceVerification = '/face-verification';
   static const String camerPick = '/camera-pick';
+  static const String facePick = '/face-pick';
   static const String addressVerification = '/address-verification';
   static const String bankVerification = '/bank-verification';
   static const String accountProcessed = '/account-processed';

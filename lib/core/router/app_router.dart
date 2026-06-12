@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/services/face_detection_page.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/features/auth/presentation/pages/account_processed_page.dart';
 import 'package:emas/features/auth/presentation/pages/address_verification_page.dart';
@@ -139,6 +140,12 @@ class AppRouter {
           path: AppRoutes.camerPick,
           name: 'camera-pick',
           builder: (context, state) => const CameraPickPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.facePick,
+          name: 'face-pick',
+          builder: (context, state) => const FaceDetectionPage(),
         ),
 
         GoRoute(

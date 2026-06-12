@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/phone_number_masker.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
@@ -144,8 +144,8 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
           horizontal: context.responsive(
-            mobile: SpacingTokens.lg,
-            tablet: SpacingTokens.xxl,
+            mobile: AppSpacings.lg,
+            tablet: AppSpacings.xxl,
           ),
         ),
         child: Column(

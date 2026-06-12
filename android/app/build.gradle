@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "com.mf.emas"
-    compileSdk flutter.compileSdkVersion
+    compileSdk 35
     ndkVersion "25.1.8937393"
 
     compileOptions {

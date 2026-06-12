@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
 import 'package:emas/features/dashboard/data/models/dashboard_formatters.dart';
@@ -54,7 +54,7 @@ class _AuctionCardState extends State<AuctionCard> {
       onTap: () {},
       child: Container(
         width: 160,
-        margin: const EdgeInsets.only(right: SpacingTokens.sm),
+        margin: const EdgeInsets.only(right: AppSpacings.sm),
         decoration: BoxDecoration(
           color: scheme.surface,
           borderRadius: BorderRadius.circular(RadiusTokens.xl),
@@ -118,8 +118,8 @@ class _CardImage extends StatelessWidget {
               child: Text(item.emoji, style: const TextStyle(fontSize: 48)),
             ),
             Positioned(
-              top: SpacingTokens.sm,
-              right: SpacingTokens.sm,
+              top: AppSpacings.sm,
+              right: AppSpacings.sm,
               child: _WishlistButton(
                 isWishlisted: item.wishlisted,
                 surfaceColor: scheme.surface,
@@ -127,8 +127,8 @@ class _CardImage extends StatelessWidget {
             ),
             if (showTimer)
               Positioned(
-                bottom: SpacingTokens.sm,
-                left: SpacingTokens.sm,
+                bottom: AppSpacings.sm,
+                left: AppSpacings.sm,
                 child: _CountdownChip(secs: secs, urgent: urgent),
               ),
           ],
@@ -219,10 +219,10 @@ class _CardInfo extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        SpacingTokens.sm,
-        SpacingTokens.sm,
-        SpacingTokens.sm,
-        SpacingTokens.md,
+        AppSpacings.sm,
+        AppSpacings.sm,
+        AppSpacings.sm,
+        AppSpacings.md,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

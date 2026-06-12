@@ -1,5 +1,6 @@
+import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/responsive/responsive_builder.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/jadwal_lelang_card.dart';
@@ -13,6 +14,7 @@ import 'package:emas/features/dashboard/presentation/sections/home/category_sect
 import 'package:emas/features/dashboard/presentation/sections/home/dashboard_header.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../sections/home/dashboard_dummy_data.dart';
 
@@ -96,19 +98,19 @@ class _MobileDashboardLayout extends StatelessWidget {
           ),
 
           // Rest of content — with padding
-          SliverToBoxAdapter(
+          const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: SpacingTokens.md,
+                horizontal: AppSpacings.md,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const AppSpacer.lg(),
-                  const _VerificationBanner(),
-                  const AppSpacer.lg(),
-                  const CategorySection(),
-                  const AppSpacer.xl(),
+                  AppSpacer.lg(),
+                  _VerificationBanner(),
+                  AppSpacer.lg(),
+                  CategorySection(),
+                  AppSpacer.xl(),
                 ],
               ),
             ),
@@ -117,7 +119,7 @@ class _MobileDashboardLayout extends StatelessWidget {
           // Jadwal Lelang header
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
               child: Row(
                 children: [
                   Container(
@@ -165,11 +167,10 @@ class _MobileDashboardLayout extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: SpacingTokens.md,
+                      horizontal: AppSpacings.md,
                     ),
                     itemCount: dummyJadwalLelang.length,
-                    itemBuilder: (_, i) =>
-                        JadwalLelangCard(data: dummyJadwalLelang[i]),
+                    itemBuilder: (_, i) => JadwalLelangCard(data: dummyJadwalLelang[i]),
                   ),
                 ),
                 const AppSpacer.xl(),
@@ -234,7 +235,6 @@ class _TabletDashboardLayout extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 24),
-
                     ],
                   ),
                 ),
@@ -257,8 +257,8 @@ class _VerificationBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
-        horizontal: SpacingTokens.md,
-        vertical: SpacingTokens.sm,
+        horizontal: AppSpacings.md,
+        vertical: AppSpacings.sm,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -287,7 +287,7 @@ class _VerificationBanner extends StatelessWidget {
               size: 28,
             ),
           ),
-          const SizedBox(width: SpacingTokens.md),
+          const SizedBox(width: AppSpacings.md),
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -304,14 +304,14 @@ class _VerificationBanner extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: SpacingTokens.sm),
+          const SizedBox(width: AppSpacings.sm),
           // Button — GestureDetector+Container to avoid infinite width constraint
           GestureDetector(
-            onTap: () {},
+            onTap: () async => context.push(AppRoutes.verificationPreparation),
             child: Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: SpacingTokens.md,
-                vertical: SpacingTokens.sm,
+                horizontal: AppSpacings.md,
+                vertical: AppSpacings.sm,
               ),
               decoration: BoxDecoration(
                 color: AppColors.primary500,

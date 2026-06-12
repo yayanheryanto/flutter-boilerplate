@@ -1,5 +1,5 @@
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
@@ -10,7 +10,7 @@ class ProfileInfoSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(SpacingTokens.md),
+      padding: const EdgeInsets.all(AppSpacings.md),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(RadiusTokens.lg),
@@ -52,7 +52,7 @@ class _StatItem extends StatelessWidget {
             fontWeight: FontWeight.w700,
             color: const Color(0xFFFF6B00),
           ),
-          const SizedBox(height: SpacingTokens.xs / 2),
+          const SizedBox(height: AppSpacings.xs / 2),
           AppText(
             label,
             variant: AppTextVariant.labelSmall,

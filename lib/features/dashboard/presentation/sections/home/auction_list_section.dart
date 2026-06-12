@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
 import 'package:emas/features/dashboard/presentation/widgets/home/auction_card.dart';
@@ -65,7 +65,7 @@ class _HorizontalAuctionList extends StatelessWidget {
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
         itemCount: items.length,
         itemBuilder: (_, i) => AuctionCard(item: items[i], showTimer: showTimer),
       ),

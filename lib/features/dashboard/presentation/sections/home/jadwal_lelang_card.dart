@@ -1,5 +1,5 @@
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class JadwalLelangCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 200,
-      margin: const EdgeInsets.only(right: SpacingTokens.sm),
+      margin: const EdgeInsets.only(right: AppSpacings.sm),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(RadiusTokens.lg),
@@ -70,10 +70,10 @@ class JadwalLelangCard extends StatelessWidget {
           // ── Info ──────────────────────────────────────────────────────
           Padding(
             padding: const EdgeInsets.fromLTRB(
-              SpacingTokens.sm,
-              SpacingTokens.sm,
-              SpacingTokens.sm,
-              SpacingTokens.sm,
+              AppSpacings.sm,
+              AppSpacings.sm,
+              AppSpacings.sm,
+              AppSpacings.sm,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,7 +113,7 @@ class JadwalLelangCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: SpacingTokens.sm),
+                const SizedBox(height: AppSpacings.sm),
 
                 // ── Live Auction badge ─────────────────────────────────
                 Container(

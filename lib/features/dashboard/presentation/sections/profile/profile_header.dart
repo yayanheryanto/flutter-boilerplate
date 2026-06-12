@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -26,10 +26,10 @@ class _ProfileHeaderContent extends StatelessWidget {
     return Container(
       color: const Color(0xFFF4F6F9),
       padding: EdgeInsets.only(
-        top: topPadding + SpacingTokens.md,
-        bottom: SpacingTokens.lg,
-        left: SpacingTokens.md,
-        right: SpacingTokens.md,
+        top: topPadding + AppSpacings.md,
+        bottom: AppSpacings.lg,
+        left: AppSpacings.md,
+        right: AppSpacings.md,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,12 +40,12 @@ class _ProfileHeaderContent extends StatelessWidget {
             variant: AppTextVariant.headlineSmall,
             fontWeight: FontWeight.w700,
           ),
-          const SizedBox(height: SpacingTokens.lg),
+          const SizedBox(height: AppSpacings.lg),
           // Avatar row
           Row(
             children: [
               _Avatar(),
-              const SizedBox(width: SpacingTokens.md),
+              const SizedBox(width: AppSpacings.md),
               Expanded(child: _UserInfo()),
             ],
           ),
@@ -127,7 +127,7 @@ class _UserInfo extends StatelessWidget {
           variant: AppTextVariant.titleLarge,
           fontWeight: FontWeight.w700,
         ),
-        SizedBox(height: SpacingTokens.xs / 2),
+        SizedBox(height: AppSpacings.xs / 2),
         AppText(
           'taromisaki@email.com',
           variant: AppTextVariant.bodySmall,

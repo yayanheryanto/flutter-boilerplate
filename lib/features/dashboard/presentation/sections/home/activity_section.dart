@@ -1,5 +1,5 @@
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/features/dashboard/data/models/dashboard_dummy_data.dart';
 import 'package:emas/features/dashboard/presentation/widgets/home/bid_card.dart';
@@ -22,10 +22,10 @@ class ActivitySection extends StatelessWidget {
         ...dummyMyBids.map(
           (item) => Padding(
             padding: const EdgeInsets.fromLTRB(
-              SpacingTokens.md,
+              AppSpacings.md,
               0,
-              SpacingTokens.md,
-              SpacingTokens.sm,
+              AppSpacings.md,
+              AppSpacings.sm,
             ),
             child: BidCard(item: item),
           ),
@@ -41,7 +41,7 @@ class _MetricRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: SpacingTokens.md),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
       child: Row(
         children: [
           Expanded(
@@ -53,7 +53,7 @@ class _MetricRow extends StatelessWidget {
               onTap: () {},
             ),
           ),
-          const AppSpacer(SpacingTokens.sm, horizontal: true),
+          const AppSpacer(AppSpacings.sm, horizontal: true),
           Expanded(
             child: MetricCard(
               emoji: '🏆',
@@ -63,7 +63,7 @@ class _MetricRow extends StatelessWidget {
               onTap: () {},
             ),
           ),
-          const AppSpacer(SpacingTokens.sm, horizontal: true),
+          const AppSpacer(AppSpacings.sm, horizontal: true),
           Expanded(
             child: MetricCard(
               emoji: '❤️',

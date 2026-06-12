@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 
 enum AppButtonVariant { primary, secondary, outlined, text, danger }
 
@@ -175,13 +175,13 @@ class AppButton extends StatelessWidget {
 
     if (prefixIcon != null) {
       children.add(Icon(prefixIcon, size: 18));
-      children.add(const SizedBox(width: SpacingTokens.xs));
+      children.add(const SizedBox(width: AppSpacings.xs));
     }
 
     children.add(Text(label));
 
     if (suffixIcon != null) {
-      children.add(const SizedBox(width: SpacingTokens.xs));
+      children.add(const SizedBox(width: AppSpacings.xs));
       children.add(Icon(suffixIcon, size: 18));
     }
 

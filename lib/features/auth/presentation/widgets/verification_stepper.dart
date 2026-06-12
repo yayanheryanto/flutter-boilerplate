@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -86,8 +86,8 @@ class _VerificationStepperState extends State<VerificationStepper> {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.symmetric(
-        horizontal: SpacingTokens.md,
-        vertical: SpacingTokens.sm,
+        horizontal: AppSpacings.md,
+        vertical: AppSpacings.sm,
       ),
       child: SingleChildScrollView(
         controller: _scrollController,

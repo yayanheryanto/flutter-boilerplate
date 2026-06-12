@@ -1,6 +1,6 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/images/app_images.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -39,7 +39,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(SpacingTokens.lg),
+                padding: const EdgeInsets.all(AppSpacings.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -115,10 +115,10 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
             // ── Bottom CTA ───────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                SpacingTokens.lg,
-                SpacingTokens.sm,
-                SpacingTokens.lg,
-                SpacingTokens.lg,
+                AppSpacings.lg,
+                AppSpacings.sm,
+                AppSpacings.lg,
+                AppSpacings.lg,
               ),
               child: AppButton(
                 label: 'Mulai Verifikasi Akun',
@@ -163,8 +163,8 @@ class _AccountTypeCard extends StatelessWidget {
         height: 10.h,
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(
-          horizontal: SpacingTokens.md,
-          vertical: SpacingTokens.sm,
+          horizontal: AppSpacings.md,
+          vertical: AppSpacings.sm,
         ),
         decoration: BoxDecoration(
           color: selected

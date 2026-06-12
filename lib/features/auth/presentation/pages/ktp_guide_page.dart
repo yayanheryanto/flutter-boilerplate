@@ -1,6 +1,6 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/spacing_tokens.dart';
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/images/app_images.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
@@ -43,8 +43,8 @@ class KtpGuidePage extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: SpacingTokens.lg,
-                  vertical: SpacingTokens.sm,
+                  horizontal: AppSpacings.lg,
+                  vertical: AppSpacings.sm,
                 ),
                 child: Container(
                   decoration: BoxDecoration(
@@ -69,7 +69,7 @@ class KtpGuidePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  padding: const EdgeInsets.all(SpacingTokens.md),
+                  padding: const EdgeInsets.all(AppSpacings.md),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -143,10 +143,10 @@ class KtpGuidePage extends StatelessWidget {
             // ── Bottom CTA ─────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                SpacingTokens.lg,
-                SpacingTokens.sm,
-                SpacingTokens.lg,
-                SpacingTokens.lg,
+                AppSpacings.lg,
+                AppSpacings.sm,
+                AppSpacings.lg,
+                AppSpacings.lg,
               ),
               child: AppButton(
                 label: 'Mulai Verifikasi KTP',
