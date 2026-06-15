@@ -27,16 +27,22 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    // Memanggil fungsi async tanpa await langsung di sini
-    _initCamera();
+    initCamera();
+  }
+
+  void initCamera() async {
+    await _initCamera();
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    // Tetap panggil dispose kamera tanpa membuat metode dispose() menjadi async
-    _controller?.dispose();
+    disposeController();
     super.dispose();
+  }
+
+  void disposeController() async {
+    await _controller?.dispose();
   }
 
   // Jika didChangeAppLifecycleState bawaan dari WidgetsBindingObserver,
@@ -47,9 +53,9 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
     if (ctrl == null || !ctrl.value.isInitialized) return;
 
     if (state == AppLifecycleState.inactive) {
-      ctrl.dispose();
+      disposeController();
     } else if (state == AppLifecycleState.resumed) {
-      _initCamera();
+      initCamera();
     }
   }
 

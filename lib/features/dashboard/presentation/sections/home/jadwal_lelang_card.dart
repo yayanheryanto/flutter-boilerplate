@@ -123,7 +123,7 @@ class JadwalLelangCard extends StatelessWidget {
                     color: AppColors.primary500.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(RadiusTokens.md),
                   ),
-                  child: Center(
+                  child: const Center(
                     child: AppText(
                       'Live Auction',
                       variant: AppTextVariant.labelSmall,

@@ -23,7 +23,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    _bannerCtrl = PageController(viewportFraction: 0.92);
+    _bannerCtrl = PageController();
     _bannerTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
       if (!mounted || !_bannerCtrl.hasClients) return;
       await _bannerCtrl.animateToPage(
@@ -48,7 +48,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppScaffoldWrapper(
       backgroundColor: Colors.white,
       body: _buildBody(),
       floatingActionButton: _CenterFAB(
@@ -56,6 +56,8 @@ class _DashboardPageState extends State<DashboardPage> {
         onTap: () => setState(() => _navIndex = 2),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // Custom bottom nav — AppScaffoldWrapper bypasses its default
+      // NavigationBar/NavigationRail when this is provided.
       bottomNavigationBar: _DashboardBottomNav(
         currentIndex: _navIndex,
         onTap: (i) {

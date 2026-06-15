@@ -134,7 +134,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                 const AppSpacer(56),
                                 AppButton(
                                   label: 'Masuk',
-                                  onPressed: () => _onSubmit(context),
+                                  onPressed: () async => _onSubmit(context),
                                   borderRadius: 25,
                                 ),
                                 const AppSpacer(20),

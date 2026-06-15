@@ -34,8 +34,7 @@ class FaceDetectionPage extends StatefulWidget {
   State<FaceDetectionPage> createState() => _FaceDetectionPageState();
 }
 
-class _FaceDetectionPageState extends State<FaceDetectionPage>
-    with WidgetsBindingObserver {
+class _FaceDetectionPageState extends State<FaceDetectionPage> with WidgetsBindingObserver {
   // ── Camera ─────────────────────────────────────────────────────────────────
   CameraController? _cam;
   bool _ready = false;
@@ -64,6 +63,11 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
   // ── AE/AF timer ────────────────────────────────────────────────────────────
   Timer? _aeTimer;
 
+  // ── Lifecycle guard ────────────────────────────────────────────────────────
+  // Prevents re-entrant init/dispose races (e.g. double back-press,
+  // or didChangeAppLifecycleState firing during teardown).
+  bool _disposing = false;
+
   // ── Fill thresholds ────────────────────────────────────────────────────────
   static const double _minFill = 0.40;
   static const double _maxFill = 0.95;
@@ -79,7 +83,6 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
     WidgetsBinding.instance.addObserver(this);
     _detector = FaceDetector(
       options: FaceDetectorOptions(
-        performanceMode: FaceDetectorMode.fast,
         enableLandmarks: false,
         enableContours: false,
         enableClassification: false,
@@ -92,7 +95,10 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    // Fire-and-forget safe stop — avoids accessing freed ByteBuffer
+    // Fire-and-forget safe stop — avoids accessing freed ByteBuffer.
+    // NOTE: the AppBar back button already awaits _stopAndDispose()
+    // before popping, so by the time dispose() runs this is usually
+    // already a no-op (cam == null).
     _stopAndDispose();
     _detector.close();
     super.dispose();
@@ -100,7 +106,7 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (!_ready || _cam == null) return;
+    if (!_ready || _cam == null || _disposing) return;
     switch (state) {
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
@@ -115,11 +121,12 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
   // ── Camera init ────────────────────────────────────────────────────────────
 
   Future<void> _initCamera() async {
+    if (_disposing) return;
     await Permission.camera.request();
 
     final cameras = await availableCameras();
     final selected = cameras.firstWhere(
-          (c) => c.lensDirection == CameraLensDirection.front,
+      (c) => c.lensDirection == CameraLensDirection.front,
       orElse: () => cameras.first,
     );
     _isFront = selected.lensDirection == CameraLensDirection.front;
@@ -127,14 +134,23 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
     final ctrl = CameraController(
       selected,
       ResolutionPreset.high,
-      imageFormatGroup: Platform.isAndroid
-          ? ImageFormatGroup.nv21
-          : ImageFormatGroup.bgra8888,
+      imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
       enableAudio: false,
     );
-    _cam = ctrl;
 
     await ctrl.initialize();
+
+    // If teardown started while we were awaiting initialize(), discard
+    // this controller immediately instead of starting its stream.
+    if (_disposing || !mounted) {
+      try {
+        await ctrl.dispose();
+      } catch (_) {}
+      return;
+    }
+
+    _cam = ctrl;
+
     try {
       await ctrl.lockCaptureOrientation(DeviceOrientation.portraitUp);
     } catch (_) {}
@@ -152,15 +168,25 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
     try {
       await _cam?.dispose();
     } catch (_) {}
+    _cam = null;
     if (mounted) setState(() => _ready = false);
   }
 
   /// Safely stop stream + dispose before leaving the page.
+  ///
+  /// Call this BEFORE popping the route (e.g. from the AppBar back
+  /// button) — this is the key fix for "Image is already closed":
+  /// it guarantees the previous [CameraController] is fully torn down
+  /// before a new instance of this page can call [_initCamera] again.
   Future<void> _stopAndDispose() async {
+    if (_disposing) return;
+    _disposing = true;
     _aeTimer?.cancel();
+
     final cam = _cam;
-    if (cam == null) return;
     _cam = null; // nullify first to stop _onFrame from queuing new work
+
+    if (cam == null) return;
 
     // Wait for any in-flight frame to finish
     while (_processing) {
@@ -181,7 +207,7 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
     _aeTimer?.cancel();
     _aeTimer = Timer.periodic(
       const Duration(seconds: 4),
-          (_) => _meterOnCircle(),
+      (_) => _meterOnCircle(),
     );
     _meterOnCircle();
   }
@@ -196,10 +222,10 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
   }
 
   Future<void> _applyFocusExposure(
-      CameraController cam,
-      Offset point, {
-        required double exposureOffset,
-      }) async {
+    CameraController cam,
+    Offset point, {
+    required double exposureOffset,
+  }) async {
     try {
       await cam.setFocusMode(FocusMode.auto);
     } catch (_) {}
@@ -222,7 +248,7 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
   // ── Frame processing ───────────────────────────────────────────────────────
 
   Future<void> _onFrame(CameraImage image) async {
-    if (!_ready || _processing || _capturing) return;
+    if (!_ready || _processing || _capturing || _disposing) return;
     final cam = _cam; // capture local ref — may be nullified by _stopAndDispose
     if (cam == null) return;
     final now = DateTime.now().millisecondsSinceEpoch;
@@ -234,14 +260,12 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
       if (_screenSize == null || _previewBoxSize == null) return;
 
       final rotation = InputImageRotationValue.fromRawValue(
-        cam.description.sensorOrientation,
-      ) ??
+            cam.description.sensorOrientation,
+          ) ??
           InputImageRotation.rotation0deg;
 
-      final format = InputImageFormatValue.fromRawValue(image.format.raw as int) ??
-          (Platform.isAndroid
-              ? InputImageFormat.nv21
-              : InputImageFormat.bgra8888);
+      final format =
+          InputImageFormatValue.fromRawValue(image.format.raw as int) ?? (Platform.isAndroid ? InputImageFormat.nv21 : InputImageFormat.bgra8888);
 
       final inputImage = InputImage.fromBytes(
         bytes: _concatPlanes(image.planes),
@@ -255,11 +279,14 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
 
       final faces = await _detector.processImage(inputImage);
 
+      // Bail out if teardown started while ML Kit was processing —
+      // avoids calling setState/_cam after dispose started.
+      if (_disposing || !mounted) return;
+
       // Image size after rotation
       final rot = cam.description.sensorOrientation;
-      final rotatedSize = (rot == 90 || rot == 270)
-          ? Size(image.height.toDouble(), image.width.toDouble())
-          : Size(image.width.toDouble(), image.height.toDouble());
+      final rotatedSize =
+          (rot == 90 || rot == 270) ? Size(image.height.toDouble(), image.width.toDouble()) : Size(image.width.toDouble(), image.height.toDouble());
 
       // Map circle rect from screen to image coordinates
       Rect circleOnImage = _mapScreenRectToImageCover(
@@ -301,7 +328,7 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
     }
 
     faces.sort(
-          (a, b) => b.boundingBox.area().compareTo(a.boundingBox.area()),
+      (a, b) => b.boundingBox.area().compareTo(a.boundingBox.area()),
     );
     final box = faces.first.boundingBox;
     final cx = circleOnImage.center.dx;
@@ -317,10 +344,9 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
       box.bottomRight,
     ];
 
-    final centerInside =
-        (center - Offset(cx, cy)).distance <= radius - margin;
+    final centerInside = (center - Offset(cx, cy)).distance <= radius - margin;
     final cornersInside = corners.every(
-          (p) => (p - Offset(cx, cy)).distance <= radius - margin,
+      (p) => (p - Offset(cx, cy)).distance <= radius - margin,
     );
 
     if (!centerInside && !cornersInside) {
@@ -328,8 +354,8 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
     }
 
     final fill = math.sqrt(
-      box.width * box.width + box.height * box.height,
-    ) /
+          box.width * box.width + box.height * box.height,
+        ) /
         (2 * radius);
 
     if (fill < _minFill) return (false, 'Maju sedikit');
@@ -362,16 +388,18 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
       final shot = await cam.takePicture();
       final resultFile = await _processCapturedImage(File(shot.path));
 
-      // Restore camera
+      if (resultFile != null) {
+        // Stop & dispose BEFORE popping — same fix as the back button.
+        await _stopAndDispose();
+        if (mounted) Navigator.of(context).pop(resultFile);
+        return;
+      }
+
+      // Decoding failed — restore camera and let user retry.
       try {
         await cam.startImageStream(_onFrame);
       } catch (_) {}
       await _restoreAutoMode(cam);
-
-      if (mounted && resultFile != null) {
-        await _stopAndDispose();
-        if (mounted) Navigator.of(context).pop(resultFile);
-      }
     } catch (e) {
       try {
         await _cam?.startImageStream(_onFrame);
@@ -483,11 +511,11 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
   }
 
   Rect _mapScreenRectToImageCover(
-      Rect screenRect,
-      Size screen,
-      Size box,
-      Size image,
-      ) {
+    Rect screenRect,
+    Size screen,
+    Size box,
+    Size image,
+  ) {
     final s1 = math.max(screen.width / box.width, screen.height / box.height);
     final dispW = box.width * s1;
     final dispH = box.height * s1;
@@ -549,76 +577,84 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
       backgroundColor: Colors.black,
       appBar: AppPageBar(
         title: 'Verifikasi Wajah',
-        onBack: () => context.pop(),
+        // Stop & dispose camera BEFORE popping — this is the fix for
+        // "Image is already closed" when re-entering this page:
+        // without this, a new CameraController is created while the
+        // old one is still tearing down in the background, causing
+        // overlapping ImageReader sessions on Android.
+        onBack: () async {
+          await _stopAndDispose();
+          if (mounted) context.pop();
+        },
       ),
       body: !_ready
           ? const Center(child: CircularProgressIndicator())
           : LayoutBuilder(
-        builder: (context, constraints) {
-          _screenSize = Size(constraints.maxWidth, constraints.maxHeight);
-          final pv = _cam!.value.previewSize!;
-          _previewBoxSize = Size(pv.height, pv.width);
+              builder: (context, constraints) {
+                _screenSize = Size(constraints.maxWidth, constraints.maxHeight);
+                final pv = _cam!.value.previewSize!;
+                _previewBoxSize = Size(pv.height, pv.width);
 
-          return Stack(
-            fit: StackFit.expand,
-            children: [
-              // ── Live preview ─────────────────────────────────────
-              FittedBox(
-                fit: BoxFit.cover,
-                child: SizedBox(
-                  width: _previewBoxSize!.width,
-                  height: _previewBoxSize!.height,
-                  child: CameraPreview(_cam!),
-                ),
-              ),
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    // ── Live preview ─────────────────────────────────────
+                    FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        width: _previewBoxSize!.width,
+                        height: _previewBoxSize!.height,
+                        child: CameraPreview(_cam!),
+                      ),
+                    ),
 
-              // ── Circle overlay ───────────────────────────────────
-              IgnorePointer(
-                child: CustomPaint(
-                  painter: _CircleOverlayPainter(
-                    ringColor: _ringColor,
-                    circleRect: _circleRect(_screenSize!),
-                  ),
-                  size: Size.infinite,
-                ),
-              ),
+                    // ── Circle overlay ───────────────────────────────────
+                    IgnorePointer(
+                      child: CustomPaint(
+                        painter: _CircleOverlayPainter(
+                          ringColor: _ringColor,
+                          circleRect: _circleRect(_screenSize!),
+                        ),
+                        size: Size.infinite,
+                      ),
+                    ),
 
-              // ── Hint text ────────────────────────────────────────
-              Positioned(
-                left: 16,
-                right: 16,
-                bottom: 48,
-                child: Text(
-                  _hint,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    shadows: [
-                      Shadow(color: Colors.black54, blurRadius: 8),
-                    ],
-                  ),
-                ),
-              ),
+                    // ── Hint text ────────────────────────────────────────
+                    Positioned(
+                      left: 16,
+                      right: 16,
+                      bottom: 48,
+                      child: Text(
+                        _hint,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          shadows: [
+                            Shadow(color: Colors.black54, blurRadius: 8),
+                          ],
+                        ),
+                      ),
+                    ),
 
-              // ── Capture loading overlay ──────────────────────────
-              if (_capturing)
-                const ColoredBox(
-                  color: Colors.black45,
-                  child: Center(child: CircularProgressIndicator()),
-                ),
-            ],
-          );
-        },
-      ),
+                    // ── Capture loading overlay ──────────────────────────
+                    if (_capturing)
+                      const ColoredBox(
+                        color: Colors.black45,
+                        child: Center(child: CircularProgressIndicator()),
+                      ),
+                  ],
+                );
+              },
+            ),
       floatingActionButton: _faceInside
           ? FloatingActionButton.extended(
-        onPressed: _capture,
-        backgroundColor: Colors.green,
-        icon: const Icon(Icons.check),
-        label: const Text('Verifikasi'),
-      )
+              onPressed: _capture,
+              backgroundColor: Colors.green,
+              icon: const Icon(Icons.check),
+              label: const Text('Verifikasi'),
+            )
           : null,
     );
   }
@@ -642,7 +678,14 @@ class _CircleOverlayPainter extends CustomPainter {
       ..addRect(Offset.zero & size)
       ..addOval(circleRect);
     canvas.drawPath(
-      Path.combine(PathOperation.difference, dimPath, Path()..addOval(circleRect)),
+      Path.combine(
+        PathOperation.difference,
+        dimPath,
+        Path()
+          ..addOval(
+            circleRect,
+          ),
+      ),
       Paint()..color = Colors.black.withOpacity(0.35),
     );
 
@@ -657,7 +700,9 @@ class _CircleOverlayPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(_CircleOverlayPainter old) =>
+  bool shouldRepaint(
+    _CircleOverlayPainter old,
+  ) =>
       old.ringColor != ringColor || old.circleRect != circleRect;
 }
 

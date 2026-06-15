@@ -1,4 +1,3 @@
-import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -47,7 +46,7 @@ class _CategoryItem extends StatelessWidget {
     final icon = _categoryIcons[category] ?? Icons.category_rounded;
 
     return GestureDetector(
-      onTap: () => context.pushNamed(
+      onTap: () async => context.pushNamed(
         'category-detail',
         pathParameters: {'slug': category.slug},
       ),

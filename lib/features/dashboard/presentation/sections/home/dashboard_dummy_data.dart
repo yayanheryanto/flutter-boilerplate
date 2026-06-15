@@ -86,7 +86,6 @@ const List<JadwalLelangData> dummyJadwalLelang = [
     dateLabel: '12 Jun 2026',
     timeLabel: '10.00',
     emoji: '🏍️',
-    tint: Color(0xFFFFE0B2),
   ),
   JadwalLelangData(
     itemName: 'Motor',
@@ -94,7 +93,6 @@ const List<JadwalLelangData> dummyJadwalLelang = [
     dateLabel: '13 Jun 2026',
     timeLabel: '09.00',
     emoji: '🏍️',
-    tint: Color(0xFFFFE0B2),
   ),
   JadwalLelangData(
     itemName: 'Mobil',

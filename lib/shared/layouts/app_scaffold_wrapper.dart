@@ -21,8 +21,17 @@ class AppScaffoldWrapper extends StatelessWidget {
   final void Function(int)? onNavigationTap;
   final PreferredSizeWidget? appBar;
   final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   final Widget? bottomSheet;
   final Color? backgroundColor;
+
+  /// Custom bottom navigation widget. When provided, this takes full
+  /// control of the bottom bar — [navigationItems] is ignored on mobile
+  /// and [_MobileScaffold]'s default [NavigationBar] is skipped.
+  ///
+  /// Use this when the design needs something [NavigationBar] can't do
+  /// (e.g. a notch for a center FAB, custom indicators, mixed item styles).
+  final Widget? bottomNavigationBar;
 
   const AppScaffoldWrapper({
     super.key,
@@ -32,20 +41,37 @@ class AppScaffoldWrapper extends StatelessWidget {
     this.onNavigationTap,
     this.appBar,
     this.floatingActionButton,
+    this.floatingActionButtonLocation,
     this.bottomSheet,
     this.backgroundColor,
+    this.bottomNavigationBar,
   });
 
   @override
   Widget build(BuildContext context) {
+    final hasCustomBottomNav = bottomNavigationBar != null;
     final hasNavigation =
         navigationItems != null && navigationItems!.isNotEmpty;
+
+    // ── Custom bottom nav: bypass NavigationBar/NavigationRail entirely ──────
+    if (hasCustomBottomNav) {
+      return Scaffold(
+        appBar: appBar,
+        body: body,
+        floatingActionButton: floatingActionButton,
+        floatingActionButtonLocation: floatingActionButtonLocation,
+        bottomSheet: bottomSheet,
+        backgroundColor: backgroundColor,
+        bottomNavigationBar: bottomNavigationBar,
+      );
+    }
 
     if (!hasNavigation) {
       return Scaffold(
         appBar: appBar,
         body: body,
         floatingActionButton: floatingActionButton,
+        floatingActionButtonLocation: floatingActionButtonLocation,
         bottomSheet: bottomSheet,
         backgroundColor: backgroundColor,
       );
@@ -59,6 +85,7 @@ class AppScaffoldWrapper extends StatelessWidget {
         currentIndex: currentIndex,
         onNavigationTap: onNavigationTap,
         floatingActionButton: floatingActionButton,
+        floatingActionButtonLocation: floatingActionButtonLocation,
         bottomSheet: bottomSheet,
         backgroundColor: backgroundColor,
       );
@@ -71,6 +98,7 @@ class AppScaffoldWrapper extends StatelessWidget {
       currentIndex: currentIndex,
       onNavigationTap: onNavigationTap,
       floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
       backgroundColor: backgroundColor,
     );
   }
@@ -83,6 +111,7 @@ class _MobileScaffold extends StatelessWidget {
   final int currentIndex;
   final void Function(int)? onNavigationTap;
   final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   final Widget? bottomSheet;
   final Color? backgroundColor;
 
@@ -93,6 +122,7 @@ class _MobileScaffold extends StatelessWidget {
     required this.currentIndex,
     this.onNavigationTap,
     this.floatingActionButton,
+    this.floatingActionButtonLocation,
     this.bottomSheet,
     this.backgroundColor,
   });
@@ -103,6 +133,7 @@ class _MobileScaffold extends StatelessWidget {
       appBar: appBar,
       body: body,
       floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
       bottomSheet: bottomSheet,
       backgroundColor: backgroundColor,
       bottomNavigationBar: NavigationBar(
@@ -127,6 +158,7 @@ class _TabletScaffold extends StatelessWidget {
   final int currentIndex;
   final void Function(int)? onNavigationTap;
   final Widget? floatingActionButton;
+  final FloatingActionButtonLocation? floatingActionButtonLocation;
   final Color? backgroundColor;
 
   const _TabletScaffold({
@@ -136,6 +168,7 @@ class _TabletScaffold extends StatelessWidget {
     required this.currentIndex,
     this.onNavigationTap,
     this.floatingActionButton,
+    this.floatingActionButtonLocation,
     this.backgroundColor,
   });
 
@@ -145,6 +178,7 @@ class _TabletScaffold extends StatelessWidget {
       appBar: appBar,
       backgroundColor: backgroundColor,
       floatingActionButton: floatingActionButton,
+      floatingActionButtonLocation: floatingActionButtonLocation,
       body: Row(
         children: [
           NavigationRail(

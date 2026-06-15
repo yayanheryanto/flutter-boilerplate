@@ -1,7 +1,6 @@
 import 'package:emas/core/firebase/notification_handler.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
 class DashboardHeader extends StatelessWidget {

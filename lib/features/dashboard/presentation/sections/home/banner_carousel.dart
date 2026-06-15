@@ -1,9 +1,14 @@
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/shared/widgets/display/app_display.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
-const _bannerCount = 3;
+const List<String> dummyBannerUrls = [
+  'https://oss.megafinance.co.id/development/mitra-megapromotion/2024/04/05/promo1.jpeg',
+  'https://oss.megafinance.co.id/development/mitra-megapromotion/2024/04/05/promo2.jpeg',
+  'https://oss.megafinance.co.id/development/mitra-megapromotion/2024/04/05/promo3.jpeg',
+];
 
 class BannerCarousel extends StatelessWidget {
   final PageController ctrl;
@@ -23,32 +28,55 @@ class BannerCarousel extends StatelessWidget {
       children: [
         // Full-width banner — no horizontal padding
         SizedBox(
-          height: 200,
+          height: 28.h,
           child: PageView.builder(
             controller: ctrl,
             onPageChanged: onPageChanged,
             physics: const BouncingScrollPhysics(),
-            itemCount: _bannerCount,
-            itemBuilder: (_, i) => const _BannerPlaceholder(),
+            itemCount: dummyBannerUrls.length,
+            itemBuilder: (_, i) => _BannerPlaceholder(
+              imageUrl: dummyBannerUrls[i],
+            ),
           ),
         ),
         const AppSpacer.sm(),
-        _DotIndicator(count: _bannerCount, currentIndex: currentPage),
+        _DotIndicator(
+          count: dummyBannerUrls.length,
+          currentIndex: currentPage,
+        ),
       ],
     );
   }
 }
 
 class _BannerPlaceholder extends StatelessWidget {
-  const _BannerPlaceholder();
+  final String imageUrl;
+
+  const _BannerPlaceholder({
+    required this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
       color: Colors.grey.shade200,
-      // TODO: replace with actual banner image
-      // child: Image.network(url, fit: BoxFit.cover),
+      child: CachedNetworkImage(
+        imageUrl: imageUrl,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        placeholder: (_, __) => SkeletonCard(
+          width: double.infinity,
+          height: 28.h,
+        ),
+        errorWidget: (_, __, ___) => const Center(
+          child: Icon(
+            Icons.broken_image_outlined,
+            size: 48,
+            color: Colors.grey,
+          ),
+        ),
+      ),
     );
   }
 }
@@ -57,7 +85,10 @@ class _DotIndicator extends StatelessWidget {
   final int count;
   final int currentIndex;
 
-  const _DotIndicator({required this.count, required this.currentIndex});
+  const _DotIndicator({
+    required this.count,
+    required this.currentIndex,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +96,7 @@ class _DotIndicator extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: List.generate(count, (i) {
         final active = i == currentIndex;
+
         return AnimatedContainer(
           duration: const Duration(milliseconds: 280),
           margin: const EdgeInsets.symmetric(horizontal: 3),

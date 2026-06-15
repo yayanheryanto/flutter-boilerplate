@@ -6,9 +6,7 @@ import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/jadwal_lelang_card.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
-import 'package:emas/features/dashboard/data/models/dashboard_dummy_data.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/activity_section.dart';
-import 'package:emas/features/dashboard/presentation/sections/home/auction_list_section.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/banner_carousel.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/category_section.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/dashboard_header.dart';
@@ -16,7 +14,7 @@ import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import '../sections/home/dashboard_dummy_data.dart';
+import 'package:emas/features/dashboard/presentation/sections/home/dashboard_dummy_data.dart';
 
 /// Responsive home-tab layout.
 ///
@@ -45,18 +43,18 @@ class DashboardLayout extends StatelessWidget {
         onBannerChanged: onBannerChanged,
         onRefresh: onRefresh,
       ),
-      tablet: _TabletDashboardLayout(
-        bannerCtrl: bannerCtrl,
-        bannerPage: bannerPage,
-        onBannerChanged: onBannerChanged,
-        onRefresh: onRefresh,
-      ),
-      desktop: _TabletDashboardLayout(
-        bannerCtrl: bannerCtrl,
-        bannerPage: bannerPage,
-        onBannerChanged: onBannerChanged,
-        onRefresh: onRefresh,
-      ),
+      // tablet: _TabletDashboardLayout(
+      //   bannerCtrl: bannerCtrl,
+      //   bannerPage: bannerPage,
+      //   onBannerChanged: onBannerChanged,
+      //   onRefresh: onRefresh,
+      // ),
+      // desktop: _TabletDashboardLayout(
+      //   bannerCtrl: bannerCtrl,
+      //   bannerPage: bannerPage,
+      //   onBannerChanged: onBannerChanged,
+      //   onRefresh: onRefresh,
+      // ),
     );
   }
 }
@@ -294,7 +292,6 @@ class _VerificationBanner extends StatelessWidget {
               children: [
                 AppText(
                   'Verifikasi Akun Sekarang!',
-                  variant: AppTextVariant.bodyMedium,
                   fontWeight: FontWeight.bold,
                 ),
                 AppText(
