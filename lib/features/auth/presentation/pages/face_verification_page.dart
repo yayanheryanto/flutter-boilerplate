@@ -5,7 +5,7 @@ import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
-import 'package:emas/core/utils/images/app_images.dart';
+import 'package:emas/core/constants/app_images.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
