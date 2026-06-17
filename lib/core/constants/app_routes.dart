@@ -30,6 +30,8 @@ class AppRoutes {
   static String category(String slug) => '/dashboard/category/$slug';
 
   static const String profile = '/profile';
+  static const String ikutLelang = '/ikut-lelang';
+  static const String liveAuction = '/live-auction';
   static const String settings = '/settings';
   static const String notifications = '/notifications';
   static const String uiDemo = '/ui-demo';

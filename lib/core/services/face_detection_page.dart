@@ -82,12 +82,7 @@ class _FaceDetectionPageState extends State<FaceDetectionPage> with WidgetsBindi
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _detector = FaceDetector(
-      options: FaceDetectorOptions(
-        enableLandmarks: false,
-        enableContours: false,
-        enableClassification: false,
-        enableTracking: false,
-      ),
+      options: FaceDetectorOptions(),
     );
     _initCamera();
   }
@@ -408,9 +403,7 @@ class _FaceDetectionPageState extends State<FaceDetectionPage> with WidgetsBindi
         await _restoreAutoMode(_cam!);
       }
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Gagal memotret: $e')),
-        );
+        AppSnackBar.show(context, 'Gagal memotret: $e');
       }
     } finally {
       if (mounted) setState(() => _capturing = false);

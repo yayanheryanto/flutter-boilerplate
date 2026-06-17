@@ -36,25 +36,107 @@ class DashboardLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ResponsiveLayoutBuilder(
-      mobile: _MobileDashboardLayout(
-        bannerCtrl: bannerCtrl,
-        bannerPage: bannerPage,
-        onBannerChanged: onBannerChanged,
-        onRefresh: onRefresh,
+    return RefreshIndicator(
+      onRefresh: onRefresh,
+      child: CustomScrollView(
+        physics: const AlwaysScrollableScrollPhysics(
+          parent: BouncingScrollPhysics(),
+        ),
+        slivers: [
+          // Header
+          const SliverToBoxAdapter(child: DashboardHeader()),
+
+          // Banner — edge to edge (no horizontal padding)
+          SliverToBoxAdapter(
+            child: BannerCarousel(
+              ctrl: bannerCtrl,
+              currentPage: bannerPage,
+              onPageChanged: onBannerChanged,
+            ),
+          ),
+
+          // Rest of content — with padding
+          const SliverToBoxAdapter(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: AppSpacings.md,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  AppSpacer.lg(),
+                  _VerificationBanner(),
+                  AppSpacer.lg(),
+                  CategorySection(),
+                  AppSpacer.xl(),
+                ],
+              ),
+            ),
+          ),
+
+          // Jadwal Lelang header
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+              child: Row(
+                children: [
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary500.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                    child: const Icon(
+                      Icons.calendar_month_rounded,
+                      size: 16,
+                      color: AppColors.primary500,
+                    ),
+                  ),
+                  const AppSpacer(8, horizontal: true),
+                  const AppText(
+                    'Jadwal Lelang',
+                    variant: AppTextVariant.titleSmall,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  const Spacer(),
+                  GestureDetector(
+                    onTap: () {},
+                    child: const AppText(
+                      'Lihat Semua',
+                      variant: AppTextVariant.bodySmall,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.primary500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // Jadwal Lelang cards — horizontal scroll
+          SliverToBoxAdapter(
+            child: Column(
+              children: [
+                const AppSpacer.sm(),
+                SizedBox(
+                  height: 220,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    physics: const BouncingScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacings.md,
+                    ),
+                    itemCount: dummyJadwalLelang.length,
+                    itemBuilder: (_, i) => JadwalLelangCard(data: dummyJadwalLelang[i]),
+                  ),
+                ),
+                const AppSpacer.xl(),
+              ],
+            ),
+          ),
+        ],
       ),
-      // tablet: _TabletDashboardLayout(
-      //   bannerCtrl: bannerCtrl,
-      //   bannerPage: bannerPage,
-      //   onBannerChanged: onBannerChanged,
-      //   onRefresh: onRefresh,
-      // ),
-      // desktop: _TabletDashboardLayout(
-      //   bannerCtrl: bannerCtrl,
-      //   bannerPage: bannerPage,
-      //   onBannerChanged: onBannerChanged,
-      //   onRefresh: onRefresh,
-      // ),
     );
   }
 }

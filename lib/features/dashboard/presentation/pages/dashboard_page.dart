@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:emas/features/dashboard/presentation/pages/ikut_lelang_page.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -81,7 +82,7 @@ class _DashboardPageState extends State<DashboardPage> {
         // Index 1 — Beli NPL
         _buildPlaceholder('Beli NPL'),
         // Index 2 — Ikut Lelang (FAB)
-        _buildPlaceholder('Ikut Lelang'),
+        const IkutLelangPage(),
         // Index 3 — Transaksi
         _buildPlaceholder('Transaksi'),
         // Index 4 — Profil
@@ -131,7 +132,9 @@ class _DashboardBottomNav extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Colors.white,
         border: Border(
-          top: BorderSide(color: Color(0xFFEEEEEE)),
+          top: BorderSide(
+            color: Color(0xFFEEEEEE),
+          ),
         ),
       ),
       child: SafeArea(
@@ -237,7 +240,11 @@ class _NavItem extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Icon(isSelected ? selectedIcon : icon, color: color, size: 24),
+            Icon(
+              isSelected ? selectedIcon : icon,
+              color: color,
+              size: 24,
+            ),
             const SizedBox(height: 2),
             Text(
               label,
