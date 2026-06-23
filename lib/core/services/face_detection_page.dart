@@ -378,7 +378,7 @@ class _FaceDetectionPageState extends State<FaceDetectionPage> with WidgetsBindi
 
       // Pre-focus and lock to reduce blur
       await _prefocusAndLock(cam);
-      await Future.delayed(const Duration(milliseconds: 120));
+      await Future<void>.delayed(const Duration(milliseconds: 120));
 
       final shot = await cam.takePicture();
       final resultFile = await _processCapturedImage(File(shot.path));
@@ -453,7 +453,7 @@ class _FaceDetectionPageState extends State<FaceDetectionPage> with WidgetsBindi
     if (_screenSize == null || _previewBoxSize == null) return;
     final pt = _circleCenterOnPreview01();
     await _applyFocusExposure(cam, pt, exposureOffset: 0.0);
-    await Future.delayed(const Duration(milliseconds: 350));
+    await Future<void>.delayed(const Duration(milliseconds: 350));
     try {
       await cam.setFocusMode(FocusMode.locked);
     } catch (_) {}

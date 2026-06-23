@@ -31,6 +31,7 @@ class AppRoutes {
 
   static const String profile = '/profile';
   static const String ikutLelang = '/ikut-lelang';
+  static const String lelangList = '/lelang-list';
   static const String liveAuction = '/live-auction';
   static const String settings = '/settings';
   static const String notifications = '/notifications';

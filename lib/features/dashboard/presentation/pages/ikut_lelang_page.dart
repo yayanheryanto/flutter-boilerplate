@@ -10,7 +10,6 @@ import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sizer/sizer.dart';
 
 // ─── Dummy data lokal ─────────────────────────────────────────────────────────
 
@@ -155,10 +154,13 @@ class _IkutLelangPageState extends State<IkutLelangPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const AppText(
-                  'Sedang Berlangsung',
-                  variant: AppTextVariant.titleSmall,
-                  fontWeight: FontWeight.w600,
+                GestureDetector(
+                  onTap: () async => context.push(AppRoutes.lelangList),
+                  child: const AppText(
+                    'Sedang Berlangsung',
+                    variant: AppTextVariant.titleSmall,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const AppSpacer.md(),
                 ..._dummySedangBerlangsung.map(
@@ -197,8 +199,7 @@ class _IkutLelangPageState extends State<IkutLelangPage> {
                         padding: const EdgeInsets.only(bottom: AppSpacings.sm),
                         child: _LelangListCard(item: item),
                       ),
-                    )
-                    .toList(),
+                    ),
               ],
             ),
           ),

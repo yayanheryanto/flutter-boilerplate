@@ -3,57 +3,17 @@ import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-/// Varian tampilan judul pada [AppPageBar].
 enum AppPageBarTitleVariant {
-  /// Hanya teks judul biasa (default — tidak breaking behaviour lama).
   textOnly,
-
-  /// Icon Material di kiri judul.
-  /// Butuh [titleIcon] diisi.
   withIcon,
-
-  /// Widget image/svg kustom di kiri judul.
-  /// Butuh [titleImage] diisi.
   withImage,
 }
 
 /// AppBar standar aplikasi.
 ///
-/// ### Penggunaan dasar (tidak berubah dari versi lama)
+/// ### Dengan margin top (mis. menghindari status bar custom)
 /// ```dart
-/// AppPageBar(title: 'Detail')
-/// AppPageBar(showBackButton: false)
-/// AppPageBar(title: 'Verifikasi', onBack: () => context.pop())
-/// ```
-///
-/// ### Dengan icon Material di kiri judul
-/// ```dart
-/// AppPageBar(
-///   title: 'Ikut Lelang',
-///   titleVariant: AppPageBarTitleVariant.withIcon,
-///   titleIcon: Icons.gavel_rounded,
-///   showBackButton: false,
-/// )
-/// ```
-///
-/// ### Dengan widget gambar kustom di kiri judul
-/// ```dart
-/// AppPageBar(
-///   title: 'Beranda',
-///   titleVariant: AppPageBarTitleVariant.withImage,
-///   titleImage: SvgPicture.asset('assets/logo.svg', width: 24, height: 24),
-///   showBackButton: false,
-/// )
-/// ```
-///
-/// ### Dengan action button di kanan
-/// ```dart
-/// AppPageBar(
-///   title: 'Profil',
-///   actions: [
-///     IconButton(icon: const Icon(Icons.settings_outlined), onPressed: () {}),
-///   ],
-/// )
+/// AppPageBar(title: 'Detail', topMargin: 16)
 /// ```
 class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
@@ -62,29 +22,16 @@ class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback? onBack;
   final double? elevation;
   final double? titleSpacing;
-
-  /// Varian tampilan judul. Default [AppPageBarTitleVariant.textOnly].
   final AppPageBarTitleVariant titleVariant;
-
-  /// Icon Material yang muncul di kiri teks judul.
-  /// Hanya aktif saat [titleVariant] == [AppPageBarTitleVariant.withIcon].
   final IconData? titleIcon;
-
-  /// Warna icon judul. Default [AppColors.primary500].
   final Color? titleIconColor;
-
-  /// Ukuran icon judul. Default 22.
   final double titleIconSize;
-
-  /// Widget gambar/svg kustom di kiri teks judul.
-  /// Hanya aktif saat [titleVariant] == [AppPageBarTitleVariant.withImage].
   final Widget? titleImage;
-
-  /// Jarak antara icon/image dan teks judul. Default 8.
   final double titleGap;
-
-  /// Action widget di sisi kanan AppBar (sama seperti [AppBar.actions]).
   final List<Widget>? actions;
+
+  /// Jarak kosong di atas AppBar. Default 0.
+  final double topMargin;
 
   const AppPageBar({
     super.key,
@@ -101,11 +48,12 @@ class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleImage,
     this.titleGap = 8,
     this.actions,
+    this.topMargin = 0,
   });
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
+    final bar = AppBar(
       elevation: elevation ?? 0,
       shadowColor: AppColors.black,
       scrolledUnderElevation: 0,
@@ -125,6 +73,16 @@ class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
           : null,
       title: _buildTitle(context),
       actions: actions,
+    );
+
+    if (topMargin == 0) return bar;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(height: topMargin, color: backgroundColor),
+        bar,
+      ],
     );
   }
 
@@ -176,5 +134,5 @@ class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
+  Size get preferredSize => Size.fromHeight(kToolbarHeight + topMargin);
 }

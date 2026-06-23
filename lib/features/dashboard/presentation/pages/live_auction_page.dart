@@ -78,7 +78,7 @@ class LiveAuctionPage extends StatelessWidget {
                 _MediaPlaceholder(),
 
                 // ── Info utama kendaraan ───────────────────────────────
-                _WhiteSection(
+                WhiteSection(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -121,7 +121,7 @@ class LiveAuctionPage extends StatelessWidget {
                 const AppSpacer.sm(),
 
                 // ── Grade ──────────────────────────────────────────────
-                _WhiteSection(
+                WhiteSection(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -150,7 +150,7 @@ class LiveAuctionPage extends StatelessWidget {
                 const AppSpacer.sm(),
 
                 // ── Spesifikasi ────────────────────────────────────────
-                _WhiteSection(
+                WhiteSection(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -173,7 +173,7 @@ class LiveAuctionPage extends StatelessWidget {
                 const AppSpacer.sm(),
 
                 // ── Penawaran Saat Ini ─────────────────────────────────
-                _WhiteSection(
+                WhiteSection(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -442,11 +442,11 @@ class _BottomCTA extends StatelessWidget {
 
 // ─── Section wrapper putih ────────────────────────────────────────────────────
 
-class _WhiteSection extends StatelessWidget {
+class WhiteSection extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
 
-  const _WhiteSection({
+  const WhiteSection({super.key,
     required this.child,
     this.padding,
   });

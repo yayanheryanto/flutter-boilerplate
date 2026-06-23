@@ -16,6 +16,7 @@ import 'package:emas/features/auth/presentation/pages/ktp_verification_page.dart
 import 'package:emas/features/auth/presentation/pages/npwp_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/verification_preparation_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/ikut_lelang_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/lelang_list_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/live_auction_page.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/core/utils/navigator_key.dart';
@@ -191,6 +192,12 @@ class AppRouter {
           path: AppRoutes.ikutLelang,
           name: 'ikut-lelang',
           builder: (context, state) => const IkutLelangPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.lelangList,
+          name: 'lelang-list',
+          builder: (context, state) => const LelangListPage(),
         ),
         GoRoute(
           path: AppRoutes.liveAuction,
