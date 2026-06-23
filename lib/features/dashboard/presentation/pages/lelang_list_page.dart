@@ -165,7 +165,12 @@ class _LelangListPageState extends State<LelangListPage> {
               fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
               color: selected ? AppColors.primary500 : AppColors.textPrimary,
             ),
-            trailing: selected ? const Icon(Icons.check_rounded, color: AppColors.primary500) : null,
+            trailing: selected
+                ? const Icon(
+                    Icons.check_rounded,
+                    color: AppColors.primary500,
+                  )
+                : null,
           );
         }).toList(),
       ),

@@ -63,13 +63,13 @@ class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: backgroundColor,
       leading: showBackButton
           ? IconButton(
-        icon: const Icon(
-          Icons.chevron_left_rounded,
-          size: 28,
-          color: AppColors.primary500,
-        ),
-        onPressed: onBack ?? () => context.pop(),
-      )
+              icon: const Icon(
+                Icons.chevron_left_rounded,
+                size: 28,
+                color: AppColors.primary500,
+              ),
+              onPressed: onBack ?? () => context.pop(),
+            )
           : null,
       title: _buildTitle(context),
       actions: actions,
@@ -101,8 +101,8 @@ class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
 
       case AppPageBarTitleVariant.withIcon:
         assert(
-        titleIcon != null,
-        'titleIcon harus diisi saat menggunakan AppPageBarTitleVariant.withIcon',
+          titleIcon != null,
+          'titleIcon harus diisi saat menggunakan AppPageBarTitleVariant.withIcon',
         );
         return Row(
           mainAxisSize: MainAxisSize.min,
@@ -119,8 +119,8 @@ class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
 
       case AppPageBarTitleVariant.withImage:
         assert(
-        titleImage != null,
-        'titleImage harus diisi saat menggunakan AppPageBarTitleVariant.withImage',
+          titleImage != null,
+          'titleImage harus diisi saat menggunakan AppPageBarTitleVariant.withImage',
         );
         return Row(
           mainAxisSize: MainAxisSize.min,

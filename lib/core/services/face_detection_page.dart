@@ -445,7 +445,10 @@ class _FaceDetectionPageState extends State<FaceDetectionPage> with WidgetsBindi
       '_circle.png',
     );
     final outFile = File(outPath);
-    await outFile.writeAsBytes(imglib.encodePng(masked), flush: true);
+    await outFile.writeAsBytes(
+      imglib.encodePng(masked),
+      flush: true,
+    );
     return outFile;
   }
 
