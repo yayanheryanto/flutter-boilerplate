@@ -2,7 +2,7 @@ import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
-import 'package:emas/core/constants/app_images.dart';
+import 'package:emas/core/constants/images.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -92,14 +92,14 @@ class KtpGuidePage extends StatelessWidget {
                       Row(
                         children: [
                           Expanded(
-                            child: Image.asset(
-                              AppImages.sampleIncorrectIdCard,
+                            child: AppImage(src:
+                              Images.sampleIncorrectIdCard,
                             ),
                           ),
                           const AppSpacer.sm(horizontal: true),
                           Expanded(
-                            child: Image.asset(
-                              AppImages.sampleCorrectIdCard,
+                            child: AppImage(src:
+                              Images.sampleCorrectIdCard,
                             ),
                           ),
                         ],

@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:emas/core/constants/images.dart';
 import 'package:emas/features/dashboard/presentation/pages/ikut_lelang_page.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/features/dashboard/presentation/layouts/dashboard_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sizer/sizer.dart';
 
 class DashboardPage extends StatefulWidget {
@@ -57,8 +59,6 @@ class _DashboardPageState extends State<DashboardPage> {
         onTap: () => setState(() => _navIndex = 2),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // Custom bottom nav — AppScaffoldWrapper bypasses its default
-      // NavigationBar/NavigationRail when this is provided.
       bottomNavigationBar: _DashboardBottomNav(
         currentIndex: _navIndex,
         onTap: (i) {
@@ -72,20 +72,15 @@ class _DashboardPageState extends State<DashboardPage> {
     return IndexedStack(
       index: _navIndex,
       children: [
-        // Index 0 — Beranda
         DashboardLayout(
           bannerCtrl: _bannerCtrl,
           bannerPage: _bannerPage,
           onBannerChanged: (i) => setState(() => _bannerPage = i),
           onRefresh: _onRefresh,
         ),
-        // Index 1 — Beli NPL
         _buildPlaceholder('Beli NPL'),
-        // Index 2 — Ikut Lelang (FAB)
         const IkutLelangPage(),
-        // Index 3 — Transaksi
         _buildPlaceholder('Transaksi'),
-        // Index 4 — Profil
         _buildPlaceholder('Profil'),
       ],
     );
@@ -126,16 +121,10 @@ class _DashboardBottomNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labelColor = currentIndex == 2 ? AppColors.primary500 : Colors.grey.shade400;
-
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        border: Border(
-          top: BorderSide(
-            color: Color(0xFFEEEEEE),
-          ),
-        ),
+        border: Border(top: BorderSide(color: Color(0xFFEEEEEE))),
       ),
       child: SafeArea(
         top: false,
@@ -144,51 +133,57 @@ class _DashboardBottomNav extends StatelessWidget {
           child: Row(
             children: [
               _NavItem(
-                icon: Icons.home_outlined,
-                selectedIcon: Icons.home_rounded,
+                svgOutline: Images.homeIcon,
+                svgFilled: Images.homeIcon,
                 label: 'Beranda',
                 index: 0,
                 currentIndex: currentIndex,
                 onTap: onTap,
               ),
               _NavItem(
-                icon: Icons.description_outlined,
-                selectedIcon: Icons.description_rounded,
+                svgOutline: Images.nplIcon,
+                svgFilled: Images.nplIcon,
                 label: 'Beli NPL',
                 index: 1,
                 currentIndex: currentIndex,
                 onTap: onTap,
               ),
-              // Gap for FAB + label
+
+              // Gap tengah untuk FAB + label
               Expanded(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 2),
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 24), // ruang FAB
                     const SizedBox(height: 2),
                     Text(
                       'Ikut Lelang',
                       style: TextStyle(
                         fontSize: 10,
-                        color: labelColor,
-                        fontWeight: currentIndex == 2 ? FontWeight.w600 : FontWeight.w400,
+                        color: currentIndex == 2
+                            ? AppColors.primary500
+                            : Colors.grey.shade400,
+                        fontWeight: currentIndex == 2
+                            ? FontWeight.w600
+                            : FontWeight.w400,
                       ),
                     ),
                   ],
                 ),
               ),
+
               _NavItem(
-                icon: Icons.swap_horiz_outlined,
-                selectedIcon: Icons.swap_horiz_rounded,
+                svgOutline: Images.transactionIcon,
+                svgFilled: Images.transactionIcon,
                 label: 'Transaksi',
                 index: 3,
                 currentIndex: currentIndex,
                 onTap: onTap,
               ),
               _NavItem(
-                icon: Icons.person_outline_rounded,
-                selectedIcon: Icons.person_rounded,
+                svgOutline: Images.profileIcon,
+                svgFilled: Images.profileIcon,
                 label: 'Profil',
                 index: 4,
                 currentIndex: currentIndex,
@@ -202,17 +197,19 @@ class _DashboardBottomNav extends StatelessWidget {
   }
 }
 
+// ─── Nav Item ─────────────────────────────────────────────────────────────────
+
 class _NavItem extends StatelessWidget {
-  final IconData icon;
-  final IconData selectedIcon;
+  final String svgOutline;
+  final String svgFilled;
   final String label;
   final int index;
   final int currentIndex;
   final ValueChanged<int> onTap;
 
   const _NavItem({
-    required this.icon,
-    required this.selectedIcon,
+    required this.svgOutline,
+    required this.svgFilled,
     required this.label,
     required this.index,
     required this.currentIndex,
@@ -229,7 +226,7 @@ class _NavItem extends StatelessWidget {
         onTap: () => onTap(index),
         child: Column(
           children: [
-            // Active indicator — zero margin, flush to top
+            // Active indicator bar di atas
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
               height: 2,
@@ -240,10 +237,11 @@ class _NavItem extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            Icon(
-              isSelected ? selectedIcon : icon,
-              color: color,
-              size: 24,
+            SvgPicture.asset(
+              isSelected ? svgFilled : svgOutline,
+              width: 24,
+              height: 24,
+              colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
             ),
             const SizedBox(height: 2),
             Text(
@@ -288,10 +286,10 @@ class _CenterFAB extends StatelessWidget {
             ),
           ],
         ),
-        child: const Icon(
-          Icons.gavel_rounded,
-          color: Colors.white,
-          size: 26,
+        child: Center(
+          child: SvgPicture.asset(
+            Images.gavelIcon,
+          ),
         ),
       ),
     );

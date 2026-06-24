@@ -2,12 +2,12 @@ import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
-import 'package:emas/core/constants/app_images.dart';
+import 'package:emas/core/constants/images.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
-import 'package:emas/shared/widgets/avatar/app_avatar_image.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
+import 'package:emas/shared/widgets/display/app_image.dart';
 import 'package:emas/shared/widgets/display/app_spacer.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -63,7 +63,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                       title: 'Personal',
                       description: 'Mengikuti lelang atas nama sendiri',
                       selected: _selected == AccountType.personal,
-                      image: AppImages.personalIcon,
+                      image: Images.personalIcon,
                       onTap: () => setState(
                         () => _selected = AccountType.personal,
                       ),
@@ -74,7 +74,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                       title: 'Perusahaan',
                       description: 'Mengikuti lelang atas nama perusahaan',
                       selected: _selected == AccountType.company,
-                      image: AppImages.companyIcon,
+                      image: Images.companyIcon,
                       onTap: () => setState(
                         () => _selected = AccountType.company,
                       ),
@@ -201,7 +201,10 @@ class _AccountTypeCard extends StatelessWidget {
               horizontal: true,
             ),
             // Avatar
-            AppAvatarImage(assetPath: image),
+            AppImage.circle(
+              src: image,
+              size: 44,
+            ),
             const AppSpacer.md(horizontal: true),
 
             // Text

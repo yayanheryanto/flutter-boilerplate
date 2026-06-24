@@ -61,21 +61,10 @@ class _BannerPlaceholder extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: Colors.grey.shade200,
-      child: CachedNetworkImage(
-        imageUrl: imageUrl,
-        fit: BoxFit.cover,
+      child: AppImage(
+        src: imageUrl,
         width: double.infinity,
-        placeholder: (_, __) => SkeletonCard(
-          width: double.infinity,
-          height: 28.h,
-        ),
-        errorWidget: (_, __, ___) => const Center(
-          child: Icon(
-            Icons.broken_image_outlined,
-            size: 48,
-            color: Colors.grey,
-          ),
-        ),
+        height: 28.h,
       ),
     );
   }

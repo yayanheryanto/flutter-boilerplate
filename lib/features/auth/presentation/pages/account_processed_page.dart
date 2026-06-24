@@ -1,4 +1,5 @@
 import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
@@ -43,8 +44,8 @@ class _AccountProcessedPageContent extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const Spacer(),
-              Image.asset(
-                'assets/images/png/account_proccessed.png',
+              AppImage(
+                src: Images.accountProcessed,
               ),
               const AppSpacer.lg(),
               const AppText(

@@ -1,20 +1,14 @@
+import 'package:emas/core/constants/images.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
-import 'package:emas/shared/theme/app_colors.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-// Maps each category to a Material icon that resembles the illustration style
-const _categoryIcons = {
-  AuctionCategory.mobil: Icons.directions_car_rounded,
-  AuctionCategory.motor: Icons.two_wheeler_rounded,
-  AuctionCategory.elektronik: Icons.laptop_rounded,
-};
-
-const _categoryIconColors = {
-  AuctionCategory.mobil: Color(0xFFF5C842),
-  AuctionCategory.motor: Color(0xFFE8834A),
-  AuctionCategory.elektronik: Color(0xFF7B9FD4),
+var _categoryIcons = {
+  AuctionCategory.mobil: Images.carIcon,
+  AuctionCategory.motor: Images.motorcycleIcon,
+  AuctionCategory.elektronik: Images.electronicIcon,
 };
 
 const _categories = [
@@ -30,7 +24,13 @@ class CategorySection extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: _categories.map((cat) => _CategoryItem(category: cat)).toList(),
+      children: _categories
+          .map(
+            (cat) => _CategoryItem(
+              category: cat,
+            ),
+          )
+          .toList(),
     );
   }
 }
@@ -42,8 +42,7 @@ class _CategoryItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final iconColor = _categoryIconColors[category] ?? AppColors.primary500;
-    final icon = _categoryIcons[category] ?? Icons.category_rounded;
+    final String icon = _categoryIcons[category]!;
 
     return GestureDetector(
       onTap: () async => context.pushNamed(
@@ -61,7 +60,7 @@ class _CategoryItem extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Center(
-              child: Icon(icon, color: iconColor, size: 36),
+              child: AppImage(src: icon),
             ),
           ),
           const SizedBox(height: 6),
@@ -69,7 +68,9 @@ class _CategoryItem extends StatelessWidget {
             category.label,
             variant: AppTextVariant.bodySmall,
             fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(0.75),
+            color: Theme.of(context).colorScheme.onSurface.withOpacity(
+                  0.75,
+                ),
           ),
         ],
       ),

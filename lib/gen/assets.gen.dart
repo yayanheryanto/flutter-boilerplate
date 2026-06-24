@@ -29,6 +29,26 @@ class $AssetsImagesPngGen {
   AssetGenImage get accountProccessed =>
       const AssetGenImage('assets/images/png/account_proccessed.png');
 
+  /// File path: assets/images/png/ic_car.png
+  AssetGenImage get icCar =>
+      const AssetGenImage('assets/images/png/ic_car.png');
+
+  /// File path: assets/images/png/ic_electronic.png
+  AssetGenImage get icElectronic =>
+      const AssetGenImage('assets/images/png/ic_electronic.png');
+
+  /// File path: assets/images/png/ic_emas_text.png
+  AssetGenImage get icEmasText =>
+      const AssetGenImage('assets/images/png/ic_emas_text.png');
+
+  /// File path: assets/images/png/ic_motorcycle.png
+  AssetGenImage get icMotorcycle =>
+      const AssetGenImage('assets/images/png/ic_motorcycle.png');
+
+  /// File path: assets/images/png/ic_verify.png
+  AssetGenImage get icVerify =>
+      const AssetGenImage('assets/images/png/ic_verify.png');
+
   /// File path: assets/images/png/sample_correct_idcard.png
   AssetGenImage get sampleCorrectIdcard =>
       const AssetGenImage('assets/images/png/sample_correct_idcard.png');
@@ -38,8 +58,16 @@ class $AssetsImagesPngGen {
       const AssetGenImage('assets/images/png/sample_incorrect_idcard.png');
 
   /// List of all assets
-  List<AssetGenImage> get values =>
-      [accountProccessed, sampleCorrectIdcard, sampleIncorrectIdcard];
+  List<AssetGenImage> get values => [
+        accountProccessed,
+        icCar,
+        icElectronic,
+        icEmasText,
+        icMotorcycle,
+        icVerify,
+        sampleCorrectIdcard,
+        sampleIncorrectIdcard
+      ];
 }
 
 class $AssetsImagesSvgGen {
@@ -54,12 +82,44 @@ class $AssetsImagesSvgGen {
   /// File path: assets/images/svg/gallery.svg
   SvgGenImage get gallery => const SvgGenImage('assets/images/svg/gallery.svg');
 
+  /// File path: assets/images/svg/ic_gavel.svg
+  SvgGenImage get icGavel =>
+      const SvgGenImage('assets/images/svg/ic_gavel.svg');
+
+  /// File path: assets/images/svg/ic_home.svg
+  SvgGenImage get icHome => const SvgGenImage('assets/images/svg/ic_home.svg');
+
+  /// File path: assets/images/svg/ic_notif.svg
+  SvgGenImage get icNotif =>
+      const SvgGenImage('assets/images/svg/ic_notif.svg');
+
+  /// File path: assets/images/svg/ic_npl.svg
+  SvgGenImage get icNpl => const SvgGenImage('assets/images/svg/ic_npl.svg');
+
+  /// File path: assets/images/svg/ic_transaction.svg
+  SvgGenImage get icTransaction =>
+      const SvgGenImage('assets/images/svg/ic_transaction.svg');
+
+  /// File path: assets/images/svg/ic_user.svg
+  SvgGenImage get icUser => const SvgGenImage('assets/images/svg/ic_user.svg');
+
   /// File path: assets/images/svg/personal.svg
   SvgGenImage get personal =>
       const SvgGenImage('assets/images/svg/personal.svg');
 
   /// List of all assets
-  List<SvgGenImage> get values => [camera, company, gallery, personal];
+  List<SvgGenImage> get values => [
+        camera,
+        company,
+        gallery,
+        icGavel,
+        icHome,
+        icNotif,
+        icNpl,
+        icTransaction,
+        icUser,
+        personal
+      ];
 }
 
 class Assets {

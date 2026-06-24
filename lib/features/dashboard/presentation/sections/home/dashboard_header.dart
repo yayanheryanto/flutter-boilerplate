@@ -1,7 +1,9 @@
+import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/firebase/notification_handler.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
-import 'package:emas/shared/theme/app_colors.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({super.key});
@@ -18,70 +20,17 @@ class DashboardHeader extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // ── EMAS logo ─────────────────────────────────────────────────
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'EMAS',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.w900,
-                  color: AppColors.primary500,
-                  letterSpacing: 1.5,
-                  height: 1.0,
-                ),
-              ),
-              Row(
-                children: [
-                  Text(
-                    'Powered by ',
-                    style: TextStyle(fontSize: 9, color: Colors.grey),
-                  ),
-                  // Mega Finance logo text
-                  Text(
-                    'M',
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w900,
-                      color: Colors.teal,
-                    ),
-                  ),
-                  Text(
-                    ' MEGAFINANCE',
-                    style: TextStyle(
-                      fontSize: 9,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black87,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+          AppImage(
+            src: Images.emasTextIcon,
           ),
-
           const Spacer(),
-
-          // ── Notification bell ─────────────────────────────────────────
           NotificationBadge(
             onTap: () {},
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: const BoxDecoration(
-                color: AppColors.primary500,
-                shape: BoxShape.circle,
-              ),
-              child: const Icon(
-                Icons.notifications_outlined,
-                color: Colors.white,
-                size: 22,
-              ),
-            ),
+            child: AppImage(src: Images.notificationIcon),
           ),
         ],
       ),
+      // ── Notification bell ─────────────────────────────────────────
     );
   }
 }

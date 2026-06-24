@@ -1,3 +1,4 @@
+import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
@@ -351,20 +352,10 @@ class _VerificationBanner extends StatelessWidget {
       child: Row(
         children: [
           // Illustration
-          Container(
-            width: 52,
-            height: 52,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFF3E0),
-              borderRadius: BorderRadius.circular(RadiusTokens.md),
-            ),
-            child: const Icon(
-              Icons.verified_user_outlined,
-              color: AppColors.primary500,
-              size: 28,
-            ),
+          AppImage(src: Images.verifyIcon),
+          const AppSpacer.sm(
+            horizontal: true,
           ),
-          const SizedBox(width: AppSpacings.md),
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,6 +364,7 @@ class _VerificationBanner extends StatelessWidget {
                   'Verifikasi Akun Sekarang!',
                   fontWeight: FontWeight.bold,
                 ),
+                AppSpacer.xs(),
                 AppText(
                   'Dapatkan banyak keuntungan',
                   variant: AppTextVariant.bodySmall,
@@ -380,13 +372,13 @@ class _VerificationBanner extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: AppSpacings.sm),
+          const AppSpacer.md(),
           // Button — GestureDetector+Container to avoid infinite width constraint
           GestureDetector(
             onTap: () async => context.push(AppRoutes.verificationPreparation),
             child: Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacings.md,
+                horizontal: AppSpacings.sm,
                 vertical: AppSpacings.sm,
               ),
               decoration: BoxDecoration(
@@ -395,7 +387,7 @@ class _VerificationBanner extends StatelessWidget {
               ),
               child: const AppText(
                 'Verifikasi',
-                variant: AppTextVariant.labelMedium,
+                variant: AppTextVariant.bodySmall,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
