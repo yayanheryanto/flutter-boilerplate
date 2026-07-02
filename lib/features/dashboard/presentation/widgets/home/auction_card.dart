@@ -115,7 +115,7 @@ class _CardImage extends StatelessWidget {
         child: Stack(
           children: [
             Center(
-              child: Text(item.emoji, style: const TextStyle(fontSize: 48)),
+              child: Text(item.image, style: const TextStyle(fontSize: 48)),
             ),
             Positioned(
               top: AppSpacings.sm,

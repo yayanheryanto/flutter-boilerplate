@@ -34,6 +34,8 @@ class AppRoutes {
   static const String lelangList = '/lelang-list';
   static const String liveAuction = '/live-auction';
   static const String settings = '/settings';
+  static const String beliNplDetail = '/beli-npl-detail';
+  static const String beliNplConfirmation = '/beli-npl-confirmation';
   static const String notifications = '/notifications';
   static const String uiDemo = '/ui-demo';
 }

@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/shared/widgets/skeleton/skeleton_atoms.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shimmer/shimmer.dart';

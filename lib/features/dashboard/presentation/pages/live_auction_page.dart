@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -6,11 +5,9 @@ import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
-import 'package:emas/shared/widgets/skeleton/skeleton_atoms.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:sizer/sizer.dart';
 
 // ─── Model lokal ──────────────────────────────────────────────────────────────
 
@@ -229,21 +226,9 @@ class _MediaPlaceholder extends StatelessWidget {
       width: double.infinity,
       color: AppColors.neutral200,
       child: Center(
-        child: CachedNetworkImage(
-          imageUrl: dummyBannerUrls[0],
-          fit: BoxFit.cover,
+        child: AppImage(
+          src: dummyBannerUrls[0],
           width: double.infinity,
-          placeholder: (_, __) => SkeletonCard(
-            width: double.infinity,
-            height: 28.h,
-          ),
-          errorWidget: (_, __, ___) => const Center(
-            child: Icon(
-              Icons.broken_image_outlined,
-              size: 48,
-              color: Colors.grey,
-            ),
-          ),
         ),
       ),
     );
@@ -446,7 +431,8 @@ class WhiteSection extends StatelessWidget {
   final Widget child;
   final EdgeInsetsGeometry? padding;
 
-  const WhiteSection({super.key,
+  const WhiteSection({
+    super.key,
     required this.child,
     this.padding,
   });

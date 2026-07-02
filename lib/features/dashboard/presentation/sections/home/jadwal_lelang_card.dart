@@ -9,7 +9,7 @@ class JadwalLelangData {
   final String locationName;
   final String dateLabel;   // e.g. "12 Jun 2026"
   final String timeLabel;   // e.g. "10.00"
-  final String emoji;
+  final String image;
   final Color tint;
   final bool isLive;
 
@@ -18,7 +18,7 @@ class JadwalLelangData {
     required this.locationName,
     required this.dateLabel,
     required this.timeLabel,
-    required this.emoji,
+    required this.image,
     this.tint = const Color(0xFFFFE0B2),
     this.isLive = true,
   });
@@ -60,7 +60,7 @@ class JadwalLelangCard extends StatelessWidget {
               color: data.tint,
               child: Center(
                 child: Text(
-                  data.emoji,
+                  data.image,
                   style: const TextStyle(fontSize: 48),
                 ),
               ),

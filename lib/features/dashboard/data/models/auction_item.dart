@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Kategori lelang — satu sumber kebenaran untuk label, emoji, warna, dan slug routing.
+/// Kategori lelang — satu sumber kebenaran untuk label, image, warna, dan slug routing.
 enum AuctionCategory {
   motor,
   mobil,
@@ -29,7 +29,7 @@ enum AuctionCategory {
         orElse: () => AuctionCategory.lainnya,
       );
 
-  String get emoji => const {
+  String get image => const {
     AuctionCategory.motor: '🏍️',
     AuctionCategory.mobil: '🚗',
     AuctionCategory.elektronik: '📱',
@@ -50,7 +50,7 @@ enum AuctionCategory {
 
 class AuctionItem {
   final String title;
-  final String emoji;
+  final String image;
   final int bid;
   final int secs;
   final bool winning;
@@ -60,7 +60,7 @@ class AuctionItem {
 
   const AuctionItem({
     required this.title,
-    required this.emoji,
+    required this.image,
     required this.bid,
     required this.secs,
     required this.category,

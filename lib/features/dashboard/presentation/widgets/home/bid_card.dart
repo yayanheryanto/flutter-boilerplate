@@ -47,7 +47,7 @@ class BidCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(RadiusTokens.md),
               ),
               child: Center(
-                child: Text(item.emoji, style: const TextStyle(fontSize: 24)),
+                child: Text(item.image, style: const TextStyle(fontSize: 24)),
               ),
             ),
             const AppSpacer(AppSpacings.sm, horizontal: true),

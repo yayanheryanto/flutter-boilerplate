@@ -202,7 +202,7 @@ class _CategorySliverAppBar extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    category.emoji,
+                    category.image,
                     style: const TextStyle(fontSize: 24),
                   ),
                 ),

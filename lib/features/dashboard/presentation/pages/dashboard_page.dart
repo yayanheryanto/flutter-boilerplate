@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:emas/core/constants/images.dart';
+import 'package:emas/features/dashboard/presentation/layouts/buy_npl_layout.dart';
 import 'package:emas/features/dashboard/presentation/pages/ikut_lelang_page.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -78,7 +79,7 @@ class _DashboardPageState extends State<DashboardPage> {
           onBannerChanged: (i) => setState(() => _bannerPage = i),
           onRefresh: _onRefresh,
         ),
-        _buildPlaceholder('Beli NPL'),
+        const BuyNplLayout(),
         const IkutLelangPage(),
         _buildPlaceholder('Transaksi'),
         _buildPlaceholder('Profil'),

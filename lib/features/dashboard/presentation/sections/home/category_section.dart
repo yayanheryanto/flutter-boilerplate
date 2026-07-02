@@ -1,7 +1,6 @@
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
 import 'package:emas/shared/widgets/design_system.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

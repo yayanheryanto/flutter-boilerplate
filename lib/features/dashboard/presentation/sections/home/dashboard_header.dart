@@ -3,7 +3,6 @@ import 'package:emas/core/firebase/notification_handler.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({super.key});

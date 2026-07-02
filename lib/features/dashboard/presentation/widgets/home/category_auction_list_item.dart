@@ -79,7 +79,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
                       color: _tint.withOpacity(0.07),
                       child: Center(
                         child: Text(
-                          widget.item.emoji,
+                          widget.item.image,
                           style: const TextStyle(fontSize: 46),
                         ),
                       ),

@@ -15,6 +15,8 @@ import 'package:emas/features/auth/presentation/pages/ktp_guide_page.dart';
 import 'package:emas/features/auth/presentation/pages/ktp_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/npwp_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/verification_preparation_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/beli_npl_confirmation_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/beli_npl_detail_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/ikut_lelang_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/lelang_list_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/live_auction_page.dart';
@@ -203,6 +205,16 @@ class AppRouter {
           path: AppRoutes.liveAuction,
           name: 'live-auction',
           builder: (context, state) => const LiveAuctionPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.beliNplDetail,
+          name: 'beli-npl-detail',
+          builder: (context, state) => const BeliNplPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.beliNplConfirmation,
+          name: 'beli-npl-confirmation',
+          builder: (context, state) => const BeliNplConfirmationPage(),
         ),
         GoRoute(
           path: AppRoutes.profile,
