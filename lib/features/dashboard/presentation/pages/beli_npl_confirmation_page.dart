@@ -9,6 +9,7 @@ import 'package:emas/shared/widgets/display/app_divider.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 // ─── Model metode pembayaran ──────────────────────────────────────────────────
@@ -16,8 +17,8 @@ import 'package:intl/intl.dart';
 class PaymentMethod {
   final String id;
   final String name;
-  final String logoAsset; // path SVG/PNG — ganti sesuai asset lokal
-  final Color logoColor; // fallback tint jika logo berupa SVG monochrome
+  final String logoAsset;
+  final Color logoColor;
 
   const PaymentMethod({
     required this.id,
@@ -91,12 +92,10 @@ class _BeliNplConfirmationPageState extends State<BeliNplConfirmationPage> {
   bool get _canPay => _selectedMethod != null && _agreeToTerms;
 
   // ── Buka bottom sheet pilih metode ─────────────────────────────────────────
-  void _showPaymentMethodSheet() {
-    AppCustomBottomSheet.show(
+  Future<void> _showPaymentMethodSheet() async {
+    await AppCustomBottomSheet.show<void>(
       context,
       title: 'Metode Pembayaran',
-      showHandle: true,
-      showCloseButton: true,
       contentPadding: const EdgeInsets.only(top: AppSpacings.sm),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -107,7 +106,7 @@ class _BeliNplConfirmationPageState extends State<BeliNplConfirmationPage> {
                 selected: _selectedMethod?.id == method.id,
                 onTap: () {
                   setState(() => _selectedMethod = method);
-                  Navigator.of(context).pop();
+                  context.pop();
                 },
               ),
             )
@@ -120,7 +119,7 @@ class _BeliNplConfirmationPageState extends State<BeliNplConfirmationPage> {
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
-      appBar: AppPageBar(title: 'Beli NPL'),
+      appBar: const AppPageBar(title: 'Beli NPL'),
       body: Column(
         children: [
           // ── Scrollable content ───────────────────────────────────
@@ -129,7 +128,7 @@ class _BeliNplConfirmationPageState extends State<BeliNplConfirmationPage> {
               padding: const EdgeInsets.all(AppSpacings.md),
               children: [
                 // ── Ringkasan Pembelian ─────────────────────────
-                _SectionTitle('Ringkasan Pembelian'),
+                const _SectionTitle('Ringkasan Pembelian'),
                 const SizedBox(height: AppSpacings.sm),
                 _InfoCard(
                   child: Column(
@@ -153,7 +152,7 @@ class _BeliNplConfirmationPageState extends State<BeliNplConfirmationPage> {
                 const SizedBox(height: AppSpacings.lg),
 
                 // ── Metode Pembayaran ───────────────────────────
-                _SectionTitle('Metode Pembayaran'),
+                const _SectionTitle('Metode Pembayaran'),
                 const SizedBox(height: AppSpacings.sm),
                 _PaymentMethodSelector(
                   selected: _selectedMethod,
@@ -255,12 +254,11 @@ class _PaymentMethodSelector extends StatelessWidget {
             Expanded(
               child: AppText(
                 selected?.name ?? 'Pilih metode pembayaran',
-                variant: AppTextVariant.bodyMedium,
                 color: selected != null ? AppColors.textPrimary : AppColors.neutral400,
               ),
             ),
 
-            Icon(
+            const Icon(
               Icons.keyboard_arrow_down_rounded,
               color: AppColors.neutral400,
               size: 22,
@@ -389,7 +387,6 @@ class _BottomSection extends StatelessWidget {
         children: [
           // Checkbox syarat & ketentuan
           Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
                 width: 24,

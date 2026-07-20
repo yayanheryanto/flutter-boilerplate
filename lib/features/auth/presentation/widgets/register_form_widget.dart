@@ -228,7 +228,7 @@ class _TermsCheckbox extends StatelessWidget {
       height: 1.3,
     );
 
-    return Row(
+    return Row( 
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(

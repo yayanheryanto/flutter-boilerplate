@@ -4,55 +4,34 @@ import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
-import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-// ─── Model lokal ──────────────────────────────────────────────────────────────
+// ─── Model ────────────────────────────────────────────────────────────────────
 
-class _GradeData {
-  final String label;
-  final String value;
+enum BidderType { floorBidder, onlineBidder, yourBid }
 
-  const _GradeData({required this.label, required this.value});
-}
+class BidEntry {
+  final int amount;
+  final BidderType type;
 
-class _SpesifikasiData {
-  final String key;
-  final String value;
-
-  const _SpesifikasiData({required this.key, required this.value});
+  const BidEntry({required this.amount, required this.type});
 }
 
 // ─── Dummy data ───────────────────────────────────────────────────────────────
 
-const _dummyGrades = [
-  _GradeData(label: 'Interior', value: 'A'),
-  _GradeData(label: 'Eksterior', value: 'D'),
-  _GradeData(label: 'Rangka', value: 'B'),
-  _GradeData(label: 'Mesin', value: 'C'),
+const _dummyBids = [
+  BidEntry(amount: 106000000, type: BidderType.onlineBidder),
+  BidEntry(amount: 105500000, type: BidderType.yourBid),
+  BidEntry(amount: 105000000, type: BidderType.onlineBidder),
+  BidEntry(amount: 104500000, type: BidderType.yourBid),
+  BidEntry(amount: 105000000, type: BidderType.onlineBidder),
 ];
 
-const _dummySpesifikasi = [
-  _SpesifikasiData(key: 'Nomor Polisi', value: 'BK8769ET'),
-  _SpesifikasiData(key: 'Kilometer', value: '142.524 KM'),
-  _SpesifikasiData(key: 'STNK', value: '27 Mei 2026'),
-  _SpesifikasiData(key: 'BPKB', value: '14 Hari Kerja'),
-];
+// ─── Formatter ────────────────────────────────────────────────────────────────
 
-final _dummyPenawaran = [106000000, 105500000, 105000000];
-
-// ─── Currency formatter (full, no abbreviation) ───────────────────────────────
-
-String _formatRupiahFull(int amount) {
-  final fmt = NumberFormat.currency(
-    locale: 'id_ID',
-    symbol: 'Rp',
-    decimalDigits: 0,
-  );
-  return fmt.format(amount);
-}
+String _rp(int v) => NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0).format(v);
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -66,344 +45,389 @@ class LiveAuctionPage extends StatelessWidget {
       appBar: const AppPageBar(title: 'Live Auction'),
       body: Column(
         children: [
-          // Scrollable content
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero,
               children: [
-                // ── Thumbnail / Media placeholder ──────────────────────
-                _MediaPlaceholder(),
+                // ── Lokasi ──────────────────────────────────
+                const _LokasiBar(lokasi: 'Mega Finance Fatmawati'),
 
-                // ── Info utama kendaraan ───────────────────────────────
-                WhiteSection(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const AppText(
-                        'DAIHATSU GRAND MAX BV - 1.3',
-                        variant: AppTextVariant.titleMedium,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      const SizedBox(height: 2),
-                      const AppText(
-                        'Tahun 2021',
-                        fontWeight: FontWeight.w500,
-                      ),
-                      const AppSpacer.md(),
-                      const AppText(
-                        'Harga Dasar',
-                        variant: AppTextVariant.bodySmall,
-                        color: AppColors.textSecondary,
-                      ),
-                      const SizedBox(height: 4),
-                      Row(
-                        children: [
-                          AppText(
-                            _formatRupiahFull(106000000),
-                            variant: AppTextVariant.titleLarge,
-                            fontWeight: FontWeight.w700,
-                          ),
-                          const SizedBox(width: AppSpacings.xs),
-                          const AppText(
-                            '*Terdapat biaya PPN 10%',
-                            variant: AppTextVariant.labelSmall,
-                            color: AppColors.textSecondary,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
+                // ── Lot + nama ──────────────────────────────
+                const _LotHeader(
+                  lot: 15,
+                  nama: 'DAIHATSU GRAND MAX BV - 1.3',
+                  tahun: 'Tahun 2021',
                 ),
 
-                const AppSpacer.sm(),
+                const SizedBox(height: AppSpacings.xs),
 
-                // ── Grade ──────────────────────────────────────────────
-                WhiteSection(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const AppText(
-                        'Grade',
-                        variant: AppTextVariant.titleSmall,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      const AppSpacer.md(),
-                      Row(
-                        children: _dummyGrades
-                            .map(
-                              (g) => Padding(
-                                padding: const EdgeInsets.only(
-                                  right: AppSpacings.md,
-                                ),
-                                child: _GradeChip(data: g),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ],
-                  ),
+                // ── Main card ───────────────────────────────
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+                  child: _MainInfoCard(),
                 ),
 
-                const AppSpacer.sm(),
+                const SizedBox(height: AppSpacings.lg),
 
-                // ── Spesifikasi ────────────────────────────────────────
-                WhiteSection(
+                // ── Penawaran Saat Ini ───────────────────────
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: AppSpacings.md),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const AppText(
-                        'Spesifikasi',
-                        variant: AppTextVariant.titleSmall,
-                        fontWeight: FontWeight.w600,
-                      ),
-                      const AppSpacer.md(),
-                      ..._dummySpesifikasi.map(
-                        (s) => Padding(
-                          padding: const EdgeInsets.only(bottom: AppSpacings.sm),
-                          child: _SpecRow(data: s),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const AppSpacer.sm(),
-
-                // ── Penawaran Saat Ini ─────────────────────────────────
-                WhiteSection(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const AppText(
+                      AppText(
                         'Penawaran Saat Ini',
                         variant: AppTextVariant.titleSmall,
-                        fontWeight: FontWeight.w600,
+                        fontWeight: FontWeight.w700,
                       ),
-                      const AppSpacer.md(),
-
-                      // Penawaran tertinggi + count badge
-                      _TopBidRow(amount: _dummyPenawaran.first),
-
-                      const AppSpacer.sm(),
-
-                      // Daftar penawaran lain
-                      ..._dummyPenawaran.map(
-                        (amount) => Padding(
-                          padding: const EdgeInsets.only(bottom: AppSpacings.sm),
-                          child: _BidRow(amount: amount),
-                        ),
-                      ),
+                      SizedBox(height: AppSpacings.sm),
+                      _BidTable(bids: _dummyBids),
                     ],
                   ),
                 ),
 
-                const AppSpacer.lg(),
+                const SizedBox(height: AppSpacings.xl),
               ],
             ),
           ),
-
-          // ── CTA fixed di bawah ─────────────────────────────────────
-          _BottomCTA(),
+          const _BottomCTA(lot: 15),
         ],
       ),
     );
   }
 }
 
-// ─── Media Placeholder ────────────────────────────────────────────────────────
+// ─── Lokasi bar ───────────────────────────────────────────────────────────────
 
-const List<String> dummyBannerUrls = [
-  'https://oss.megafinance.co.id/development/mitra-megapromotion/2024/04/05/promo1.jpeg',
-  'https://oss.megafinance.co.id/development/mitra-megapromotion/2024/04/05/promo2.jpeg',
-  'https://oss.megafinance.co.id/development/mitra-megapromotion/2024/04/05/promo3.jpeg',
-];
+class _LokasiBar extends StatelessWidget {
+  final String lokasi;
 
-class _MediaPlaceholder extends StatelessWidget {
+  const _LokasiBar({required this.lokasi});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 220,
-      width: double.infinity,
-      color: AppColors.neutral200,
-      child: Center(
-        child: AppImage(
-          src: dummyBannerUrls[0],
-          width: double.infinity,
-        ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(AppSpacings.md, AppSpacings.md, AppSpacings.md, AppSpacings.xs),
+      child: Row(
+        children: [
+          const Icon(Icons.location_on_outlined, size: 18, color: AppColors.textSecondary),
+          const SizedBox(width: 4),
+          AppText(lokasi, color: AppColors.textSecondary),
+        ],
       ),
     );
   }
 }
 
-// ─── Grade chip ───────────────────────────────────────────────────────────────
+// ─── Lot header ───────────────────────────────────────────────────────────────
 
-class _GradeChip extends StatelessWidget {
-  final _GradeData data;
+class _LotHeader extends StatelessWidget {
+  final int lot;
+  final String nama;
+  final String tahun;
 
-  const _GradeChip({required this.data});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppText(
-          data.label,
-          variant: AppTextVariant.labelSmall,
-          color: AppColors.textSecondary,
-        ),
-        const SizedBox(height: 6),
-        Container(
-          width: 48,
-          height: 48,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(RadiusTokens.md),
-            border: Border.all(color: AppColors.primary500, width: 1.5),
-          ),
-          child: Center(
-            child: AppText(
-              data.value,
-              variant: AppTextVariant.titleLarge,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textPrimary,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-// ─── Spec row ─────────────────────────────────────────────────────────────────
-
-class _SpecRow extends StatelessWidget {
-  final _SpesifikasiData data;
-
-  const _SpecRow({required this.data});
+  const _LotHeader({required this.lot, required this.nama, required this.tahun});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        AppText(
-          data.key,
-          color: AppColors.textSecondary,
-        ),
-        AppText(
-          data.value,
-          fontWeight: FontWeight.w500,
-        ),
-      ],
-    );
-  }
-}
-
-// ─── Top bid row (penawaran tertinggi + count badge) ──────────────────────────
-class _TopBidRow extends StatelessWidget {
-  final int amount;
-
-  const _TopBidRow({required this.amount});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Container(
-            padding: const EdgeInsets.all(AppSpacings.md),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md, vertical: AppSpacings.sm),
+      child: Row(
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md, vertical: AppSpacings.sm),
             decoration: BoxDecoration(
-              color: AppColors.white,
-              borderRadius: BorderRadius.circular(RadiusTokens.lg),
-              border: Border.all(color: AppColors.neutral200),
+              color: AppColors.primary500,
+              borderRadius: BorderRadius.circular(RadiusTokens.full),
             ),
+            child: AppText('Lot $lot', variant: AppTextVariant.labelLarge, fontWeight: FontWeight.w700, color: AppColors.white),
+          ),
+          const SizedBox(width: AppSpacings.sm),
+          Expanded(
             child: Column(
-              mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const AppText(
-                  'Penawaran Tertinggi',
-                  variant: AppTextVariant.labelSmall,
-                  color: AppColors.textSecondary,
-                ),
-                const SizedBox(height: 4),
-                AppText(
-                  _formatRupiahFull(amount),
-                  variant: AppTextVariant.titleMedium,
-                  fontWeight: FontWeight.w700,
-                ),
+                AppText(nama, variant: AppTextVariant.titleSmall, fontWeight: FontWeight.w700),
+                AppText(tahun, variant: AppTextVariant.bodySmall, color: AppColors.textSecondary),
               ],
             ),
           ),
-        ),
-        const SizedBox(width: AppSpacings.md),
-        Container(
-          width: 72,
-          height: 72,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(RadiusTokens.md),
-            border: Border.all(
-              color: AppColors.primary500,
-              width: 1.5,
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Main info card ───────────────────────────────────────────────────────────
+
+class _MainInfoCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        // Baris atas
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                height: 160,
+                decoration: BoxDecoration(
+                  color: AppColors.neutral200,
+                  borderRadius: BorderRadius.circular(RadiusTokens.lg),
+                ),
+                child: const Center(
+                  child: Icon(Icons.directions_car_rounded, size: 56, color: AppColors.neutral400),
+                ),
+              ),
             ),
-          ),
-          child: const Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            const SizedBox(width: AppSpacings.sm),
+            Expanded(child: _specCard()),
+          ],
+        ),
+
+        const SizedBox(height: AppSpacings.sm),
+
+        // Baris bawah
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(child: _priceCard()),
+            const SizedBox(width: AppSpacings.sm),
+            Expanded(child: _gradeCard()),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _specCard() {
+    return Container(
+      padding: const EdgeInsets.all(AppSpacings.md),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        border: Border.all(color: AppColors.neutral200),
+      ),
+      child: const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppText('Spesifikasi Kendaraan', variant: AppTextVariant.labelMedium, fontWeight: FontWeight.w700),
+          SizedBox(height: AppSpacings.sm),
+          _SpecItem(label: 'No. Polisi', value: 'BK8769ET'),
+          _SpecItem(label: 'Kilometer', value: '142.524 KM'),
+          _SpecItem(label: 'Masa Berlaku STNK', value: '27 Mei 2026'),
+        ],
+      ),
+    );
+  }
+
+  Widget _priceCard() {
+    return Container(
+      padding: const EdgeInsets.all(AppSpacings.md),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        border: Border.all(color: AppColors.neutral200),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const AppText('Harga Dasar', variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
+          AppText(_rp(106000000), variant: AppTextVariant.titleSmall, fontWeight: FontWeight.w800),
+          const SizedBox(height: AppSpacings.sm),
+          const AppText('Harga Penawaran Sekarang', variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
+          AppText(_rp(106000000), variant: AppTextVariant.titleSmall, fontWeight: FontWeight.w800),
+        ],
+      ),
+    );
+  }
+
+  Widget _gradeCard() {
+    return Container(
+      padding: const EdgeInsets.all(AppSpacings.md),
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        border: Border.all(color: AppColors.neutral200),
+      ),
+      child: const Column(
+        children: [
+          Row(
             children: [
-              AppText(
-                'COUNT',
-                variant: AppTextVariant.labelSmall,
-                color: AppColors.textSecondary,
-                fontWeight: FontWeight.w600,
-              ),
-              SizedBox(height: 2),
-              AppText(
-                '1',
-                variant: AppTextVariant.titleLarge,
-                fontWeight: FontWeight.w700,
-              ),
+              Expanded(child: _GradeItem(label: 'Interior', value: 'A')),
+              Expanded(child: _GradeItem(label: 'Rangka', value: 'B')),
             ],
           ),
-        ),
+          SizedBox(height: AppSpacings.sm),
+          Row(
+            children: [
+              Expanded(child: _GradeItem(label: 'Eksterior', value: 'D')),
+              Expanded(child: _GradeItem(label: 'Mesin', value: 'C')),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Spec item ────────────────────────────────────────────────────────────────
+
+class _SpecItem extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _SpecItem({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: AppSpacings.sm),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          AppText(label, variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
+          AppText(value, variant: AppTextVariant.labelLarge, fontWeight: FontWeight.w700),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Grade item ───────────────────────────────────────────────────────────────
+
+class _GradeItem extends StatelessWidget {
+  final String label;
+  final String value;
+
+  const _GradeItem({required this.label, required this.value});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        AppText(label, variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
+        const SizedBox(width: 6),
+        AppText(value, variant: AppTextVariant.titleSmall, fontWeight: FontWeight.w800),
       ],
     );
   }
 }
 
-// ─── Bid row (daftar penawaran) ───────────────────────────────────────────────
+// ─── Bid table ────────────────────────────────────────────────────────────────
+//
+// Struktur kolom (3 kolom dengan TableColumnWidth):
+//
+//  ┌─────────────┬──────────────────────┬───────────────┐
+//  │  COUNT      │  Rp106.000.000       │  Online Bidder│  ← header
+//  │  Floor Bidd │                      │               │
+//  │  Online Bid │                      │               │
+//  ├─────────────┼──────────────────────┼───────────────┤
+//  │             │  Rp105.500.000       │  Your Bid     │  ← yourBid row (bg kuning)
+//  ├─────────────┼──────────────────────┼───────────────┤
+//  │             │  Rp105.000.000       │  Online Bidder│
+//  └─────────────┴──────────────────────┴───────────────┘
+//
+// Kolom 0 (lebar tetap 80): COUNT/legend
+// Kolom 1 (flex): nominal
+// Kolom 2 (lebar tetap 90): tipe bidder
 
-class _BidRow extends StatelessWidget {
-  final int amount;
+class _BidTable extends StatelessWidget {
+  final List<BidEntry> bids;
 
-  const _BidRow({required this.amount});
+  const _BidTable({required this.bids});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacings.md,
-        vertical: AppSpacings.sm + 4,
-      ),
+      padding: const EdgeInsets.all(AppSpacings.md),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.md),
+        borderRadius: BorderRadius.circular(RadiusTokens.xl),
         border: Border.all(color: AppColors.neutral200),
       ),
-      child: AppText(
-        _formatRupiahFull(amount),
-        variant: AppTextVariant.titleSmall,
-        fontWeight: FontWeight.w600,
+      child: Column(
+        children: [
+          // Header
+          Row(
+            children: [
+              const Expanded(
+                flex: 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    AppText('COUNT', variant: AppTextVariant.labelMedium, fontWeight: FontWeight.w700),
+                    SizedBox(height: 4),
+                    AppText('Floor Bidder', variant: AppTextVariant.bodySmall),
+                    AppText('Online Bidder', variant: AppTextVariant.bodySmall),
+                  ],
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: AppText(_rp(bids.first.amount), variant: AppTextVariant.titleSmall, fontWeight: FontWeight.w800),
+              ),
+              const Expanded(
+                flex: 2,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: AppText('Online Bidder', variant: AppTextVariant.bodySmall),
+                ),
+              ),
+            ],
+          ),
+
+          const SizedBox(height: AppSpacings.sm),
+
+          // List bid
+          ...bids.skip(1).map((bid) {
+            final isYourBid = bid.type == BidderType.yourBid;
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: AppSpacings.sm),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacings.sm,
+                vertical: AppSpacings.sm,
+              ),
+              decoration: BoxDecoration(
+                color: isYourBid ? const Color(0xFFF7F0E7) : AppColors.white,
+                borderRadius: BorderRadius.circular(RadiusTokens.md),
+              ),
+              child: Row(
+                children: [
+                  const Spacer(flex: 2),
+                  Expanded(
+                    flex: 3,
+                    child: AppText(_rp(bid.amount), variant: AppTextVariant.labelLarge, fontWeight: FontWeight.w700),
+                  ),
+                  Expanded(
+                    flex: 2,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: AppText(
+                        isYourBid ? 'Your Bid' : 'Online Bidder',
+                        variant: AppTextVariant.bodySmall,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }),
+        ],
       ),
     );
   }
 }
-
 // ─── Bottom CTA ───────────────────────────────────────────────────────────────
 
 class _BottomCTA extends StatelessWidget {
+  final int lot;
+
+  const _BottomCTA({required this.lot});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -415,39 +439,11 @@ class _BottomCTA extends StatelessWidget {
         AppSpacings.lg,
       ),
       child: AppButton(
-        label: 'Beli NPL',
+        label: 'Tawar Lot $lot',
         size: AppButtonSize.large,
-        onPressed: () {
-          // TODO: navigate to beli NPL flow
-        },
+        borderRadius: RadiusTokens.full,
+        onPressed: () {},
       ),
-    );
-  }
-}
-
-// ─── Section wrapper putih ────────────────────────────────────────────────────
-
-class WhiteSection extends StatelessWidget {
-  final Widget child;
-  final EdgeInsetsGeometry? padding;
-
-  const WhiteSection({
-    super.key,
-    required this.child,
-    this.padding,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: AppColors.white,
-      padding: padding ??
-          const EdgeInsets.symmetric(
-            horizontal: AppSpacings.md,
-            vertical: AppSpacings.lg,
-          ),
-      child: child,
     );
   }
 }

@@ -6,7 +6,6 @@ import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
-import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -108,7 +107,7 @@ class BeliNplPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
       backgroundColor: AppColors.neutral50,
-      appBar: AppPageBar(title: 'Beli NPL'),
+      appBar: const AppPageBar(title: 'Beli NPL'),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -126,7 +125,6 @@ class BeliNplPage extends StatelessWidget {
                 const SizedBox(height: AppSpacings.xs),
                 const AppText(
                   'Silakan cek kembali yang sudah Anda pilih sebelum lanjut ke pembayaran',
-                  variant: AppTextVariant.bodyMedium,
                   color: AppColors.textSecondary,
                 ),
 
