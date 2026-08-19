@@ -9,8 +9,7 @@ class LiveBadge extends StatefulWidget {
   State<LiveBadge> createState() => _LiveBadgeState();
 }
 
-class _LiveBadgeState extends State<LiveBadge>
-    with SingleTickerProviderStateMixin {
+class _LiveBadgeState extends State<LiveBadge> with SingleTickerProviderStateMixin {
   late AnimationController _ctrl;
   late Animation<double> _opacity;
 

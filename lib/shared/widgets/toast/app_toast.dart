@@ -49,8 +49,7 @@ class AppToast {
   AppToast._();
 
   // Uses AppNavigator.navigatorKey — no separate key needed.
-  static OverlayState? get _overlay =>
-      AppNavigator.navigatorKey.currentState?.overlay;
+  static OverlayState? get _overlay => AppNavigator.navigatorKey.currentState?.overlay;
 
   static final List<_ToastEntry> _queue = [];
   static bool _isShowing = false;
@@ -58,54 +57,79 @@ class AppToast {
   // ── Named shortcuts ─────────────────────────────────────────────────────────
 
   static void success(
-      String message, {
-        AppToastPosition position = AppToastPosition.bottom,
-        Duration duration = const Duration(seconds: 2),
-      }) =>
-      show(message, type: AppToastType.success, position: position, duration: duration);
+    String message, {
+    AppToastPosition position = AppToastPosition.bottom,
+    Duration duration = const Duration(seconds: 2),
+  }) =>
+      show(
+        message,
+        type: AppToastType.success,
+        position: position,
+        duration: duration,
+      );
 
   static void error(
-      String message, {
-        AppToastPosition position = AppToastPosition.bottom,
-        Duration duration = const Duration(seconds: 3),
-      }) =>
-      show(message, type: AppToastType.error, position: position, duration: duration);
+    String message, {
+    AppToastPosition position = AppToastPosition.bottom,
+    Duration duration = const Duration(seconds: 3),
+  }) =>
+      show(
+        message,
+        type: AppToastType.error,
+        position: position,
+        duration: duration,
+      );
 
   static void warning(
-      String message, {
-        AppToastPosition position = AppToastPosition.bottom,
-        Duration duration = const Duration(seconds: 3),
-      }) =>
-      show(message, type: AppToastType.warning, position: position, duration: duration);
+    String message, {
+    AppToastPosition position = AppToastPosition.bottom,
+    Duration duration = const Duration(seconds: 3),
+  }) =>
+      show(
+        message,
+        type: AppToastType.warning,
+        position: position,
+        duration: duration,
+      );
 
   static void info(
-      String message, {
-        AppToastPosition position = AppToastPosition.bottom,
-        Duration duration = const Duration(seconds: 2),
-      }) =>
+    String message, {
+    AppToastPosition position = AppToastPosition.bottom,
+    Duration duration = const Duration(seconds: 2),
+  }) =>
       show(message, position: position, duration: duration);
 
   // ── Core show ───────────────────────────────────────────────────────────────
 
   static void show(
-      String message, {
-        AppToastType type = AppToastType.info,
-        AppToastPosition position = AppToastPosition.bottom,
-        Duration duration = const Duration(seconds: 2),
-        IconData? customIcon,
-      }) {
+    String message, {
+    AppToastType type = AppToastType.info,
+    AppToastPosition position = AppToastPosition.bottom,
+    Duration duration = const Duration(seconds: 2),
+    IconData? customIcon,
+  }) {
     final overlay = _overlay;
     if (overlay == null) {
       // Navigator not ready yet — schedule for next frame
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        show(message, type: type, position: position, duration: duration, customIcon: customIcon);
+        show(
+          message,
+          type: type,
+          position: position,
+          duration: duration,
+          customIcon: customIcon,
+        );
       });
       return;
     }
 
     late OverlayEntry entry;
     entry = OverlayEntry(
-      builder: (_) => _ToastWidget(message: message, type: type, position: position),
+      builder: (_) => _ToastWidget(
+        message: message,
+        type: type,
+        position: position,
+      ),
     );
 
     final toastEntry = _ToastEntry(
@@ -156,8 +180,7 @@ class _ToastWidget extends StatefulWidget {
   State<_ToastWidget> createState() => _ToastWidgetState();
 }
 
-class _ToastWidgetState extends State<_ToastWidget>
-    with SingleTickerProviderStateMixin {
+class _ToastWidgetState extends State<_ToastWidget> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _opacity;
   late final Animation<Offset> _slide;
@@ -170,14 +193,26 @@ class _ToastWidgetState extends State<_ToastWidget>
       duration: const Duration(milliseconds: 280),
     );
 
-    _opacity = CurvedAnimation(parent: _controller, curve: Curves.easeOut);
+    _opacity = CurvedAnimation(
+      parent: _controller,
+      curve: Curves.easeOut,
+    );
 
     final begin = widget.position == AppToastPosition.top
-        ? const Offset(0, -0.4)
-        : const Offset(0, 0.4);
+        ? const Offset(
+            0,
+            -0.4,
+          )
+        : const Offset(
+            0,
+            0.4,
+          );
 
     _slide = Tween<Offset>(begin: begin, end: Offset.zero).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic),
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOutCubic,
+      ),
     );
 
     _controller.forward();

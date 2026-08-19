@@ -1,96 +1,237 @@
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/di/injection.dart';
+import 'package:emas/core/services/socket/app_socket_service.dart';
+import 'package:emas/features/dashboard/data/models/live_auction_models.dart';
+import 'package:emas/features/dashboard/presentation/bloc/live_auction/live_auction_bloc.dart';
+import 'package:emas/features/dashboard/presentation/widgets/home/live_badge.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
-import 'package:emas/shared/widgets/buttons/app_button.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-
-// ─── Model ────────────────────────────────────────────────────────────────────
-
-enum BidderType { floorBidder, onlineBidder, yourBid }
-
-class BidEntry {
-  final int amount;
-  final BidderType type;
-
-  const BidEntry({required this.amount, required this.type});
-}
-
-// ─── Dummy data ───────────────────────────────────────────────────────────────
-
-const _dummyBids = [
-  BidEntry(amount: 106000000, type: BidderType.onlineBidder),
-  BidEntry(amount: 105500000, type: BidderType.yourBid),
-  BidEntry(amount: 105000000, type: BidderType.onlineBidder),
-  BidEntry(amount: 104500000, type: BidderType.yourBid),
-  BidEntry(amount: 105000000, type: BidderType.onlineBidder),
-];
 
 // ─── Formatter ────────────────────────────────────────────────────────────────
 
 String _rp(int v) => NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0).format(v);
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
+//
+// Live bidding didukung oleh [LiveAuctionBloc] + dummy WebSocket
+// ([DummySocketService]) — lihat lib/core/services/socket/. Tinggal ganti
+// binding AppSocketService di DI kalau backend real-time sudah siap, tidak
+// ada perubahan lain yang dibutuhkan di halaman ini.
 
 class LiveAuctionPage extends StatelessWidget {
-  const LiveAuctionPage({super.key});
+  final int lot;
+
+  const LiveAuctionPage({super.key, this.lot = 15});
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffoldWrapper(
-      backgroundColor: AppColors.neutral50,
-      appBar: const AppPageBar(title: 'Live Auction'),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: [
-                // ── Lokasi ──────────────────────────────────
-                const _LokasiBar(lokasi: 'Mega Finance Fatmawati'),
+    return BlocProvider<LiveAuctionBloc>(
+      create: (_) => getIt<LiveAuctionBloc>()..add(LiveAuctionStarted(lot: lot)),
+      child: const _LiveAuctionView(),
+    );
+  }
+}
 
-                // ── Lot + nama ──────────────────────────────
-                const _LotHeader(
-                  lot: 15,
-                  nama: 'DAIHATSU GRAND MAX BV - 1.3',
-                  tahun: 'Tahun 2021',
-                ),
+class _LiveAuctionView extends StatefulWidget {
+  const _LiveAuctionView();
 
-                const SizedBox(height: AppSpacings.xs),
+  @override
+  State<_LiveAuctionView> createState() => _LiveAuctionViewState();
+}
 
-                // ── Main card ───────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
-                  child: _MainInfoCard(),
-                ),
+class _LiveAuctionViewState extends State<_LiveAuctionView> {
+  int _lastBidCount = 0;
 
-                const SizedBox(height: AppSpacings.lg),
+  @override
+  void dispose() {
+    // context.read<LiveAuctionBloc>().add(const LiveAuctionStopped());
+    super.dispose();
+  }
 
-                // ── Penawaran Saat Ini ───────────────────────
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: AppSpacings.md),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      AppText(
-                        'Penawaran Saat Ini',
-                        variant: AppTextVariant.titleSmall,
-                        fontWeight: FontWeight.w700,
-                      ),
-                      SizedBox(height: AppSpacings.sm),
-                      _BidTable(bids: _dummyBids),
-                    ],
-                  ),
-                ),
+  void _handleSideEffects(BuildContext context, LiveAuctionState state) {
+    // Toast ketika ada bid baru yang menyalip tawaran kita.
+    if (state.bids.length > _lastBidCount) {
+      final newest = state.bids.first;
+      final gotOutbid = newest.type != BidderType.yourBid && state.bids.length > 1 && state.bids[1].type == BidderType.yourBid;
 
-                const SizedBox(height: AppSpacings.xl),
-              ],
-            ),
+      if (gotOutbid) {
+        AppToast.show(
+          'Tawaran Anda disalip ${newest.bidderName} — ${_rp(newest.amount)}',
+          type: AppToastType.error,
+        );
+      }
+    }
+    _lastBidCount = state.bids.length;
+
+    if (state.status == LiveAuctionStatus.ended && state.winningBid != null) {
+      AppToast.show(
+        'Lelang berakhir. Pemenang: ${state.winningBid!.bidderName} — ${_rp(state.winningBid!.amount)}',
+        duration: const Duration(seconds: 3),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<LiveAuctionBloc, LiveAuctionState>(
+      listener: _handleSideEffects,
+      builder: (context, state) {
+        return AppScaffoldWrapper(
+          backgroundColor: AppColors.neutral50,
+          appBar: AppPageBar(
+            onBack: () => context.pop(),
+            title: 'Live Auction',
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: AppSpacings.md),
+                child: Center(child: _ConnectionStatusChip(state: state)),
+              ),
+            ],
           ),
-          const _BottomCTA(lot: 15),
+          body: Column(
+            children: [
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: [
+                    // ── Lokasi + viewer count ────────────────────
+                    _LokasiBar(
+                      lokasi: 'Mega Finance Fatmawati',
+                      viewerCount: state.viewerCount,
+                    ),
+
+                    // ── Lot + nama ──────────────────────────────
+                    const _LotHeader(
+                      lot: 15,
+                      nama: 'DAIHATSU GRAND MAX BV - 1.3',
+                      tahun: 'Tahun 2021',
+                    ),
+
+                    const SizedBox(height: AppSpacings.xs),
+
+                    // ── Main card ───────────────────────────────
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+                      child: _MainInfoCard(state: state),
+                    ),
+
+                    const SizedBox(height: AppSpacings.lg),
+
+                    // ── Penawaran Saat Ini ───────────────────────
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const AppText(
+                                'Penawaran Saat Ini',
+                                variant: AppTextVariant.titleSmall,
+                                fontWeight: FontWeight.w700,
+                              ),
+                              if (state.isLive) const LiveBadge(),
+                            ],
+                          ),
+                          const SizedBox(height: AppSpacings.sm),
+                          state.status == LiveAuctionStatus.connecting ? const _BidTableSkeleton() : _BidTable(bids: state.bids),
+                          if (state.status == LiveAuctionStatus.endingSoon && state.endingInSeconds != null) ...[
+                            const SizedBox(height: AppSpacings.sm),
+                            _EndingSoonBanner(secondsLeft: state.endingInSeconds!),
+                          ],
+                        ],
+                      ),
+                    ),
+
+                    const SizedBox(height: AppSpacings.xl),
+                  ],
+                ),
+              ),
+              _BottomCTA(lot: state.lot == 0 ? 15 : state.lot, state: state),
+            ],
+          ),
+        );
+      },
+    );
+  }
+}
+
+// ─── Connection status chip ─────────────────────────────────────────────────
+
+class _ConnectionStatusChip extends StatelessWidget {
+  final LiveAuctionState state;
+
+  const _ConnectionStatusChip({required this.state});
+
+  @override
+  Widget build(BuildContext context) {
+    late final String label;
+    late final Color color;
+
+    switch (state.connectionStatus) {
+      case SocketConnectionStatus.connecting:
+        label = 'Menghubungkan…';
+        color = AppColors.neutral400;
+      case SocketConnectionStatus.reconnecting:
+        label = 'Menghubungkan ulang…';
+        color = AppColors.warning500;
+      case SocketConnectionStatus.connected:
+        label = state.status == LiveAuctionStatus.ended ? 'Berakhir' : 'Terhubung';
+        color = state.status == LiveAuctionStatus.ended ? AppColors.neutral400 : AppColors.success500;
+      case SocketConnectionStatus.disconnected:
+        label = 'Terputus';
+        color = AppColors.error500;
+    }
+
+    return AppBadge(
+      label: label,
+      backgroundColor: color.withOpacity(0.12),
+      textColor: color,
+    );
+  }
+}
+
+// ─── Ending soon banner ──────────────────────────────────────────────────────
+
+class _EndingSoonBanner extends StatelessWidget {
+  final int secondsLeft;
+
+  const _EndingSoonBanner({required this.secondsLeft});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacings.md,
+        vertical: AppSpacings.sm,
+      ),
+      decoration: BoxDecoration(
+        color: AppColors.warning500.withOpacity(0.12),
+        borderRadius: BorderRadius.circular(RadiusTokens.md),
+      ),
+      child: Row(
+        children: [
+          const Icon(
+            Icons.timer_outlined,
+            size: 18,
+            color: AppColors.warning500,
+          ),
+          const SizedBox(width: 6),
+          AppText(
+            'Lelang akan segera berakhir dalam $secondsLeft detik',
+            variant: AppTextVariant.bodySmall,
+            color: AppColors.warning500,
+            fontWeight: FontWeight.w600,
+          ),
         ],
       ),
     );
@@ -101,18 +242,39 @@ class LiveAuctionPage extends StatelessWidget {
 
 class _LokasiBar extends StatelessWidget {
   final String lokasi;
+  final int viewerCount;
 
-  const _LokasiBar({required this.lokasi});
+  const _LokasiBar({required this.lokasi, required this.viewerCount});
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(AppSpacings.md, AppSpacings.md, AppSpacings.md, AppSpacings.xs),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacings.md,
+        AppSpacings.md,
+        AppSpacings.md,
+        AppSpacings.xs,
+      ),
       child: Row(
         children: [
-          const Icon(Icons.location_on_outlined, size: 18, color: AppColors.textSecondary),
+          const Icon(
+            Icons.location_on_outlined,
+            size: 18,
+            color: AppColors.textSecondary,
+          ),
           const SizedBox(width: 4),
-          AppText(lokasi, color: AppColors.textSecondary),
+          Expanded(child: AppText(lokasi, color: AppColors.textSecondary)),
+          const Icon(
+            Icons.visibility_outlined,
+            size: 16,
+            color: AppColors.textSecondary,
+          ),
+          const SizedBox(width: 4),
+          AppText(
+            '$viewerCount menonton',
+            variant: AppTextVariant.bodySmall,
+            color: AppColors.textSecondary,
+          ),
         ],
       ),
     );
@@ -126,29 +288,65 @@ class _LotHeader extends StatelessWidget {
   final String nama;
   final String tahun;
 
-  const _LotHeader({required this.lot, required this.nama, required this.tahun});
+  const _LotHeader({
+    required this.lot,
+    required this.nama,
+    required this.tahun,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md, vertical: AppSpacings.sm),
+      padding: const EdgeInsets.fromLTRB(
+        AppSpacings.md,
+        AppSpacings.sm,
+        AppSpacings.md,
+        AppSpacings.sm,
+      ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          // LOT
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md, vertical: AppSpacings.sm),
-            decoration: BoxDecoration(
-              color: AppColors.primary500,
-              borderRadius: BorderRadius.circular(RadiusTokens.full),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 14,
+              vertical: 9,
             ),
-            child: AppText('Lot $lot', variant: AppTextVariant.labelLarge, fontWeight: FontWeight.w700, color: AppColors.white),
+            decoration: const BoxDecoration(
+              color: AppColors.primary500,
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(18),
+                bottomRight: Radius.circular(18),
+              ),
+            ),
+            child: AppText(
+              'Lot $lot',
+              variant: AppTextVariant.labelLarge,
+              fontWeight: FontWeight.w700,
+              color: AppColors.white,
+            ),
           ),
-          const SizedBox(width: AppSpacings.sm),
+
+          const SizedBox(width: 10),
+
+          // NAMA + TAHUN
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppText(nama, variant: AppTextVariant.titleSmall, fontWeight: FontWeight.w700),
-                AppText(tahun, variant: AppTextVariant.bodySmall, color: AppColors.textSecondary),
+                AppText(
+                  nama,
+                  variant: AppTextVariant.titleSmall,
+                  fontWeight: FontWeight.w700,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 2),
+                AppText(
+                  tahun,
+                  variant: AppTextVariant.bodySmall,
+                  fontWeight: FontWeight.w600,
+                ),
               ],
             ),
           ),
@@ -161,83 +359,190 @@ class _LotHeader extends StatelessWidget {
 // ─── Main info card ───────────────────────────────────────────────────────────
 
 class _MainInfoCard extends StatelessWidget {
+  final LiveAuctionState state;
+
+  const _MainInfoCard({
+    required this.state,
+  });
+
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Baris atas
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Container(
-                height: 160,
-                decoration: BoxDecoration(
-                  color: AppColors.neutral200,
-                  borderRadius: BorderRadius.circular(RadiusTokens.lg),
-                ),
-                child: const Center(
-                  child: Icon(Icons.directions_car_rounded, size: 56, color: AppColors.neutral400),
-                ),
-              ),
-            ),
-            const SizedBox(width: AppSpacings.sm),
-            Expanded(child: _specCard()),
-          ],
+        // ============================================================
+        // LEFT COLUMN
+        // ============================================================
+        Expanded(
+          flex: 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _vehicleImage(),
+
+              const SizedBox(height: 8),
+
+              _priceCard(state),
+            ],
+          ),
         ),
 
-        const SizedBox(height: AppSpacings.sm),
+        const SizedBox(width: 10),
 
-        // Baris bawah
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(child: _priceCard()),
-            const SizedBox(width: AppSpacings.sm),
-            Expanded(child: _gradeCard()),
-          ],
+        // ============================================================
+        // RIGHT COLUMN
+        // ============================================================
+        Expanded(
+          flex: 5,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _specCard(),
+
+              const SizedBox(height: 10),
+
+              _gradeCard(),
+            ],
+          ),
         ),
       ],
     );
   }
 
+  Widget _vehicleImage() {
+    return Container(
+      height: 115,
+      decoration: BoxDecoration(
+        color: AppColors.neutral200,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: const Center(
+        child: Icon(
+          Icons.directions_car_rounded,
+          size: 48,
+          color: AppColors.neutral400,
+        ),
+      ),
+    );
+  }
+
   Widget _specCard() {
     return Container(
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.fromLTRB(
+        10,
+        0,
+        10,
+        8,
+      ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
-        border: Border.all(color: AppColors.neutral200),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.neutral200,
+        ),
       ),
-      child: const Column(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText('Spesifikasi Kendaraan', variant: AppTextVariant.labelMedium, fontWeight: FontWeight.w700),
-          SizedBox(height: AppSpacings.sm),
-          _SpecItem(label: 'No. Polisi', value: 'BK8769ET'),
-          _SpecItem(label: 'Kilometer', value: '142.524 KM'),
-          _SpecItem(label: 'Masa Berlaku STNK', value: '27 Mei 2026'),
+          // TITLE
+          Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(
+              vertical: 8,
+            ),
+            decoration: const BoxDecoration(
+              border: Border(
+                bottom: BorderSide(
+                  color: AppColors.neutral200,
+                ),
+              ),
+            ),
+            child: const AppText(
+              'Spesifikasi Kendaraan',
+              variant: AppTextVariant.labelMedium,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+
+          const SizedBox(height: 8),
+
+          const _SpecItem(
+            label: 'No. Polisi',
+            value: 'BK8769ET',
+          ),
+
+          const _SpecItem(
+            label: 'Kilometer',
+            value: '142.524 KM',
+          ),
+
+          const _SpecItem(
+            label: 'Masa Berlaku STNK',
+            value: '27 Mei 2026',
+          ),
         ],
       ),
     );
   }
 
-  Widget _priceCard() {
+  Widget _priceCard(LiveAuctionState state) {
+    final isConnecting =
+        state.status == LiveAuctionStatus.connecting;
+
     return Container(
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 10,
+        vertical: 8,
+      ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
-        border: Border.all(color: AppColors.neutral200),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.neutral200,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const AppText('Harga Dasar', variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
-          AppText(_rp(106000000), variant: AppTextVariant.titleSmall, fontWeight: FontWeight.w800),
-          const SizedBox(height: AppSpacings.sm),
-          const AppText('Harga Penawaran Sekarang', variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
-          AppText(_rp(106000000), variant: AppTextVariant.titleSmall, fontWeight: FontWeight.w800),
+          const AppText(
+            'Harga Dasar',
+            variant: AppTextVariant.labelSmall,
+            color: AppColors.textSecondary,
+          ),
+
+          const SizedBox(height: 2),
+
+          isConnecting
+              ? const SkeletonText(
+            width: 120,
+            height: 20,
+          )
+              : AppText(
+            _rp(state.basePrice),
+            variant: AppTextVariant.titleSmall,
+            fontWeight: FontWeight.w800,
+          ),
+
+          const SizedBox(height: 6),
+
+          const AppText(
+            'Harga Penawaran Sekarang',
+            variant: AppTextVariant.labelSmall,
+            color: AppColors.textSecondary,
+          ),
+
+          const SizedBox(height: 2),
+
+          isConnecting
+              ? const SkeletonText(
+            width: 120,
+            height: 20,
+          )
+              : AppText(
+            _rp(state.currentPrice),
+            variant: AppTextVariant.titleSmall,
+            fontWeight: FontWeight.w800,
+          ),
         ],
       ),
     );
@@ -245,25 +550,52 @@ class _MainInfoCard extends StatelessWidget {
 
   Widget _gradeCard() {
     return Container(
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: 2,
+      ),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
-        border: Border.all(color: AppColors.neutral200),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.neutral200,
+        ),
       ),
       child: const Column(
         children: [
           Row(
             children: [
-              Expanded(child: _GradeItem(label: 'Interior', value: 'A')),
-              Expanded(child: _GradeItem(label: 'Rangka', value: 'B')),
+              Expanded(
+                child: _GradeItem(
+                  label: 'Interior',
+                  value: 'A',
+                ),
+              ),
+              Expanded(
+                child: _GradeItem(
+                  label: 'Rangka',
+                  value: 'B',
+                ),
+              ),
             ],
           ),
-          SizedBox(height: AppSpacings.sm),
+
+          AppSpacer.xs(),
+
           Row(
             children: [
-              Expanded(child: _GradeItem(label: 'Eksterior', value: 'D')),
-              Expanded(child: _GradeItem(label: 'Mesin', value: 'C')),
+              Expanded(
+                child: _GradeItem(
+                  label: 'Eksterior',
+                  value: 'D',
+                ),
+              ),
+              Expanded(
+                child: _GradeItem(
+                  label: 'Mesin',
+                  value: 'C',
+                ),
+              ),
             ],
           ),
         ],
@@ -278,17 +610,31 @@ class _SpecItem extends StatelessWidget {
   final String label;
   final String value;
 
-  const _SpecItem({required this.label, required this.value});
+  const _SpecItem({
+    required this.label,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacings.sm),
+      padding: const EdgeInsets.only(
+        bottom: 5,
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AppText(label, variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
-          AppText(value, variant: AppTextVariant.labelLarge, fontWeight: FontWeight.w700),
+          AppText(
+            label,
+            variant: AppTextVariant.labelSmall,
+            color: AppColors.textSecondary,
+          ),
+          const SizedBox(height: 1),
+          AppText(
+            value,
+            variant: AppTextVariant.labelLarge,
+            fontWeight: FontWeight.w700,
+          ),
         ],
       ),
     );
@@ -301,43 +647,40 @@ class _GradeItem extends StatelessWidget {
   final String label;
   final String value;
 
-  const _GradeItem({required this.label, required this.value});
+  const _GradeItem({
+    required this.label,
+    required this.value,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        AppText(label, variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
-        const SizedBox(width: 6),
-        AppText(value, variant: AppTextVariant.titleSmall, fontWeight: FontWeight.w800),
+        const AppSpacer.xs(horizontal: true,),
+        AppText(
+          label,
+          variant: AppTextVariant.labelSmall,
+          color: AppColors.textSecondary,
+        ),
+
+        const Spacer(),
+
+        AppText(
+          value,
+          variant: AppTextVariant.labelLarge,
+          fontWeight: FontWeight.w800,
+        ),
+        const AppSpacer.xs(horizontal: true,),
       ],
     );
   }
 }
 
-// ─── Bid table ────────────────────────────────────────────────────────────────
-//
-// Struktur kolom (3 kolom dengan TableColumnWidth):
-//
-//  ┌─────────────┬──────────────────────┬───────────────┐
-//  │  COUNT      │  Rp106.000.000       │  Online Bidder│  ← header
-//  │  Floor Bidd │                      │               │
-//  │  Online Bid │                      │               │
-//  ├─────────────┼──────────────────────┼───────────────┤
-//  │             │  Rp105.500.000       │  Your Bid     │  ← yourBid row (bg kuning)
-//  ├─────────────┼──────────────────────┼───────────────┤
-//  │             │  Rp105.000.000       │  Online Bidder│
-//  └─────────────┴──────────────────────┴───────────────┘
-//
-// Kolom 0 (lebar tetap 80): COUNT/legend
-// Kolom 1 (flex): nominal
-// Kolom 2 (lebar tetap 90): tipe bidder
+// ─── Bid table skeleton (dipakai saat status connecting) ──────────────────────
 
-class _BidTable extends StatelessWidget {
-  final List<BidEntry> bids;
-
-  const _BidTable({required this.bids});
+class _BidTableSkeleton extends StatelessWidget {
+  const _BidTableSkeleton();
 
   @override
   Widget build(BuildContext context) {
@@ -349,73 +692,256 @@ class _BidTable extends StatelessWidget {
         border: Border.all(color: AppColors.neutral200),
       ),
       child: Column(
+        children: List.generate(
+          4,
+          (i) => const Padding(
+            padding: EdgeInsets.only(bottom: AppSpacings.sm),
+            child: Row(
+              children: [
+                Expanded(flex: 2, child: SkeletonText(height: 14)),
+                SizedBox(width: AppSpacings.sm),
+                Expanded(flex: 3, child: SkeletonText(height: 14)),
+                SizedBox(width: AppSpacings.sm),
+                Expanded(flex: 2, child: SkeletonText(height: 14)),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// ─── Bid table ────────────────────────────────────────────────────────────────
+
+class _BidTable extends StatelessWidget {
+  final List<BidEntry> bids;
+
+  const _BidTable({
+    required this.bids,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    if (bids.isEmpty) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(AppSpacings.lg),
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: AppColors.neutral200,
+          ),
+        ),
+        child: const Center(
+          child: AppText(
+            'Belum ada penawaran',
+            color: AppColors.textSecondary,
+          ),
+        ),
+      );
+    }
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: AppColors.neutral200,
+        ),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(16),
+        child: Column(
+          children: [
+            // Semua bid menggunakan row yang sama
+            ...bids.take(5).toList().asMap().entries.map(
+                  (entry) {
+                final index = entry.key;
+                final bid = entry.value;
+
+                return _BidRow(
+                  bid: bid,
+                  isFirst: index == 0,
+                  isLast: index == bids.take(5).length - 1,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _BidRow extends StatelessWidget {
+  final BidEntry bid;
+  final bool isFirst;
+  final bool isLast;
+
+  const _BidRow({
+    required this.bid,
+    required this.isFirst,
+    required this.isLast,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isYourBid = bid.type == BidderType.yourBid;
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        border: !isLast
+            ? const Border(
+          bottom: BorderSide(
+            color: AppColors.neutral200,
+            width: 1,
+          ),
+        )
+            : null,
+      ),
+      child: Row(
         children: [
-          // Header
-          Row(
-            children: [
-              const Expanded(
-                flex: 2,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    AppText('COUNT', variant: AppTextVariant.labelMedium, fontWeight: FontWeight.w700),
-                    SizedBox(height: 4),
-                    AppText('Floor Bidder', variant: AppTextVariant.bodySmall),
-                    AppText('Online Bidder', variant: AppTextVariant.bodySmall),
-                  ],
-                ),
+          // ============================================================
+          // COUNT
+          // Tetap putih, tidak ikut background Your Bid
+          // ============================================================
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 10,
               ),
-              Expanded(
-                flex: 3,
-                child: AppText(_rp(bids.first.amount), variant: AppTextVariant.titleSmall, fontWeight: FontWeight.w800),
+              child: AppText(
+                isFirst ? 'COUNT' : '',
+                variant: AppTextVariant.labelMedium,
+                fontWeight: FontWeight.w700,
               ),
-              const Expanded(
-                flex: 2,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: AppText('Online Bidder', variant: AppTextVariant.bodySmall),
-                ),
-              ),
-            ],
+            ),
           ),
 
-          const SizedBox(height: AppSpacings.sm),
-
-          // List bid
-          ...bids.skip(1).map((bid) {
-            final isYourBid = bid.type == BidderType.yourBid;
-
-            return Container(
-              margin: const EdgeInsets.only(bottom: AppSpacings.sm),
+          // ============================================================
+          // BID + BIDDER
+          // Background Your Bid hanya di area ini
+          // ============================================================
+          Expanded(
+            flex: 5,
+            child: Container(
+              color: isYourBid
+                  ? const Color(0xFFF8F1E9)
+                  : AppColors.white,
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacings.sm,
-                vertical: AppSpacings.sm,
-              ),
-              decoration: BoxDecoration(
-                color: isYourBid ? const Color(0xFFF7F0E7) : AppColors.white,
-                borderRadius: BorderRadius.circular(RadiusTokens.md),
+                horizontal: 8,
+                vertical: 10,
               ),
               child: Row(
                 children: [
-                  const Spacer(flex: 2),
+                  // NOMINAL
                   Expanded(
                     flex: 3,
-                    child: AppText(_rp(bid.amount), variant: AppTextVariant.labelLarge, fontWeight: FontWeight.w700),
+                    child: AppText(
+                      _rp(bid.amount),
+                      variant: AppTextVariant.labelLarge,
+                      fontWeight: isFirst
+                          ? FontWeight.w800
+                          : FontWeight.w700,
+                    ),
                   ),
+
+                  // BIDDER
                   Expanded(
                     flex: 2,
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: AppText(
-                        isYourBid ? 'Your Bid' : 'Online Bidder',
+                        isYourBid
+                            ? 'Your Bid'
+                            : 'Online Bidder',
                         variant: AppTextVariant.bodySmall,
                       ),
                     ),
                   ),
                 ],
               ),
-            );
-          }),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+
+class _BidHistoryRow extends StatelessWidget {
+  final BidEntry bid;
+  final bool isLast;
+
+  const _BidHistoryRow({
+    required this.bid,
+    required this.isLast,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isYourBid = bid.type == BidderType.yourBid;
+
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: isYourBid
+            ? const Color(0xFFF8F1E9)
+            : AppColors.white,
+        border: isLast
+            ? null
+            : const Border(
+          top: BorderSide(
+            color: AppColors.neutral200,
+            width: 1,
+          ),
+        ),
+      ),
+      padding: const EdgeInsets.symmetric(
+        horizontal: 14,
+        vertical: 10,
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          // LEFT EMPTY SPACE
+          const Expanded(
+            flex: 2,
+            child: SizedBox(),
+          ),
+
+          // BID AMOUNT
+          Expanded(
+            flex: 3,
+            child: AppText(
+              _rp(bid.amount),
+              variant: AppTextVariant.labelLarge,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+
+          // BIDDER
+          Expanded(
+            flex: 2,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: AppText(
+                isYourBid
+                    ? 'Your Bid'
+                    : 'Online Bidder',
+                variant: AppTextVariant.bodySmall,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
+
         ],
       ),
     );
@@ -425,11 +951,19 @@ class _BidTable extends StatelessWidget {
 
 class _BottomCTA extends StatelessWidget {
   final int lot;
+  final LiveAuctionState state;
 
-  const _BottomCTA({required this.lot});
+  const _BottomCTA({required this.lot, required this.state});
 
   @override
   Widget build(BuildContext context) {
+    final canBid = state.isLive && !state.isPlacingBid;
+    final label = state.status == LiveAuctionStatus.ended
+        ? 'Lelang Berakhir'
+        : state.status == LiveAuctionStatus.connecting
+            ? 'Menghubungkan…'
+            : 'Tawar ${_rp(state.nextBidAmount)}';
+
     return Container(
       color: AppColors.white,
       padding: const EdgeInsets.fromLTRB(
@@ -439,10 +973,15 @@ class _BottomCTA extends StatelessWidget {
         AppSpacings.lg,
       ),
       child: AppButton(
-        label: 'Tawar Lot $lot',
+        label: label,
         size: AppButtonSize.large,
         borderRadius: RadiusTokens.full,
-        onPressed: () {},
+        isLoading: state.isPlacingBid,
+        onPressed: canBid
+            ? () => context.read<LiveAuctionBloc>().add(
+                  LiveAuctionBidPlaced(amount: state.nextBidAmount),
+                )
+            : null,
       ),
     );
   }

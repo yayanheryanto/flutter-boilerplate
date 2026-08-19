@@ -30,6 +30,10 @@ import '../../features/auth/domain/usecases/auth/login_usecase.dart' as _i985;
 import '../../features/auth/domain/usecases/auth/logout_usecase.dart' as _i726;
 import '../../features/auth/domain/usecases/auth/register_usecase.dart' as _i47;
 import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
+import '../../features/dashboard/data/datasources/live_auction_socket_datasource.dart'
+    as _i702;
+import '../../features/dashboard/presentation/bloc/live_auction/live_auction_bloc.dart'
+    as _i899;
 import '../bloc/notification_bloc.dart' as _i1015;
 import '../firebase/firebase_services.dart' as _i454;
 import '../firebase/notification_service.dart' as _i650;
@@ -42,6 +46,8 @@ import '../services/camera_service.dart' as _i860;
 import '../services/connectivity_service.dart' as _i47;
 import '../services/file_picker_service.dart' as _i108;
 import '../services/permission_service.dart' as _i165;
+import '../services/socket/app_socket_service.dart' as _i145;
+import '../services/socket/dummy_socket_service.dart' as _i436;
 import '../services/token_service.dart' as _i227;
 import 'app_module.dart' as _i460;
 
@@ -73,6 +79,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i992.HiveAuthLocalDataSource());
     gh.lazySingleton<_i454.AnalyticsService>(
         () => _i454.FirebaseAnalyticsService());
+    gh.lazySingleton<_i145.AppSocketService>(() => _i436.DummySocketService());
     gh.lazySingleton<_i454.RemoteConfigService>(
         () => _i454.FirebaseRemoteConfigService());
     gh.lazySingleton<_i227.TokenService>(() => _i227.HiveTokenService());
@@ -84,8 +91,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i745.AuthInterceptor(gh<_i227.TokenService>()));
     gh.lazySingleton<_i47.ConnectivityService>(
         () => _i47.ConnectivityServiceImpl(gh<_i895.Connectivity>()));
+    gh.factory<_i702.LiveAuctionSocketDataSource>(() =>
+        _i702.LiveAuctionSocketDataSourceImpl(gh<_i145.AppSocketService>()));
     gh.factory<_i1015.NotificationBloc>(
         () => _i1015.NotificationBloc(gh<_i650.NotificationService>()));
+    gh.factory<_i899.LiveAuctionBloc>(
+        () => _i899.LiveAuctionBloc(gh<_i702.LiveAuctionSocketDataSource>()));
     gh.singleton<_i667.DioClient>(() => _i667.DioClient(
           gh<_i745.AuthInterceptor>(),
           gh<_i344.LoggingInterceptor>(),
