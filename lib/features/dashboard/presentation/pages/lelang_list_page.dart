@@ -270,7 +270,7 @@ class _LelangListPageState extends State<LelangListPage> {
                     itemCount: items.length,
                     itemBuilder: (context, index) => _LelangGridCard(
                       data: items[index],
-                      onTap: () async => context.push(AppRoutes.liveAuction),
+                      onTap: () async => context.push(AppRoutes.lelangDetail),
                     ),
                   ),
           ),

@@ -154,13 +154,10 @@ class _IkutLelangPageState extends State<IkutLelangPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                GestureDetector(
-                  onTap: () async => context.push(AppRoutes.lelangList),
-                  child: const AppText(
-                    'Sedang Berlangsung',
-                    variant: AppTextVariant.titleSmall,
-                    fontWeight: FontWeight.w600,
-                  ),
+                const AppText(
+                  'Sedang Berlangsung',
+                  variant: AppTextVariant.titleSmall,
+                  fontWeight: FontWeight.w600,
                 ),
                 const AppSpacer.md(),
                 ..._dummySedangBerlangsung.map(
@@ -256,7 +253,7 @@ class _CategoryChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final icon = _categoryIcons[category] ?? Icons.category_rounded;
     final iconColor = _categoryIconColors[category] ?? AppColors.primary500;
-    final bgColor = _categoryIconBg[category] ?? AppColors.neutral100;
+    // final bgColor = _categoryIconBg[category] ?? AppColors.neutral100;
 
     return GestureDetector(
       onTap: onTap,
@@ -265,7 +262,7 @@ class _CategoryChip extends StatelessWidget {
         width: 88,
         padding: const EdgeInsets.symmetric(vertical: AppSpacings.sm),
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: isSelected ? AppColors.primary500.withOpacity(0.08) : AppColors.white,
           borderRadius: BorderRadius.circular(RadiusTokens.md),
           border: Border.all(
             color: isSelected ? AppColors.primary500 : AppColors.neutral200,
@@ -279,7 +276,7 @@ class _CategoryChip extends StatelessWidget {
               width: 52,
               height: 44,
               decoration: BoxDecoration(
-                color: bgColor,
+                // color: bgColor,
                 borderRadius: BorderRadius.circular(RadiusTokens.sm),
               ),
               child: Center(
@@ -301,80 +298,112 @@ class _CategoryChip extends StatelessWidget {
 }
 
 // ─── Lelang List Card ─────────────────────────────────────────────────────────
-
 class _LelangListCard extends StatelessWidget {
   final _LelangItem item;
 
-  const _LelangListCard({required this.item});
+  const _LelangListCard({
+    required this.item,
+  });
 
   @override
   Widget build(BuildContext context) {
-    final icon = _categoryIcons[item.category] ?? Icons.category_rounded;
-    final iconColor = _categoryIconColors[item.category] ?? AppColors.primary500;
-    final iconBg = _categoryIconBg[item.category] ?? AppColors.neutral100;
+    final icon =
+        _categoryIcons[item.category] ?? Icons.category_rounded;
+
+    final iconColor =
+        _categoryIconColors[item.category] ?? AppColors.primary500;
 
     return Container(
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(RadiusTokens.lg),
-        border: Border.all(color: AppColors.neutral200),
+        border: Border.all(
+          color: AppColors.neutral200,
+        ),
       ),
-      clipBehavior: Clip.antiAlias,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          // ── Row: ikon + info ─────────────────────────────────────────
+          // ===============================================================
+          // CARD CONTENT
+          // ===============================================================
           Padding(
             padding: const EdgeInsets.all(AppSpacings.md),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Thumbnail ikon
-                Container(
+                // =========================================================
+                // THUMBNAIL
+                // =========================================================
+                SizedBox(
                   width: 56,
                   height: 56,
-                  decoration: BoxDecoration(
-                    color: iconBg,
-                    borderRadius: BorderRadius.circular(RadiusTokens.md),
-                  ),
                   child: Center(
-                    child: Icon(icon, color: iconColor, size: 32),
+                    child: Icon(
+                      icon,
+                      color: iconColor,
+                      size: 38,
+                    ),
                   ),
                 ),
-                const SizedBox(width: AppSpacings.md),
 
-                // Info teks
+                const SizedBox(
+                  width: AppSpacings.md,
+                ),
+
+                // =========================================================
+                // INFORMATION
+                // =========================================================
                 Expanded(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppText(
                         item.kategori,
-                        variant: AppTextVariant.labelSmall,
-                        color: AppColors.textSecondary,
+                        variant: AppTextVariant.labelMedium,
+                        color: AppColors.textPrimary,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
+
                       const SizedBox(height: 2),
+
                       AppText(
                         item.namaLembaga,
                         variant: AppTextVariant.labelMedium,
                         fontWeight: FontWeight.w600,
+                        color: AppColors.textPrimary,
                         maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
+
                       const SizedBox(height: 4),
+
                       Row(
                         children: [
-                          AppText(
-                            item.tanggal,
-                            variant: AppTextVariant.labelSmall,
-                            color: AppColors.textSecondary,
+                          Flexible(
+                            child: AppText(
+                              item.tanggal,
+                              variant: AppTextVariant.labelMedium,
+                              color: AppColors.textPrimary,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
+
                           const AppText(
                             '  |  ',
-                            variant: AppTextVariant.labelSmall,
-                            color: AppColors.neutral300,
+                            variant: AppTextVariant.labelMedium,
+                            color: AppColors.textPrimary,
                           ),
+
                           AppText(
                             item.jam,
-                            variant: AppTextVariant.labelSmall,
-                            color: AppColors.textSecondary,
+                            variant: AppTextVariant.labelMedium,
+                            color: AppColors.textPrimary,
+                            maxLines: 1,
                           ),
                         ],
                       ),
@@ -385,20 +414,29 @@ class _LelangListCard extends StatelessWidget {
             ),
           ),
 
-          // ── CTA button ───────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacings.md,
-              0,
-              AppSpacings.md,
-              AppSpacings.md,
-            ),
-            child: AppButton(
-              label: 'Live Auction',
-              size: AppButtonSize.small,
-              onPressed: () async {
-                await context.push(AppRoutes.liveAuction);
+          // ===============================================================
+          // LIVE AUCTION
+          // ===============================================================
+          Material(
+            color: AppColors.primary500,
+            child: InkWell(
+              onTap: () async {
+                await context.push(
+                  AppRoutes.liveAuction,
+                );
               },
+              child: const SizedBox(
+                width: double.infinity,
+                height: 34,
+                child: Center(
+                  child: AppText(
+                    'Live Auction',
+                    variant: AppTextVariant.labelMedium,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textPrimary,
+                  ),
+                ),
+              ),
             ),
           ),
         ],

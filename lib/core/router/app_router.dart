@@ -18,6 +18,7 @@ import 'package:emas/features/auth/presentation/pages/verification_preparation_p
 import 'package:emas/features/dashboard/presentation/pages/beli_npl_confirmation_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/beli_npl_detail_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/ikut_lelang_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/lelang_detail_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/lelang_list_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/live_auction_page.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -200,6 +201,11 @@ class AppRouter {
           path: AppRoutes.lelangList,
           name: 'lelang-list',
           builder: (context, state) => const LelangListPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.lelangDetail,
+          name: 'lelang-detail',
+          builder: (context, state) => const LelangDetailPage(),
         ),
         GoRoute(
           path: AppRoutes.liveAuction,

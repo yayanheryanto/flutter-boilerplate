@@ -1,3 +1,4 @@
+import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
 import 'package:emas/shared/widgets/design_system.dart';
@@ -53,12 +54,7 @@ class _CategoryItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
-        await context.pushNamed(
-          'category-detail',
-          pathParameters: {
-            'slug': category.slug,
-          },
-        );
+        await context.pgush(AppRoutes.lelangList);
       },
       child: SizedBox(
         width: 82,

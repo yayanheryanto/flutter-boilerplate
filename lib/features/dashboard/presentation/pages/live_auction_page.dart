@@ -260,10 +260,16 @@ class _LokasiBar extends StatelessWidget {
           const Icon(
             Icons.location_on_outlined,
             size: 18,
-            color: AppColors.textSecondary,
+            color: AppColors.textPrimary,
           ),
           const SizedBox(width: 4),
-          Expanded(child: AppText(lokasi, color: AppColors.textSecondary)),
+          Expanded(
+            child: AppText(
+              lokasi,
+              color: AppColors.textPrimary,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
           // const Icon(
           //   Icons.visibility_outlined,
           //   size: 16,
@@ -304,7 +310,6 @@ class _LotHeader extends StatelessWidget {
         AppSpacings.sm,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // LOT
           Container(
@@ -346,6 +351,7 @@ class _LotHeader extends StatelessWidget {
                   tahun,
                   variant: AppTextVariant.bodySmall,
                   fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
                 ),
               ],
             ),
@@ -379,9 +385,7 @@ class _MainInfoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _vehicleImage(),
-
               const SizedBox(height: 8),
-
               _priceCard(state),
             ],
           ),
@@ -398,9 +402,7 @@ class _MainInfoCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               _specCard(),
-
               const SizedBox(height: 10),
-
               _gradeCard(),
             ],
           ),
@@ -486,8 +488,7 @@ class _MainInfoCard extends StatelessWidget {
   }
 
   Widget _priceCard(LiveAuctionState state) {
-    final isConnecting =
-        state.status == LiveAuctionStatus.connecting;
+    final isConnecting = state.status == LiveAuctionStatus.connecting;
 
     return Container(
       padding: const EdgeInsets.symmetric(
@@ -507,42 +508,36 @@ class _MainInfoCard extends StatelessWidget {
           const AppText(
             'Harga Dasar',
             variant: AppTextVariant.labelSmall,
-            color: AppColors.textSecondary,
+            color: AppColors.textPrimary,
           ),
-
           const SizedBox(height: 2),
-
           isConnecting
               ? const SkeletonText(
-            width: 120,
-            height: 20,
-          )
+                  width: 120,
+                  height: 20,
+                )
               : AppText(
-            _rp(state.basePrice),
-            variant: AppTextVariant.titleSmall,
-            fontWeight: FontWeight.w800,
-          ),
-
+                  _rp(state.basePrice),
+                  variant: AppTextVariant.titleSmall,
+                  fontWeight: FontWeight.w800,
+                ),
           const SizedBox(height: 6),
-
           const AppText(
             'Harga Penawaran Sekarang',
             variant: AppTextVariant.labelSmall,
-            color: AppColors.textSecondary,
+            color: AppColors.textPrimary,
           ),
-
           const SizedBox(height: 2),
-
           isConnecting
               ? const SkeletonText(
-            width: 120,
-            height: 20,
-          )
+                  width: 120,
+                  height: 20,
+                )
               : AppText(
-            _rp(state.currentPrice),
-            variant: AppTextVariant.titleSmall,
-            fontWeight: FontWeight.w800,
-          ),
+                  _rp(state.currentPrice),
+                  variant: AppTextVariant.titleSmall,
+                  fontWeight: FontWeight.w800,
+                ),
         ],
       ),
     );
@@ -579,9 +574,7 @@ class _MainInfoCard extends StatelessWidget {
               ),
             ],
           ),
-
           AppSpacer.xs(),
-
           Row(
             children: [
               Expanded(
@@ -627,7 +620,7 @@ class _SpecItem extends StatelessWidget {
           AppText(
             label,
             variant: AppTextVariant.labelSmall,
-            color: AppColors.textSecondary,
+            color: AppColors.textPrimary,
           ),
           const SizedBox(height: 1),
           AppText(
@@ -655,23 +648,24 @@ class _GradeItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        const AppSpacer.xs(horizontal: true,),
+        const AppSpacer.xs(
+          horizontal: true,
+        ),
         AppText(
           label,
           variant: AppTextVariant.labelSmall,
-          color: AppColors.textSecondary,
+          color: AppColors.textPrimary,
         ),
-
         const Spacer(),
-
         AppText(
           value,
           variant: AppTextVariant.labelLarge,
           fontWeight: FontWeight.w800,
         ),
-        const AppSpacer.xs(horizontal: true,),
+        const AppSpacer.xs(
+          horizontal: true,
+        ),
       ],
     );
   }
@@ -758,7 +752,7 @@ class _BidTable extends StatelessWidget {
           children: [
             // Semua bid menggunakan row yang sama
             ...bids.take(5).toList().asMap().entries.map(
-                  (entry) {
+              (entry) {
                 final index = entry.key;
                 final bid = entry.value;
 
@@ -796,11 +790,10 @@ class _BidRow extends StatelessWidget {
       decoration: BoxDecoration(
         border: !isLast
             ? const Border(
-          bottom: BorderSide(
-            color: AppColors.neutral200,
-            width: 1,
-          ),
-        )
+                bottom: BorderSide(
+                  color: AppColors.neutral200,
+                ),
+              )
             : null,
       ),
       child: Row(
@@ -831,9 +824,7 @@ class _BidRow extends StatelessWidget {
           Expanded(
             flex: 5,
             child: Container(
-              color: isYourBid
-                  ? const Color(0xFFF8F1E9)
-                  : AppColors.white,
+              color: isYourBid ? const Color(0xFFF8F1E9) : AppColors.white,
               padding: const EdgeInsets.symmetric(
                 horizontal: 8,
                 vertical: 10,
@@ -846,9 +837,7 @@ class _BidRow extends StatelessWidget {
                     child: AppText(
                       _rp(bid.amount),
                       variant: AppTextVariant.labelLarge,
-                      fontWeight: isFirst
-                          ? FontWeight.w800
-                          : FontWeight.w700,
+                      fontWeight: isFirst ? FontWeight.w800 : FontWeight.w700,
                     ),
                   ),
 
@@ -858,10 +847,9 @@ class _BidRow extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerRight,
                       child: AppText(
-                        isYourBid
-                            ? 'Your Bid'
-                            : 'Online Bidder',
+                        isYourBid ? 'Your Bid' : 'Online Bidder',
                         variant: AppTextVariant.bodySmall,
+                        color: AppColors.textPrimary,
                       ),
                     ),
                   ),
@@ -874,7 +862,6 @@ class _BidRow extends StatelessWidget {
     );
   }
 }
-
 
 class _BidHistoryRow extends StatelessWidget {
   final BidEntry bid;
@@ -892,24 +879,20 @@ class _BidHistoryRow extends StatelessWidget {
     return Container(
       width: double.infinity,
       decoration: BoxDecoration(
-        color: isYourBid
-            ? const Color(0xFFF8F1E9)
-            : AppColors.white,
+        color: isYourBid ? const Color(0xFFF8F1E9) : AppColors.white,
         border: isLast
             ? null
             : const Border(
-          top: BorderSide(
-            color: AppColors.neutral200,
-            width: 1,
-          ),
-        ),
+                top: BorderSide(
+                  color: AppColors.neutral200,
+                ),
+              ),
       ),
       padding: const EdgeInsets.symmetric(
         horizontal: 14,
         vertical: 10,
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           // LEFT EMPTY SPACE
           const Expanded(
@@ -933,15 +916,12 @@ class _BidHistoryRow extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerRight,
               child: AppText(
-                isYourBid
-                    ? 'Your Bid'
-                    : 'Online Bidder',
+                isYourBid ? 'Your Bid' : 'Online Bidder',
                 variant: AppTextVariant.bodySmall,
                 color: AppColors.textPrimary,
               ),
             ),
           ),
-
         ],
       ),
     );

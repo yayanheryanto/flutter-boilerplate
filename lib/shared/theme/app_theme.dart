@@ -108,6 +108,7 @@ class AppTheme {
 
   static TextTheme _buildTextTheme(ColorScheme colorScheme) {
     return TextTheme(
+      // ── Display ──────────────────────────────────────────────────────────────
       displayLarge: TextStyle(
         fontSize: TypographyTokens.displayLarge,
         fontWeight: TypographyTokens.bold,
@@ -118,6 +119,13 @@ class AppTheme {
         fontWeight: TypographyTokens.bold,
         color: colorScheme.onSurface,
       ),
+      displaySmall: TextStyle(
+        fontSize: TypographyTokens.displaySmall,
+        fontWeight: TypographyTokens.bold,
+        color: colorScheme.onSurface,
+      ),
+
+      // ── Headline ─────────────────────────────────────────────────────────────
       headlineLarge: TextStyle(
         fontSize: TypographyTokens.headlineLarge,
         fontWeight: TypographyTokens.bold,
@@ -133,6 +141,8 @@ class AppTheme {
         fontWeight: TypographyTokens.semiBold,
         color: colorScheme.onSurface,
       ),
+
+      // ── Title ────────────────────────────────────────────────────────────────
       titleLarge: TextStyle(
         fontSize: TypographyTokens.titleLarge,
         fontWeight: TypographyTokens.semiBold,
@@ -143,6 +153,13 @@ class AppTheme {
         fontWeight: TypographyTokens.medium,
         color: colorScheme.onSurface,
       ),
+      titleSmall: TextStyle(
+        fontSize: TypographyTokens.titleSmall,
+        fontWeight: TypographyTokens.medium,
+        color: colorScheme.onSurface,
+      ),
+
+      // ── Body ─────────────────────────────────────────────────────────────────
       bodyLarge: TextStyle(
         fontSize: TypographyTokens.bodyLarge,
         fontWeight: TypographyTokens.regular,
@@ -158,9 +175,21 @@ class AppTheme {
         fontWeight: TypographyTokens.regular,
         color: colorScheme.onSurface.withOpacity(0.7),
       ),
+
+      // ── Label ────────────────────────────────────────────────────────────────
       labelLarge: TextStyle(
         fontSize: TypographyTokens.labelLarge,
         fontWeight: TypographyTokens.medium,
+        color: colorScheme.onSurface,
+      ),
+      labelMedium: TextStyle(
+        fontSize: TypographyTokens.labelMedium,
+        fontWeight: TypographyTokens.medium,
+        color: colorScheme.onSurface,
+      ),
+      labelSmall: TextStyle(
+        fontSize: TypographyTokens.labelSmall,
+        fontWeight: TypographyTokens.regular,
         color: colorScheme.onSurface,
       ),
     );
