@@ -8,7 +8,8 @@ class AppColors {
   static const Color primary200 = Color(0xFFFFE199);
   static const Color primary300 = Color(0xFFFED470);
   static const Color primary400 = Color(0xFFFCC14A);
-  static const Color primary500 = Color(0xFFF99D1C);
+  // static const Color primary500 = Color(0xFFF99D1C);
+  static const Color primary500 = Color(0xfffdba00);
   static const Color primary600 = Color(0xFFF08F12);
   static const Color primary700 = Color(0xFFE07F0D);
   static const Color primary800 = Color(0xFFCC700A);
@@ -61,4 +62,5 @@ class AppColors {
   static const Color white = Color(0xFFFFFFFF);
   static const Color black = Color(0xFF000000);
   static const Color transparent = Colors.transparent;
+  // static const Color buttonColor = Color(0xfffdba00);
 }

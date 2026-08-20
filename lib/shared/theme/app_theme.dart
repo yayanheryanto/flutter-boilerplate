@@ -188,7 +188,7 @@ class AppTheme {
     return ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
+        foregroundColor: AppColors.textPrimary,
         minimumSize: const Size(double.infinity, 48),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(RadiusTokens.md),
@@ -207,7 +207,7 @@ class AppTheme {
   ) {
     return OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
-        foregroundColor: colorScheme.primary,
+        foregroundColor: AppColors.textPrimary,
         minimumSize: const Size(double.infinity, 48),
         side: BorderSide(color: colorScheme.primary),
         shape: RoundedRectangleBorder(
@@ -225,7 +225,7 @@ class AppTheme {
   static TextButtonThemeData _buildTextButtonTheme(ColorScheme colorScheme) {
     return TextButtonThemeData(
       style: TextButton.styleFrom(
-        foregroundColor: colorScheme.primary,
+        foregroundColor: AppColors.textPrimary,
         textStyle: const TextStyle(
           fontSize: TypographyTokens.labelLarge,
           fontWeight: TypographyTokens.medium,

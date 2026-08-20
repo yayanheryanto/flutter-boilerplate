@@ -4,13 +4,13 @@ import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-var _categoryIcons = {
+final Map<AuctionCategory, String> _categoryIcons = {
   AuctionCategory.mobil: Images.carIcon,
   AuctionCategory.motor: Images.motorcycleIcon,
   AuctionCategory.elektronik: Images.electronicIcon,
 };
 
-const _categories = [
+const List<AuctionCategory> _categories = [
   AuctionCategory.mobil,
   AuctionCategory.motor,
   AuctionCategory.elektronik,
@@ -21,15 +21,20 @@ class CategorySection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: _categories
-          .map(
-            (cat) => _CategoryItem(
-              category: cat,
-            ),
-          )
-          .toList(),
+    return SizedBox(
+      height: 82,
+      width: double.infinity,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: _categories
+            .map(
+              (category) => _CategoryItem(
+                category: category,
+              ),
+            )
+            .toList(),
+      ),
     );
   }
 }
@@ -37,41 +42,56 @@ class CategorySection extends StatelessWidget {
 class _CategoryItem extends StatelessWidget {
   final AuctionCategory category;
 
-  const _CategoryItem({required this.category});
+  const _CategoryItem({
+    required this.category,
+  });
 
   @override
   Widget build(BuildContext context) {
     final String icon = _categoryIcons[category]!;
 
     return GestureDetector(
-      onTap: () async => context.pushNamed(
-        'category-detail',
-        pathParameters: {'slug': category.slug},
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 72,
-            height: 60,
-            decoration: BoxDecoration(
-              color: Colors.grey.shade100,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Center(
-              child: AppImage(src: icon),
-            ),
-          ),
-          const SizedBox(height: 6),
-          AppText(
-            category.label,
-            variant: AppTextVariant.bodySmall,
-            fontWeight: FontWeight.w500,
-            color: Theme.of(context).colorScheme.onSurface.withOpacity(
-                  0.75,
+      behavior: HitTestBehavior.opaque,
+      onTap: () async {
+        await context.pushNamed(
+          'category-detail',
+          pathParameters: {
+            'slug': category.slug,
+          },
+        );
+      },
+      child: SizedBox(
+        width: 82,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // ============================================================
+            // CATEGORY ICON
+            // ============================================================
+            SizedBox(
+              width: 56,
+              height: 46,
+              child: FittedBox(
+                child: AppImage(
+                  src: icon,
                 ),
-          ),
-        ],
+              ),
+            ),
+
+            const SizedBox(height: 5),
+
+            // ============================================================
+            // CATEGORY LABEL
+            // ============================================================
+            AppText(
+              category.label,
+              variant: AppTextVariant.bodySmall,
+              fontWeight: FontWeight.w500,
+              color: Colors.black87,
+              maxLines: 1,
+            ),
+          ],
+        ),
       ),
     );
   }

@@ -7,9 +7,9 @@ import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/bottomsheets/app_bottom_sheet.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:emas/shared/widgets/dropdown/app_dropdown.dart';
 import 'package:emas/shared/widgets/pickers/app_date_picker.dart';
-import 'package:emas/shared/widgets/toast/app_toast.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -57,19 +57,19 @@ class _BuyNplLayoutState extends State<BuyNplLayout> {
 const _categoryIcons = {
   AuctionCategory.mobil: Icons.directions_car_rounded,
   AuctionCategory.motor: Icons.two_wheeler_rounded,
-  AuctionCategory.elektronik: Icons.laptop_rounded,
+  // AuctionCategory.elektronik: Icons.laptop_rounded,
 };
 
 const _categoryIconColors = {
   AuctionCategory.mobil: Color(0xFFF5C842),
   AuctionCategory.motor: Color(0xFFE8834A),
-  AuctionCategory.elektronik: Color(0xFF7B9FD4),
+  // AuctionCategory.elektronik: Color(0xFF7B9FD4),
 };
 
 const _auctionCategories = [
   AuctionCategory.mobil,
   AuctionCategory.motor,
-  AuctionCategory.elektronik,
+  // AuctionCategory.elektronik,
 ];
 
 class _CategorySelector extends StatelessWidget {
@@ -84,28 +84,33 @@ class _CategorySelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: _auctionCategories
-          .map(
-            (cat) => Padding(
-          padding: const EdgeInsets.only(right: AppSpacings.sm),
-          child: _CategoryChip(
-            category: cat,
-            isSelected: cat == selected,
-            onTap: () async {
-              onSelected(cat);
-              final result = await BeliNplBottomSheet.show(
-                context,
-                category: cat,
-              );
-              if (result != null && context.mounted) {
-                await context.push(AppRoutes.beliNplDetail, extra: result);
-              }
-            },
-          ),
-        ),
-      )
-          .toList(),
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: _auctionCategories.asMap().entries.map(
+            (entry) {
+          final index = entry.key;
+          final cat = entry.value;
+          return Padding(
+            padding: EdgeInsets.only(
+              right: index != _auctionCategories.length - 1 ? 16.0 : 0.0,
+            ),
+            child: _CategoryChip(
+              category: cat,
+              isSelected: cat == selected,
+              onTap: () async {
+                onSelected(cat);
+                final result = await BeliNplBottomSheet.show(
+                  context,
+                  category: cat,
+                );
+
+                if (result != null && context.mounted) {
+                  await context.push(AppRoutes.beliNplDetail, extra: result);
+                }
+              },
+            ),
+          );
+        },
+      ).toList(),
     );
   }
 }
@@ -130,37 +135,28 @@ class _CategoryChip extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
-        width: 88,
-        padding: const EdgeInsets.symmetric(vertical: AppSpacings.sm),
+        width: 156, // Disesuaikan agar muat berjajar dua dan berbentuk persegi
+        height: 156,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(RadiusTokens.md),
+          borderRadius: BorderRadius.circular(RadiusTokens.lg ?? 16),
           border: Border.all(
-            // color: isSelected ? AppColors.primary500 : AppColors.neutral200,
             color: AppColors.neutral200,
-            // width: isSelected ? 2 : 1,
+            width: 1,
           ),
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 52,
-              height: 44,
-              decoration: BoxDecoration(
-                // color: bgColor,
-                borderRadius: BorderRadius.circular(RadiusTokens.sm),
-              ),
-              child: Center(
-                child: Icon(icon, color: iconColor, size: 30),
-              ),
-            ),
-            const SizedBox(height: 6),
+            // Catatan: Ganti Icon di bawah ini dengan Image.asset()
+            // jika ilustrasi aslinya merupakan file gambar custom.
+            Icon(icon, color: iconColor, size: 64),
+            const AppSpacer.sm(),
             AppText(
               category.label,
-              variant: AppTextVariant.labelSmall,
-              fontWeight: FontWeight.w500,
-              color: isSelected ? AppColors.textPrimary : AppColors.textSecondary,
+              variant: AppTextVariant.titleSmall,
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
             ),
           ],
         ),
@@ -220,16 +216,6 @@ const _dummyLokasiLelang = [
 
 /// Bottom sheet "Beli NPL" — dipanggil sebelum masuk ke halaman detail NPL,
 /// supaya user set lokasi, tanggal lelang, dan jumlah NPL yang mau dibeli.
-///
-/// ```dart
-/// final result = await BeliNplBottomSheet.show(
-///   context,
-///   category: AuctionCategory.mobil,
-/// );
-/// if (result != null) {
-///   // lanjut ke halaman berikutnya dengan `result`
-/// }
-/// ```
 class BeliNplBottomSheet {
   static Future<BeliNplResult?> show(
       BuildContext context, {
@@ -279,13 +265,13 @@ class _BeliNplFormState extends State<_BeliNplForm> {
   int get _subtotal => widget.hargaPerNpl * _jumlah;
 
   void _incrementJumlah() => setState(() => _jumlah++);
-
   void _decrementJumlah() {
     if (_jumlah <= 1) return;
     setState(() => _jumlah--);
   }
 
   void _submit() async {
+    // Uncomment validasi ini jika lokasi dan tanggal diwajibkan:
     // if (_lokasi == null || _tanggal == null) {
     //   AppToast.show(
     //     'Lengkapi lokasi dan tanggal lelang terlebih dahulu',
@@ -293,7 +279,6 @@ class _BeliNplFormState extends State<_BeliNplForm> {
     //   );
     //   return;
     // }
-
     // Navigator.of(context).pop(
     //   BeliNplResult(
     //     category: widget.category,
@@ -304,7 +289,6 @@ class _BeliNplFormState extends State<_BeliNplForm> {
     //     subtotal: _subtotal,
     //   ),
     // );
-
     await context.push(AppRoutes.beliNplDetail);
   }
 
@@ -348,7 +332,6 @@ class _BeliNplFormState extends State<_BeliNplForm> {
             ),
           ],
         ),
-
         const SizedBox(height: AppSpacings.md),
         const Divider(height: 1, color: AppColors.neutral200),
         const SizedBox(height: AppSpacings.md),
@@ -357,9 +340,7 @@ class _BeliNplFormState extends State<_BeliNplForm> {
         _PriceRow(label: 'Harga per NPL', value: widget.hargaPerNpl),
         const SizedBox(height: AppSpacings.sm),
         _PriceRow(label: 'Subtotal', value: _subtotal, emphasize: true),
-
         const SizedBox(height: AppSpacings.lg),
-
         AppButton(
           label: 'Tambah',
           size: AppButtonSize.large,
@@ -424,7 +405,11 @@ class _StepperButton extends StatelessWidget {
           color: AppColors.neutral100,
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, size: 18, color: AppColors.textPrimary),
+        child: Icon(
+          icon,
+          size: 18,
+          color: AppColors.textPrimary,
+        ),
       ),
     );
   }
@@ -456,7 +441,6 @@ class _PriceRow extends StatelessWidget {
       children: [
         AppText(
           label,
-          variant: AppTextVariant.bodyMedium,
           color: emphasize ? AppColors.textPrimary : AppColors.textSecondary,
           fontWeight: emphasize ? FontWeight.w600 : FontWeight.w400,
         ),

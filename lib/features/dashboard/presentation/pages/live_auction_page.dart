@@ -264,17 +264,17 @@ class _LokasiBar extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           Expanded(child: AppText(lokasi, color: AppColors.textSecondary)),
-          const Icon(
-            Icons.visibility_outlined,
-            size: 16,
-            color: AppColors.textSecondary,
-          ),
-          const SizedBox(width: 4),
-          AppText(
-            '$viewerCount menonton',
-            variant: AppTextVariant.bodySmall,
-            color: AppColors.textSecondary,
-          ),
+          // const Icon(
+          //   Icons.visibility_outlined,
+          //   size: 16,
+          //   color: AppColors.textSecondary,
+          // ),
+          // const SizedBox(width: 4),
+          // AppText(
+          //   '$viewerCount menonton',
+          //   variant: AppTextVariant.bodySmall,
+          //   color: AppColors.textSecondary,
+          // ),
         ],
       ),
     );

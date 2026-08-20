@@ -121,6 +121,7 @@ class _DashboardBottomNav extends StatelessWidget {
   });
 
   @override
+  
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
@@ -156,7 +157,7 @@ class _DashboardBottomNav extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 2),
-                    const SizedBox(height: 24), // ruang FAB
+                    const SizedBox(height: 24),
                     const SizedBox(height: 2),
                     Text(
                       'Ikut Lelang',

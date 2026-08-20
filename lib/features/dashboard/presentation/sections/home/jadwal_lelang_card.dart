@@ -1,5 +1,3 @@
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -7,8 +5,8 @@ import 'package:flutter/material.dart';
 class JadwalLelangData {
   final String itemName;
   final String locationName;
-  final String dateLabel;   // e.g. "12 Jun 2026"
-  final String timeLabel;   // e.g. "10.00"
+  final String dateLabel;
+  final String timeLabel;
   final String image;
   final Color tint;
   final bool isLive;
@@ -27,114 +25,142 @@ class JadwalLelangData {
 class JadwalLelangCard extends StatelessWidget {
   final JadwalLelangData data;
 
-  const JadwalLelangCard({super.key, required this.data});
+  const JadwalLelangCard({
+    super.key,
+    required this.data,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 200,
-      margin: const EdgeInsets.only(right: AppSpacings.sm),
+      width: MediaQuery.of(context).size.width * 0.65,
+      height: 110,
+      margin: const EdgeInsets.only(right: 8),
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: Colors.black.withOpacity(0.08),
+          width: 0.5,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
-            blurRadius: 10,
-            offset: const Offset(0, 3),
+            blurRadius: 8,
+            offset: const Offset(1, 1),
           ),
         ],
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
         children: [
-          // ── Thumbnail ─────────────────────────────────────────────────
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(RadiusTokens.lg),
-            ),
-            child: Container(
-              height: 90,
-              width: double.infinity,
-              color: data.tint,
-              child: Center(
-                child: Text(
-                  data.image,
-                  style: const TextStyle(fontSize: 48),
-                ),
+          SizedBox(
+            height: 80,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 8,
+                vertical: 7,
+              ),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 48,
+                    height: 48,
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Text(
+                        data.image,
+                        style: const TextStyle(
+                          fontSize: 38,
+                          height: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(width: 7),
+
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        AppText(
+                          data.itemName,
+                          variant: AppTextVariant.labelMedium,
+                          fontWeight: FontWeight.w600,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          color: AppColors.textPrimary,
+                        ),
+
+                        const SizedBox(height: 1),
+
+                        AppText(
+                          data.locationName,
+                          variant: AppTextVariant.labelSmall,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.textPrimary,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+
+                        const SizedBox(height: 2),
+
+                        Row(
+                          children: [
+                            Flexible(
+                              child: AppText(
+                                data.dateLabel,
+                                variant: AppTextVariant.labelSmall,
+                                color: AppColors.textPrimary,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+
+                            const AppText(
+                              ' | ',
+                              variant: AppTextVariant.labelSmall,
+                              color: AppColors.textPrimary,
+                            ),
+
+                            AppText(
+                              data.timeLabel,
+                              variant: AppTextVariant.labelSmall,
+                              color: AppColors.textPrimary,
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
 
-          // ── Info ──────────────────────────────────────────────────────
-          Padding(
-            padding: const EdgeInsets.fromLTRB(
-              AppSpacings.sm,
-              AppSpacings.sm,
-              AppSpacings.sm,
-              AppSpacings.sm,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                AppText(
-                  data.itemName,
-                  variant: AppTextVariant.labelMedium,
-                  fontWeight: FontWeight.w600,
-                  maxLines: 1,
+          if (data.isLive)
+            Expanded(
+              child: Container(
+                width: double.infinity,
+                alignment: Alignment.center,
+                decoration: const BoxDecoration(
+                  color: AppColors.primary500,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(7),
+                    bottomRight: Radius.circular(7),
+                  ),
                 ),
-                const SizedBox(height: 2),
-                AppText(
-                  data.locationName,
+                child: const AppText(
+                  'Live Auction',
                   variant: AppTextVariant.labelSmall,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.black87,
-                  maxLines: 1,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.black,
                 ),
-                const SizedBox(height: 4),
-                // Date + time row
-                Row(
-                  children: [
-                    AppText(
-                      data.dateLabel,
-                      variant: AppTextVariant.labelSmall,
-                      color: Colors.grey.shade600,
-                    ),
-                    AppText(
-                      '  |  ',
-                      variant: AppTextVariant.labelSmall,
-                      color: Colors.grey.shade400,
-                    ),
-                    AppText(
-                      data.timeLabel,
-                      variant: AppTextVariant.labelSmall,
-                      color: Colors.grey.shade600,
-                    ),
-                  ],
-                ),
-                const SizedBox(height: AppSpacings.sm),
-
-                // ── Live Auction badge ─────────────────────────────────
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(vertical: 6),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary500.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(RadiusTokens.md),
-                  ),
-                  child: const Center(
-                    child: AppText(
-                      'Live Auction',
-                      variant: AppTextVariant.labelSmall,
-                      fontWeight: FontWeight.w600,
-                      color: AppColors.primary500,
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
         ],
       ),
     );

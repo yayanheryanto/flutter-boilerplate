@@ -14,10 +14,6 @@ import 'package:go_router/go_router.dart';
 
 import 'package:emas/features/dashboard/presentation/sections/home/dashboard_dummy_data.dart';
 
-/// Responsive home-tab layout.
-///
-/// - Mobile  : single-column scroll.
-/// - Tablet/Desktop : two-column grid.
 class DashboardLayout extends StatelessWidget {
   final PageController bannerCtrl;
   final int bannerPage;
@@ -41,10 +37,9 @@ class DashboardLayout extends StatelessWidget {
           parent: BouncingScrollPhysics(),
         ),
         slivers: [
-          // Header
-          const SliverToBoxAdapter(child: DashboardHeader()),
-
-          // Banner — edge to edge (no horizontal padding)
+          const SliverToBoxAdapter(
+            child: DashboardHeader(),
+          ),
           SliverToBoxAdapter(
             child: BannerCarousel(
               ctrl: bannerCtrl,
@@ -52,8 +47,6 @@ class DashboardLayout extends StatelessWidget {
               onPageChanged: onBannerChanged,
             ),
           ),
-
-          // Rest of content — with padding
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(
@@ -62,49 +55,75 @@ class DashboardLayout extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Banner → verification
                   AppSpacer.lg(),
+
                   _VerificationBanner(),
-                  AppSpacer.lg(),
+
+                  // Verification → category
+                  AppSpacer.md(),
+
                   CategorySection(),
-                  AppSpacer.xl(),
+
+                  // Category → auction header
+                  AppSpacer.md(),
                 ],
               ),
             ),
           ),
 
-          // Jadwal Lelang header
+          // ===============================================================
+          // JADWAL LELANG HEADER
+          // ===============================================================
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacings.md,
+              ),
               child: Row(
                 children: [
+                  // Calendar icon
                   Container(
-                    width: 28,
-                    height: 28,
+                    width: 34,
+                    height: 34,
                     decoration: BoxDecoration(
-                      color: AppColors.primary500.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(6),
+                      color: AppColors.primary500.withOpacity(0.10),
+                      borderRadius: BorderRadius.circular(10),
                     ),
                     child: const Icon(
                       Icons.calendar_month_rounded,
-                      size: 16,
+                      size: 18,
                       color: AppColors.primary500,
                     ),
                   ),
-                  const AppSpacer(8, horizontal: true),
+
+                  const SizedBox(width: 10),
+
+                  // Title
                   const AppText(
                     'Jadwal Lelang',
                     variant: AppTextVariant.titleSmall,
                     fontWeight: FontWeight.bold,
                   ),
+
                   const Spacer(),
+
+                  // See all
                   GestureDetector(
-                    onTap: () {},
-                    child: const AppText(
-                      'Lihat Semua',
-                      variant: AppTextVariant.bodySmall,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.primary500,
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () {
+                      // TODO: Navigate to all auction schedules.
+                    },
+                    child: const Padding(
+                      padding: EdgeInsets.symmetric(
+                        vertical: 8,
+                      ),
+                      child: AppText(
+                        'Lihat Semua',
+                        variant: AppTextVariant.bodySmall,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.info500,
+                      ),
                     ),
                   ),
                 ],
@@ -112,13 +131,15 @@ class DashboardLayout extends StatelessWidget {
             ),
           ),
 
-          // Jadwal Lelang cards — horizontal scroll
+          // ===============================================================
+          // JADWAL LELANG CARDS
+          // ===============================================================
           SliverToBoxAdapter(
             child: Column(
               children: [
                 const AppSpacer.sm(),
                 SizedBox(
-                  height: 220,
+                  height: 110, // tetap sebagai tinggi area ListView
                   child: ListView.builder(
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
@@ -126,10 +147,14 @@ class DashboardLayout extends StatelessWidget {
                       horizontal: AppSpacings.md,
                     ),
                     itemCount: dummyJadwalLelang.length,
-                    itemBuilder: (_, i) => JadwalLelangCard(data: dummyJadwalLelang[i]),
+                    itemBuilder: (_, index) {
+                      return JadwalLelangCard(
+                        data: dummyJadwalLelang[index],
+                      );
+                    },
                   ),
                 ),
-                const AppSpacer.xl(),
+                const AppSpacer.lg(),
               ],
             ),
           ),
@@ -139,193 +164,9 @@ class DashboardLayout extends StatelessWidget {
   }
 }
 
-// ── Mobile layout ──────────────────────────────────────────────────────────────
-
-// class _MobileDashboardLayout extends StatelessWidget {
-//   final PageController bannerCtrl;
-//   final int bannerPage;
-//   final ValueChanged<int> onBannerChanged;
-//   final Future<void> Function() onRefresh;
-//
-//   const _MobileDashboardLayout({
-//     required this.bannerCtrl,
-//     required this.bannerPage,
-//     required this.onBannerChanged,
-//     required this.onRefresh,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return RefreshIndicator(
-//       onRefresh: onRefresh,
-//       child: CustomScrollView(
-//         physics: const AlwaysScrollableScrollPhysics(
-//           parent: BouncingScrollPhysics(),
-//         ),
-//         slivers: [
-//           // Header
-//           const SliverToBoxAdapter(child: DashboardHeader()),
-//
-//           // Banner — edge to edge (no horizontal padding)
-//           SliverToBoxAdapter(
-//             child: BannerCarousel(
-//               ctrl: bannerCtrl,
-//               currentPage: bannerPage,
-//               onPageChanged: onBannerChanged,
-//             ),
-//           ),
-//
-//           // Rest of content — with padding
-//           const SliverToBoxAdapter(
-//             child: Padding(
-//               padding: EdgeInsets.symmetric(
-//                 horizontal: AppSpacings.md,
-//               ),
-//               child: Column(
-//                 crossAxisAlignment: CrossAxisAlignment.start,
-//                 children: [
-//                   AppSpacer.lg(),
-//                   _VerificationBanner(),
-//                   AppSpacer.lg(),
-//                   CategorySection(),
-//                   AppSpacer.xl(),
-//                 ],
-//               ),
-//             ),
-//           ),
-//
-//           // Jadwal Lelang header
-//           SliverToBoxAdapter(
-//             child: Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
-//               child: Row(
-//                 children: [
-//                   Container(
-//                     width: 28,
-//                     height: 28,
-//                     decoration: BoxDecoration(
-//                       color: AppColors.primary500.withOpacity(0.1),
-//                       borderRadius: BorderRadius.circular(6),
-//                     ),
-//                     child: const Icon(
-//                       Icons.calendar_month_rounded,
-//                       size: 16,
-//                       color: AppColors.primary500,
-//                     ),
-//                   ),
-//                   const AppSpacer(8, horizontal: true),
-//                   const AppText(
-//                     'Jadwal Lelang',
-//                     variant: AppTextVariant.titleSmall,
-//                     fontWeight: FontWeight.bold,
-//                   ),
-//                   const Spacer(),
-//                   GestureDetector(
-//                     onTap: () {},
-//                     child: const AppText(
-//                       'Lihat Semua',
-//                       variant: AppTextVariant.bodySmall,
-//                       fontWeight: FontWeight.w500,
-//                       color: AppColors.primary500,
-//                     ),
-//                   ),
-//                 ],
-//               ),
-//             ),
-//           ),
-//
-//           // Jadwal Lelang cards — horizontal scroll
-//           SliverToBoxAdapter(
-//             child: Column(
-//               children: [
-//                 const AppSpacer.sm(),
-//                 SizedBox(
-//                   height: 220,
-//                   child: ListView.builder(
-//                     scrollDirection: Axis.horizontal,
-//                     physics: const BouncingScrollPhysics(),
-//                     padding: const EdgeInsets.symmetric(
-//                       horizontal: AppSpacings.md,
-//                     ),
-//                     itemCount: dummyJadwalLelang.length,
-//                     itemBuilder: (_, i) => JadwalLelangCard(data: dummyJadwalLelang[i]),
-//                   ),
-//                 ),
-//                 const AppSpacer.xl(),
-//               ],
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-//
-// // ── Tablet / Desktop layout ────────────────────────────────────────────────────
-//
-// class _TabletDashboardLayout extends StatelessWidget {
-//   final PageController bannerCtrl;
-//   final int bannerPage;
-//   final ValueChanged<int> onBannerChanged;
-//   final Future<void> Function() onRefresh;
-//
-//   const _TabletDashboardLayout({
-//     required this.bannerCtrl,
-//     required this.bannerPage,
-//     required this.onBannerChanged,
-//     required this.onRefresh,
-//   });
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return RefreshIndicator(
-//       onRefresh: onRefresh,
-//       child: CustomScrollView(
-//         physics: const AlwaysScrollableScrollPhysics(
-//           parent: BouncingScrollPhysics(),
-//         ),
-//         slivers: [
-//           const SliverToBoxAdapter(child: DashboardHeader()),
-//           SliverToBoxAdapter(
-//             child: Padding(
-//               padding: context.responsivePadding,
-//               child: Center(
-//                 child: ConstrainedBox(
-//                   constraints: BoxConstraints(maxWidth: context.contentMaxWidth),
-//                   child: Row(
-//                     crossAxisAlignment: CrossAxisAlignment.start,
-//                     children: [
-//                       Expanded(
-//                         flex: 5,
-//                         child: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             BannerCarousel(
-//                               ctrl: bannerCtrl,
-//                               currentPage: bannerPage,
-//                               onPageChanged: onBannerChanged,
-//                             ),
-//                             const AppSpacer.lg(),
-//                             const CategorySection(),
-//                             const AppSpacer.xl(),
-//                             const ActivitySection(),
-//                           ],
-//                         ),
-//                       ),
-//                       const SizedBox(width: 24),
-//                     ],
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-// ─── Verification Banner ──────────────────────────────────────────────────────
+// ===========================================================================
+// VERIFICATION BANNER
+// ===========================================================================
 
 class _VerificationBanner extends StatelessWidget {
   const _VerificationBanner();
@@ -340,7 +181,9 @@ class _VerificationBanner extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        borderRadius: BorderRadius.circular(
+          RadiusTokens.lg,
+        ),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.06),
@@ -351,45 +194,73 @@ class _VerificationBanner extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // Illustration
-          AppImage(src: Images.verifyIcon),
-          const AppSpacer.sm(
-            horizontal: true,
+          // ===============================================================
+          // VERIFICATION ILLUSTRATION
+          // ===============================================================
+          SizedBox(
+            width: 58,
+            height: 58,
+            child: FittedBox(
+              child: AppImage(
+                src: Images.verifyIcon,
+              ),
+            ),
           ),
+
+          const SizedBox(width: 10),
+
+          // ===============================================================
+          // TEXT
+          // ===============================================================
           const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppText(
                   'Verifikasi Akun Sekarang!',
+                  variant: AppTextVariant.bodySmall,
                   fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
                 ),
-                AppSpacer.xs(),
+                SizedBox(height: 3),
                 AppText(
                   'Dapatkan banyak keuntungan',
-                  variant: AppTextVariant.bodySmall,
+                  variant: AppTextVariant.labelSmall,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black54,
                 ),
               ],
             ),
           ),
-          const AppSpacer.md(),
-          // Button — GestureDetector+Container to avoid infinite width constraint
+
+          const SizedBox(width: 8),
+
+          // ===============================================================
+          // BUTTON
+          // ===============================================================
           GestureDetector(
-            onTap: () async => context.push(AppRoutes.verificationPreparation),
+            behavior: HitTestBehavior.opaque,
+            onTap: () async {
+              await context.push(
+                AppRoutes.verificationPreparation,
+              );
+            },
             child: Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacings.sm,
-                vertical: AppSpacings.sm,
+                horizontal: 14,
+                vertical: 8,
               ),
               decoration: BoxDecoration(
                 color: AppColors.primary500,
-                borderRadius: BorderRadius.circular(RadiusTokens.full),
+                borderRadius: BorderRadius.circular(
+                  RadiusTokens.full,
+                ),
               ),
               child: const AppText(
                 'Verifikasi',
-                variant: AppTextVariant.bodySmall,
+                variant: AppTextVariant.labelSmall,
                 fontWeight: FontWeight.w600,
-                color: Colors.white,
+                color: AppColors.black,
               ),
             ),
           ),
