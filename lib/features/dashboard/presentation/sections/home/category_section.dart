@@ -54,7 +54,7 @@ class _CategoryItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
-        await context.pgush(AppRoutes.lelangList);
+        await context.push(AppRoutes.lelangList);
       },
       child: SizedBox(
         width: 82,
