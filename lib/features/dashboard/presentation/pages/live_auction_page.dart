@@ -863,70 +863,70 @@ class _BidRow extends StatelessWidget {
   }
 }
 
-class _BidHistoryRow extends StatelessWidget {
-  final BidEntry bid;
-  final bool isLast;
-
-  const _BidHistoryRow({
-    required this.bid,
-    required this.isLast,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    final isYourBid = bid.type == BidderType.yourBid;
-
-    return Container(
-      width: double.infinity,
-      decoration: BoxDecoration(
-        color: isYourBid ? const Color(0xFFF8F1E9) : AppColors.white,
-        border: isLast
-            ? null
-            : const Border(
-                top: BorderSide(
-                  color: AppColors.neutral200,
-                ),
-              ),
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 14,
-        vertical: 10,
-      ),
-      child: Row(
-        children: [
-          // LEFT EMPTY SPACE
-          const Expanded(
-            flex: 2,
-            child: SizedBox(),
-          ),
-
-          // BID AMOUNT
-          Expanded(
-            flex: 3,
-            child: AppText(
-              _rp(bid.amount),
-              variant: AppTextVariant.labelLarge,
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-
-          // BIDDER
-          Expanded(
-            flex: 2,
-            child: Align(
-              alignment: Alignment.centerRight,
-              child: AppText(
-                isYourBid ? 'Your Bid' : 'Online Bidder',
-                variant: AppTextVariant.bodySmall,
-                color: AppColors.textPrimary,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class _BidHistoryRow extends StatelessWidget {
+//   final BidEntry bid;
+//   final bool isLast;
+//
+//   const _BidHistoryRow({
+//     required this.bid,
+//     required this.isLast,
+//   });
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     final isYourBid = bid.type == BidderType.yourBid;
+//
+//     return Container(
+//       width: double.infinity,
+//       decoration: BoxDecoration(
+//         color: isYourBid ? const Color(0xFFF8F1E9) : AppColors.white,
+//         border: isLast
+//             ? null
+//             : const Border(
+//                 top: BorderSide(
+//                   color: AppColors.neutral200,
+//                 ),
+//               ),
+//       ),
+//       padding: const EdgeInsets.symmetric(
+//         horizontal: 14,
+//         vertical: 10,
+//       ),
+//       child: Row(
+//         children: [
+//           // LEFT EMPTY SPACE
+//           const Expanded(
+//             flex: 2,
+//             child: SizedBox(),
+//           ),
+//
+//           // BID AMOUNT
+//           Expanded(
+//             flex: 3,
+//             child: AppText(
+//               _rp(bid.amount),
+//               variant: AppTextVariant.labelLarge,
+//               fontWeight: FontWeight.w700,
+//             ),
+//           ),
+//
+//           // BIDDER
+//           Expanded(
+//             flex: 2,
+//             child: Align(
+//               alignment: Alignment.centerRight,
+//               child: AppText(
+//                 isYourBid ? 'Your Bid' : 'Online Bidder',
+//                 variant: AppTextVariant.bodySmall,
+//                 color: AppColors.textPrimary,
+//               ),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 // ─── Bottom CTA ───────────────────────────────────────────────────────────────
 
 class _BottomCTA extends StatelessWidget {

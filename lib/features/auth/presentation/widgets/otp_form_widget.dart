@@ -153,7 +153,7 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
           children: [
             const AppSpacer.md(),
             const AppText(
-              'Masukkan Kode OTP',
+              'Masukan Kode OTP',
               variant: AppTextVariant.headlineLarge,
               color: AppColors.primary500,
               fontWeight: FontWeight.w800,

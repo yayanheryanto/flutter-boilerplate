@@ -5,7 +5,6 @@ import 'package:emas/features/dashboard/data/models/auction_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
-import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -81,11 +80,11 @@ const _categoryIconColors = {
   AuctionCategory.elektronik: Color(0xFF7B9FD4),
 };
 
-const _categoryIconBg = {
-  AuctionCategory.mobil: Color(0xFFFFF8DC),
-  AuctionCategory.motor: Color(0xFFFFF0E6),
-  AuctionCategory.elektronik: Color(0xFFEEF2FB),
-};
+// const _categoryIconBg = {
+//   AuctionCategory.mobil: Color(0xFFFFF8DC),
+//   AuctionCategory.motor: Color(0xFFFFF0E6),
+//   AuctionCategory.elektronik: Color(0xFFEEF2FB),
+// };
 
 const _auctionCategories = [
   AuctionCategory.mobil,
@@ -331,7 +330,6 @@ class _LelangListCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(AppSpacings.md),
             child: Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 // =========================================================
                 // THUMBNAIL

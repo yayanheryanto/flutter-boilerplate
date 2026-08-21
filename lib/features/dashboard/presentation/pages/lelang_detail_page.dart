@@ -10,8 +10,7 @@ import 'package:intl/intl.dart';
 
 // ─── Formatter ────────────────────────────────────────────────────────────────
 
-String _rp(int v) => NumberFormat.currency(
-    locale: 'id_ID', symbol: 'Rp', decimalDigits: 0).format(v);
+String _rp(int v) => NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0).format(v);
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
@@ -35,16 +34,14 @@ class LelangDetailPage extends StatelessWidget {
                   width: double.infinity,
                   color: AppColors.neutral300,
                   child: const Center(
-                    child: Icon(Icons.directions_car_rounded,
-                        size: 64, color: AppColors.neutral500),
+                    child: Icon(Icons.directions_car_rounded, size: 64, color: AppColors.neutral500),
                   ),
                 ),
 
                 const SizedBox(height: AppSpacings.md),
 
                 Padding(
-                  padding:
-                  const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+                  padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -111,8 +108,7 @@ class LelangDetailPage extends StatelessWidget {
                               padding: const EdgeInsets.all(AppSpacings.sm),
                               decoration: BoxDecoration(
                                 color: AppColors.white,
-                                borderRadius:
-                                BorderRadius.circular(RadiusTokens.md),
+                                borderRadius: BorderRadius.circular(RadiusTokens.md),
                                 border: Border.all(color: AppColors.neutral200),
                               ),
                               child: Column(
@@ -136,12 +132,12 @@ class LelangDetailPage extends StatelessWidget {
                           const SizedBox(width: AppSpacings.sm),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                                horizontal: AppSpacings.md,
-                                vertical: AppSpacings.xs),
+                              horizontal: AppSpacings.md,
+                              vertical: AppSpacings.xs,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color(0xFFFFF9E6),
-                              borderRadius:
-                              BorderRadius.circular(RadiusTokens.md),
+                              borderRadius: BorderRadius.circular(RadiusTokens.md),
                               border: Border.all(color: AppColors.primary500),
                             ),
                             child: const Column(
@@ -214,19 +210,18 @@ class _GradeAndSpecCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(RadiusTokens.lg),
         border: Border.all(color: AppColors.neutral200),
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // ── Sub-Section Grade ──
-          const AppText(
+          AppText(
             'Grade',
-            variant: AppTextVariant.bodyMedium,
             fontWeight: FontWeight.bold,
           ),
-          const SizedBox(height: AppSpacings.sm),
+          SizedBox(height: AppSpacings.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const [
+            children: [
               _GradeItem(label: 'Interior', value: 'A'),
               _GradeItem(label: 'Eksterior', value: 'D'),
               _GradeItem(label: 'Rangka', value: 'B'),
@@ -234,22 +229,21 @@ class _GradeAndSpecCard extends StatelessWidget {
             ],
           ),
 
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: AppSpacings.sm),
             child: Divider(color: AppColors.neutral200),
           ),
 
           // ── Sub-Section Spesifikasi ──
-          const AppText(
+          AppText(
             'Spesifikasi',
-            variant: AppTextVariant.bodyMedium,
             fontWeight: FontWeight.bold,
           ),
-          const SizedBox(height: AppSpacings.xs),
-          const _SpecRow(label: 'Nomor Polisi', value: 'BK8769ET'),
-          const _SpecRow(label: 'Kilometer', value: '142.524 KM'),
-          const _SpecRow(label: 'STNK', value: '27 Mei 2026'),
-          const _SpecRow(label: 'BPKB', value: '14 Hari Kerja'),
+          SizedBox(height: AppSpacings.xs),
+          _SpecRow(label: 'Nomor Polisi', value: 'BK8769ET'),
+          _SpecRow(label: 'Kilometer', value: '142.524 KM'),
+          _SpecRow(label: 'STNK', value: '27 Mei 2026'),
+          _SpecRow(label: 'BPKB', value: '14 Hari Kerja'),
         ],
       ),
     );
@@ -355,7 +349,6 @@ class _BidsHistoryList extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: AppText(
                     _rp(bids[index]),
-                    variant: AppTextVariant.bodyMedium,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

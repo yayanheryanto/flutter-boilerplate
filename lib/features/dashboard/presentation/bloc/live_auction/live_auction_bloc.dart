@@ -19,8 +19,7 @@ class LiveAuctionBloc extends Bloc<LiveAuctionEvent, LiveAuctionState> {
   StreamSubscription<LiveAuctionSocketEvent>? _eventsSub;
   StreamSubscription<SocketConnectionStatus>? _statusSub;
 
-  LiveAuctionBloc(this._socketDataSource)
-      : super(const LiveAuctionState.initial(lot: 0)) {
+  LiveAuctionBloc(this._socketDataSource) : super(const LiveAuctionState.initial(lot: 0)) {
     on<LiveAuctionStarted>(_onStarted);
     on<LiveAuctionBidPlaced>(_onBidPlaced);
     on<LiveAuctionSocketEventReceived>(_onSocketEventReceived);
@@ -63,23 +62,27 @@ class LiveAuctionBloc extends Bloc<LiveAuctionEvent, LiveAuctionState> {
     final socketEvent = event.event;
 
     if (socketEvent is LiveAuctionSnapshotEvent) {
-      emit(state.copyWith(
-        status: LiveAuctionStatus.live,
-        basePrice: socketEvent.basePrice,
-        currentPrice: socketEvent.currentPrice,
-        viewerCount: socketEvent.viewerCount,
-        bids: socketEvent.bids,
-      ));
+      emit(
+        state.copyWith(
+          status: LiveAuctionStatus.live,
+          basePrice: socketEvent.basePrice,
+          currentPrice: socketEvent.currentPrice,
+          viewerCount: socketEvent.viewerCount,
+          bids: socketEvent.bids,
+        ),
+      );
       return;
     }
 
     if (socketEvent is LiveAuctionNewBidEvent) {
-      emit(state.copyWith(
-        status: LiveAuctionStatus.live,
-        currentPrice: socketEvent.currentPrice,
-        bids: [socketEvent.bid, ...state.bids],
-        isPlacingBid: false,
-      ));
+      emit(
+        state.copyWith(
+          status: LiveAuctionStatus.live,
+          currentPrice: socketEvent.currentPrice,
+          bids: [socketEvent.bid, ...state.bids],
+          isPlacingBid: false,
+        ),
+      );
       return;
     }
 
@@ -89,18 +92,22 @@ class LiveAuctionBloc extends Bloc<LiveAuctionEvent, LiveAuctionState> {
     }
 
     if (socketEvent is LiveAuctionEndingSoonEvent) {
-      emit(state.copyWith(
-        status: LiveAuctionStatus.endingSoon,
-        endingInSeconds: socketEvent.secondsLeft,
-      ));
+      emit(
+        state.copyWith(
+          status: LiveAuctionStatus.endingSoon,
+          endingInSeconds: socketEvent.secondsLeft,
+        ),
+      );
       return;
     }
 
     if (socketEvent is LiveAuctionEndedEvent) {
-      emit(state.copyWith(
-        status: LiveAuctionStatus.ended,
-        winningBid: socketEvent.winningBid,
-      ));
+      emit(
+        state.copyWith(
+          status: LiveAuctionStatus.ended,
+          winningBid: socketEvent.winningBid,
+        ),
+      );
       return;
     }
     // LiveAuctionUnknownEvent → diabaikan.

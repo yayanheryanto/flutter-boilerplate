@@ -580,7 +580,7 @@ class _FaceDetectionPageState extends State<FaceDetectionPage> with WidgetsBindi
         // overlapping ImageReader sessions on Android.
         onBack: () async {
           await _stopAndDispose();
-          if (mounted) context.pop();
+          if (context.mounted) context.pop();
         },
       ),
       body: !_ready

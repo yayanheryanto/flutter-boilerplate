@@ -5,12 +5,7 @@ import 'package:emas/features/dashboard/data/models/auction_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
-import 'package:emas/shared/widgets/bottomsheets/app_bottom_sheet.dart';
-import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/design_system.dart';
-import 'package:emas/shared/widgets/dropdown/app_dropdown.dart';
-import 'package:emas/shared/widgets/pickers/app_date_picker.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -139,10 +134,9 @@ class _CategoryChip extends StatelessWidget {
         height: 156,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(RadiusTokens.lg ?? 16),
+          borderRadius: BorderRadius.circular(RadiusTokens.lg),
           border: Border.all(
             color: AppColors.neutral200,
-            width: 1,
           ),
         ),
         child: Column(
@@ -209,7 +203,7 @@ class BeliNplResult {
 /// Dummy daftar lokasi lelang — ganti dengan data dari API begitu tersedia.
 const _dummyLokasiLelang = [
   'Mega Finance Fatmawati',
-  'Mega Finance Kelapa Gading',
+  'Mega Finance Bogor',
   'Mega Finance Bandung',
   'Mega Finance Surabaya',
 ];
@@ -226,7 +220,6 @@ class BeliNplBottomSheet {
     return AppCustomBottomSheet.show<BeliNplResult>(
       context,
       title: 'Beli NPL',
-      isDismissible: true,
       content: _BeliNplForm(
         category: category,
         hargaPerNpl: hargaPerNpl,
@@ -322,7 +315,6 @@ class _BeliNplFormState extends State<_BeliNplForm> {
           children: [
             const AppText(
               'Jumlah NPL',
-              variant: AppTextVariant.bodyMedium,
               fontWeight: FontWeight.w500,
             ),
             _QuantityStepper(

@@ -67,7 +67,6 @@ class JadwalLelangCard extends StatelessWidget {
                     width: 48,
                     height: 48,
                     child: FittedBox(
-                      fit: BoxFit.contain,
                       child: Text(
                         data.image,
                         style: const TextStyle(

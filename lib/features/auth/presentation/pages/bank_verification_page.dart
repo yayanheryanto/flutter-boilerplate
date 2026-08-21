@@ -139,7 +139,7 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
                       AppButton(
                         label: 'Lanjut',
                         onPressed: () async {
-                          await context.push(AppRoutes.accountProcessed);
+                          await context.push(AppRoutes.confirmationVerification);
                           // _onSubmit
                         },
                         borderRadius: 25,
