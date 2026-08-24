@@ -49,19 +49,19 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
 
   // ── Submit ────────────────────────────────────────────────────────────────────
 
-  void _onSubmit() {
-    if (!validateForm()) return;
-    if (_ktpPhoto == null) {
-      AppSnackbar.error(context, 'Foto KTP wajib dilampirkan');
-      return;
-    }
-    if (_selectedDob == null) {
-      AppSnackbar.error(context, 'Tanggal lahir wajib diisi');
-      return;
-    }
-    // TODO: dispatch KTP verification event
-    context.go(AppRoutes.dashboard);
-  }
+  // void _onSubmit() {
+  //   if (!validateForm()) return;
+  //   if (_ktpPhoto == null) {
+  //     AppSnackbar.error(context, 'Foto KTP wajib dilampirkan');
+  //     return;
+  //   }
+  //   if (_selectedDob == null) {
+  //     AppSnackbar.error(context, 'Tanggal lahir wajib diisi');
+  //     return;
+  //   }
+  //   // TODO: dispatch KTP verification event
+  //   context.go(AppRoutes.dashboard);
+  // }
 
   // ── Build ─────────────────────────────────────────────────────────────────────
 

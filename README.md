@@ -164,7 +164,7 @@ flutter build apk --release --flavor prod --target lib/main.dart
 ### 6. Run from VS Code / Cursor
 Launch configs tersedia di `.vscode/launch.json`:
 
-- `Flutter (dev) - Debug / Profile / Release`
+- `Flutter (dev) - Debug / Profile / Release`g
 - `Flutter (stag) - Debug / Profile / Release`
 - `Flutter (prod) - Debug / Profile / Release`
 

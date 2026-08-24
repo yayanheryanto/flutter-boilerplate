@@ -1,3 +1,4 @@
+import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -39,9 +40,9 @@ class JadwalLelangCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(AppSpacings.md),
         border: Border.all(
-          color: Colors.black.withOpacity(0.08),
+          color: Colors.black.withOpacity(0.3),
           width: 0.5,
         ),
         boxShadow: [

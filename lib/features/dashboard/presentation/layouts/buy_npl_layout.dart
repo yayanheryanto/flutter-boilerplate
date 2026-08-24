@@ -1,4 +1,5 @@
 import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/features/dashboard/data/models/auction_item.dart';
@@ -49,16 +50,9 @@ class _BuyNplLayoutState extends State<BuyNplLayout> {
   }
 }
 
-const _categoryIcons = {
-  AuctionCategory.mobil: Icons.directions_car_rounded,
-  AuctionCategory.motor: Icons.two_wheeler_rounded,
-  // AuctionCategory.elektronik: Icons.laptop_rounded,
-};
-
-const _categoryIconColors = {
-  AuctionCategory.mobil: Color(0xFFF5C842),
-  AuctionCategory.motor: Color(0xFFE8834A),
-  // AuctionCategory.elektronik: Color(0xFF7B9FD4),
+final _categoryIcons = {
+  AuctionCategory.mobil: Images.carIcon,
+  AuctionCategory.motor: Images.motorcycleIcon,
 };
 
 const _auctionCategories = [
@@ -81,7 +75,7 @@ class _CategorySelector extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: _auctionCategories.asMap().entries.map(
-            (entry) {
+        (entry) {
           final index = entry.key;
           final cat = entry.value;
           return Padding(
@@ -123,14 +117,13 @@ class _CategoryChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final icon = _categoryIcons[category] ?? Icons.category_rounded;
-    final iconColor = _categoryIconColors[category] ?? AppColors.primary500;
+    final icon = _categoryIcons[category];
 
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
-        width: 156, // Disesuaikan agar muat berjajar dua dan berbentuk persegi
+        width: 156,
         height: 156,
         decoration: BoxDecoration(
           color: AppColors.white,
@@ -140,18 +133,36 @@ class _CategoryChip extends StatelessWidget {
           ),
         ),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Catatan: Ganti Icon di bawah ini dengan Image.asset()
-            // jika ilustrasi aslinya merupakan file gambar custom.
-            Icon(icon, color: iconColor, size: 64),
-            const AppSpacer.sm(),
-            AppText(
-              category.label,
-              variant: AppTextVariant.titleSmall,
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+            const Spacer(),
+
+            // Area icon dibuat memiliki tinggi yang sama
+            SizedBox(
+              height: 56,
+              child: Center(
+                child: AppImage(
+                  src: icon,
+                  width: 56,
+                ),
+              ),
             ),
+
+            const AppSpacer.md(),
+
+            // Text selalu berada di posisi yang sama
+            SizedBox(
+              height: 20,
+              child: Center(
+                child: AppText(
+                  category.label,
+                  variant: AppTextVariant.titleSmall,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textPrimary,
+                ),
+              ),
+            ),
+
+            const Spacer(),
           ],
         ),
       ),
@@ -212,11 +223,11 @@ const _dummyLokasiLelang = [
 /// supaya user set lokasi, tanggal lelang, dan jumlah NPL yang mau dibeli.
 class BeliNplBottomSheet {
   static Future<BeliNplResult?> show(
-      BuildContext context, {
-        required AuctionCategory category,
-        int hargaPerNpl = 1000000,
-        int initialJumlah = 1,
-      }) {
+    BuildContext context, {
+    required AuctionCategory category,
+    int hargaPerNpl = 1000000,
+    int initialJumlah = 1,
+  }) {
     return AppCustomBottomSheet.show<BeliNplResult>(
       context,
       title: 'Beli NPL',
@@ -258,6 +269,7 @@ class _BeliNplFormState extends State<_BeliNplForm> {
   int get _subtotal => widget.hargaPerNpl * _jumlah;
 
   void _incrementJumlah() => setState(() => _jumlah++);
+
   void _decrementJumlah() {
     if (_jumlah <= 1) return;
     setState(() => _jumlah--);

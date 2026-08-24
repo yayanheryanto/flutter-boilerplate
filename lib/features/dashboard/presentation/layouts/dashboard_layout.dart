@@ -181,14 +181,13 @@ class _VerificationBanner extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(
-          RadiusTokens.lg,
-        ),
+        borderRadius: BorderRadius.circular(AppSpacings.md),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.06),
-            blurRadius: 8,
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 10,
             offset: const Offset(0, 2),
+            spreadRadius: 0.3,
           ),
         ],
       ),

@@ -364,7 +364,11 @@ class _KtpPhotoCard extends StatelessWidget {
 
           // Foto Ulang button
           AppButton(
-            label: isLoading ? 'Memproses...' : photo == null ? 'Ambil Foto' : 'Foto Ulang',
+            label: isLoading
+                ? 'Memproses...'
+                : photo == null
+                    ? 'Ambil Foto'
+                    : 'Foto Ulang',
             variant: AppButtonVariant.outlined,
             backgroundColor: AppColors.bgCard,
             onPressed: isLoading ? null : onTap,

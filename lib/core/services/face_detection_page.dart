@@ -14,19 +14,6 @@ import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:permission_handler/permission_handler.dart';
 
-/// Halaman kamera selfie dengan face detection (ML Kit).
-///
-/// Menampilkan live preview + overlay lingkaran. Saat wajah masuk
-/// dalam lingkaran dan proporsi tepat, FAB hijau muncul untuk capture.
-/// Setelah capture, file [File] dikembalikan ke pemanggil via [Navigator.pop].
-///
-/// Penggunaan:
-/// ```dart
-/// final File? photo = await Navigator.push<File?>(
-///   context,
-///   MaterialPageRoute(builder: (_) => const FaceDetectionPage()),
-/// );
-/// ```
 class FaceDetectionPage extends StatefulWidget {
   const FaceDetectionPage({super.key});
 
@@ -34,304 +21,676 @@ class FaceDetectionPage extends StatefulWidget {
   State<FaceDetectionPage> createState() => _FaceDetectionPageState();
 }
 
-class _FaceDetectionPageState extends State<FaceDetectionPage> with WidgetsBindingObserver {
-  // ── Camera ─────────────────────────────────────────────────────────────────
+class _FaceDetectionPageState extends State<FaceDetectionPage>
+    with WidgetsBindingObserver {
+  // ─────────────────────────────────────────────────────────────────────────
+  // Camera
+  // ─────────────────────────────────────────────────────────────────────────
+
   CameraController? _cam;
+
   bool _ready = false;
   bool _isFront = false;
 
-  // ── Layout sizes ───────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // Layout
+  // ─────────────────────────────────────────────────────────────────────────
+
   Size? _screenSize;
   Size? _previewBoxSize;
 
-  // ── Frame processing ───────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // Frame processing
+  // ─────────────────────────────────────────────────────────────────────────
+
   int _lastProcessedMs = 0;
+
   static const int _processIntervalMs = 220;
+
   bool _processing = false;
 
-  // ── ML Kit ─────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // ML Kit
+  // ─────────────────────────────────────────────────────────────────────────
+
   late final FaceDetector _detector;
 
-  // ── UI state ───────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // UI
+  // ─────────────────────────────────────────────────────────────────────────
+
   bool _faceInside = false;
-  String _hint = 'Posisikan wajah di dalam lingkaran';
+
+  String _hint =
+      'Posisikan wajah di dalam lingkaran';
+
   Color _ringColor = Colors.red;
 
-  // ── Capture ────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // Capture
+  // ─────────────────────────────────────────────────────────────────────────
+
   bool _capturing = false;
 
-  // ── AE/AF timer ────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // AE / AF
+  // ─────────────────────────────────────────────────────────────────────────
+
   Timer? _aeTimer;
 
-  // ── Lifecycle guard ────────────────────────────────────────────────────────
-  // Prevents re-entrant init/dispose races (e.g. double back-press,
-  // or didChangeAppLifecycleState firing during teardown).
+  bool _applyingAe = false;
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Lifecycle guards
+  // ─────────────────────────────────────────────────────────────────────────
+
   bool _disposing = false;
 
-  // ── Fill thresholds ────────────────────────────────────────────────────────
+  bool _initializing = false;
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Face thresholds
+  // ─────────────────────────────────────────────────────────────────────────
+
   static const double _minFill = 0.40;
   static const double _maxFill = 0.95;
 
-  // ── Ring radius ratio ──────────────────────────────────────────────────────
   static const double _ringRatio = 0.72;
 
-  // ── Lifecycle ──────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // Init
+  // ─────────────────────────────────────────────────────────────────────────
 
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addObserver(this);
+
     _detector = FaceDetector(
       options: FaceDetectorOptions(),
     );
-    _initCamera();
+
+    unawaited(_initCamera());
   }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Dispose
+  // ─────────────────────────────────────────────────────────────────────────
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
-    // Fire-and-forget safe stop — avoids accessing freed ByteBuffer.
-    // NOTE: the AppBar back button already awaits _stopAndDispose()
-    // before popping, so by the time dispose() runs this is usually
-    // already a no-op (cam == null).
-    _stopAndDispose();
-    _detector.close();
+
+    _disposing = true;
+
+    _aeTimer?.cancel();
+    _aeTimer = null;
+
+    final cam = _cam;
+
+    _cam = null;
+    _ready = false;
+
+    unawaited(
+      _cleanupCamera(cam),
+    );
+
+    unawaited(_detector.close());
+
     super.dispose();
   }
 
+  // ─────────────────────────────────────────────────────────────────────────
+  // App lifecycle
+  // ─────────────────────────────────────────────────────────────────────────
+
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (!_ready || _cam == null || _disposing) return;
+  void didChangeAppLifecycleState(
+      AppLifecycleState state,
+      ) {
+    if (_disposing) return;
+
     switch (state) {
       case AppLifecycleState.inactive:
       case AppLifecycleState.paused:
-        _pauseCamera();
+        unawaited(_pauseCamera());
+
       case AppLifecycleState.resumed:
-        _initCamera();
+        if (!_ready && !_initializing) {
+          unawaited(_initCamera());
+        }
+
       default:
         break;
     }
   }
 
-  // ── Camera init ────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // Camera initialization
+  // ─────────────────────────────────────────────────────────────────────────
 
   Future<void> _initCamera() async {
-    if (_disposing) return;
-    await Permission.camera.request();
-
-    final cameras = await availableCameras();
-    final selected = cameras.firstWhere(
-      (c) => c.lensDirection == CameraLensDirection.front,
-      orElse: () => cameras.first,
-    );
-    _isFront = selected.lensDirection == CameraLensDirection.front;
-
-    final ctrl = CameraController(
-      selected,
-      ResolutionPreset.high,
-      imageFormatGroup: Platform.isAndroid ? ImageFormatGroup.nv21 : ImageFormatGroup.bgra8888,
-      enableAudio: false,
-    );
-
-    await ctrl.initialize();
-
-    // If teardown started while we were awaiting initialize(), discard
-    // this controller immediately instead of starting its stream.
-    if (_disposing || !mounted) {
-      try {
-        await ctrl.dispose();
-      } catch (_) {}
+    if (_disposing || _initializing) {
       return;
     }
 
-    _cam = ctrl;
+    _initializing = true;
+
+    CameraController? ctrl;
 
     try {
-      await ctrl.lockCaptureOrientation(DeviceOrientation.portraitUp);
-    } catch (_) {}
+      final permission =
+      await Permission.camera.request();
 
-    if (mounted) setState(() => _ready = true);
-    await ctrl.startImageStream(_onFrame);
-    _startAeTimer();
+      if (!permission.isGranted) {
+        return;
+      }
+
+      if (_disposing || !mounted) {
+        return;
+      }
+
+      final cameras =
+      await availableCameras();
+
+      if (_disposing ||
+          !mounted ||
+          cameras.isEmpty) {
+        return;
+      }
+
+      final selected =
+      cameras.firstWhere(
+            (camera) =>
+        camera.lensDirection ==
+            CameraLensDirection.front,
+        orElse: () => cameras.first,
+      );
+
+      _isFront =
+          selected.lensDirection ==
+              CameraLensDirection.front;
+
+      ctrl = CameraController(
+        selected,
+        ResolutionPreset.high,
+        imageFormatGroup: Platform.isAndroid
+            ? ImageFormatGroup.nv21
+            : ImageFormatGroup.bgra8888,
+        enableAudio: false,
+      );
+
+      await ctrl.initialize();
+
+      if (_disposing || !mounted) {
+        await _cleanupCamera(ctrl);
+        ctrl = null;
+        return;
+      }
+
+      _cam = ctrl;
+
+      try {
+        await ctrl.lockCaptureOrientation(
+          DeviceOrientation.portraitUp,
+        );
+      } catch (_) {}
+
+      if (_disposing || !mounted) {
+        if (_cam == ctrl) {
+          _cam = null;
+        }
+
+        await _cleanupCamera(ctrl);
+        ctrl = null;
+        return;
+      }
+
+      await ctrl.startImageStream(
+        _onFrame,
+      );
+
+      if (_disposing || !mounted) {
+        if (_cam == ctrl) {
+          _cam = null;
+        }
+
+        try {
+          await ctrl.stopImageStream();
+        } catch (_) {}
+
+        await _cleanupCamera(ctrl);
+
+        ctrl = null;
+        return;
+      }
+
+      if (mounted) {
+        setState(() {
+          _ready = true;
+          _faceInside = false;
+          _hint =
+          'Posisikan wajah di dalam lingkaran';
+          _ringColor = Colors.red;
+        });
+      }
+
+      _startAeTimer();
+    } catch (e) {
+      if (ctrl != null) {
+        await _cleanupCamera(ctrl);
+      }
+
+      if (_cam == ctrl) {
+        _cam = null;
+      }
+
+      if (mounted && !_disposing) {
+        setState(() {
+          _ready = false;
+        });
+
+        AppSnackBar.show(
+          context,
+          'Gagal mengaktifkan kamera: $e',
+        );
+      }
+    } finally {
+      _initializing = false;
+    }
   }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Pause camera
+  // ─────────────────────────────────────────────────────────────────────────
 
   Future<void> _pauseCamera() async {
-    _aeTimer?.cancel();
-    try {
-      await _cam?.stopImageStream();
-    } catch (_) {}
-    try {
-      await _cam?.dispose();
-    } catch (_) {}
-    _cam = null;
-    if (mounted) setState(() => _ready = false);
-  }
-
-  /// Safely stop stream + dispose before leaving the page.
-  ///
-  /// Call this BEFORE popping the route (e.g. from the AppBar back
-  /// button) — this is the key fix for "Image is already closed":
-  /// it guarantees the previous [CameraController] is fully torn down
-  /// before a new instance of this page can call [_initCamera] again.
-  Future<void> _stopAndDispose() async {
     if (_disposing) return;
-    _disposing = true;
+
     _aeTimer?.cancel();
+    _aeTimer = null;
 
     final cam = _cam;
-    _cam = null; // nullify first to stop _onFrame from queuing new work
 
-    if (cam == null) return;
+    _cam = null;
 
-    // Wait for any in-flight frame to finish
-    while (_processing) {
-      await Future<void>.delayed(const Duration(milliseconds: 16));
+    if (mounted) {
+      setState(() {
+        _ready = false;
+        _faceInside = false;
+      });
     }
 
+    if (cam == null) {
+      return;
+    }
+
+    await _cleanupCamera(cam);
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // Cleanup camera
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Future<void> _cleanupCamera(
+      CameraController? cam,
+      ) async {
+    if (cam == null) return;
+
     try {
-      if (cam.value.isStreamingImages) await cam.stopImageStream();
+      if (cam.value.isStreamingImages) {
+        await cam.stopImageStream();
+      }
     } catch (_) {}
+
     try {
       await cam.dispose();
     } catch (_) {}
   }
 
-  // ── AE / AF ────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // Back / stop camera
+  //
+  // IMPORTANT:
+  // Tidak menunggu camera.dispose().
+  // Route langsung di-pop agar UX tidak terasa lambat.
+  // ─────────────────────────────────────────────────────────────────────────
+
+  void _handleBack() {
+    if (_disposing) {
+      return;
+    }
+
+    _disposing = true;
+
+    _aeTimer?.cancel();
+    _aeTimer = null;
+
+    final cam = _cam;
+
+    // Putuskan controller dari state terlebih dahulu.
+    _cam = null;
+
+    _ready = false;
+    _faceInside = false;
+
+    // Cleanup berjalan di background.
+    unawaited(
+      _cleanupCamera(cam),
+    );
+
+    // Pop langsung.
+    if (mounted) {
+      context.pop();
+    }
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // AE / AF timer
+  // ─────────────────────────────────────────────────────────────────────────
 
   void _startAeTimer() {
+    if (_disposing) return;
+
     _aeTimer?.cancel();
+
     _aeTimer = Timer.periodic(
       const Duration(seconds: 4),
-      (_) => _meterOnCircle(),
+          (_) {
+        unawaited(
+          _meterOnCircle(),
+        );
+      },
     );
-    _meterOnCircle();
+
+    unawaited(
+      _meterOnCircle(),
+    );
   }
 
   Future<void> _meterOnCircle() async {
-    final cam = _cam;
-    if (cam == null || !cam.value.isInitialized) return;
-    if (_screenSize == null || _previewBoxSize == null) return;
+    if (_disposing ||
+        _applyingAe) {
+      return;
+    }
 
-    final pt = _circleCenterOnPreview01();
-    await _applyFocusExposure(cam, pt, exposureOffset: 0.4);
+    final cam = _cam;
+
+    if (cam == null ||
+        !cam.value.isInitialized) {
+      return;
+    }
+
+    final screen = _screenSize;
+    final previewBox = _previewBoxSize;
+
+    if (screen == null ||
+        previewBox == null) {
+      return;
+    }
+
+    _applyingAe = true;
+
+    try {
+      final point =
+      _circleCenterOnPreview01();
+
+      await _applyFocusExposure(
+        cam,
+        point,
+        exposureOffset: 0.4,
+      );
+    } finally {
+      _applyingAe = false;
+    }
   }
 
   Future<void> _applyFocusExposure(
-    CameraController cam,
-    Offset point, {
-    required double exposureOffset,
-  }) async {
+      CameraController cam,
+      Offset point, {
+        required double exposureOffset,
+      }) async {
+    if (_disposing) return;
+
     try {
-      await cam.setFocusMode(FocusMode.auto);
+      await cam.setFocusMode(
+        FocusMode.auto,
+      );
     } catch (_) {}
+
+    if (_disposing) return;
+
     try {
-      await cam.setExposureMode(ExposureMode.auto);
+      await cam.setExposureMode(
+        ExposureMode.auto,
+      );
     } catch (_) {}
+
+    if (_disposing) return;
+
     try {
       await cam.setFocusPoint(point);
     } catch (_) {}
+
+    if (_disposing) return;
+
     try {
       await cam.setExposurePoint(point);
     } catch (_) {}
+
+    if (_disposing) return;
+
     try {
-      final min = await cam.getMinExposureOffset();
-      final max = await cam.getMaxExposureOffset();
-      await cam.setExposureOffset(exposureOffset.clamp(min, max));
+      final min =
+      await cam.getMinExposureOffset();
+
+      final max =
+      await cam.getMaxExposureOffset();
+
+      if (_disposing) return;
+
+      await cam.setExposureOffset(
+        exposureOffset.clamp(
+          min,
+          max,
+        ),
+      );
     } catch (_) {}
   }
 
-  // ── Frame processing ───────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // Frame processing
+  // ─────────────────────────────────────────────────────────────────────────
 
-  Future<void> _onFrame(CameraImage image) async {
-    if (!_ready || _processing || _capturing || _disposing) return;
-    final cam = _cam; // capture local ref — may be nullified by _stopAndDispose
-    if (cam == null) return;
-    final now = DateTime.now().millisecondsSinceEpoch;
-    if (now - _lastProcessedMs < _processIntervalMs) return;
+  Future<void> _onFrame(
+      CameraImage image,
+      ) async {
+    if (_disposing ||
+        !_ready ||
+        _processing ||
+        _capturing) {
+      return;
+    }
+
+    final cam = _cam;
+
+    if (cam == null ||
+        !cam.value.isInitialized) {
+      return;
+    }
+
+    final now =
+        DateTime.now().millisecondsSinceEpoch;
+
+    if (now - _lastProcessedMs <
+        _processIntervalMs) {
+      return;
+    }
+
     _lastProcessedMs = now;
+
     _processing = true;
 
     try {
-      if (_screenSize == null || _previewBoxSize == null) return;
+      final screen = _screenSize;
+      final previewBox =
+          _previewBoxSize;
 
-      final rotation = InputImageRotationValue.fromRawValue(
-            cam.description.sensorOrientation,
+      if (screen == null ||
+          previewBox == null) {
+        return;
+      }
+
+      final rotation =
+          InputImageRotationValue.fromRawValue(
+            cam.description
+                .sensorOrientation,
           ) ??
-          InputImageRotation.rotation0deg;
+              InputImageRotation
+                  .rotation0deg;
 
       final format =
-          InputImageFormatValue.fromRawValue(image.format.raw as int) ?? (Platform.isAndroid ? InputImageFormat.nv21 : InputImageFormat.bgra8888);
+          InputImageFormatValue.fromRawValue(
+            image.format.raw as int,
+          ) ??
+              (Platform.isAndroid
+                  ? InputImageFormat.nv21
+                  : InputImageFormat.bgra8888);
 
-      final inputImage = InputImage.fromBytes(
-        bytes: _concatPlanes(image.planes),
-        metadata: InputImageMetadata(
-          size: Size(image.width.toDouble(), image.height.toDouble()),
+      final inputImage =
+      InputImage.fromBytes(
+        bytes: _concatPlanes(
+          image.planes,
+        ),
+        metadata:
+        InputImageMetadata(
+          size: Size(
+            image.width.toDouble(),
+            image.height.toDouble(),
+          ),
           rotation: rotation,
           format: format,
-          bytesPerRow: image.planes.first.bytesPerRow,
+          bytesPerRow:
+          image.planes
+              .first.bytesPerRow,
         ),
       );
 
-      final faces = await _detector.processImage(inputImage);
+      final faces =
+      await _detector.processImage(
+        inputImage,
+      );
 
-      // Bail out if teardown started while ML Kit was processing —
-      // avoids calling setState/_cam after dispose started.
-      if (_disposing || !mounted) return;
+      if (_disposing ||
+          !mounted) {
+        return;
+      }
 
-      // Image size after rotation
-      final rot = cam.description.sensorOrientation;
+      final rot =
+          cam.description
+              .sensorOrientation;
+
       final rotatedSize =
-          (rot == 90 || rot == 270) ? Size(image.height.toDouble(), image.width.toDouble()) : Size(image.width.toDouble(), image.height.toDouble());
+      (rot == 90 || rot == 270)
+          ? Size(
+        image.height
+            .toDouble(),
+        image.width
+            .toDouble(),
+      )
+          : Size(
+        image.width
+            .toDouble(),
+        image.height
+            .toDouble(),
+      );
 
-      // Map circle rect from screen to image coordinates
-      Rect circleOnImage = _mapScreenRectToImageCover(
-        _circleRect(_screenSize!),
-        _screenSize!,
-        _previewBoxSize!,
+      Rect circleOnImage =
+      _mapScreenRectToImageCover(
+        _circleRect(screen),
+        screen,
+        previewBox,
         rotatedSize,
       );
 
-      // Mirror for front camera
       if (_isFront) {
-        circleOnImage = Rect.fromLTWH(
-          rotatedSize.width - circleOnImage.right,
-          circleOnImage.top,
-          circleOnImage.width,
-          circleOnImage.height,
-        );
+        circleOnImage =
+            Rect.fromLTWH(
+              rotatedSize.width -
+                  circleOnImage.right,
+              circleOnImage.top,
+              circleOnImage.width,
+              circleOnImage.height,
+            );
       }
 
-      final (ok, hint) = _evaluateFace(faces, circleOnImage);
+      final (ok, hint) =
+      _evaluateFace(
+        faces,
+        circleOnImage,
+      );
 
-      if (mounted) {
-        setState(() {
-          _faceInside = ok;
-          _ringColor = ok ? Colors.green : Colors.red;
-          _hint = hint;
-        });
+      if (_disposing ||
+          !mounted) {
+        return;
       }
+
+      setState(() {
+        _faceInside = ok;
+        _ringColor =
+        ok ? Colors.green : Colors.red;
+        _hint = hint;
+      });
     } catch (_) {
+      // Ignore camera / MLKit frame errors.
     } finally {
       _processing = false;
     }
   }
 
-  /// Returns (isValid, hintMessage) based on face position vs circle.
-  (bool, String) _evaluateFace(List<Face> faces, Rect circleOnImage) {
+  // ─────────────────────────────────────────────────────────────────────────
+  // Face evaluation
+  // ─────────────────────────────────────────────────────────────────────────
+
+  (bool, String) _evaluateFace(
+      List<Face> faces,
+      Rect circleOnImage,
+      ) {
     if (faces.isEmpty) {
-      return (false, 'Posisikan wajah di dalam lingkaran');
+      return (
+      false,
+      'Posisikan wajah di dalam lingkaran',
+      );
     }
 
     faces.sort(
-      (a, b) => b.boundingBox.area().compareTo(a.boundingBox.area()),
+          (a, b) => b.boundingBox
+          .area()
+          .compareTo(
+        a.boundingBox.area(),
+      ),
     );
-    final box = faces.first.boundingBox;
-    final cx = circleOnImage.center.dx;
-    final cy = circleOnImage.center.dy;
-    final radius = math.min(circleOnImage.width, circleOnImage.height) / 2;
-    final margin = radius * 0.03;
 
-    final center = box.center;
+    final box =
+        faces.first.boundingBox;
+
+    final center =
+        circleOnImage.center;
+
+    final radius =
+        math.min(
+          circleOnImage.width,
+          circleOnImage.height,
+        ) /
+            2;
+
+    final margin =
+        radius * 0.03;
+
+    final faceCenter =
+        box.center;
+
     final corners = [
       box.topLeft,
       box.topRight,
@@ -339,36 +698,87 @@ class _FaceDetectionPageState extends State<FaceDetectionPage> with WidgetsBindi
       box.bottomRight,
     ];
 
-    final centerInside = (center - Offset(cx, cy)).distance <= radius - margin;
-    final cornersInside = corners.every(
-      (p) => (p - Offset(cx, cy)).distance <= radius - margin,
+    final centerInside =
+        (faceCenter - center)
+            .distance <=
+            radius - margin;
+
+    final cornersInside =
+    corners.every(
+          (point) =>
+      (point - center)
+          .distance <=
+          radius - margin,
     );
 
-    if (!centerInside && !cornersInside) {
-      return (false, 'Geser wajah ke tengah lingkaran');
+    if (!centerInside &&
+        !cornersInside) {
+      return (
+      false,
+      'Geser wajah ke tengah lingkaran',
+      );
     }
 
     final fill = math.sqrt(
-          box.width * box.width + box.height * box.height,
-        ) /
+      box.width * box.width +
+          box.height * box.height,
+    ) /
         (2 * radius);
 
-    if (fill < _minFill) return (false, 'Maju sedikit');
-    if (fill > _maxFill) return (false, 'Mundur sedikit');
-    return (true, 'Tahan…');
+    if (fill < _minFill) {
+      return (
+      false,
+      'Maju sedikit',
+      );
+    }
+
+    if (fill > _maxFill) {
+      return (
+      false,
+      'Mundur sedikit',
+      );
+    }
+
+    return (
+    true,
+    'Tahan…',
+    );
   }
 
-  // ── Capture ────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // Capture
+  // ─────────────────────────────────────────────────────────────────────────
 
   Future<void> _capture() async {
-    if (!_faceInside || _capturing) return;
-    final cam = _cam;
-    if (cam == null || !cam.value.isInitialized) return;
-    if (_screenSize == null || _previewBoxSize == null) return;
+    if (_disposing ||
+        !_faceInside ||
+        _capturing) {
+      return;
+    }
 
-    setState(() => _capturing = true);
+    final cam = _cam;
+
+    if (cam == null ||
+        !cam.value.isInitialized) {
+      return;
+    }
+
+    final screen = _screenSize;
+    final previewBox =
+        _previewBoxSize;
+
+    if (screen == null ||
+        previewBox == null) {
+      return;
+    }
+
+    setState(() {
+      _capturing = true;
+    });
+
     try {
       _aeTimer?.cancel();
+      _aeTimer = null;
 
       if (cam.value.isStreamingImages) {
         try {
@@ -376,289 +786,710 @@ class _FaceDetectionPageState extends State<FaceDetectionPage> with WidgetsBindi
         } catch (_) {}
       }
 
-      // Pre-focus and lock to reduce blur
-      await _prefocusAndLock(cam);
-      await Future<void>.delayed(const Duration(milliseconds: 120));
+      if (_disposing) return;
 
-      final shot = await cam.takePicture();
-      final resultFile = await _processCapturedImage(File(shot.path));
+      await _prefocusAndLock(
+        cam,
+      );
 
-      if (resultFile != null) {
-        // Stop & dispose BEFORE popping — same fix as the back button.
-        await _stopAndDispose();
-        if (mounted) Navigator.of(context).pop(resultFile);
+      if (_disposing) return;
+
+      await Future<void>.delayed(
+        const Duration(
+          milliseconds: 120,
+        ),
+      );
+
+      if (_disposing) return;
+
+      final shot =
+      await cam.takePicture();
+
+      if (_disposing) return;
+
+      final result =
+      await _processCapturedImage(
+        File(shot.path),
+      );
+
+      if (_disposing) return;
+
+      if (result != null) {
+        final oldCam = _cam;
+
+        _cam = null;
+        _ready = false;
+
+        _aeTimer?.cancel();
+        _aeTimer = null;
+
+        unawaited(
+          _cleanupCamera(oldCam),
+        );
+
+        if (mounted) {
+          Navigator.of(context)
+              .pop(result);
+        }
+
         return;
       }
 
-      // Decoding failed — restore camera and let user retry.
-      try {
-        await cam.startImageStream(_onFrame);
-      } catch (_) {}
-      await _restoreAutoMode(cam);
-    } catch (e) {
-      try {
-        await _cam?.startImageStream(_onFrame);
-      } catch (_) {}
-      if (_cam != null && _cam!.value.isInitialized) {
-        await _restoreAutoMode(_cam!);
+      if (!_disposing) {
+        try {
+          await cam.startImageStream(
+            _onFrame,
+          );
+        } catch (_) {}
+
+        await _restoreAutoMode(
+          cam,
+        );
       }
-      if (mounted) {
-        AppSnackBar.show(context, 'Gagal memotret: $e');
+    } catch (e) {
+      if (!_disposing) {
+        try {
+          if (!cam.value.isStreamingImages) {
+            await cam.startImageStream(
+              _onFrame,
+            );
+          }
+        } catch (_) {}
+
+        if (!_disposing &&
+            cam.value.isInitialized) {
+          await _restoreAutoMode(
+            cam,
+          );
+        }
+
+        if (mounted) {
+          AppSnackBar.show(
+            context,
+            'Gagal memotret: $e',
+          );
+        }
       }
     } finally {
-      if (mounted) setState(() => _capturing = false);
+      if (mounted && !_disposing) {
+        setState(() {
+          _capturing = false;
+        });
+      }
     }
   }
 
-  Future<File?> _processCapturedImage(File raw) async {
-    final bytes = await raw.readAsBytes();
-    imglib.Image? full = imglib.decodeImage(bytes);
-    if (full == null) return null;
+  // ─────────────────────────────────────────────────────────────────────────
+  // Process captured image
+  // ─────────────────────────────────────────────────────────────────────────
 
-    // Rotate to portrait if needed
+  Future<File?> _processCapturedImage(
+      File raw,
+      ) async {
+    final screen = _screenSize;
+    final previewBox =
+        _previewBoxSize;
+
+    if (screen == null ||
+        previewBox == null) {
+      return null;
+    }
+
+    final bytes =
+    await raw.readAsBytes();
+
+    if (_disposing) {
+      return null;
+    }
+
+    imglib.Image? full =
+    imglib.decodeImage(bytes);
+
+    if (full == null) {
+      return null;
+    }
+
     if (full.width > full.height) {
-      full = imglib.copyRotate(full, angle: 90);
+      full = imglib.copyRotate(
+        full,
+        angle: 90,
+      );
     }
 
-    // Mirror for front camera to align with overlay
     if (_isFront) {
-      full = imglib.flipHorizontal(full);
+      full = imglib.flipHorizontal(
+        full,
+      );
     }
 
-    final circleOnImage = _mapScreenRectToImageCover(
-      _circleRect(_screenSize!),
-      _screenSize!,
-      _previewBoxSize!,
-      Size(full.width.toDouble(), full.height.toDouble()),
+    final circleOnImage =
+    _mapScreenRectToImageCover(
+      _circleRect(screen),
+      screen,
+      previewBox,
+      Size(
+        full.width.toDouble(),
+        full.height.toDouble(),
+      ),
     );
 
-    final x = circleOnImage.left.floor().clamp(0, full.width - 1);
-    final y = circleOnImage.top.floor().clamp(0, full.height - 1);
-    final w = circleOnImage.width.floor().clamp(1, full.width - x);
-    final h = circleOnImage.height.floor().clamp(1, full.height - y);
+    final x =
+    circleOnImage.left
+        .floor()
+        .clamp(
+      0,
+      full.width - 1,
+    );
 
-    final cropped = imglib.copyCrop(full, x: x, y: y, width: w, height: h);
-    final masked = _applyCircleMask(cropped);
+    final y =
+    circleOnImage.top
+        .floor()
+        .clamp(
+      0,
+      full.height - 1,
+    );
 
-    final outPath = raw.path.replaceFirst(
-      RegExp(r'\.jpe?g$', caseSensitive: false),
+    final w =
+    circleOnImage.width
+        .floor()
+        .clamp(
+      1,
+      full.width - x,
+    );
+
+    final h =
+    circleOnImage.height
+        .floor()
+        .clamp(
+      1,
+      full.height - y,
+    );
+
+    final cropped =
+    imglib.copyCrop(
+      full,
+      x: x,
+      y: y,
+      width: w,
+      height: h,
+    );
+
+    final masked =
+    _applyCircleMask(
+      cropped,
+    );
+
+    final outPath =
+    raw.path.replaceFirst(
+      RegExp(
+        r'\.jpe?g$',
+        caseSensitive: false,
+      ),
       '_circle.png',
     );
-    final outFile = File(outPath);
+
+    final outFile =
+    File(outPath);
+
     await outFile.writeAsBytes(
       imglib.encodePng(masked),
       flush: true,
     );
+
     return outFile;
   }
 
-  Future<void> _prefocusAndLock(CameraController cam) async {
-    if (_screenSize == null || _previewBoxSize == null) return;
-    final pt = _circleCenterOnPreview01();
-    await _applyFocusExposure(cam, pt, exposureOffset: 0.0);
-    await Future<void>.delayed(const Duration(milliseconds: 350));
+  // ─────────────────────────────────────────────────────────────────────────
+  // Prefocus
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Future<void> _prefocusAndLock(
+      CameraController cam,
+      ) async {
+    if (_disposing) return;
+
+    final screen = _screenSize;
+    final previewBox =
+        _previewBoxSize;
+
+    if (screen == null ||
+        previewBox == null) {
+      return;
+    }
+
+    final point =
+    _circleCenterOnPreview01();
+
+    await _applyFocusExposure(
+      cam,
+      point,
+      exposureOffset: 0.0,
+    );
+
+    if (_disposing) return;
+
+    await Future<void>.delayed(
+      const Duration(
+        milliseconds: 350,
+      ),
+    );
+
+    if (_disposing) return;
+
     try {
-      await cam.setFocusMode(FocusMode.locked);
+      await cam.setFocusMode(
+        FocusMode.locked,
+      );
     } catch (_) {}
+
+    if (_disposing) return;
+
     try {
-      await cam.setExposureMode(ExposureMode.locked);
+      await cam.setExposureMode(
+        ExposureMode.locked,
+      );
     } catch (_) {}
   }
 
-  Future<void> _restoreAutoMode(CameraController cam) async {
+  // ─────────────────────────────────────────────────────────────────────────
+  // Restore AE / AF
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Future<void> _restoreAutoMode(
+      CameraController cam,
+      ) async {
+    if (_disposing) return;
+
     await _applyFocusExposure(
       cam,
       _circleCenterOnPreview01(),
       exposureOffset: 0.4,
     );
+
+    if (_disposing) return;
+
     _startAeTimer();
   }
 
-  // ── Geometry helpers ───────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // Geometry
+  // ─────────────────────────────────────────────────────────────────────────
 
-  Rect _circleRect(Size screen) {
-    final shortest = math.min(screen.width, screen.height);
-    final diameter = shortest * _ringRatio;
+  Rect _circleRect(
+      Size screen,
+      ) {
+    final shortest =
+    math.min(
+      screen.width,
+      screen.height,
+    );
+
+    final diameter =
+        shortest * _ringRatio;
+
     return Rect.fromCenter(
-      center: Offset(screen.width / 2, screen.height / 3 + diameter / 2),
+      center: Offset(
+        screen.width / 2,
+        screen.height / 3 +
+            diameter / 2,
+      ),
       width: diameter,
       height: diameter,
     );
   }
 
   Offset _circleCenterOnPreview01() {
-    final circle = _circleRect(_screenSize!);
-    final s1 = math.max(
-      _screenSize!.width / _previewBoxSize!.width,
-      _screenSize!.height / _previewBoxSize!.height,
-    );
-    final dispW = _previewBoxSize!.width * s1;
-    final dispH = _previewBoxSize!.height * s1;
-    final dx = (_screenSize!.width - dispW) / 2.0;
-    final dy = (_screenSize!.height - dispH) / 2.0;
+    final screen =
+        _screenSize;
 
-    final bx = (circle.center.dx - dx) / s1;
-    final by = (circle.center.dy - dy) / s1;
+    final box =
+        _previewBoxSize;
+
+    if (screen == null ||
+        box == null ||
+        box.width <= 0 ||
+        box.height <= 0) {
+      return const Offset(
+        0.5,
+        0.5,
+      );
+    }
+
+    final circle =
+    _circleRect(screen);
+
+    final s1 = math.max(
+      screen.width / box.width,
+      screen.height / box.height,
+    );
+
+    final dispW =
+        box.width * s1;
+
+    final dispH =
+        box.height * s1;
+
+    final dx =
+        (screen.width - dispW) /
+            2.0;
+
+    final dy =
+        (screen.height - dispH) /
+            2.0;
+
+    final bx =
+        (circle.center.dx - dx) /
+            s1;
+
+    final by =
+        (circle.center.dy - dy) /
+            s1;
 
     return Offset(
-      (bx / _previewBoxSize!.width).clamp(0.0, 1.0),
-      (by / _previewBoxSize!.height).clamp(0.0, 1.0),
+      (bx / box.width)
+          .clamp(0.0, 1.0),
+      (by / box.height)
+          .clamp(0.0, 1.0),
     );
   }
 
   Rect _mapScreenRectToImageCover(
-    Rect screenRect,
-    Size screen,
-    Size box,
-    Size image,
-  ) {
-    final s1 = math.max(screen.width / box.width, screen.height / box.height);
-    final dispW = box.width * s1;
-    final dispH = box.height * s1;
-    final dx = (screen.width - dispW) / 2.0;
-    final dy = (screen.height - dispH) / 2.0;
+      Rect screenRect,
+      Size screen,
+      Size box,
+      Size image,
+      ) {
+    if (box.width <= 0 ||
+        box.height <= 0 ||
+        image.width <= 0 ||
+        image.height <= 0) {
+      return Rect.zero;
+    }
 
-    final bx = (screenRect.left - dx) / s1;
-    final by = (screenRect.top - dy) / s1;
-    final bw = screenRect.width / s1;
-    final bh = screenRect.height / s1;
+    final s1 = math.max(
+      screen.width / box.width,
+      screen.height / box.height,
+    );
 
-    final s2 = math.max(box.width / image.width, box.height / image.height);
-    final visW = box.width / s2;
-    final visH = box.height / s2;
-    final offX = (image.width - visW) / 2.0;
-    final offY = (image.height - visH) / 2.0;
+    final dispW =
+        box.width * s1;
+
+    final dispH =
+        box.height * s1;
+
+    final dx =
+        (screen.width - dispW) /
+            2.0;
+
+    final dy =
+        (screen.height - dispH) /
+            2.0;
+
+    final bx =
+        (screenRect.left - dx) /
+            s1;
+
+    final by =
+        (screenRect.top - dy) /
+            s1;
+
+    final bw =
+        screenRect.width / s1;
+
+    final bh =
+        screenRect.height / s1;
+
+    final s2 = math.max(
+      box.width / image.width,
+      box.height / image.height,
+    );
+
+    final visW =
+        box.width / s2;
+
+    final visH =
+        box.height / s2;
+
+    final offX =
+        (image.width - visW) /
+            2.0;
+
+    final offY =
+        (image.height - visH) /
+            2.0;
 
     return Rect.fromLTWH(
-      offX + (bx / box.width) * visW,
-      offY + (by / box.height) * visH,
-      (bw / box.width) * visW,
-      (bh / box.height) * visH,
+      offX +
+          (bx / box.width) *
+              visW,
+      offY +
+          (by / box.height) *
+              visH,
+      (bw / box.width) *
+          visW,
+      (bh / box.height) *
+          visH,
     );
   }
 
-  imglib.Image _applyCircleMask(imglib.Image src) {
+  // ─────────────────────────────────────────────────────────────────────────
+  // Circle mask
+  // ─────────────────────────────────────────────────────────────────────────
+
+  imglib.Image _applyCircleMask(
+      imglib.Image src,
+      ) {
     final w = src.width;
     final h = src.height;
+
     final cx = w / 2.0;
     final cy = h / 2.0;
-    final r2 = math.pow(math.min(w, h) / 2.0, 2);
+
+    final r2 = math.pow(
+      math.min(w, h) / 2.0,
+      2,
+    );
 
     for (int y = 0; y < h; y++) {
-      final dy = (y + 0.5) - cy;
+      final dy =
+          (y + 0.5) - cy;
+
       for (int x = 0; x < w; x++) {
-        final dx = (x + 0.5) - cx;
-        if (dx * dx + dy * dy > r2) {
-          final p = src.getPixel(x, y);
-          src.setPixelRgba(x, y, p.r.toInt(), p.g.toInt(), p.b.toInt(), 0);
+        final dx =
+            (x + 0.5) - cx;
+
+        if (dx * dx + dy * dy >
+            r2) {
+          final p =
+          src.getPixel(
+            x,
+            y,
+          );
+
+          src.setPixelRgba(
+            x,
+            y,
+            p.r.toInt(),
+            p.g.toInt(),
+            p.b.toInt(),
+            0,
+          );
         }
       }
     }
+
     return src;
   }
 
-  Uint8List _concatPlanes(List<Plane> planes) {
-    final builder = BytesBuilder();
-    for (final p in planes) {
-      builder.add(p.bytes);
+  // ─────────────────────────────────────────────────────────────────────────
+  // Plane concat
+  // ─────────────────────────────────────────────────────────────────────────
+
+  Uint8List _concatPlanes(
+      List<Plane> planes,
+      ) {
+    final builder =
+    BytesBuilder();
+
+    for (final plane in planes) {
+      builder.add(
+        plane.bytes,
+      );
     }
+
     return builder.toBytes();
   }
 
-  // ── Build ──────────────────────────────────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────────────────
+  // Build
+  // ─────────────────────────────────────────────────────────────────────────
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(
+      BuildContext context,
+      ) {
+    final cam = _cam;
+
+    final canShowCamera =
+        !_disposing &&
+            _ready &&
+            cam != null &&
+            cam.value.isInitialized &&
+            cam.value.previewSize != null;
+
     return AppScaffoldWrapper(
       backgroundColor: Colors.black,
+
       appBar: AppPageBar(
         title: 'Verifikasi Wajah',
-        // Stop & dispose camera BEFORE popping — this is the fix for
-        // "Image is already closed" when re-entering this page:
-        // without this, a new CameraController is created while the
-        // old one is still tearing down in the background, causing
-        // overlapping ImageReader sessions on Android.
-        onBack: () async {
-          await _stopAndDispose();
-          if (context.mounted) context.pop();
+
+        onBack: _handleBack,
+      ),
+
+      body: !canShowCamera
+          ? const Center(
+        child:
+        CircularProgressIndicator(),
+      )
+          : LayoutBuilder(
+        builder: (
+            context,
+            constraints,
+            ) {
+          final previewSize =
+              cam.value.previewSize;
+
+          if (previewSize == null) {
+            return const Center(
+              child:
+              CircularProgressIndicator(),
+            );
+          }
+
+          _screenSize = Size(
+            constraints.maxWidth,
+            constraints.maxHeight,
+          );
+
+          _previewBoxSize =
+              Size(
+                previewSize.height,
+                previewSize.width,
+              );
+
+          final screen =
+              _screenSize;
+
+          final previewBox =
+              _previewBoxSize;
+
+          if (screen == null ||
+              previewBox == null) {
+            return const Center(
+              child:
+              CircularProgressIndicator(),
+            );
+          }
+
+          return Stack(
+            fit: StackFit.expand,
+            children: [
+              // ─────────────────────────────────────────────────────
+              // Camera preview
+              // ─────────────────────────────────────────────────────
+
+              FittedBox(
+                fit: BoxFit.cover,
+                child: SizedBox(
+                  width:
+                  previewBox.width,
+                  height:
+                  previewBox.height,
+                  child:
+                  CameraPreview(
+                    cam,
+                  ),
+                ),
+              ),
+
+              // ─────────────────────────────────────────────────────
+              // Circle overlay
+              // ─────────────────────────────────────────────────────
+
+              IgnorePointer(
+                child:
+                CustomPaint(
+                  painter:
+                  _CircleOverlayPainter(
+                    ringColor:
+                    _ringColor,
+                    circleRect:
+                    _circleRect(
+                      screen,
+                    ),
+                  ),
+                  size:
+                  Size.infinite,
+                ),
+              ),
+
+              // ─────────────────────────────────────────────────────
+              // Hint
+              // ─────────────────────────────────────────────────────
+
+              Positioned(
+                left: 16,
+                right: 16,
+                bottom: 48,
+                child: Text(
+                  _hint,
+                  textAlign:
+                  TextAlign.center,
+                  style:
+                  const TextStyle(
+                    color:
+                    Colors.white,
+                    fontSize: 16,
+                    fontWeight:
+                    FontWeight.w600,
+                    shadows: [
+                      Shadow(
+                        color:
+                        Colors.black54,
+                        blurRadius:
+                        8,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // ─────────────────────────────────────────────────────
+              // Loading
+              // ─────────────────────────────────────────────────────
+
+              if (_capturing)
+                const ColoredBox(
+                  color:
+                  Colors.black45,
+                  child:
+                  Center(
+                    child:
+                    CircularProgressIndicator(),
+                  ),
+                ),
+            ],
+          );
         },
       ),
-      body: !_ready
-          ? const Center(child: CircularProgressIndicator())
-          : LayoutBuilder(
-              builder: (context, constraints) {
-                _screenSize = Size(constraints.maxWidth, constraints.maxHeight);
-                final pv = _cam!.value.previewSize!;
-                _previewBoxSize = Size(pv.height, pv.width);
 
-                return Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    // ── Live preview ─────────────────────────────────────
-                    FittedBox(
-                      fit: BoxFit.cover,
-                      child: SizedBox(
-                        width: _previewBoxSize!.width,
-                        height: _previewBoxSize!.height,
-                        child: CameraPreview(_cam!),
-                      ),
-                    ),
-
-                    // ── Circle overlay ───────────────────────────────────
-                    IgnorePointer(
-                      child: CustomPaint(
-                        painter: _CircleOverlayPainter(
-                          ringColor: _ringColor,
-                          circleRect: _circleRect(_screenSize!),
-                        ),
-                        size: Size.infinite,
-                      ),
-                    ),
-
-                    // ── Hint text ────────────────────────────────────────
-                    Positioned(
-                      left: 16,
-                      right: 16,
-                      bottom: 48,
-                      child: Text(
-                        _hint,
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          shadows: [
-                            Shadow(color: Colors.black54, blurRadius: 8),
-                          ],
-                        ),
-                      ),
-                    ),
-
-                    // ── Capture loading overlay ──────────────────────────
-                    if (_capturing)
-                      const ColoredBox(
-                        color: Colors.black45,
-                        child: Center(child: CircularProgressIndicator()),
-                      ),
-                  ],
-                );
-              },
-            ),
-      floatingActionButton: _faceInside
+      floatingActionButton:
+      _faceInside &&
+          !_capturing &&
+          !_disposing
           ? FloatingActionButton.extended(
-              onPressed: _capture,
-              backgroundColor: Colors.green,
-              icon: const Icon(Icons.check),
-              label: const Text('Verifikasi'),
-            )
+        onPressed:
+        _capture,
+        backgroundColor:
+        Colors.green,
+        icon: const Icon(
+          Icons.check,
+        ),
+        label: const Text(
+          'Verifikasi',
+        ),
+      )
           : null,
     );
   }
 }
 
-// ─── Circle Overlay Painter ───────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────────────────
+// Circle Overlay Painter
+// ─────────────────────────────────────────────────────────────────────────────
 
-class _CircleOverlayPainter extends CustomPainter {
+class _CircleOverlayPainter
+    extends CustomPainter {
   final Color ringColor;
   final Rect circleRect;
 
@@ -668,40 +1499,59 @@ class _CircleOverlayPainter extends CustomPainter {
   });
 
   @override
-  void paint(Canvas canvas, Size size) {
-    // Dim outside circle
-    final dimPath = Path()
-      ..addRect(Offset.zero & size)
+  void paint(
+      Canvas canvas,
+      Size size,
+      ) {
+    final fullPath = Path()
+      ..addRect(
+        Offset.zero & size,
+      );
+
+    final circlePath = Path()
       ..addOval(circleRect);
-    canvas.drawPath(
-      Path.combine(
-        PathOperation.difference,
-        dimPath,
-        Path()
-          ..addOval(
-            circleRect,
-          ),
-      ),
-      Paint()..color = Colors.black.withOpacity(0.35),
+
+    final dimPath =
+    Path.combine(
+      PathOperation.difference,
+      fullPath,
+      circlePath,
     );
 
-    // Ring
+    canvas.drawPath(
+      dimPath,
+      Paint()
+        ..color =
+        Colors.black.withOpacity(
+          0.35,
+        ),
+    );
+
     canvas.drawOval(
       circleRect,
       Paint()
         ..color = ringColor
-        ..style = PaintingStyle.stroke
+        ..style =
+            PaintingStyle.stroke
         ..strokeWidth = 3,
     );
   }
 
   @override
   bool shouldRepaint(
-    _CircleOverlayPainter old,
-  ) =>
-      old.ringColor != ringColor || old.circleRect != circleRect;
+      _CircleOverlayPainter oldDelegate,
+      ) {
+    return oldDelegate.ringColor !=
+        ringColor ||
+        oldDelegate.circleRect !=
+            circleRect;
+  }
 }
 
-extension on Rect {
+// ─────────────────────────────────────────────────────────────────────────────
+// Rect extension
+// ─────────────────────────────────────────────────────────────────────────────
+
+extension RectExtension on Rect {
   double area() => width * height;
 }

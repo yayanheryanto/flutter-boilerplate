@@ -170,28 +170,32 @@ class _KtpPhotoCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(RadiusTokens.md),
             child: photo != null
                 ? Center(
-              child: Image.file(
-                photo!,
-                height: 18.h,
-                width: 58.w,
-                fit: BoxFit.cover,
-              ),
-            )
+                    child: Image.file(
+                      photo!,
+                      height: 18.h,
+                      width: 58.w,
+                      fit: BoxFit.cover,
+                    ),
+                  )
                 : Center(
-              child: SizedBox(
-                height: 18.h,
-                width: 58.w,
-                child: Image.asset(
-                  Images.sampleCorrectIdCard,
-                ),
-              ),
-            ),
+                    child: SizedBox(
+                      height: 18.h,
+                      width: 58.w,
+                      child: Image.asset(
+                        Images.sampleCorrectIdCard,
+                      ),
+                    ),
+                  ),
           ),
           const AppSpacer.md(),
 
           // Foto Ulang button (Removed Expanded to prevent layout crashes)
           AppButton(
-            label: isLoading ? 'Memproses...' : photo == null ? 'Ambil Foto' : 'Foto Ulang',
+            label: isLoading
+                ? 'Memproses...'
+                : photo == null
+                    ? 'Ambil Foto'
+                    : 'Foto Ulang',
             variant: AppButtonVariant.outlined,
             backgroundColor: AppColors.bgCard,
             onPressed: isLoading ? null : onTap,
