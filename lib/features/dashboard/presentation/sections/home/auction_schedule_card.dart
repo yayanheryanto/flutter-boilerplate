@@ -3,7 +3,7 @@ import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
-class JadwalLelangData {
+class AuctionScheduleData {
   final String itemName;
   final String locationName;
   final String dateLabel;
@@ -12,7 +12,7 @@ class JadwalLelangData {
   final Color tint;
   final bool isLive;
 
-  const JadwalLelangData({
+  const AuctionScheduleData({
     required this.itemName,
     required this.locationName,
     required this.dateLabel,
@@ -23,10 +23,10 @@ class JadwalLelangData {
   });
 }
 
-class JadwalLelangCard extends StatelessWidget {
-  final JadwalLelangData data;
+class AuctionScheduleCard extends StatelessWidget {
+  final AuctionScheduleData data;
 
-  const JadwalLelangCard({
+  const AuctionScheduleCard({
     super.key,
     required this.data,
   });

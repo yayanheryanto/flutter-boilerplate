@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/services/face_detection_page.dart';
+import 'package:emas/features/auth/presentation/pages/face_detection_page.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/features/auth/presentation/pages/account_processed_page.dart';
 import 'package:emas/features/auth/presentation/pages/address_verification_page.dart';
@@ -15,24 +15,25 @@ import 'package:emas/features/auth/presentation/pages/ktp_guide_page.dart';
 import 'package:emas/features/auth/presentation/pages/ktp_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/npwp_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/verification_preparation_page.dart';
-import 'package:emas/features/dashboard/presentation/pages/beli_npl_confirmation_page.dart';
-import 'package:emas/features/dashboard/presentation/pages/beli_npl_detail_page.dart';
-import 'package:emas/features/dashboard/presentation/pages/ikut_lelang_page.dart';
-import 'package:emas/features/dashboard/presentation/pages/lelang_detail_page.dart';
-import 'package:emas/features/dashboard/presentation/pages/lelang_list_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/buy_npl_confirmation_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/buy_npl_detail_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/join_auction_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/auction_detail_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/auction_list_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/live_auction_page.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/core/utils/navigator_key.dart';
-import 'package:emas/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:emas/features/auth/presentation/pages/login_page.dart';
 import 'package:emas/features/auth/presentation/pages/otp_page.dart';
 import 'package:emas/features/auth/presentation/pages/register_page.dart';
-import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/features/dashboard/presentation/pages/category_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
+
+import 'package:emas/features/auth/presentation/pages/forgot_password_page.dart';
 
 @singleton
 class AppRouter {
@@ -143,7 +144,7 @@ class AppRouter {
         ),
 
         GoRoute(
-          path: AppRoutes.camerPick,
+          path: AppRoutes.cameraPick,
           name: 'camera-pick',
           builder: (context, state) => const CameraPickPage(),
         ),
@@ -192,20 +193,20 @@ class AppRouter {
         ),
 
         GoRoute(
-          path: AppRoutes.ikutLelang,
-          name: 'ikut-lelang',
-          builder: (context, state) => const IkutLelangPage(),
+          path: AppRoutes.joinAuction,
+          name: 'join-auction',
+          builder: (context, state) => const JoinAuctionPage(),
         ),
 
         GoRoute(
-          path: AppRoutes.lelangList,
-          name: 'lelang-list',
-          builder: (context, state) => const LelangListPage(),
+          path: AppRoutes.auctionList,
+          name: 'auction-list',
+          builder: (context, state) => const AuctionListPage(),
         ),
         GoRoute(
-          path: AppRoutes.lelangDetail,
-          name: 'lelang-detail',
-          builder: (context, state) => const LelangDetailPage(),
+          path: AppRoutes.auctionDetail,
+          name: 'auction-detail',
+          builder: (context, state) => const AuctionDetailPage(),
         ),
         GoRoute(
           path: AppRoutes.liveAuction,
@@ -213,14 +214,14 @@ class AppRouter {
           builder: (context, state) => const LiveAuctionPage(),
         ),
         GoRoute(
-          path: AppRoutes.beliNplDetail,
-          name: 'beli-npl-detail',
-          builder: (context, state) => const BeliNplPage(),
+          path: AppRoutes.buyNplDetail,
+          name: 'buy-npl-detail',
+          builder: (context, state) => const BuyNplPage(),
         ),
         GoRoute(
-          path: AppRoutes.beliNplConfirmation,
-          name: 'beli-npl-confirmation',
-          builder: (context, state) => const BeliNplConfirmationPage(),
+          path: AppRoutes.buyNplConfirmation,
+          name: 'buy-npl-confirmation',
+          builder: (context, state) => const BuyNplConfirmationPage(),
         ),
         GoRoute(
           path: AppRoutes.profile,

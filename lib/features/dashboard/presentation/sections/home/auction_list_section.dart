@@ -1,6 +1,6 @@
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
-import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/features/dashboard/presentation/widgets/home/auction_card.dart';
 import 'package:emas/features/dashboard/presentation/widgets/home/live_badge.dart';
 import 'package:emas/features/dashboard/presentation/widgets/home/section_header.dart';

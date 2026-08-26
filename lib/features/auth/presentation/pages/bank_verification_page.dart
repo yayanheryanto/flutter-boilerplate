@@ -7,7 +7,10 @@ import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/design_system.dart';
+import 'package:emas/core/di/injection.dart';
+import 'package:emas/features/auth/presentation/bloc/verification_flow/verification_flow_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
@@ -17,7 +20,10 @@ class BankVerificationPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _BankVerificationContent();
+    return BlocProvider<VerificationFlowBloc>(
+      create: (_) => getIt<VerificationFlowBloc>(),
+      child: const _BankVerificationContent(),
+    );
   }
 }
 

@@ -2,7 +2,7 @@ import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
-import 'package:emas/features/dashboard/presentation/sections/home/jadwal_lelang_card.dart';
+import 'package:emas/features/dashboard/presentation/sections/home/auction_schedule_card.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/banner_carousel.dart';
@@ -146,10 +146,10 @@ class DashboardLayout extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                       horizontal: AppSpacings.md,
                     ),
-                    itemCount: dummyJadwalLelang.length,
+                    itemCount: dummyAuctionSchedule.length,
                     itemBuilder: (_, index) {
-                      return JadwalLelangCard(
-                        data: dummyJadwalLelang[index],
+                      return AuctionScheduleCard(
+                        data: dummyAuctionSchedule[index],
                       );
                     },
                   ),

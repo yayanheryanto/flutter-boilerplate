@@ -1,67 +1,42 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/core/utils/currency_formatter.dart';
+import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
+import 'package:emas/features/dashboard/domain/entities/npl_order_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
+import 'package:emas/core/di/injection.dart';
+import 'package:emas/features/dashboard/presentation/bloc/buy_npl_detail/buy_npl_detail_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 // ─── Model ────────────────────────────────────────────────────────────────────
-
-class NplOrderItem {
-  final AuctionCategory category;
-  final String lokasi;
-  final String tanggal;
-  final String waktu;
-  final int jumlahNpl;
-  final int hargaPerNpl;
-
-  const NplOrderItem({
-    required this.category,
-    required this.lokasi,
-    required this.tanggal,
-    required this.waktu,
-    required this.jumlahNpl,
-    required this.hargaPerNpl,
-  });
-
-  int get subtotal => jumlahNpl * hargaPerNpl;
-}
 
 // ─── Dummy data ───────────────────────────────────────────────────────────────
 
 const _dummyOrders = [
   NplOrderItem(
     category: AuctionCategory.mobil,
-    lokasi: 'Fatmawati',
-    tanggal: '29 Juni 2026',
-    waktu: '10.00 WIB',
-    jumlahNpl: 1,
-    hargaPerNpl: 5000000,
+    location: 'Fatmawati',
+    date: '29 Juni 2026',
+    time: '10.00 WIB',
+    nplQuantity: 1,
+    pricePerNpl: 5000000,
   ),
   NplOrderItem(
     category: AuctionCategory.motor,
-    lokasi: 'Fatmawati',
-    tanggal: '29 Juni 2026',
-    waktu: '10.00 WIB',
-    jumlahNpl: 3,
-    hargaPerNpl: 1000000,
+    location: 'Fatmawati',
+    date: '29 Juni 2026',
+    time: '10.00 WIB',
+    nplQuantity: 3,
+    pricePerNpl: 1000000,
   ),
 ];
-
-// ─── Formatter ────────────────────────────────────────────────────────────────
-
-String _rupiah(int amount) => NumberFormat.currency(
-      locale: 'id_ID',
-      symbol: 'Rp',
-      decimalDigits: 0,
-    ).format(amount);
-
 // ─── Category icon/color helpers ──────────────────────────────────────────────
 
 const _categoryIcons = {
@@ -93,57 +68,62 @@ const _categoryIconBg = {
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-class BeliNplPage extends StatelessWidget {
+class BuyNplPage extends StatelessWidget {
   final List<NplOrderItem> orders;
 
-  const BeliNplPage({
+  const BuyNplPage({
     super.key,
     this.orders = _dummyOrders,
   });
 
-  int get _totalHarga => orders.fold(0, (sum, o) => sum + o.subtotal);
+  int get _totalAmount => orders.fold(0, (sum, o) => sum + o.subtotal);
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffoldWrapper(
-      backgroundColor: AppColors.neutral50,
-      appBar: const AppPageBar(title: 'Beli NPL'),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ── Scrollable content ─────────────────────────────────────
-          Expanded(
-            child: ListView(
-              padding: const EdgeInsets.all(AppSpacings.md),
-              children: [
-                // Header teks
-                const AppText(
-                  'Konfirmasi Pembelian NPL',
-                  variant: AppTextVariant.titleLarge,
-                  fontWeight: FontWeight.w700,
-                ),
-                const SizedBox(height: AppSpacings.xs),
-                const AppText(
-                  'Silakan cek kembali yang sudah Anda pilih sebelum lanjut ke pembayaran',
-                  color: AppColors.textSecondary,
-                ),
+    return BlocProvider(
+      create: (_) => getIt<BuyNplDetailBloc>()..add(const BuyNplDetailStarted()),
+      child: BlocBuilder<BuyNplDetailBloc, BuyNplDetailState>(
+        builder: (context, state) => AppScaffoldWrapper(
+          backgroundColor: AppColors.neutral50,
+          appBar: const AppPageBar(title: 'Beli NPL'),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // ── Scrollable content ─────────────────────────────────────
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.all(AppSpacings.md),
+                  children: [
+                    // Header teks
+                    const AppText(
+                      'Konfirmasi Pembelian NPL',
+                      variant: AppTextVariant.titleLarge,
+                      fontWeight: FontWeight.w700,
+                    ),
+                    const SizedBox(height: AppSpacings.xs),
+                    const AppText(
+                      'Silakan cek kembali yang sudah Anda pilih sebelum lanjut ke pembayaran',
+                      color: AppColors.textSecondary,
+                    ),
 
-                const SizedBox(height: AppSpacings.lg),
+                    const SizedBox(height: AppSpacings.lg),
 
-                // Order cards
-                ...orders.map(
-                  (order) => Padding(
-                    padding: const EdgeInsets.only(bottom: AppSpacings.md),
-                    child: _NplOrderCard(order: order),
-                  ),
+                    // Order cards
+                    ...orders.map(
+                      (order) => Padding(
+                        padding: const EdgeInsets.only(bottom: AppSpacings.md),
+                        child: _NplOrderCard(order: order),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+
+              // ── Fixed bottom CTA ───────────────────────────────────────
+              _BottomCTA(total: _totalAmount),
+            ],
           ),
-
-          // ── Fixed bottom CTA ───────────────────────────────────────
-          _BottomCTA(total: _totalHarga),
-        ],
+        ),
       ),
     );
   }
@@ -171,7 +151,7 @@ class _NplOrderCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       child: Column(
         children: [
-          // ── Header: icon + label kategori ─────────────────────────
+          // ── Header: icon + label categoryLabel ─────────────────────────
           Padding(
             padding: const EdgeInsets.all(AppSpacings.md),
             child: Row(
@@ -207,33 +187,33 @@ class _NplOrderCard extends StatelessWidget {
                 _DetailRow(
                   left: _DetailCell(
                     label: 'Lokasi Lelang',
-                    value: order.lokasi,
+                    value: order.location,
                   ),
                   right: _DetailCell(
                     label: 'Lokasi Lelang',
-                    value: order.lokasi,
+                    value: order.location,
                   ),
                 ),
                 const SizedBox(height: AppSpacings.md),
                 _DetailRow(
                   left: _DetailCell(
                     label: 'Tanggal Lelang',
-                    value: order.tanggal,
+                    value: order.date,
                   ),
                   right: _DetailCell(
                     label: 'Waktu Lelang',
-                    value: order.waktu,
+                    value: order.time,
                   ),
                 ),
                 const SizedBox(height: AppSpacings.md),
                 _DetailRow(
                   left: _DetailCell(
                     label: 'Jumlah NPL',
-                    value: order.jumlahNpl.toString(),
+                    value: order.nplQuantity.toString(),
                   ),
                   right: _DetailCell(
                     label: 'Harga per NPL',
-                    value: _rupiah(order.hargaPerNpl),
+                    value: CurrencyFormatter.rupiah(order.pricePerNpl),
                   ),
                 ),
               ],
@@ -319,7 +299,7 @@ class _SubtotalBar extends StatelessWidget {
             color: AppColors.white,
           ),
           AppText(
-            _rupiah(amount),
+            CurrencyFormatter.rupiah(amount),
             variant: AppTextVariant.labelLarge,
             fontWeight: FontWeight.w700,
             color: AppColors.white,
@@ -348,11 +328,11 @@ class _BottomCTA extends StatelessWidget {
         AppSpacings.lg,
       ),
       child: AppButton(
-        label: 'Lanjut Pembayaran    ${_rupiah(total)}',
+        label: 'Lanjut Pembayaran    ${CurrencyFormatter.rupiah(total)}',
         size: AppButtonSize.large,
         borderRadius: RadiusTokens.full,
         onPressed: () async {
-          await context.push(AppRoutes.beliNplConfirmation);
+          await context.push(AppRoutes.buyNplConfirmation);
         },
       ),
     );

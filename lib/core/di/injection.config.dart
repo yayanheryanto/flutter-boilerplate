@@ -30,8 +30,34 @@ import '../../features/auth/domain/usecases/auth/login_usecase.dart' as _i985;
 import '../../features/auth/domain/usecases/auth/logout_usecase.dart' as _i726;
 import '../../features/auth/domain/usecases/auth/register_usecase.dart' as _i47;
 import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
+import '../../features/auth/presentation/bloc/verification_flow/verification_flow_bloc.dart'
+    as _i875;
+import '../../features/dashboard/data/datasources/auction_datasource.dart'
+    as _i688;
 import '../../features/dashboard/data/datasources/live_auction_socket_datasource.dart'
     as _i702;
+import '../../features/dashboard/data/repositories/auction_repository_impl.dart'
+    as _i1069;
+import '../../features/dashboard/domain/repositories/auction_repository.dart'
+    as _i746;
+import '../../features/dashboard/domain/usecases/get_auction_list_usecase.dart'
+    as _i962;
+import '../../features/dashboard/domain/usecases/get_auctions_by_category_usecase.dart'
+    as _i217;
+import '../../features/dashboard/presentation/bloc/auction_detail/auction_detail_bloc.dart'
+    as _i339;
+import '../../features/dashboard/presentation/bloc/auction_list/auction_list_bloc.dart'
+    as _i237;
+import '../../features/dashboard/presentation/bloc/buy_npl_confirmation/buy_npl_confirmation_bloc.dart'
+    as _i592;
+import '../../features/dashboard/presentation/bloc/buy_npl_detail/buy_npl_detail_bloc.dart'
+    as _i841;
+import '../../features/dashboard/presentation/bloc/category/category_bloc.dart'
+    as _i157;
+import '../../features/dashboard/presentation/bloc/dashboard/dashboard_bloc.dart'
+    as _i72;
+import '../../features/dashboard/presentation/bloc/join_auction/join_auction_bloc.dart'
+    as _i959;
 import '../../features/dashboard/presentation/bloc/live_auction/live_auction_bloc.dart'
     as _i899;
 import '../bloc/notification_bloc.dart' as _i1015;
@@ -64,6 +90,13 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final appModule = _$AppModule();
     final authModule = _$AuthModule();
+    gh.factory<_i875.VerificationFlowBloc>(() => _i875.VerificationFlowBloc());
+    gh.factory<_i339.AuctionDetailBloc>(() => _i339.AuctionDetailBloc());
+    gh.factory<_i592.BuyNplConfirmationBloc>(
+        () => _i592.BuyNplConfirmationBloc());
+    gh.factory<_i841.BuyNplDetailBloc>(() => _i841.BuyNplDetailBloc());
+    gh.factory<_i72.DashboardBloc>(() => _i72.DashboardBloc());
+    gh.factory<_i959.JoinAuctionBloc>(() => _i959.JoinAuctionBloc());
     gh.singleton<_i344.LoggingInterceptor>(() => _i344.LoggingInterceptor());
     gh.singleton<_i914.RetryInterceptor>(() => _i914.RetryInterceptor());
     gh.singleton<_i81.AppRouter>(() => _i81.AppRouter());
@@ -79,6 +112,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i992.HiveAuthLocalDataSource());
     gh.lazySingleton<_i454.AnalyticsService>(
         () => _i454.FirebaseAnalyticsService());
+    gh.factory<_i688.AuctionDataSource>(() => _i688.AuctionDummyDataSource());
     gh.lazySingleton<_i145.AppSocketService>(() => _i436.DummySocketService());
     gh.lazySingleton<_i454.RemoteConfigService>(
         () => _i454.FirebaseRemoteConfigService());
@@ -91,6 +125,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i745.AuthInterceptor(gh<_i227.TokenService>()));
     gh.lazySingleton<_i47.ConnectivityService>(
         () => _i47.ConnectivityServiceImpl(gh<_i895.Connectivity>()));
+    gh.lazySingleton<_i746.AuctionRepository>(
+        () => _i1069.AuctionRepositoryImpl(gh<_i688.AuctionDataSource>()));
     gh.factory<_i702.LiveAuctionSocketDataSource>(() =>
         _i702.LiveAuctionSocketDataSourceImpl(gh<_i145.AppSocketService>()));
     gh.factory<_i1015.NotificationBloc>(
@@ -102,6 +138,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i344.LoggingInterceptor>(),
           gh<_i914.RetryInterceptor>(),
         ));
+    gh.factory<_i217.GetAuctionsByCategoryUseCase>(() =>
+        _i217.GetAuctionsByCategoryUseCase(gh<_i746.AuctionRepository>()));
+    gh.factory<_i962.GetAuctionListUseCase>(
+        () => _i962.GetAuctionListUseCase(gh<_i746.AuctionRepository>()));
     gh.lazySingleton<_i161.AuthRemoteDataSource>(
         () => authModule.authRemoteDataSource(gh<_i667.DioClient>()));
     gh.lazySingleton<_i787.AuthRepository>(() => _i153.AuthRepositoryImpl(
@@ -109,6 +149,10 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i992.AuthLocalDataSource>(),
           gh<_i227.TokenService>(),
         ));
+    gh.factory<_i157.CategoryBloc>(
+        () => _i157.CategoryBloc(gh<_i217.GetAuctionsByCategoryUseCase>()));
+    gh.factory<_i237.AuctionListBloc>(
+        () => _i237.AuctionListBloc(gh<_i962.GetAuctionListUseCase>()));
     gh.factory<_i911.ForgotPasswordUseCase>(
         () => _i911.ForgotPasswordUseCase(gh<_i787.AuthRepository>()));
     gh.factory<_i25.GetCachedAuthUseCase>(

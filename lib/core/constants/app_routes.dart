@@ -1,4 +1,4 @@
-import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 
 class AppRoutes {
   AppRoutes._();
@@ -15,7 +15,7 @@ class AppRoutes {
   static const String ktpVerification = '/ktp-verification';
   static const String npwpVerification = '/npwp-verification';
   static const String faceVerification = '/face-verification';
-  static const String camerPick = '/camera-pick';
+  static const String cameraPick = '/camera-pick';
   static const String facePick = '/face-pick';
   static const String addressVerification = '/address-verification';
   static const String bankVerification = '/bank-verification';
@@ -30,13 +30,13 @@ class AppRoutes {
   static String category(String slug) => '/dashboard/category/$slug';
 
   static const String profile = '/profile';
-  static const String ikutLelang = '/ikut-lelang';
-  static const String lelangList = '/lelang-list';
-  static const String lelangDetail = '/lelang-detail';
+  static const String joinAuction = '/ikut-lelang';
+  static const String auctionList = '/lelang-list';
+  static const String auctionDetail = '/lelang-detail';
   static const String liveAuction = '/live-auction';
   static const String settings = '/settings';
-  static const String beliNplDetail = '/beli-npl-detail';
-  static const String beliNplConfirmation = '/beli-npl-confirmation';
+  static const String buyNplDetail = '/beli-npl-detail';
+  static const String buyNplConfirmation = '/beli-npl-confirmation';
   static const String notifications = '/notifications';
   static const String uiDemo = '/ui-demo';
 }

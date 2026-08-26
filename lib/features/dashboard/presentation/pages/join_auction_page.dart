@@ -1,29 +1,32 @@
 import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/di/injection.dart';
+import 'package:emas/features/dashboard/presentation/bloc/join_auction/join_auction_bloc.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 // ─── Dummy data lokal ─────────────────────────────────────────────────────────
 
-class _LelangItem {
-  final String kategori;
-  final String namaLembaga;
-  final String tanggal;
+class _AuctionItem {
+  final String categoryLabel;
+  final String institutionName;
+  final String date;
   final String jam;
   final AuctionCategory category;
   final bool isLive;
 
-  const _LelangItem({
-    required this.kategori,
-    required this.namaLembaga,
-    required this.tanggal,
+  const _AuctionItem({
+    required this.categoryLabel,
+    required this.institutionName,
+    required this.date,
     required this.jam,
     required this.category,
     this.isLive = false,
@@ -31,18 +34,18 @@ class _LelangItem {
 }
 
 const _dummySedangBerlangsung = [
-  _LelangItem(
-    kategori: 'Mobil',
-    namaLembaga: 'Mega Finance Fatmawati',
-    tanggal: '12 Jun 2026',
+  _AuctionItem(
+    categoryLabel: 'Mobil',
+    institutionName: 'Mega Finance Fatmawati',
+    date: '12 Jun 2026',
     jam: '10.00',
     category: AuctionCategory.mobil,
     isLive: true,
   ),
-  _LelangItem(
-    kategori: 'Mobil',
-    namaLembaga: 'Mega Finance Fatmawati',
-    tanggal: '12 Jun 2026',
+  _AuctionItem(
+    categoryLabel: 'Mobil',
+    institutionName: 'Mega Finance Fatmawati',
+    date: '12 Jun 2026',
     jam: '10.00',
     category: AuctionCategory.mobil,
     isLive: true,
@@ -50,23 +53,23 @@ const _dummySedangBerlangsung = [
 ];
 
 const _dummyAkanDatang = [
-  _LelangItem(
-    kategori: 'Mobil',
-    namaLembaga: 'Mega Finance Fatmawati',
-    tanggal: '12 Jun 2026',
+  _AuctionItem(
+    categoryLabel: 'Mobil',
+    institutionName: 'Mega Finance Fatmawati',
+    date: '12 Jun 2026',
     jam: '10.00',
     category: AuctionCategory.mobil,
   ),
-  _LelangItem(
-    kategori: 'Mobil',
-    namaLembaga: 'Mega Finance Fatmawati',
-    tanggal: '12 Jun 2026',
+  _AuctionItem(
+    categoryLabel: 'Mobil',
+    institutionName: 'Mega Finance Fatmawati',
+    date: '12 Jun 2026',
     jam: '10.00',
     category: AuctionCategory.mobil,
   ),
 ];
 
-// ─── Icons & warna per kategori ───────────────────────────────────────────────
+// ─── Icons & warna per categoryLabel ───────────────────────────────────────────────
 
 const _categoryIcons = {
   AuctionCategory.mobil: Icons.directions_car_rounded,
@@ -94,19 +97,23 @@ const _auctionCategories = [
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-class IkutLelangPage extends StatefulWidget {
-  const IkutLelangPage({super.key});
+class JoinAuctionPage extends StatefulWidget {
+  const JoinAuctionPage({super.key});
 
   @override
-  State<IkutLelangPage> createState() => _IkutLelangPageState();
+  State<JoinAuctionPage> createState() => _JoinAuctionPageState();
 }
 
-class _IkutLelangPageState extends State<IkutLelangPage> {
-  AuctionCategory _selectedCategory = AuctionCategory.mobil;
+class _JoinAuctionPageState extends State<JoinAuctionPage> {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffoldWrapper(
+    return BlocProvider(
+      create: (_) => getIt<JoinAuctionBloc>(),
+      child: BlocBuilder<JoinAuctionBloc, JoinAuctionState>(
+        builder: (context, state) {
+          final selectedCategory = state.selectedCategory;
+          return AppScaffoldWrapper(
       backgroundColor: AppColors.neutral50,
       appBar: const AppPageBar(
         title: 'Ikut Lelang',
@@ -137,8 +144,8 @@ class _IkutLelangPageState extends State<IkutLelangPage> {
                 ),
                 const AppSpacer.md(),
                 _CategorySelector(
-                  selected: _selectedCategory,
-                  onSelected: (cat) => setState(() => _selectedCategory = cat),
+                  selected: selectedCategory,
+                  onSelected: (cat) => context.read<JoinAuctionBloc>().add(JoinAuctionCategoryChanged(cat)),
                 ),
               ],
             ),
@@ -162,7 +169,7 @@ class _IkutLelangPageState extends State<IkutLelangPage> {
                 ..._dummySedangBerlangsung.map(
                   (item) => Padding(
                     padding: const EdgeInsets.only(bottom: AppSpacings.sm),
-                    child: _LelangListCard(item: item),
+                    child: _AuctionListCard(item: item),
                   ),
                 ),
               ],
@@ -193,7 +200,7 @@ class _IkutLelangPageState extends State<IkutLelangPage> {
                     .map(
                       (item) => Padding(
                         padding: const EdgeInsets.only(bottom: AppSpacings.sm),
-                        child: _LelangListCard(item: item),
+                        child: _AuctionListCard(item: item),
                       ),
                     ),
               ],
@@ -202,6 +209,9 @@ class _IkutLelangPageState extends State<IkutLelangPage> {
 
           const AppSpacer.lg(),
         ],
+      ),
+          );
+        },
       ),
     );
   }
@@ -297,10 +307,10 @@ class _CategoryChip extends StatelessWidget {
 }
 
 // ─── Lelang List Card ─────────────────────────────────────────────────────────
-class _LelangListCard extends StatelessWidget {
-  final _LelangItem item;
+class _AuctionListCard extends StatelessWidget {
+  final _AuctionItem item;
 
-  const _LelangListCard({
+  const _AuctionListCard({
     required this.item,
   });
 
@@ -359,7 +369,7 @@ class _LelangListCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       AppText(
-                        item.kategori,
+                        item.categoryLabel,
                         variant: AppTextVariant.labelMedium,
                         color: AppColors.textPrimary,
                         maxLines: 1,
@@ -369,7 +379,7 @@ class _LelangListCard extends StatelessWidget {
                       const SizedBox(height: 2),
 
                       AppText(
-                        item.namaLembaga,
+                        item.institutionName,
                         variant: AppTextVariant.labelMedium,
                         fontWeight: FontWeight.w600,
                         color: AppColors.textPrimary,
@@ -383,7 +393,7 @@ class _LelangListCard extends StatelessWidget {
                         children: [
                           Flexible(
                             child: AppText(
-                              item.tanggal,
+                              item.date,
                               variant: AppTextVariant.labelMedium,
                               color: AppColors.textPrimary,
                               maxLines: 1,

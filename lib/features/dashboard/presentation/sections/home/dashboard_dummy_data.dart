@@ -1,7 +1,7 @@
-import 'package:emas/features/dashboard/presentation/sections/home/jadwal_lelang_card.dart';
+import 'package:emas/features/dashboard/presentation/sections/home/auction_schedule_card.dart';
 import 'package:flutter/material.dart';
 
-import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 
 // ── Tawaran aktif saya ────────────────────────────────────────────────────────
 
@@ -79,22 +79,22 @@ List<AuctionItem> itemsByCategory(AuctionCategory category) =>
 
 // ── Jadwal Lelang ─────────────────────────────────────────────────────────────
 
-const List<JadwalLelangData> dummyJadwalLelang = [
-  JadwalLelangData(
+const List<AuctionScheduleData> dummyAuctionSchedule = [
+  AuctionScheduleData(
     itemName: 'Motor',
     locationName: 'Mega Finance Fatmawati',
     dateLabel: '12 Jun 2026',
     timeLabel: '10.00',
     image: '🏍️',
   ),
-  JadwalLelangData(
+  AuctionScheduleData(
     itemName: 'Motor',
     locationName: 'Mega Finance Depok',
     dateLabel: '13 Jun 2026',
     timeLabel: '09.00',
     image: '🏍️',
   ),
-  JadwalLelangData(
+  AuctionScheduleData(
     itemName: 'Mobil',
     locationName: 'Mega Finance Bekasi',
     dateLabel: '14 Jun 2026',

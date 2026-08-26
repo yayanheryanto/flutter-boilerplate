@@ -1,22 +1,14 @@
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/di/injection.dart';
+import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
+import 'package:emas/features/dashboard/presentation/bloc/category/category_bloc.dart';
+import 'package:emas/features/dashboard/presentation/widgets/home/category_auction_list_item.dart';
 import 'package:emas/shared/widgets/input/app_text_field.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
-import 'package:emas/features/dashboard/data/models/auction_item.dart';
-import 'package:emas/features/dashboard/data/models/dashboard_dummy_data.dart';
-import 'package:emas/features/dashboard/presentation/widgets/home/category_auction_list_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
-enum _SortOption {
-  endingSoon('Segera Berakhir'),
-  highestBid('Tawaran Tertinggi'),
-  lowestBid('Tawaran Terendah'),
-  newest('Terbaru');
-
-  const _SortOption(this.label);
-  final String label;
-}
 
 class CategoryPage extends StatefulWidget {
   final AuctionCategory category;
@@ -28,8 +20,6 @@ class CategoryPage extends StatefulWidget {
 
 class _CategoryPageState extends State<CategoryPage> {
   final _searchCtrl = TextEditingController();
-  _SortOption _sort = _SortOption.endingSoon;
-  String _query = '';
 
   @override
   void dispose() {
@@ -37,91 +27,8 @@ class _CategoryPageState extends State<CategoryPage> {
     super.dispose();
   }
 
-  List<AuctionItem> get _items {
-    var list = itemsByCategory(widget.category);
-
-    if (_query.isNotEmpty) {
-      list = list
-          .where((e) => e.title.toLowerCase().contains(_query.toLowerCase()))
-          .toList();
-    }
-
-    switch (_sort) {
-      case _SortOption.endingSoon:
-        list.sort((a, b) => a.secs.compareTo(b.secs));
-      case _SortOption.highestBid:
-        list.sort((a, b) => b.bid.compareTo(a.bid));
-      case _SortOption.lowestBid:
-        list.sort((a, b) => a.bid.compareTo(b.bid));
-      case _SortOption.newest:
-        list = list.reversed.toList();
-    }
-
-    return list;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final cat = widget.category;
-    final items = _items;
-
-    return Scaffold(
-      backgroundColor: const Color(0xFFF4F6F9),
-      body: RefreshIndicator(
-        onRefresh: () async => setState(() {}),
-        child: CustomScrollView(
-          physics: const AlwaysScrollableScrollPhysics(
-            parent: BouncingScrollPhysics(),
-          ),
-          slivers: [
-            _CategorySliverAppBar(
-              category: cat,
-              searchCtrl: _searchCtrl,
-              onSearch: (v) => setState(() => _query = v),
-              onSort: () async => _showSortSheet(context),
-            ),
-            SliverToBoxAdapter(
-              child: _SortPillRow(
-                selected: _sort,
-                color: cat.color,
-                onSelected: (s) => setState(() => _sort = s),
-              ),
-            ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  AppSpacings.md,
-                  AppSpacings.sm,
-                  AppSpacings.md,
-                  0,
-                ),
-                child: AppText(
-                  '${items.length} item tersedia',
-                  variant: AppTextVariant.labelMedium,
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
-                ),
-              ),
-            ),
-            items.isEmpty
-                ? SliverFillRemaining(child: _EmptyState(query: _query))
-                : SliverList(
-              delegate: SliverChildBuilderDelegate(
-                    (_, i) => i < items.length
-                    ? Padding(
-                  padding: const EdgeInsets.only(top: AppSpacings.xs),
-                  child: CategoryAuctionListItem(item: items[i]),
-                )
-                    : const SizedBox(height: AppSpacings.xl),
-                childCount: items.length + 1,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Future<void> _showSortSheet(BuildContext ctx) async {
+    final bloc = context.read<CategoryBloc>();
     await showModalBottomSheet<void>(
       context: ctx,
       backgroundColor: Colors.white,
@@ -129,11 +36,69 @@ class _CategoryPageState extends State<CategoryPage> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(RadiusTokens.xl)),
       ),
       builder: (_) => _SortSheet(
-        selected: _sort,
+        selected: bloc.state.sort,
         color: widget.category.color,
-        onSelected: (s) {
-          setState(() => _sort = s);
+        onSelected: (sort) {
+          bloc.add(CategorySortChanged(sort));
           Navigator.pop(ctx);
+        },
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<CategoryBloc>()..add(CategoryStarted(widget.category)),
+      child: BlocBuilder<CategoryBloc, CategoryState>(
+        builder: (context, state) {
+          final cat = widget.category;
+          final items = state.items;
+          return Scaffold(
+            backgroundColor: const Color(0xFFF4F6F9),
+            body: RefreshIndicator(
+              onRefresh: () async => context.read<CategoryBloc>().add(CategoryStarted(cat)),
+              child: CustomScrollView(
+                physics: const AlwaysScrollableScrollPhysics(parent: BouncingScrollPhysics()),
+                slivers: [
+                  _CategorySliverAppBar(
+                    category: cat,
+                    searchCtrl: _searchCtrl,
+                    onSearch: (value) => context.read<CategoryBloc>().add(CategorySearchChanged(value)),
+                    onSort: () async => _showSortSheet(context),
+                  ),
+                  SliverToBoxAdapter(
+                    child: _SortPillRow(
+                      selected: state.sort,
+                      color: cat.color,
+                      onSelected: (sort) => context.read<CategoryBloc>().add(CategorySortChanged(sort)),
+                    ),
+                  ),
+                  SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(AppSpacings.md, AppSpacings.sm, AppSpacings.md, 0),
+                      child: AppText('${items.length} item tersedia', variant: AppTextVariant.labelMedium, color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4)),
+                    ),
+                  ),
+                  if (state.status == CategoryStatus.loading)
+                    const SliverFillRemaining(child: Center(child: CircularProgressIndicator()))
+                  else if (state.status == CategoryStatus.failure)
+                    SliverFillRemaining(child: Center(child: AppText(state.errorMessage ?? 'Gagal memuat data')))
+                  else if (items.isEmpty)
+                    SliverFillRemaining(child: _EmptyState(query: state.query))
+                  else
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (_, i) => i < items.length
+                            ? Padding(padding: const EdgeInsets.only(top: AppSpacings.xs), child: CategoryAuctionListItem(item: items[i]))
+                            : const SizedBox(height: AppSpacings.xl),
+                        childCount: items.length + 1,
+                      ),
+                    ),
+                ],
+              ),
+            ),
+          );
         },
       ),
     );
@@ -253,9 +218,9 @@ class _CategorySliverAppBar extends StatelessWidget {
 // ── Sort Pill Row ─────────────────────────────────────────────────────────────
 
 class _SortPillRow extends StatelessWidget {
-  final _SortOption selected;
+  final CategorySort selected;
   final Color color;
-  final ValueChanged<_SortOption> onSelected;
+  final ValueChanged<CategorySort> onSelected;
 
   const _SortPillRow({
     required this.selected,
@@ -275,7 +240,7 @@ class _SortPillRow extends StatelessWidget {
         AppSpacings.sm,
       ),
       child: Row(
-        children: _SortOption.values.map((s) {
+        children: CategorySort.values.map((s) {
           final active = s == selected;
           return GestureDetector(
             onTap: () => onSelected(s),
@@ -316,9 +281,9 @@ class _SortPillRow extends StatelessWidget {
 // ── Sort Bottom Sheet ─────────────────────────────────────────────────────────
 
 class _SortSheet extends StatelessWidget {
-  final _SortOption selected;
+  final CategorySort selected;
   final Color color;
-  final ValueChanged<_SortOption> onSelected;
+  final ValueChanged<CategorySort> onSelected;
 
   const _SortSheet({
     required this.selected,
@@ -356,7 +321,7 @@ class _SortSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: AppSpacings.xs),
-          ..._SortOption.values.map(
+          ...CategorySort.values.map(
                 (s) => ListTile(
               contentPadding: const EdgeInsets.symmetric(
                 horizontal: AppSpacings.md,

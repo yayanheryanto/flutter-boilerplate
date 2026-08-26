@@ -3,7 +3,7 @@ import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
-import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/features/dashboard/data/models/dashboard_formatters.dart';
 import 'package:flutter/material.dart';
 

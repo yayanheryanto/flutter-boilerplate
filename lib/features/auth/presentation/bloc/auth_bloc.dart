@@ -43,7 +43,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(const AuthLoading());
 
     final result = await _loginUseCase(
-      LoginParams(email: event.email, password: event.password),
+      LoginParams(
+        email: event.email,
+        password: event.password,
+      ),
     );
 
     result.fold(

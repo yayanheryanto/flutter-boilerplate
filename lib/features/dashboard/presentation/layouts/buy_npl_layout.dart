@@ -2,14 +2,15 @@ import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/core/utils/currency_formatter.dart';
+import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
+import 'package:emas/features/dashboard/domain/entities/buy_npl_result.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
 
 class BuyNplLayout extends StatefulWidget {
   const BuyNplLayout({super.key});
@@ -87,13 +88,13 @@ class _CategorySelector extends StatelessWidget {
               isSelected: cat == selected,
               onTap: () async {
                 onSelected(cat);
-                final result = await BeliNplBottomSheet.show(
+                final result = await BuyNplBottomSheet.show(
                   context,
                   category: cat,
                 );
 
                 if (result != null && context.mounted) {
-                  await context.push(AppRoutes.beliNplDetail, extra: result);
+                  await context.push(AppRoutes.buyNplDetail, extra: result);
                 }
               },
             ),
@@ -193,26 +194,8 @@ class _SectionContainer extends StatelessWidget {
 }
 
 /// Hasil yang dikembalikan saat user menekan "Tambah".
-class BeliNplResult {
-  final AuctionCategory category;
-  final String lokasi;
-  final DateTime tanggal;
-  final int jumlah;
-  final int hargaPerNpl;
-  final int subtotal;
-
-  const BeliNplResult({
-    required this.category,
-    required this.lokasi,
-    required this.tanggal,
-    required this.jumlah,
-    required this.hargaPerNpl,
-    required this.subtotal,
-  });
-}
-
-/// Dummy daftar lokasi lelang — ganti dengan data dari API begitu tersedia.
-const _dummyLokasiLelang = [
+/// Dummy daftar location lelang — ganti dengan data dari API begitu tersedia.
+const _dummyAuctionLocations = [
   'Mega Finance Fatmawati',
   'Mega Finance Bogor',
   'Mega Finance Bandung',
@@ -220,81 +203,81 @@ const _dummyLokasiLelang = [
 ];
 
 /// Bottom sheet "Beli NPL" — dipanggil sebelum masuk ke halaman detail NPL,
-/// supaya user set lokasi, tanggal lelang, dan jumlah NPL yang mau dibeli.
-class BeliNplBottomSheet {
-  static Future<BeliNplResult?> show(
+/// supaya user set location, date lelang, dan quantity NPL yang mau dibeli.
+class BuyNplBottomSheet {
+  static Future<BuyNplResult?> show(
     BuildContext context, {
     required AuctionCategory category,
-    int hargaPerNpl = 1000000,
-    int initialJumlah = 1,
+    int pricePerNpl = 1000000,
+    int initialQuantity = 1,
   }) {
-    return AppCustomBottomSheet.show<BeliNplResult>(
+    return AppCustomBottomSheet.show<BuyNplResult>(
       context,
       title: 'Beli NPL',
-      content: _BeliNplForm(
+      content: _BuyNplForm(
         category: category,
-        hargaPerNpl: hargaPerNpl,
-        initialJumlah: initialJumlah,
+        pricePerNpl: pricePerNpl,
+        initialQuantity: initialQuantity,
       ),
     );
   }
 }
 
-class _BeliNplForm extends StatefulWidget {
+class _BuyNplForm extends StatefulWidget {
   final AuctionCategory category;
-  final int hargaPerNpl;
-  final int initialJumlah;
+  final int pricePerNpl;
+  final int initialQuantity;
 
-  const _BeliNplForm({
+  const _BuyNplForm({
     required this.category,
-    required this.hargaPerNpl,
-    required this.initialJumlah,
+    required this.pricePerNpl,
+    required this.initialQuantity,
   });
 
   @override
-  State<_BeliNplForm> createState() => _BeliNplFormState();
+  State<_BuyNplForm> createState() => _BuyNplFormState();
 }
 
-class _BeliNplFormState extends State<_BeliNplForm> {
-  String? _lokasi;
-  DateTime? _tanggal;
-  late int _jumlah;
+class _BuyNplFormState extends State<_BuyNplForm> {
+  String? _location;
+  DateTime? _date;
+  late int _quantity;
 
   @override
   void initState() {
     super.initState();
-    _jumlah = widget.initialJumlah;
+    _quantity = widget.initialQuantity;
   }
 
-  int get _subtotal => widget.hargaPerNpl * _jumlah;
+  int get _subtotal => widget.pricePerNpl * _quantity;
 
-  void _incrementJumlah() => setState(() => _jumlah++);
+  void _incrementQuantity() => setState(() => _quantity++);
 
-  void _decrementJumlah() {
-    if (_jumlah <= 1) return;
-    setState(() => _jumlah--);
+  void _decrementQuantity() {
+    if (_quantity <= 1) return;
+    setState(() => _quantity--);
   }
 
   void _submit() async {
-    // Uncomment validasi ini jika lokasi dan tanggal diwajibkan:
-    // if (_lokasi == null || _tanggal == null) {
+    // Uncomment validasi ini jika location dan date diwajibkan:
+    // if (_location == null || _date == null) {
     //   AppToast.show(
-    //     'Lengkapi lokasi dan tanggal lelang terlebih dahulu',
+    //     'Lengkapi location dan date lelang terlebih dahulu',
     //     type: AppToastType.warning,
     //   );
     //   return;
     // }
     // Navigator.of(context).pop(
-    //   BeliNplResult(
+    //   BuyNplResult(
     //     category: widget.category,
-    //     lokasi: _lokasi!,
-    //     tanggal: _tanggal!,
-    //     jumlah: _jumlah,
-    //     hargaPerNpl: widget.hargaPerNpl,
+    //     location: _location!,
+    //     date: _date!,
+    //     quantity: _quantity,
+    //     pricePerNpl: widget.pricePerNpl,
     //     subtotal: _subtotal,
     //   ),
     // );
-    await context.push(AppRoutes.beliNplDetail);
+    await context.push(AppRoutes.buyNplDetail);
   }
 
   @override
@@ -306,18 +289,18 @@ class _BeliNplFormState extends State<_BeliNplForm> {
         AppDropdownField<String>(
           label: 'Lokasi Lelang',
           hint: 'Pilih lokasi lelang',
-          value: _lokasi,
-          items: _dummyLokasiLelang,
-          onChanged: (v) => setState(() => _lokasi = v),
+          value: _location,
+          items: _dummyAuctionLocations,
+          onChanged: (v) => setState(() => _location = v),
         ),
         const SizedBox(height: AppSpacings.md),
         AppDateField(
           label: 'Tanggal Lelang',
-          hint: 'Pilih tanggal lelang',
-          initialValue: _tanggal,
+          hint: 'Pilih date lelang',
+          initialValue: _date,
           firstDate: DateTime.now(),
           lastDate: DateTime.now().add(const Duration(days: 90)),
-          onChanged: (d) => setState(() => _tanggal = d),
+          onChanged: (d) => setState(() => _date = d),
         ),
         const SizedBox(height: AppSpacings.lg),
 
@@ -330,9 +313,9 @@ class _BeliNplFormState extends State<_BeliNplForm> {
               fontWeight: FontWeight.w500,
             ),
             _QuantityStepper(
-              value: _jumlah,
-              onDecrement: _decrementJumlah,
-              onIncrement: _incrementJumlah,
+              value: _quantity,
+              onDecrement: _decrementQuantity,
+              onIncrement: _incrementQuantity,
             ),
           ],
         ),
@@ -341,7 +324,7 @@ class _BeliNplFormState extends State<_BeliNplForm> {
         const SizedBox(height: AppSpacings.md),
 
         // ── Harga & subtotal ──────────────────────────────────────
-        _PriceRow(label: 'Harga per NPL', value: widget.hargaPerNpl),
+        _PriceRow(label: 'Harga per NPL', value: widget.pricePerNpl),
         const SizedBox(height: AppSpacings.sm),
         _PriceRow(label: 'Subtotal', value: _subtotal, emphasize: true),
         const SizedBox(height: AppSpacings.lg),
@@ -434,11 +417,7 @@ class _PriceRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final formatted = NumberFormat.currency(
-      locale: 'id_ID',
-      symbol: 'Rp',
-      decimalDigits: 0,
-    ).format(value);
+    final formatted = CurrencyFormatter.rupiah(value);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

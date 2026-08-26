@@ -2,6 +2,7 @@ import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/services/socket/app_socket_service.dart';
+import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/data/models/live_auction_models.dart';
 import 'package:emas/features/dashboard/presentation/bloc/live_auction/live_auction_bloc.dart';
 import 'package:emas/features/dashboard/presentation/widgets/home/live_badge.dart';
@@ -12,11 +13,6 @@ import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-
-// ─── Formatter ────────────────────────────────────────────────────────────────
-
-String _rp(int v) => NumberFormat.currency(locale: 'id_ID', symbol: 'Rp', decimalDigits: 0).format(v);
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 //
@@ -63,7 +59,7 @@ class _LiveAuctionViewState extends State<_LiveAuctionView> {
 
       if (gotOutbid) {
         AppToast.show(
-          'Tawaran Anda disalip ${newest.bidderName} — ${_rp(newest.amount)}',
+          'Tawaran Anda disalip ${newest.bidderName} — ${CurrencyFormatter.rupiah(newest.amount)}',
           type: AppToastType.error,
         );
       }
@@ -72,7 +68,7 @@ class _LiveAuctionViewState extends State<_LiveAuctionView> {
 
     if (state.status == LiveAuctionStatus.ended && state.winningBid != null) {
       AppToast.show(
-        'Lelang berakhir. Pemenang: ${state.winningBid!.bidderName} — ${_rp(state.winningBid!.amount)}',
+        'Lelang berakhir. Pemenang: ${state.winningBid!.bidderName} — ${CurrencyFormatter.rupiah(state.winningBid!.amount)}',
         duration: const Duration(seconds: 3),
       );
     }
@@ -102,16 +98,16 @@ class _LiveAuctionViewState extends State<_LiveAuctionView> {
                   padding: EdgeInsets.zero,
                   children: [
                     // ── Lokasi + viewer count ────────────────────
-                    _LokasiBar(
-                      lokasi: 'Mega Finance Fatmawati',
+                    _LocationBar(
+                      location: 'Mega Finance Fatmawati',
                       viewerCount: state.viewerCount,
                     ),
 
                     // ── Lot + nama ──────────────────────────────
                     const _LotHeader(
                       lot: 15,
-                      nama: 'DAIHATSU GRAND MAX BV - 1.3',
-                      tahun: 'Tahun 2021',
+                      itemName: 'DAIHATSU GRAND MAX BV - 1.3',
+                      year: 'Tahun 2021',
                     ),
 
                     const SizedBox(height: AppSpacings.xs),
@@ -240,11 +236,11 @@ class _EndingSoonBanner extends StatelessWidget {
 
 // ─── Lokasi bar ───────────────────────────────────────────────────────────────
 
-class _LokasiBar extends StatelessWidget {
-  final String lokasi;
+class _LocationBar extends StatelessWidget {
+  final String location;
   final int viewerCount;
 
-  const _LokasiBar({required this.lokasi, required this.viewerCount});
+  const _LocationBar({required this.location, required this.viewerCount});
 
   @override
   Widget build(BuildContext context) {
@@ -265,7 +261,7 @@ class _LokasiBar extends StatelessWidget {
           const SizedBox(width: 4),
           Expanded(
             child: AppText(
-              lokasi,
+              location,
               color: AppColors.textPrimary,
               fontWeight: FontWeight.w600,
             ),
@@ -291,13 +287,13 @@ class _LokasiBar extends StatelessWidget {
 
 class _LotHeader extends StatelessWidget {
   final int lot;
-  final String nama;
-  final String tahun;
+  final String itemName;
+  final String year;
 
   const _LotHeader({
     required this.lot,
-    required this.nama,
-    required this.tahun,
+    required this.itemName,
+    required this.year,
   });
 
   @override
@@ -340,7 +336,7 @@ class _LotHeader extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppText(
-                  nama,
+                  itemName,
                   variant: AppTextVariant.titleSmall,
                   fontWeight: FontWeight.w700,
                   maxLines: 1,
@@ -348,7 +344,7 @@ class _LotHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 2),
                 AppText(
-                  tahun,
+                  year,
                   variant: AppTextVariant.bodySmall,
                   fontWeight: FontWeight.w600,
                   color: AppColors.textPrimary,
@@ -517,7 +513,7 @@ class _MainInfoCard extends StatelessWidget {
                   height: 20,
                 )
               : AppText(
-                  _rp(state.basePrice),
+                  CurrencyFormatter.rupiah(state.basePrice),
                   variant: AppTextVariant.titleSmall,
                   fontWeight: FontWeight.w800,
                 ),
@@ -534,7 +530,7 @@ class _MainInfoCard extends StatelessWidget {
                   height: 20,
                 )
               : AppText(
-                  _rp(state.currentPrice),
+                  CurrencyFormatter.rupiah(state.currentPrice),
                   variant: AppTextVariant.titleSmall,
                   fontWeight: FontWeight.w800,
                 ),
@@ -835,7 +831,7 @@ class _BidRow extends StatelessWidget {
                   Expanded(
                     flex: 3,
                     child: AppText(
-                      _rp(bid.amount),
+                      CurrencyFormatter.rupiah(bid.amount),
                       variant: AppTextVariant.labelLarge,
                       fontWeight: isFirst ? FontWeight.w800 : FontWeight.w700,
                     ),
@@ -942,7 +938,7 @@ class _BottomCTA extends StatelessWidget {
         ? 'Lelang Berakhir'
         : state.status == LiveAuctionStatus.connecting
             ? 'Menghubungkan…'
-            : 'Tawar ${_rp(state.nextBidAmount)}';
+            : 'Tawar ${CurrencyFormatter.rupiah(state.nextBidAmount)}';
 
     return Container(
       color: AppColors.white,

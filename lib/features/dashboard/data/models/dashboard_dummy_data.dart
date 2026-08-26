@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emas/features/dashboard/data/models/auction_item.dart';
+import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 
 // ── Tawaran aktif saya ────────────────────────────────────────────────────────
 

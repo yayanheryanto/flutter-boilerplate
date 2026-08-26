@@ -1,39 +1,71 @@
 import 'dart:async';
 
 import 'package:emas/core/constants/images.dart';
+import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/dashboard/presentation/layouts/buy_npl_layout.dart';
-import 'package:emas/features/dashboard/presentation/pages/ikut_lelang_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/join_auction_page.dart';
+import 'package:emas/features/dashboard/presentation/layouts/dashboard_layout.dart';
+import 'package:emas/features/dashboard/presentation/bloc/dashboard/dashboard_bloc.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
-import 'package:emas/features/dashboard/presentation/layouts/dashboard_layout.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sizer/sizer.dart';
 
-class DashboardPage extends StatefulWidget {
+
+class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
 
   @override
-  State<DashboardPage> createState() => _DashboardPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider<DashboardBloc>(
+      create: (_) => getIt<DashboardBloc>(),
+      child: const _DashboardView(),
+    );
+  }
 }
 
-class _DashboardPageState extends State<DashboardPage> {
-  int _navIndex = 0;
-  int _bannerPage = 0;
+class _DashboardView extends StatefulWidget {
+  const _DashboardView();
+
+  @override
+  State<_DashboardView> createState() => _DashboardViewState();
+}
+
+class _DashboardViewState extends State<_DashboardView> {
   late final PageController _bannerCtrl;
   Timer? _bannerTimer;
 
   @override
   void initState() {
     super.initState();
+
     _bannerCtrl = PageController();
-    _bannerTimer = Timer.periodic(const Duration(seconds: 4), (_) async {
-      if (!mounted || !_bannerCtrl.hasClients) return;
-      await _bannerCtrl.animateToPage(
-        (_bannerPage + 1) % 3,
-        duration: const Duration(milliseconds: 500),
-        curve: Curves.easeInOut,
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+
+      _bannerTimer = Timer.periodic(
+        const Duration(seconds: 4),
+            (_) async {
+          if (!mounted || !_bannerCtrl.hasClients) return;
+
+          final bloc = context.read<DashboardBloc>();
+          final currentIndex = bloc.state.bannerIndex;
+          final nextPage = (currentIndex + 1) % 3;
+
+          await _bannerCtrl.animateToPage(
+            nextPage,
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+          );
+
+          if (!mounted) return;
+
+          bloc.add(DashboardBannerChanged(nextPage));
+        },
       );
     });
   }
@@ -45,42 +77,63 @@ class _DashboardPageState extends State<DashboardPage> {
     super.dispose();
   }
 
-  Future<void> _onRefresh() async {
-    await Future<void>.delayed(const Duration(milliseconds: 800));
-    if (mounted) setState(() {});
-  }
-
   @override
   Widget build(BuildContext context) {
-    return AppScaffoldWrapper(
-      backgroundColor: Colors.white,
-      body: _buildBody(),
-      floatingActionButton: _CenterFAB(
-        selected: _navIndex == 2,
-        onTap: () => setState(() => _navIndex = 2),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: _DashboardBottomNav(
-        currentIndex: _navIndex,
-        onTap: (i) {
-          if (i != 2) setState(() => _navIndex = i);
-        },
-      ),
+    return BlocBuilder<DashboardBloc, DashboardState>(
+      builder: (context, state) {
+        return AppScaffoldWrapper(
+          backgroundColor: Colors.white,
+          body: _buildBody(context, state),
+          floatingActionButton: _CenterFAB(
+            selected: state.navigationIndex == 2,
+            onTap: () {
+              context.read<DashboardBloc>().add(
+                const DashboardTabChanged(2),
+              );
+            },
+          ),
+          floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked,
+          bottomNavigationBar: _DashboardBottomNav(
+            currentIndex: state.navigationIndex,
+            onTap: (index) {
+              if (index == 2) return;
+
+              context.read<DashboardBloc>().add(
+                DashboardTabChanged(index),
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(
+      BuildContext context,
+      DashboardState state,
+      ) {
+    final bloc = context.read<DashboardBloc>();
+
     return IndexedStack(
-      index: _navIndex,
+      index: state.navigationIndex,
       children: [
         DashboardLayout(
           bannerCtrl: _bannerCtrl,
-          bannerPage: _bannerPage,
-          onBannerChanged: (i) => setState(() => _bannerPage = i),
-          onRefresh: _onRefresh,
+          bannerPage: state.bannerIndex,
+          onBannerChanged: (index) {
+            bloc.add(
+              DashboardBannerChanged(index),
+            );
+          },
+          onRefresh: () async {
+            bloc.add(
+              const DashboardRefreshRequested(),
+            );
+          },
         ),
         const BuyNplLayout(),
-        const IkutLelangPage(),
+        const JoinAuctionPage(),
         _buildPlaceholder('Transaksi'),
         _buildPlaceholder('Profil'),
       ],
@@ -89,7 +142,11 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Widget _buildPlaceholder(String title) {
     return RefreshIndicator(
-      onRefresh: _onRefresh,
+      onRefresh: () async {
+        context.read<DashboardBloc>().add(
+          const DashboardRefreshRequested(),
+        );
+      },
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
         children: [
@@ -99,7 +156,10 @@ class _DashboardPageState extends State<DashboardPage> {
               child: AppText(
                 title,
                 variant: AppTextVariant.titleMedium,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withOpacity(0.4),
               ),
             ),
           ),
@@ -121,7 +181,7 @@ class _DashboardBottomNav extends StatelessWidget {
   });
 
   @override
-  
+
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(

@@ -8,7 +8,10 @@ import 'package:emas/shared/widgets/display/app_spacer.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:flutter/gestures.dart';
+import 'package:emas/core/di/injection.dart';
+import 'package:emas/features/auth/presentation/bloc/verification_flow/verification_flow_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class ConfirmationVerificationPage extends StatefulWidget {
@@ -29,7 +32,10 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffoldWrapper(
+    return BlocProvider<VerificationFlowBloc>(
+      create: (_) => getIt<VerificationFlowBloc>(),
+      child: BlocBuilder<VerificationFlowBloc, VerificationFlowState>(
+        builder: (context, state) => AppScaffoldWrapper(
       backgroundColor: AppColors.white,
       appBar: AppPageBar(
         elevation: 1,
@@ -150,6 +156,8 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
               ),
             ),
           ],
+        ),
+      ),
         ),
       ),
     );
