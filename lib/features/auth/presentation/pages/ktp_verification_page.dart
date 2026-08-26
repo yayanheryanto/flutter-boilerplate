@@ -13,9 +13,7 @@ import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:emas/shared/widgets/pickers/wheel_date_picker.dart';
 import 'package:emas/core/di/injection.dart';
-import 'package:emas/features/auth/presentation/bloc/verification_flow/verification_flow_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -146,10 +144,7 @@ class KtpVerificationPageState extends State<KtpVerificationPage> with AppFormMi
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<VerificationFlowBloc>(
-      create: (_) => getIt<VerificationFlowBloc>(),
-      child: BlocBuilder<VerificationFlowBloc, VerificationFlowState>(
-        builder: (context, state) => AppScaffoldWrapper(
+    return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
@@ -286,8 +281,6 @@ class KtpVerificationPageState extends State<KtpVerificationPage> with AppFormMi
               ],
             ),
           ),
-        ),
-      ),
         ),
       ),
     );

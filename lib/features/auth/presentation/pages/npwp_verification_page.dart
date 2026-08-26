@@ -17,9 +17,7 @@ import 'package:emas/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:emas/core/di/injection.dart';
-import 'package:emas/features/auth/presentation/bloc/verification_flow/verification_flow_bloc.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class NPWPVerificationPage extends StatefulWidget {
@@ -134,10 +132,7 @@ class _NPWPVerificationPageState extends State<NPWPVerificationPage> with AppFor
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<VerificationFlowBloc>(
-      create: (_) => getIt<VerificationFlowBloc>(),
-      child: BlocBuilder<VerificationFlowBloc, VerificationFlowState>(
-        builder: (context, state) => AppScaffoldWrapper(
+    return AppScaffoldWrapper(
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
         onBack: () => context.pop(),
@@ -337,8 +332,6 @@ class _NPWPVerificationPageState extends State<NPWPVerificationPage> with AppFor
               ),
             ],
           ),
-        ),
-      ),
         ),
       ),
     );

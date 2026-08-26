@@ -30,8 +30,6 @@ import '../../features/auth/domain/usecases/auth/login_usecase.dart' as _i985;
 import '../../features/auth/domain/usecases/auth/logout_usecase.dart' as _i726;
 import '../../features/auth/domain/usecases/auth/register_usecase.dart' as _i47;
 import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
-import '../../features/auth/presentation/bloc/verification_flow/verification_flow_bloc.dart'
-    as _i875;
 import '../../features/dashboard/data/datasources/auction_datasource.dart'
     as _i688;
 import '../../features/dashboard/data/datasources/live_auction_socket_datasource.dart'
@@ -90,7 +88,6 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final appModule = _$AppModule();
     final authModule = _$AuthModule();
-    gh.factory<_i875.VerificationFlowBloc>(() => _i875.VerificationFlowBloc());
     gh.factory<_i339.AuctionDetailBloc>(() => _i339.AuctionDetailBloc());
     gh.factory<_i592.BuyNplConfirmationBloc>(
         () => _i592.BuyNplConfirmationBloc());
