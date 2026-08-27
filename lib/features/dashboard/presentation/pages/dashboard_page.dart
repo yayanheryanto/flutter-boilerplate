@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/dashboard/presentation/layouts/buy_npl_layout.dart';
+import 'package:emas/features/dashboard/presentation/layouts/transaction_layout.dart';
 import 'package:emas/features/dashboard/presentation/pages/join_auction_page.dart';
 import 'package:emas/features/dashboard/presentation/layouts/dashboard_layout.dart';
 import 'package:emas/features/dashboard/presentation/bloc/dashboard/dashboard_bloc.dart';
@@ -134,7 +135,7 @@ class _DashboardViewState extends State<_DashboardView> {
         ),
         const BuyNplLayout(),
         const JoinAuctionPage(),
-        _buildPlaceholder('Transaksi'),
+        const TransactionLayout(),
         _buildPlaceholder('Profil'),
       ],
     );

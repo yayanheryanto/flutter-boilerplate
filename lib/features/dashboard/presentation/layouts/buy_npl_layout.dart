@@ -130,7 +130,7 @@ class _CategoryChip extends StatelessWidget {
           color: AppColors.white,
           borderRadius: BorderRadius.circular(RadiusTokens.lg),
           border: Border.all(
-            color: AppColors.neutral200,
+            color: AppColors.neutral300,
           ),
         ),
         child: Column(

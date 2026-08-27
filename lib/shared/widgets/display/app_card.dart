@@ -9,6 +9,7 @@ class AppCard extends StatelessWidget {
   final Color? backgroundColor;
   final double? elevation;
   final BorderRadius? borderRadius;
+  final Color? borderColor;
 
   const AppCard({
     super.key,
@@ -18,6 +19,7 @@ class AppCard extends StatelessWidget {
     this.backgroundColor,
     this.elevation,
     this.borderRadius,
+    this.borderColor,
   });
 
   @override
@@ -28,7 +30,7 @@ class AppCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: borderRadius ?? BorderRadius.circular(RadiusTokens.lg),
         side: BorderSide(
-          color: Theme.of(context).colorScheme.outline.withOpacity(0.5),
+          color: borderColor ?? Theme.of(context).colorScheme.outline.withOpacity(0.5),
         ),
       ),
       clipBehavior: Clip.antiAlias,

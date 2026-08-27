@@ -39,4 +39,7 @@ class AppRoutes {
   static const String buyNplConfirmation = '/beli-npl-confirmation';
   static const String notifications = '/notifications';
   static const String uiDemo = '/ui-demo';
+
+  static const String payment = '/payment';
+
 }
