@@ -29,11 +29,9 @@ class _BankVerificationContent extends StatefulWidget {
 }
 
 class _BankVerificationContentState extends State<_BankVerificationContent> with AppFormMixin<_BankVerificationContent> {
-  // ── Controllers ──────────────────────────────────────────────────────────────
   final _accountNameController = TextEditingController();
   final _accountNoController = TextEditingController();
 
-  // ── State ─────────────────────────────────────────────────────────────────────
   File? _ktpPhoto;
   DateTime? _selectedDob;
   String? _bank;
@@ -46,8 +44,6 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
     _accountNoController.dispose();
     super.dispose();
   }
-
-  // ── Submit ────────────────────────────────────────────────────────────────────
 
   // void _onSubmit() {
   //   if (!validateForm()) return;
@@ -62,8 +58,6 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
   //   // TODO: dispatch KTP verification event
   //   context.go(AppRoutes.dashboard);
   // }
-
-  // ── Build ─────────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +94,6 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
 
                       const AppSpacer.md(),
 
-                      // Jenis Kelamin
                       AppDropdownField(
                         label: 'Bank',
                         hint: 'Pilih nama bank',
@@ -110,7 +103,6 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
                         validator: (v) => v == null ? 'Bank wajib dipilih' : null,
                       ),
                       const AppSpacer.md(),
-                      // NIK
                       AppTextField(
                         controller: _accountNoController,
                         label: 'Nomor Rekening',

@@ -29,7 +29,6 @@ class FaceVerificationPage extends StatefulWidget {
 }
 
 class FaceVerificationPageState extends State<FaceVerificationPage> with AppFormMixin<FaceVerificationPage> {
-  // ── State ─────────────────────────────────────────────────────────────────────
   File? _ktpPhoto;
   bool _isLoadingPhoto = false;
 
@@ -37,8 +36,6 @@ class FaceVerificationPageState extends State<FaceVerificationPage> with AppForm
   void dispose() {
     super.dispose();
   }
-
-  // ── Submit ────────────────────────────────────────────────────────────────────
 
   void _onSubmit() {
     if (!validateForm()) return;
@@ -51,14 +48,11 @@ class FaceVerificationPageState extends State<FaceVerificationPage> with AppForm
   }
 
   Future<void> _openCamera() async {
-    // final result = await context.push<File?>(AppRoutes.cameraPick);
     final result = await context.push<File?>(AppRoutes.facePick);
     if (result != null && mounted) {
       setState(() => _ktpPhoto = result);
     }
   }
-
-  // ── Build ─────────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -108,7 +102,6 @@ class FaceVerificationPageState extends State<FaceVerificationPage> with AppForm
                 ),
               ),
 
-              // 2. Fixed Bottom Button Container
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacings.md,
@@ -130,8 +123,6 @@ class FaceVerificationPageState extends State<FaceVerificationPage> with AppForm
     );
   }
 }
-
-// ─── KTP Photo Card ───────────────────────────────────────────────────────────
 
 class _KtpPhotoCard extends StatelessWidget {
   final File? photo;
@@ -160,12 +151,10 @@ class _KtpPhotoCard extends StatelessWidget {
       padding: const EdgeInsets.all(AppSpacings.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min, // Ensures card only takes needed space
+        mainAxisSize: MainAxisSize.min,
         children: [
           const AppText('Verifikasi Wajah', variant: AppTextVariant.titleMedium, fontWeight: FontWeight.bold),
           const AppSpacer.md(),
-
-          // Photo area
           ClipRRect(
             borderRadius: BorderRadius.circular(RadiusTokens.md),
             child: photo != null
@@ -188,8 +177,6 @@ class _KtpPhotoCard extends StatelessWidget {
                   ),
           ),
           const AppSpacer.md(),
-
-          // Foto Ulang button (Removed Expanded to prevent layout crashes)
           AppButton(
             label: isLoading
                 ? 'Memproses...'
@@ -197,12 +184,12 @@ class _KtpPhotoCard extends StatelessWidget {
                     ? 'Ambil Foto'
                     : 'Foto Ulang',
             variant: AppButtonVariant.outlined,
-            backgroundColor: AppColors.bgCard,
+            backgroundColor: AppColors.white,
             onPressed: isLoading ? null : onTap,
             isLoading: isLoading,
-            foregroundColor: AppColors.primary500,
-            colorSide: AppColors.bgCard,
-            borderWidth: 0,
+            foregroundColor: AppColors.textPrimary,
+            borderColor: AppColors.primary500,
+            borderWidth: 1,
             borderRadius: 25,
           ),
         ],

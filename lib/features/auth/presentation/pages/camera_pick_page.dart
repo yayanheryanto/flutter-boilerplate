@@ -45,8 +45,6 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
     await _controller?.dispose();
   }
 
-  // Jika didChangeAppLifecycleState bawaan dari WidgetsBindingObserver,
-  // ia mengembalikan tipe data void, bukan Future<void>.
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     final ctrl = _controller;
@@ -58,8 +56,6 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
       initCamera();
     }
   }
-
-  // ── Camera init ───────────────────────────────────────────────────────────
 
   Future<void> _initCamera() async {
     setState(() => _isInitializing = true);
@@ -98,8 +94,6 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
     }
   }
 
-  // ── Capture ───────────────────────────────────────────────────────────────
-
   Future<void> _capture() async {
     final ctrl = _controller;
     if (ctrl == null || !ctrl.value.isInitialized || _isCapturing) return;
@@ -120,11 +114,8 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
   void _retake() => setState(() => _photo = null);
 
   void _confirm() {
-    // Return the captured photo back to the calling page
     context.pop(_photo);
   }
-
-  // ── Build ─────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -136,21 +127,17 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
       ),
       body: Column(
         children: [
-          // ── Camera / preview area ───────────────────────────────────────
           Expanded(
             child: Stack(
               fit: StackFit.expand,
               children: [
-                // Live preview or captured photo
                 _buildCameraView(),
 
-                // Bracket overlay — always visible
                 const _ViewfinderOverlay(),
               ],
             ),
           ),
 
-          // ── Bottom panel ────────────────────────────────────────────────
           _BottomPanel(
             hasPhoto: _photo != null,
             isCapturing: _isCapturing,
@@ -164,12 +151,10 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
   }
 
   Widget _buildCameraView() {
-    // Show captured photo
     if (_photo != null) {
       return Image.file(_photo!, fit: BoxFit.cover);
     }
 
-    // Loading
     if (_isInitializing || _controller == null || !_controller!.value.isInitialized) {
       return const ColoredBox(
         color: Color(0xFFD8D8D8),
@@ -179,7 +164,6 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
       );
     }
 
-    // Live camera preview — fill entire area
     return ClipRect(
       child: OverflowBox(
         child: FittedBox(
@@ -194,8 +178,6 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
     );
   }
 }
-
-// ─── Viewfinder Overlay ───────────────────────────────────────────────────────
 
 class _ViewfinderOverlay extends StatelessWidget {
   const _ViewfinderOverlay();
@@ -249,8 +231,6 @@ class _BracketPainter extends CustomPainter {
   bool shouldRepaint(_BracketPainter old) => false;
 }
 
-// ─── Bottom Panel ─────────────────────────────────────────────────────────────
-
 class _BottomPanel extends StatelessWidget {
   final bool hasPhoto;
   final bool isCapturing;
@@ -301,7 +281,6 @@ class _BeforeCapture extends StatelessWidget {
         ),
         const SizedBox(height: 24),
 
-        // Shutter button
         GestureDetector(
           onTap: isCapturing ? null : onCapture,
           child: AnimatedContainer(

@@ -5,6 +5,7 @@ import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_list_item.dart';
 import 'package:emas/features/dashboard/presentation/bloc/auction_list/auction_list_bloc.dart';
+import 'package:emas/gen/assets.gen.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/bottomsheets/app_bottom_sheet.dart';
@@ -97,7 +98,7 @@ class _AuctionListPageState extends State<AuctionListPage> {
                       maximumPrice: int.tryParse(maxController.text),
                     ),
                   );
-                  Navigator.pop(context);
+                  context.pop();
                 },
               ),
             ],
@@ -117,7 +118,7 @@ class _AuctionListPageState extends State<AuctionListPage> {
       child: BlocBuilder<AuctionListBloc, AuctionListState>(
         builder: (context, state) {
           return AppScaffoldWrapper(
-            backgroundColor: AppColors.neutral50,
+            backgroundColor: AppColors.white,
             appBar: _SearchAppBar(
               controller: _searchController,
               onChanged: (value) => context.read<AuctionListBloc>().add(AuctionListSearchChanged(value)),
@@ -160,7 +161,7 @@ class _AuctionListPageState extends State<AuctionListPage> {
         crossAxisCount: 2,
         crossAxisSpacing: AppSpacings.sm,
         mainAxisSpacing: AppSpacings.sm,
-        childAspectRatio: 0.72,
+        childAspectRatio: 0.78,
       ),
       itemCount: state.items.length,
       itemBuilder: (context, index) => _AuctionGridCard(
@@ -270,64 +271,90 @@ class _AuctionGridCard extends StatelessWidget {
   const _AuctionGridCard({required this.data, required this.onTap});
 
   @override
-  Widget build(BuildContext context) => GestureDetector(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(RadiusTokens.lg),
-            border: Border.all(color: AppColors.neutral200),
+  Widget build(BuildContext context) {
+    return AppCard(
+      onTap: onTap,
+      padding: EdgeInsets.zero,
+      borderRadius: BorderRadius.circular(RadiusTokens.lg),
+      borderColor: AppColors.neutral300,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Container(
+              width: double.infinity,
+              color: AppColors.neutral200,
+              child: Image.asset(Assets.images.png.icMotorcycle.path),
+            ),
           ),
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Container(
-                  width: double.infinity,
-                  color: AppColors.neutral200,
-                  child: const Center(child: Icon(Icons.directions_car_outlined, size: 40, color: AppColors.neutral400)),
+          Padding(
+            padding: const EdgeInsets.all(AppSpacings.sm),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+               AppText(
+                  data.name,
+                  variant: AppTextVariant.labelSmall,
+                  fontWeight: FontWeight.w600,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  // height: 1.35,
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(AppSpacings.sm),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                const SizedBox(height: 2),
+                AppText(
+                  CurrencyFormatter.rupiah(data.price),
+                  variant: AppTextVariant.labelMedium,
+                  fontWeight: FontWeight.w700,
+                ),
+                const SizedBox(height: 2),
+                AppText(
+                  data.location,
+                  variant: AppTextVariant.labelSmall,
+                  color: AppColors.textPrimary,
+                ),
+                const SizedBox(height: 2),
+                Row(
                   children: [
-                    AppText(data.name, variant: AppTextVariant.labelSmall, fontWeight: FontWeight.w500, maxLines: 2),
-                    const SizedBox(height: 4),
-                    AppText(CurrencyFormatter.rupiah(data.price), variant: AppTextVariant.labelMedium, fontWeight: FontWeight.w700),
-                    const SizedBox(height: 2),
-                    AppText(data.location, variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
-                    const SizedBox(height: 2),
-                    Row(
-                      children: [
-                        AppText(data.date, variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
-                        const AppText(' | ', variant: AppTextVariant.labelSmall, color: AppColors.neutral300),
-                        AppText(data.time, variant: AppTextVariant.labelSmall, color: AppColors.textSecondary),
-                      ],
+                    AppText(
+                      data.date,
+                      variant: AppTextVariant.labelSmall,
+                      color: AppColors.textPrimary,
+                    ),
+                    const AppText(
+                      ' | ',
+                      variant: AppTextVariant.labelSmall,
+                      color: AppColors.neutral300,
+                    ),
+                    AppText(
+                      data.time,
+                      variant: AppTextVariant.labelSmall,
+                      color: AppColors.textPrimary,
                     ),
                   ],
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
+        ],
+      ),
+    );
+  }
 }
 
 class _EmptyState extends StatelessWidget {
   const _EmptyState();
 
   @override
-  Widget build(BuildContext context) => const Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.search_off_rounded, size: 56, color: AppColors.neutral300),
-            AppSpacer.sm(),
-            AppText('Tidak ada lelang ditemukan', color: AppColors.textSecondary),
-          ],
-        ),
-      );
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.search_off_rounded, size: 56, color: AppColors.neutral300),
+          AppSpacer.sm(),
+          AppText('Tidak ada lelang ditemukan', color: AppColors.textSecondary),
+        ],
+      ),
+    );
+  }
 }

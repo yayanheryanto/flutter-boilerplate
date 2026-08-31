@@ -5,7 +5,7 @@ import 'package:emas/core/constants/tokens/app_spacings.dart';
 
 enum AppButtonVariant { primary, secondary, outlined, text, danger }
 
-enum AppButtonSize { small, medium, large }
+enum AppButtonSize { extraSmall, small, medium, large }
 
 class AppButton extends StatelessWidget {
   final String label;
@@ -25,11 +25,14 @@ class AppButton extends StatelessWidget {
   /// Override the default corner radius. Defaults to [RadiusTokens.md].
   final double? borderRadius;
 
+  /// Custom inner content padding override.
+  final EdgeInsetsGeometry? padding;
+
   final Color? backgroundColor;
   final Color? foregroundColor;
   final Color? borderColor;
   final double? borderWidth;
-  final Color? colorSide;
+  // final Color? colorSide;
 
   const AppButton({
     super.key,
@@ -44,11 +47,12 @@ class AppButton extends StatelessWidget {
     this.width,
     this.dangerOverride = false,
     this.borderRadius,
+    this.padding,
     this.backgroundColor,
     this.foregroundColor,
     this.borderColor,
     this.borderWidth,
-    this.colorSide,
+    // this.colorSide,
   });
 
   @override
@@ -107,6 +111,8 @@ class AppButton extends StatelessWidget {
 
   double _getHeight() {
     switch (size) {
+      case AppButtonSize.extraSmall:
+        return 28;
       case AppButtonSize.small:
         return 36;
       case AppButtonSize.medium:
@@ -116,9 +122,32 @@ class AppButton extends StatelessWidget {
     }
   }
 
+  EdgeInsetsGeometry _getPadding() {
+    if (padding != null) return padding!;
+
+    switch (size) {
+      case AppButtonSize.extraSmall:
+        return const EdgeInsets.symmetric(horizontal: 10);
+      case AppButtonSize.small:
+        return const EdgeInsets.symmetric(horizontal: 12);
+      case AppButtonSize.medium:
+        return const EdgeInsets.symmetric(horizontal: 16);
+      case AppButtonSize.large:
+        return const EdgeInsets.symmetric(horizontal: 20);
+    }
+  }
+
   ButtonStyle _buildStyle(BuildContext context, ColorScheme colorScheme) {
     final radius = BorderRadius.circular(
       borderRadius ?? RadiusTokens.md,
+    );
+    final buttonPadding = _getPadding();
+
+    // Base properties to remove default Material button padding constraints
+    final baseStyle = ButtonStyle(
+      padding: WidgetStateProperty.all(buttonPadding),
+      minimumSize: WidgetStateProperty.all(Size.zero),
+      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
 
     // dangerOverride wins over variant
@@ -127,7 +156,7 @@ class AppButton extends StatelessWidget {
         backgroundColor: backgroundColor ?? colorScheme.error,
         foregroundColor: foregroundColor ?? colorScheme.onError,
         shape: RoundedRectangleBorder(borderRadius: radius),
-      );
+      ).merge(baseStyle);
     }
 
     switch (variant) {
@@ -137,29 +166,29 @@ class AppButton extends StatelessWidget {
           foregroundColor: foregroundColor ?? colorScheme.onSurface,
           shape: RoundedRectangleBorder(borderRadius: radius),
           elevation: 0,
-        );
+        ).merge(baseStyle);
       case AppButtonVariant.outlined:
         return OutlinedButton.styleFrom(
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
           side: BorderSide(
-            color: colorSide ?? colorScheme.primary,
+            color: borderColor ?? colorScheme.primary,
             width: borderWidth ?? 1,
           ),
           shape: RoundedRectangleBorder(borderRadius: radius),
-        );
+        ).merge(baseStyle);
       case AppButtonVariant.text:
         return TextButton.styleFrom(
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
           shape: RoundedRectangleBorder(borderRadius: radius),
-        );
+        ).merge(baseStyle);
       default:
         return ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
           shape: RoundedRectangleBorder(borderRadius: radius),
-        );
+        ).merge(baseStyle);
     }
   }
 

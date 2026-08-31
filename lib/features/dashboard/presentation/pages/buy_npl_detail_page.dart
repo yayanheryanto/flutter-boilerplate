@@ -15,10 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-// ─── Model ────────────────────────────────────────────────────────────────────
-
-// ─── Dummy data ───────────────────────────────────────────────────────────────
-
 const _dummyOrders = [
   NplOrderItem(
     category: AuctionCategory.mobil,
@@ -37,7 +33,6 @@ const _dummyOrders = [
     pricePerNpl: 1000000,
   ),
 ];
-// ─── Category icon/color helpers ──────────────────────────────────────────────
 
 const _categoryIcons = {
   AuctionCategory.mobil: Icons.directions_car_rounded,
@@ -65,8 +60,6 @@ const _categoryIconBg = {
   AuctionCategory.mewah: Color(0xFFF3EEFB),
   AuctionCategory.lainnya: Color(0xFFF1F5F9),
 };
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
 
 class BuyNplPage extends StatelessWidget {
   final List<NplOrderItem> orders;
@@ -129,8 +122,6 @@ class BuyNplPage extends StatelessWidget {
   }
 }
 
-// ─── Order card ───────────────────────────────────────────────────────────────
-
 class _NplOrderCard extends StatelessWidget {
   final NplOrderItem order;
 
@@ -179,7 +170,6 @@ class _NplOrderCard extends StatelessWidget {
 
           const Divider(height: 1, color: AppColors.neutral200),
 
-          // ── Grid detail ───────────────────────────────────────────
           Padding(
             padding: const EdgeInsets.all(AppSpacings.md),
             child: Column(
@@ -220,15 +210,12 @@ class _NplOrderCard extends StatelessWidget {
             ),
           ),
 
-          // ── Subtotal bar ──────────────────────────────────────────
           _SubtotalBar(amount: order.subtotal),
         ],
       ),
     );
   }
 }
-
-// ─── Detail row + cell ────────────────────────────────────────────────────────
 
 class _DetailRow extends StatelessWidget {
   final _DetailCell left;
@@ -274,8 +261,6 @@ class _DetailCell extends StatelessWidget {
   }
 }
 
-// ─── Subtotal bar ─────────────────────────────────────────────────────────────
-
 class _SubtotalBar extends StatelessWidget {
   final int amount;
 
@@ -296,21 +281,19 @@ class _SubtotalBar extends StatelessWidget {
             'Subtotal',
             variant: AppTextVariant.labelLarge,
             fontWeight: FontWeight.w600,
-            color: AppColors.white,
+            color: AppColors.textPrimary,
           ),
           AppText(
             CurrencyFormatter.rupiah(amount),
             variant: AppTextVariant.labelLarge,
             fontWeight: FontWeight.w700,
-            color: AppColors.white,
+            color: AppColors.textPrimary,
           ),
         ],
       ),
     );
   }
 }
-
-// ─── Bottom CTA ───────────────────────────────────────────────────────────────
 
 class _BottomCTA extends StatelessWidget {
   final int total;
@@ -328,8 +311,7 @@ class _BottomCTA extends StatelessWidget {
         AppSpacings.lg,
       ),
       child: AppButton(
-        label: 'Lanjut Pembayaran    ${CurrencyFormatter.rupiah(total)}',
-        size: AppButtonSize.large,
+        label: 'Lanjut Pembayaran ${CurrencyFormatter.rupiah(total)}',
         borderRadius: RadiusTokens.full,
         onPressed: () async {
           await context.push(AppRoutes.buyNplConfirmation);

@@ -59,8 +59,6 @@ class _ForgotPasswordFormWidgetState extends State<ForgotPasswordFormWidget> wit
   }
 }
 
-// ─── Form View ────────────────────────────────────────────────────────────────
-
 class _FormView extends StatelessWidget {
   final TextEditingController phoneController;
   final GlobalKey<FormState> formKey;
@@ -86,7 +84,6 @@ class _FormView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // ── Header ──────────────────────────────────────────────────────
             const AppText(
               'Lupa Password',
               variant: AppTextVariant.headlineLarge,
@@ -100,7 +97,6 @@ class _FormView extends StatelessWidget {
             ),
             const SizedBox(height: 32),
 
-            // ── Phone number ─────────────────────────────────────────────────
             AppTextField(
               controller: phoneController,
               label: 'Nomor Handphone',
@@ -120,7 +116,6 @@ class _FormView extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // ── Submit ───────────────────────────────────────────────────────
             AppButton(
               label: 'Lanjutkan',
               onPressed: () async => context.push(AppRoutes.otp, extra: {'phone': phoneController.text}),

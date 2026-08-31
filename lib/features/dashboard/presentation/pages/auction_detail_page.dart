@@ -61,7 +61,7 @@ class AuctionDetailPage extends StatelessWidget {
                           const AppText(
                             'Tahun 2021',
                             variant: AppTextVariant.bodySmall,
-                            color: AppColors.textSecondary,
+                            color: AppColors.textPrimary,
                           ),
 
                           const SizedBox(height: AppSpacings.md),
@@ -70,7 +70,7 @@ class AuctionDetailPage extends StatelessWidget {
                           const AppText(
                             'Harga Dasar',
                             variant: AppTextVariant.labelSmall,
-                            color: AppColors.textSecondary,
+                            color: AppColors.textPrimary,
                           ),
                           const SizedBox(height: 2),
                           Row(
@@ -86,7 +86,7 @@ class AuctionDetailPage extends StatelessWidget {
                               const AppText(
                                 '*Terdapat biaya PPN 10%',
                                 variant: AppTextVariant.labelSmall,
-                                color: AppColors.textSecondary,
+                                color: AppColors.textPrimary,
                               ),
                             ],
                           ),
@@ -123,7 +123,7 @@ class AuctionDetailPage extends StatelessWidget {
                                       const AppText(
                                         'Penawaran Tertinggi',
                                         variant: AppTextVariant.labelSmall,
-                                        color: AppColors.textSecondary,
+                                        color: AppColors.textPrimary,
                                       ),
                                       const SizedBox(height: 2),
                                       AppText(
@@ -152,7 +152,7 @@ class AuctionDetailPage extends StatelessWidget {
                                       'COUNT',
                                       variant: AppTextVariant.labelSmall,
                                       fontWeight: FontWeight.bold,
-                                      color: AppColors.textSecondary,
+                                      color: AppColors.textPrimary,
                                     ),
                                     AppText(
                                       '1',
@@ -191,7 +191,6 @@ class AuctionDetailPage extends StatelessWidget {
                 ),
                 child: AppButton(
                   label: 'Beli NPL',
-                  size: AppButtonSize.large,
                   borderRadius: RadiusTokens.full,
                   onPressed: () {},
                 ),
@@ -273,7 +272,7 @@ class _GradeItem extends StatelessWidget {
         AppText(
           label,
           variant: AppTextVariant.labelSmall,
-          color: AppColors.textSecondary,
+          color: AppColors.textPrimary,
         ),
         const SizedBox(height: 4),
         Container(
@@ -315,7 +314,7 @@ class _SpecRow extends StatelessWidget {
           AppText(
             label,
             variant: AppTextVariant.bodySmall,
-            color: AppColors.textSecondary,
+            color: AppColors.textPrimary,
           ),
           AppText(
             value,

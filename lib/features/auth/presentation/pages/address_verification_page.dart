@@ -29,7 +29,6 @@ class _AddressVerificationContent extends StatefulWidget {
 }
 
 class _AddressVerificationContentState extends State<_AddressVerificationContent> with AppFormMixin<_AddressVerificationContent> {
-  // ── Controllers ──────────────────────────────────────────────────────────────
   final _addressController = TextEditingController();
   final _rtController = TextEditingController();
   final _rwController = TextEditingController();
@@ -38,7 +37,6 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
   final _districtController = TextEditingController();
   final _villageController = TextEditingController();
 
-  // ── State ─────────────────────────────────────────────────────────────────────
   File? _ktpPhoto;
   DateTime? _selectedDob;
   String? _province;
@@ -63,8 +61,6 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
     super.dispose();
   }
 
-  // ── Submit ────────────────────────────────────────────────────────────────────
-
   void _onSubmit() {
     if (!validateForm()) return;
     if (_ktpPhoto == null) {
@@ -78,8 +74,6 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
     // TODO: dispatch KTP verification event
     context.go(AppRoutes.dashboard);
   }
-
-  // ── Build ─────────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +110,6 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
                       ),
 
                       const AppSpacer.md(),
-                      // NIK
                       AppTextField(
                         controller: _addressController,
                         label: 'Alamat',
@@ -128,8 +121,6 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
                         ]),
                       ),
                       const AppSpacer.md(),
-
-                      // Nama
 
                       Row(
                         children: [
@@ -170,7 +161,6 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
 
                       const AppSpacer.md(),
 
-                      // Jenis Kelamin
                       AppDropdownField(
                         label: 'Provinsi',
                         hint: 'Pilih provinsi domisili',
@@ -181,7 +171,6 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
                       ),
                       const AppSpacer.md(),
 
-                      // Tempat Lahir
                       AppDropdownField(
                         label: 'Kota',
                         hint: 'Pilih kota domisili',
@@ -192,7 +181,6 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
                       ),
                       const AppSpacer.md(),
 
-                      // Tanggal Lahir
                       AppDropdownField(
                         label: 'Kecamatan',
                         hint: 'Pilih kecamatan domisili',
@@ -203,7 +191,6 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
                       ),
                       const AppSpacer.md(),
 
-                      // Pekerjaan
                       AppDropdownField(
                         label: 'Kelurahan',
                         hint: 'Pilih kelurahan domisili',

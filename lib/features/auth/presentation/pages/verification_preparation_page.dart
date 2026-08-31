@@ -43,7 +43,6 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // ── Header ──────────────────────────────────────────────
                     const AppText(
                       'Pilih jenis akun lelang Anda',
                       variant: AppTextVariant.titleLarge,
@@ -55,8 +54,6 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                       variant: AppTextVariant.titleSmall,
                     ),
                     const AppSpacer.lg(),
-
-                    // ── Account type selector ────────────────────────────────
 
                     _AccountTypeCard(
                       type: AccountType.personal,
@@ -81,7 +78,6 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                     ),
                     const AppSpacer.xl(),
 
-                    // ── Section label ────────────────────────────────────────
                     const AppText(
                       'Hal yang perlu dipersiapkan',
                       variant: AppTextVariant.titleSmall,
@@ -89,7 +85,6 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
                     ),
                     const AppSpacer.md(),
 
-                    // ── Preparation items ────────────────────────────────────
                     _PreparationItem(
                       number: 1,
                       title: _selected == AccountType.personal ? 'Foto e-KTP' : 'Foto NPWP',
@@ -136,8 +131,6 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
   }
 }
 
-// ─── Account Type Card ────────────────────────────────────────────────────────
-
 class _AccountTypeCard extends StatelessWidget {
   final AccountType type;
   final String title;
@@ -183,7 +176,6 @@ class _AccountTypeCard extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Radio indicator
             Container(
               width: 22,
               height: 22,
@@ -200,14 +192,12 @@ class _AccountTypeCard extends StatelessWidget {
             const AppSpacer.md(
               horizontal: true,
             ),
-            // Avatar
             AppImage.circle(
               src: image,
               size: 44,
             ),
             const AppSpacer.md(horizontal: true),
 
-            // Text
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -231,8 +221,6 @@ class _AccountTypeCard extends StatelessWidget {
     );
   }
 }
-
-// ─── Preparation Item ─────────────────────────────────────────────────────────
 
 class _PreparationItem extends StatelessWidget {
   final int number;
@@ -269,7 +257,6 @@ class _PreparationItem extends StatelessWidget {
 
         const AppSpacer.md(horizontal: true),
 
-        // Text
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

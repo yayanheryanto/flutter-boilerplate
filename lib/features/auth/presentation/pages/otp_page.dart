@@ -9,7 +9,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class OtpPage extends StatelessWidget {
-  /// The phone number the OTP was sent to — shown in the subtitle.
   final String phone;
 
   const OtpPage({super.key, required this.phone});

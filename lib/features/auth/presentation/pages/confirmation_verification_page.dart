@@ -42,10 +42,8 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const AppSpacer.md(),
-            // ── Stepper ──────────────────────────────────────────────────
             const VerificationStepper(currentStep: 4),
 
-            // ── Content ──────────────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(AppSpacings.md),
@@ -60,7 +58,6 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
                     ),
                     const AppSpacer.lg(),
 
-                    // Review items
                     _ReviewItem(
                       label: 'Verifikasi KTP',
                       onTap: () => context.go(AppRoutes.ktpVerification),
@@ -96,7 +93,6 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  // Terms checkbox
                   Row(
                     children: [
                       SizedBox(
@@ -140,7 +136,6 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
                   ),
                   const AppSpacer.md(),
 
-                  // CTA button
                   AppButton(
                     label: 'Verifikasi Akun',
                     onPressed: _agreedToTerms ? _onVerify : null,
@@ -155,8 +150,6 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
     );
   }
 }
-
-// ─── Review Item ──────────────────────────────────────────────────────────────
 
 class _ReviewItem extends StatelessWidget {
   final String label;

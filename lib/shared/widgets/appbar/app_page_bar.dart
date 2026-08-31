@@ -9,12 +9,6 @@ enum AppPageBarTitleVariant {
   withImage,
 }
 
-/// AppBar standar aplikasi.
-///
-/// ### Dengan margin top (mis. menghindari status bar custom)
-/// ```dart
-/// AppPageBar(title: 'Detail', topMargin: 16)
-/// ```
 class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final Color backgroundColor;
@@ -29,8 +23,6 @@ class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? titleImage;
   final double titleGap;
   final List<Widget>? actions;
-
-  /// Jarak kosong di atas AppBar. Default 0.
   final double topMargin;
 
   const AppPageBar({

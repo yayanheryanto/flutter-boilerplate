@@ -330,7 +330,6 @@ class _BuyNplFormState extends State<_BuyNplForm> {
         const SizedBox(height: AppSpacings.lg),
         AppButton(
           label: 'Tambah',
-          size: AppButtonSize.large,
           borderRadius: RadiusTokens.full,
           onPressed: _submit,
         ),

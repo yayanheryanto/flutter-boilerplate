@@ -1,53 +1,64 @@
-/// Status pembayaran transaksi NPL/lelang.
-enum TransaksiStatus { belumDibayar, menungguPembayaran }
+/// Payment status of an NPL/auction transaction.
+enum TransactionStatus { unpaid, pendingPayment }
 
 class TransactionItem {
   final String id;
-  final String namaKendaraan;
-  final String noPolisi;
-  final int tahun;
+  final String vehicleName;
+  final String licensePlate;
+  final int year;
   final int lot;
-  final int hargaTerbentuk;
-  final TransaksiStatus status;
+  final int formedPrice;
+  final TransactionStatus status;
+
+  /// The fields below are only populated for [TransactionStatus.pendingPayment].
+  final DateTime? payBeforeDate;
+  final int? totalBill;
+  final String? paymentMethodName;
 
   const TransactionItem({
     required this.id,
-    required this.namaKendaraan,
-    required this.noPolisi,
-    required this.tahun,
+    required this.vehicleName,
+    required this.licensePlate,
+    required this.year,
     required this.lot,
-    required this.hargaTerbentuk,
+    required this.formedPrice,
     required this.status,
+    this.payBeforeDate,
+    this.totalBill,
+    this.paymentMethodName,
   });
 }
 
-/// Dummy data transaksi — ganti dengan hasil API begitu endpoint tersedia.
-const dummyTransactionItems = [
-  TransactionItem(
+/// Dummy transaction data — replace with API results once the endpoint is available.
+final dummyTransactionItems = [
+  const TransactionItem(
     id: 'trx-001',
-    namaKendaraan: 'DAIHATSU GRAND MAX BV - 1.3',
-    noPolisi: 'BK8769ET',
-    tahun: 2021,
+    vehicleName: 'DAIHATSU GRAND MAX BV - 1.3',
+    licensePlate: 'BK8769ET',
+    year: 2021,
     lot: 15,
-    hargaTerbentuk: 150000000,
-    status: TransaksiStatus.belumDibayar,
+    formedPrice: 150000000,
+    status: TransactionStatus.unpaid,
   ),
-  TransactionItem(
+  const TransactionItem(
     id: 'trx-002',
-    namaKendaraan: 'DAIHATSU GRAND MAX BV - 1.3',
-    noPolisi: 'BK8769ET',
-    tahun: 2021,
+    vehicleName: 'DAIHATSU GRAND MAX BV - 1.3',
+    licensePlate: 'BK8769ET',
+    year: 2021,
     lot: 15,
-    hargaTerbentuk: 150000000,
-    status: TransaksiStatus.belumDibayar,
+    formedPrice: 150000000,
+    status: TransactionStatus.unpaid,
   ),
   TransactionItem(
     id: 'trx-003',
-    namaKendaraan: 'TOYOTA AVANZA VELOZ 1.5',
-    noPolisi: 'BK1122AF',
-    tahun: 2020,
-    lot: 8,
-    hargaTerbentuk: 175000000,
-    status: TransaksiStatus.menungguPembayaran,
+    vehicleName: 'DAIHATSU GRAND MAX BV - 1.3',
+    licensePlate: 'BK8769ET',
+    year: 2021,
+    lot: 15,
+    formedPrice: 150000000,
+    status: TransactionStatus.pendingPayment,
+    payBeforeDate: DateTime(2026, 9, 1, 23, 59),
+    totalBill: 146000000,
+    paymentMethodName: 'Allo Bank',
   ),
 ];

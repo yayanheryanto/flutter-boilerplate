@@ -21,6 +21,7 @@ import 'package:emas/features/dashboard/presentation/pages/join_auction_page.dar
 import 'package:emas/features/dashboard/presentation/pages/auction_detail_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/auction_list_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/live_auction_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/payment_guide_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/payment_page.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/core/utils/navigator_key.dart';
@@ -244,6 +245,12 @@ class AppRouter {
           path: AppRoutes.payment,
           name: 'payment',
           builder: (context, state) => const PaymentPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.paymentGuide,
+          name: 'payment-guide',
+          builder: (context, state) => const PaymentGuidePage(),
         ),
       ],
 

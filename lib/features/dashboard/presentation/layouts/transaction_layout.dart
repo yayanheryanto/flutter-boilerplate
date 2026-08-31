@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
@@ -10,6 +12,30 @@ import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+const _shortMonths = [
+  '',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'Mei',
+  'Jun',
+  'Jul',
+  'Agu',
+  'Sep',
+  'Okt',
+  'Nov',
+  'Des',
+];
+
+/// Formats "4 Nov 2026, 09:33 WIB" without depending on `intl`'s locale
+/// initialization for `DateFormat`.
+String _formatDateTime(DateTime dt) {
+  final hour = dt.hour.toString().padLeft(2, '0');
+  final minute = dt.minute.toString().padLeft(2, '0');
+  return '${dt.day} ${_shortMonths[dt.month]} ${dt.year}, $hour:$minute WIB';
+}
+
 class TransactionLayout extends StatefulWidget {
   const TransactionLayout({super.key});
 
@@ -18,10 +44,9 @@ class TransactionLayout extends StatefulWidget {
 }
 
 class _TransactionLayoutState extends State<TransactionLayout> {
-  TransaksiStatus _selectedStatus = TransaksiStatus.belumDibayar;
+  TransactionStatus _selectedStatus = TransactionStatus.unpaid;
 
-  List<TransactionItem> get _filteredItems =>
-      dummyTransactionItems.where((item) => item.status == _selectedStatus).toList();
+  List<TransactionItem> get _filteredItems => dummyTransactionItems.where((item) => item.status == _selectedStatus).toList();
 
   @override
   Widget build(BuildContext context) {
@@ -47,11 +72,11 @@ class _TransactionLayoutState extends State<TransactionLayout> {
             child: _filteredItems.isEmpty
                 ? const _EmptyState()
                 : ListView.separated(
-              padding: const EdgeInsets.all(AppSpacings.md),
-              itemCount: _filteredItems.length,
-              separatorBuilder: (_, __) => const SizedBox(height: AppSpacings.md),
-              itemBuilder: (context, i) => _TransaksiCard(item: _filteredItems[i]),
-            ),
+                    padding: const EdgeInsets.all(AppSpacings.md),
+                    itemCount: _filteredItems.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: AppSpacings.md),
+                    itemBuilder: (context, i) => _TransactionCard(item: _filteredItems[i]),
+                  ),
           ),
         ],
       ),
@@ -59,33 +84,37 @@ class _TransactionLayoutState extends State<TransactionLayout> {
   }
 }
 
-// ─── Tab bar ──────────────────────────────────────────────────────────────────
-
 class _TransactionTabBar extends StatelessWidget {
-  final TransaksiStatus selected;
-  final ValueChanged<TransaksiStatus> onChanged;
+  final TransactionStatus selected;
+  final ValueChanged<TransactionStatus> onChanged;
 
   const _TransactionTabBar({required this.selected, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+      padding: const EdgeInsets.symmetric(
+        horizontal: AppSpacings.md,
+      ),
       decoration: const BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.neutral200)),
+        border: Border(
+          bottom: BorderSide(
+            color: AppColors.neutral200,
+          ),
+        ),
       ),
       child: Row(
         children: [
           _TabItem(
             label: 'Belum Dibayar',
-            isSelected: selected == TransaksiStatus.belumDibayar,
-            onTap: () => onChanged(TransaksiStatus.belumDibayar),
+            isSelected: selected == TransactionStatus.unpaid,
+            onTap: () => onChanged(TransactionStatus.unpaid),
           ),
           const SizedBox(width: AppSpacings.lg),
           _TabItem(
             label: 'Menunggu Pembayaran',
-            isSelected: selected == TransaksiStatus.menungguPembayaran,
-            onTap: () => onChanged(TransaksiStatus.menungguPembayaran),
+            isSelected: selected == TransactionStatus.pendingPayment,
+            onTap: () => onChanged(TransactionStatus.pendingPayment),
           ),
         ],
       ),
@@ -106,7 +135,7 @@ class _TabItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isSelected ? AppColors.textPrimary : AppColors.textSecondary;
+    final color = isSelected ? AppColors.textPrimary : AppColors.textPrimary;
 
     return InkWell(
       onTap: onTap,
@@ -126,8 +155,8 @@ class _TabItem extends StatelessWidget {
             ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 180),
-              height: 2,
-              color: isSelected ? AppColors.info500 : AppColors.transparent,
+              height: 3,
+              color: isSelected ? AppColors.blue100 : AppColors.transparent,
             ),
           ],
         ),
@@ -136,15 +165,15 @@ class _TabItem extends StatelessWidget {
   }
 }
 
-// ─── Transaksi card ───────────────────────────────────────────────────────────
-
-class _TransaksiCard extends StatelessWidget {
+class _TransactionCard extends StatelessWidget {
   final TransactionItem item;
 
-  const _TransaksiCard({required this.item});
+  const _TransactionCard({required this.item});
 
   @override
   Widget build(BuildContext context) {
+    final isPendingPayment = item.status == TransactionStatus.pendingPayment;
+
     return AppCard(
       backgroundColor: AppColors.white,
       borderRadius: BorderRadius.circular(RadiusTokens.lg),
@@ -175,23 +204,23 @@ class _TransaksiCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     AppText(
-                      item.namaKendaraan,
+                      item.vehicleName,
                       fontWeight: FontWeight.w700,
                     ),
                     const SizedBox(height: 2),
                     AppText(
-                      '${item.noPolisi} | ${item.tahun} | LOT ${item.lot}',
+                      '${item.licensePlate} | ${item.year} | LOT ${item.lot}',
                       variant: AppTextVariant.labelSmall,
-                      color: AppColors.textSecondary,
+                      color: AppColors.textPrimary,
                     ),
                     const SizedBox(height: AppSpacings.sm),
                     const AppText(
                       'Harga Terbentuk',
                       variant: AppTextVariant.labelSmall,
-                      color: AppColors.textSecondary,
+                      color: AppColors.textPrimary,
                     ),
                     AppText(
-                      CurrencyFormatter.rupiah(item.hargaTerbentuk),
+                      CurrencyFormatter.rupiah(item.formedPrice),
                       fontWeight: FontWeight.w700,
                     ),
                   ],
@@ -200,38 +229,233 @@ class _TransaksiCard extends StatelessWidget {
             ],
           ),
           const SizedBox(height: AppSpacings.md),
-          Row(
-            children: [
-              Expanded(
-                child: AppButton(
-                  label: 'Lihat Detail',
-                  variant: AppButtonVariant.outlined,
-                  borderRadius: RadiusTokens.full,
-                  borderColor: AppColors.info500,
-                  foregroundColor: AppColors.textPrimary,
-                  // TODO: navigasi ke halaman detail transaksi
-                  onPressed: () {},
-                ),
-              ),
-              const SizedBox(width: AppSpacings.sm),
-              Expanded(
-                child: AppButton(
-                  label: 'Bayar',
-                  borderRadius: RadiusTokens.full,
-                  onPressed: () async {
-                    await context.push(AppRoutes.payment);
-                  },
-                ),
-              ),
-            ],
-          ),
+          if (isPendingPayment)
+            _PendingPaymentSection(item: item)
+          else
+            _UnpaidActions(
+              item: item,
+            ),
         ],
       ),
     );
   }
 }
 
-// ─── Empty state ──────────────────────────────────────────────────────────────
+// ─── Actions for "unpaid" status ───────────────────────────────────────────────
+
+class _UnpaidActions extends StatelessWidget {
+  final TransactionItem item;
+
+  const _UnpaidActions({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: AppButton(
+            label: 'Lihat Detail',
+            variant: AppButtonVariant.outlined,
+            borderRadius: RadiusTokens.full,
+            borderColor: AppColors.blue100,
+            size: AppButtonSize.small,
+            borderWidth: 2,
+            foregroundColor: AppColors.textPrimary,
+            onPressed: () {},
+          ),
+        ),
+        const SizedBox(width: AppSpacings.md),
+        Expanded(
+          child: AppButton(
+            label: 'Bayar',
+            size: AppButtonSize.small,
+            borderRadius: RadiusTokens.full,
+            onPressed: () async {
+              await context.push(AppRoutes.payment);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Section for "pending payment" status ──────────────────────────────────────
+
+class _PendingPaymentSection extends StatelessWidget {
+  final TransactionItem item;
+
+  const _PendingPaymentSection({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    final dueDate = item.payBeforeDate;
+    final total = item.totalBill;
+    final methodName = item.paymentMethodName;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // ── Top Information (Bayar sebelum & Total Tagihan) ──
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const AppText(
+                    'Bayar sebelum',
+                    variant: AppTextVariant.labelSmall,
+                    color: AppColors.textPrimary,
+                  ),
+                  const SizedBox(height: 4),
+                  AppText(
+                    dueDate != null ? _formatDateTime(dueDate) : '-',
+                    variant: AppTextVariant.labelMedium,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ],
+              ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                const AppText(
+                  'Total Tagihan',
+                  variant: AppTextVariant.labelSmall,
+                  color: AppColors.textPrimary,
+                ),
+                const SizedBox(height: 4),
+                AppText(
+                  total != null ? CurrencyFormatter.rupiah(total) : '-',
+                  fontWeight: FontWeight.w700,
+                ),
+              ],
+            ),
+          ],
+        ),
+
+        const SizedBox(height: AppSpacings.md),
+
+        // ── Divider Line ──
+        const Divider(
+          height: 1,
+          thickness: 1,
+          color: AppColors.neutral200,
+        ),
+
+        const SizedBox(height: AppSpacings.md),
+
+        // ── Bottom Section (Countdown & Action Button) ──
+        Row(
+          children: [
+            Expanded(
+              child: dueDate != null
+                  ? _CountdownLabel(
+                      dueDate: dueDate,
+                      paymentMethodName: methodName ?? '-',
+                    )
+                  : const AppText(
+                      'Selesaikan pembayaran segera',
+                      variant: AppTextVariant.labelSmall,
+                      color: AppColors.textPrimary,
+                    ),
+            ),
+            const SizedBox(width: AppSpacings.sm),
+            SizedBox(
+              width: 80,
+              child: AppButton(
+                label: 'Bayar',
+                size: AppButtonSize.small,
+                backgroundColor: AppColors.primary500,
+                foregroundColor: AppColors.textPrimary,
+                borderRadius: RadiusTokens.full,
+                onPressed: () async {
+                  await context.push(AppRoutes.paymentGuide);
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+/// "Bayar dalam **HH:MM:SS** dengan <method>" — the countdown digits tick
+/// down every second until [dueDate].
+class _CountdownLabel extends StatefulWidget {
+  final DateTime dueDate;
+  final String paymentMethodName;
+
+  const _CountdownLabel({
+    required this.dueDate,
+    required this.paymentMethodName,
+  });
+
+  @override
+  State<_CountdownLabel> createState() => _CountdownLabelState();
+}
+
+class _CountdownLabelState extends State<_CountdownLabel> {
+  Timer? _timer;
+  late Duration _remaining;
+
+  @override
+  void initState() {
+    super.initState();
+    _remaining = _computeRemaining();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      setState(() => _remaining = _computeRemaining());
+    });
+  }
+
+  Duration _computeRemaining() {
+    final diff = widget.dueDate.difference(DateTime.now());
+    return diff.isNegative ? Duration.zero : diff;
+  }
+
+  String get _formatted {
+    String two(int n) => n.toString().padLeft(2, '0');
+    return '${two(_remaining.inHours)}:${two(_remaining.inMinutes.remainder(60))}:${two(_remaining.inSeconds.remainder(60))}';
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    const baseStyle = TextStyle(
+      fontFamily: 'Inter',
+      fontSize: 12,
+      color: AppColors.textPrimary,
+    );
+
+    return RichText(
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      text: TextSpan(
+        style: baseStyle,
+        children: [
+          const TextSpan(text: 'Bayar dalam '),
+          TextSpan(
+            text: _formatted,
+            style: const TextStyle(
+              color: AppColors.info500, // Warna biru cerah/cyan sesuai desain
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          TextSpan(text: ' dengan ${widget.paymentMethodName}'),
+        ],
+      ),
+    );
+  }
+}
 
 class _EmptyState extends StatelessWidget {
   const _EmptyState();
@@ -250,7 +474,7 @@ class _EmptyState extends StatelessWidget {
           SizedBox(height: AppSpacings.md),
           AppText(
             'Belum ada transaksi',
-            color: AppColors.textSecondary,
+            color: AppColors.textPrimary,
           ),
         ],
       ),

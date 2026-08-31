@@ -15,10 +15,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Payment Methods
-// ─────────────────────────────────────────────────────────────────────────────
-
 const _paymentMethods = [
   PaymentMethod(
     id: 'mega_va',
@@ -52,10 +48,6 @@ const _paymentMethods = [
   ),
 ];
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Page
-// ─────────────────────────────────────────────────────────────────────────────
-
 class BuyNplConfirmationPage extends StatefulWidget {
   final int totalAmount;
 
@@ -69,10 +61,6 @@ class BuyNplConfirmationPage extends StatefulWidget {
 }
 
 class _BuyNplConfirmationPageState extends State<BuyNplConfirmationPage> {
-  // ───────────────────────────────────────────────────────────────────────────
-  // Payment Method Bottom Sheet
-  // ───────────────────────────────────────────────────────────────────────────
-
   Future<void> _showPaymentMethodSheet(BuildContext blocContext) async {
     await AppCustomBottomSheet.show<void>(
       blocContext,
@@ -101,10 +89,6 @@ class _BuyNplConfirmationPageState extends State<BuyNplConfirmationPage> {
     );
   }
 
-  // ───────────────────────────────────────────────────────────────────────────
-  // Build
-  // ───────────────────────────────────────────────────────────────────────────
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider<BuyNplConfirmationBloc>(
@@ -118,28 +102,18 @@ class _BuyNplConfirmationPageState extends State<BuyNplConfirmationPage> {
             ),
             body: Column(
               children: [
-                // ─────────────────────────────────────────────────────────────
-                // Scrollable Content
-                // ─────────────────────────────────────────────────────────────
-
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.all(
                       AppSpacings.md,
                     ),
                     children: [
-                      // ───────────────────────────────────────────────────────
-                      // Ringkasan Pembelian
-                      // ───────────────────────────────────────────────────────
-
                       const _SectionTitle(
                         'Ringkasan Pembelian',
                       ),
-
                       const SizedBox(
                         height: AppSpacings.sm,
                       ),
-
                       _InfoCard(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,23 +134,15 @@ class _BuyNplConfirmationPageState extends State<BuyNplConfirmationPage> {
                           ],
                         ),
                       ),
-
                       const SizedBox(
                         height: AppSpacings.lg,
                       ),
-
-                      // ───────────────────────────────────────────────────────
-                      // Metode Pembayaran
-                      // ───────────────────────────────────────────────────────
-
                       const _SectionTitle(
                         'Metode Pembayaran',
                       ),
-
                       const SizedBox(
                         height: AppSpacings.sm,
                       ),
-
                       _PaymentMethodSelector(
                         selected: state.selectedMethod,
                         onTap: () async {
@@ -186,11 +152,6 @@ class _BuyNplConfirmationPageState extends State<BuyNplConfirmationPage> {
                     ],
                   ),
                 ),
-
-                // ─────────────────────────────────────────────────────────────
-                // Bottom Section
-                // ─────────────────────────────────────────────────────────────
-
                 _BottomSection(
                   agreeToTerms: state.agreeToTerms,
                   canPay: state.canPay,
@@ -217,10 +178,6 @@ class _BuyNplConfirmationPageState extends State<BuyNplConfirmationPage> {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Section Title
-// ─────────────────────────────────────────────────────────────────────────────
-
 class _SectionTitle extends StatelessWidget {
   final String text;
 
@@ -235,10 +192,6 @@ class _SectionTitle extends StatelessWidget {
     );
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Info Card
-// ─────────────────────────────────────────────────────────────────────────────
 
 class _InfoCard extends StatelessWidget {
   final Widget child;
@@ -267,10 +220,6 @@ class _InfoCard extends StatelessWidget {
     );
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Payment Method Selector
-// ─────────────────────────────────────────────────────────────────────────────
 
 class _PaymentMethodSelector extends StatelessWidget {
   final PaymentMethod? selected;
@@ -301,10 +250,6 @@ class _PaymentMethodSelector extends StatelessWidget {
         ),
         child: Row(
           children: [
-            // ───────────────────────────────────────────────────────────────
-            // Bank Logo
-            // ───────────────────────────────────────────────────────────────
-
             if (selected != null) ...[
               _BankLogo(
                 logoAsset: selected!.logoAsset,
@@ -313,18 +258,12 @@ class _PaymentMethodSelector extends StatelessWidget {
                 width: AppSpacings.sm,
               ),
             ],
-
-            // ───────────────────────────────────────────────────────────────
-            // Label
-            // ───────────────────────────────────────────────────────────────
-
             Expanded(
               child: AppText(
                 selected?.name ?? 'Pilih metode pembayaran',
                 color: selected != null ? AppColors.textPrimary : AppColors.neutral400,
               ),
             ),
-
             const Icon(
               Icons.keyboard_arrow_down_rounded,
               color: AppColors.neutral400,
@@ -336,10 +275,6 @@ class _PaymentMethodSelector extends StatelessWidget {
     );
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Payment Method Tile
-// ─────────────────────────────────────────────────────────────────────────────
 
 class _PaymentMethodTile extends StatelessWidget {
   final PaymentMethod method;
@@ -366,36 +301,20 @@ class _PaymentMethodTile extends StatelessWidget {
             ),
             child: Row(
               children: [
-                // ───────────────────────────────────────────────────────────
-                // Bank Logo
-                // ───────────────────────────────────────────────────────────
-
                 _BankLogo(
                   logoAsset: method.logoAsset,
-                  size: 48,
                 ),
-
                 const SizedBox(
                   width: AppSpacings.md,
                 ),
-
-                // ───────────────────────────────────────────────────────────
-                // Bank Name
-                // ───────────────────────────────────────────────────────────
-
                 Expanded(
                   child: AppText(
                     method.name,
-                    variant: AppTextVariant.bodyLarge,
+                    variant: AppTextVariant.labelMedium,
                     fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                     color: selected ? AppColors.primary500 : AppColors.textPrimary,
                   ),
                 ),
-
-                // ───────────────────────────────────────────────────────────
-                // Selected Indicator
-                // ───────────────────────────────────────────────────────────
-
                 if (selected)
                   const Icon(
                     Icons.check_circle_rounded,
@@ -413,10 +332,6 @@ class _PaymentMethodTile extends StatelessWidget {
     );
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Bank Logo
-// ─────────────────────────────────────────────────────────────────────────────
 
 class _BankLogo extends StatelessWidget {
   final String logoAsset;
@@ -457,10 +372,6 @@ class _BankLogo extends StatelessWidget {
   }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Bottom Section
-// ─────────────────────────────────────────────────────────────────────────────
-
 class _BottomSection extends StatelessWidget {
   final bool agreeToTerms;
   final bool canPay;
@@ -487,10 +398,6 @@ class _BottomSection extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // ─────────────────────────────────────────────────────────────────
-          // Checkbox Syarat & Ketentuan
-          // ─────────────────────────────────────────────────────────────────
-
           Row(
             children: [
               SizedBox(
@@ -530,10 +437,10 @@ class _BottomSection extends StatelessWidget {
                             // Buka halaman syarat & ketentuan.
                           },
                           child: const Text(
-                            'syarat dan ketentuan EMAS',
+                            'Syarat dan Ketentuan EMAS',
                             style: TextStyle(
                               fontSize: 13,
-                              color: AppColors.primary500,
+                              color: AppColors.turquoise400,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -556,7 +463,6 @@ class _BottomSection extends StatelessWidget {
 
           AppButton(
             label: 'Bayar',
-            size: AppButtonSize.large,
             borderRadius: RadiusTokens.full,
             onPressed: onPay,
           ),

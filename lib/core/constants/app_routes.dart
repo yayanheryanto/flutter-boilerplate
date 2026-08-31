@@ -41,5 +41,6 @@ class AppRoutes {
   static const String uiDemo = '/ui-demo';
 
   static const String payment = '/payment';
+  static const String paymentGuide = '/payment-guide';
 
 }

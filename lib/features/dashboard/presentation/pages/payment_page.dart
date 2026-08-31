@@ -1,3 +1,4 @@
+import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/tokens/app_spacings.dart';
 import 'package:emas/core/constants/tokens/radius_tokens.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
@@ -13,11 +14,13 @@ import 'package:go_router/go_router.dart';
 class PaymentPage extends StatefulWidget {
   final int priceAmount;
   final int adminFee;
+  final int nplFee;
 
   const PaymentPage({
     super.key,
-    this.priceAmount = 500000,
-    this.adminFee = 10000,
+    this.priceAmount = 150000000,
+    this.adminFee = 1000000,
+    this.nplFee = 5000000,
   });
 
   @override
@@ -27,7 +30,7 @@ class PaymentPage extends StatefulWidget {
 class _PaymentPageState extends State<PaymentPage> {
   String? _selectedMethodId;
 
-  int get _totalPayment => widget.priceAmount + widget.adminFee;
+  int get _totalPayment => widget.priceAmount + widget.adminFee - widget.nplFee;
 
   bool get _hasSelectedMethod => _selectedMethodId != null;
 
@@ -35,10 +38,8 @@ class _PaymentPageState extends State<PaymentPage> {
     setState(() => _selectedMethodId = methodId);
   }
 
-  void _submitPayment() {
-    if (!_hasSelectedMethod) return;
-    // TODO: proses pembayaran melalui metode terpilih.
-    AppToast.show('Memproses pembayaran…');
+  Future<void> _submitPayment() async {
+    await context.push(AppRoutes.paymentGuide);
   }
 
   @override
@@ -89,6 +90,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 _PaymentSummaryCard(
                   priceAmount: widget.priceAmount,
                   adminFee: widget.adminFee,
+                  nplFee: widget.nplFee,
                 ),
               ],
             ),
@@ -96,15 +98,13 @@ class _PaymentPageState extends State<PaymentPage> {
           _PaymentBottomBar(
             totalPayment: _totalPayment,
             showMethodWarning: !_hasSelectedMethod,
-            onPay: _hasSelectedMethod ? _submitPayment : null,
+            onPay: _submitPayment,
           ),
         ],
       ),
     );
   }
 }
-
-// ─── Payment method tile ───────────────────────────────────────────────────────
 
 class _PaymentOptionTile extends StatelessWidget {
   final PaymentOption option;
@@ -159,9 +159,10 @@ class _PaymentOptionTile extends StatelessWidget {
               variant: AppButtonVariant.outlined,
               size: AppButtonSize.small,
               isExpanded: false,
+              borderWidth: 2,
               borderRadius: RadiusTokens.full,
-              borderColor: AppColors.primary500,
-              foregroundColor: AppColors.primary500,
+              borderColor: AppColors.blue100,
+              foregroundColor: AppColors.textPrimary,
               onPressed: onActivate,
             ),
         ],
@@ -169,8 +170,6 @@ class _PaymentOptionTile extends StatelessWidget {
     );
   }
 }
-
-// ─── "Lihat metode pembayaran lainnya" ─────────────────────────────────────────
 
 class _MorePaymentMethodsRow extends StatelessWidget {
   const _MorePaymentMethodsRow();
@@ -189,7 +188,7 @@ class _MorePaymentMethodsRow extends StatelessWidget {
           vertical: AppSpacings.md,
         ),
         decoration: BoxDecoration(
-          color: AppColors.bgCard,
+          color: AppColors.blue100,
           borderRadius: BorderRadius.circular(RadiusTokens.lg),
         ),
         child: const Row(
@@ -199,7 +198,7 @@ class _MorePaymentMethodsRow extends StatelessWidget {
               'Lihat Metode Pembayaran Lainnya',
               fontWeight: FontWeight.w600,
             ),
-            Icon(Icons.chevron_right_rounded, color: AppColors.primary500),
+            Icon(Icons.chevron_right_rounded),
           ],
         ),
       ),
@@ -207,13 +206,16 @@ class _MorePaymentMethodsRow extends StatelessWidget {
   }
 }
 
-// ─── Payment summary ────────────────────────────────────────────────────────────
-
 class _PaymentSummaryCard extends StatelessWidget {
   final int priceAmount;
   final int adminFee;
+  final int nplFee;
 
-  const _PaymentSummaryCard({required this.priceAmount, required this.adminFee});
+  const _PaymentSummaryCard({
+    required this.priceAmount,
+    required this.adminFee,
+    required this.nplFee,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -227,6 +229,8 @@ class _PaymentSummaryCard extends StatelessWidget {
           _SummaryRow(label: 'Harga Terbentuk', value: priceAmount),
           const SizedBox(height: AppSpacings.sm),
           _SummaryRow(label: 'Biaya Admin', value: adminFee),
+          const SizedBox(height: AppSpacings.sm),
+          _SummaryRow(label: 'Biaya NPL', value: nplFee),
         ],
       ),
     );
@@ -246,7 +250,7 @@ class _SummaryRow extends StatelessWidget {
       children: [
         AppText(label, color: AppColors.textPrimary),
         AppText(
-          CurrencyFormatter.rupiah(value),
+          label.contains('NPL') ? '- ${CurrencyFormatter.rupiah(value)}' : CurrencyFormatter.rupiah(value),
           fontWeight: FontWeight.w700,
           color: AppColors.textPrimary,
         ),
@@ -254,8 +258,6 @@ class _SummaryRow extends StatelessWidget {
     );
   }
 }
-
-// ─── Bottom bar (warning + total + tombol bayar) ───────────────────────────────
 
 class _PaymentBottomBar extends StatelessWidget {
   final int totalPayment;
@@ -273,23 +275,27 @@ class _PaymentBottomBar extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: AppColors.white,
-        border: Border(top: BorderSide(color: AppColors.neutral200)),
+        border: Border(
+          top: BorderSide(
+            color: AppColors.neutral200,
+          ),
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (showMethodWarning) const _MethodWarningBanner(),
           Padding(
-            padding: const EdgeInsets.fromLTRB(
+            padding: const EdgeInsets.all(
               AppSpacings.md,
-              AppSpacings.sm,
-              AppSpacings.md,
-              AppSpacings.lg,
             ),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Expanded(
                   child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const AppText(
@@ -308,7 +314,6 @@ class _PaymentBottomBar extends StatelessWidget {
                 const SizedBox(width: AppSpacings.md),
                 AppButton(
                   label: 'Bayar',
-                  size: AppButtonSize.large,
                   isExpanded: false,
                   width: 140,
                   borderRadius: RadiusTokens.full,
@@ -330,7 +335,18 @@ class _MethodWarningBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: AppColors.warning50,
+      // color: AppColors.blue100,
+      decoration: const BoxDecoration(
+        color: AppColors.blue100,
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(
+            AppSpacings.md,
+          ),
+          topRight: Radius.circular(
+            AppSpacings.md,
+          ),
+        ),
+      ),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacings.md,
         vertical: AppSpacings.sm,
@@ -343,7 +359,7 @@ class _MethodWarningBanner extends StatelessWidget {
             child: AppText(
               'Pilih metode pembayaran sebelum lanjut bayar',
               variant: AppTextVariant.labelSmall,
-              color: AppColors.warning600,
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -398,19 +414,17 @@ Future<void> _showPaymentMethodSheet(BuildContext blocContext) async {
       children: _paymentMethods
           .map(
             (method) => _PaymentMethodTile(
-          method: method,
-          selected: false,
-          onTap: () {
-            blocContext.pop();
-          },
-        ),
-      )
+              method: method,
+              selected: false,
+              onTap: () {
+                blocContext.pop();
+              },
+            ),
+          )
           .toList(),
     ),
   );
 }
-
-
 
 class _PaymentMethodTile extends StatelessWidget {
   final PaymentMethod method;
@@ -443,7 +457,6 @@ class _PaymentMethodTile extends StatelessWidget {
 
                 _BankLogo(
                   logoAsset: method.logoAsset,
-                  size: 48,
                 ),
 
                 const SizedBox(
@@ -457,7 +470,7 @@ class _PaymentMethodTile extends StatelessWidget {
                 Expanded(
                   child: AppText(
                     method.name,
-                    variant: AppTextVariant.bodyLarge,
+                    variant: AppTextVariant.labelMedium,
                     fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                     color: selected ? AppColors.primary500 : AppColors.textPrimary,
                   ),
@@ -484,10 +497,6 @@ class _PaymentMethodTile extends StatelessWidget {
     );
   }
 }
-
-// ─────────────────────────────────────────────────────────────────────────────
-// Bank Logo
-// ─────────────────────────────────────────────────────────────────────────────
 
 class _BankLogo extends StatelessWidget {
   final String logoAsset;

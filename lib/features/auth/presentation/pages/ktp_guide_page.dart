@@ -32,14 +32,12 @@ class KtpGuidePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ── Stepper ────────────────────────────────────────────────────
             const AppSpacer.sm(),
             VerificationStepper(
               currentStep: 0,
               accountType: accountType,
             ),
 
-            // ── Content ────────────────────────────────────────────────────
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
@@ -106,7 +104,6 @@ class KtpGuidePage extends StatelessWidget {
                       ),
                       const AppSpacer.md(),
 
-                      // ── Tips list ────────────────────────────────────────
                       const _TipItem(
                         text: 'Ambil foto KTP ',
                         boldParts: ['dengan jelas', 'di dalam bingkai'],
@@ -140,7 +137,6 @@ class KtpGuidePage extends StatelessWidget {
               ),
             ),
 
-            // ── Bottom CTA ─────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(
                 AppSpacings.lg,
@@ -189,7 +185,6 @@ class _TipItem extends StatelessWidget {
         );
     final bold = normal?.copyWith(fontWeight: FontWeight.bold, color: Theme.of(context).colorScheme.onSurface);
 
-    // Build rich text spans
     final spans = <TextSpan>[
       TextSpan(text: text, style: normal),
       TextSpan(text: boldParts[0], style: bold),

@@ -31,7 +31,6 @@ class _VerificationStepperState extends State<VerificationStepper> {
         'Review Informasi Data',
       ];
 
-  // One key per step (not per row item) to measure exact position
   late final List<GlobalKey> _stepKeys = List.generate(
     steps.length,
     (_) => GlobalKey(),
@@ -67,7 +66,6 @@ class _VerificationStepperState extends State<VerificationStepper> {
     final box = ctx.findRenderObject() as RenderBox?;
     if (box == null) return;
 
-    // Position of the active step relative to the scroll view's content
     final scrollBox = _scrollController.position.context.storageContext.findRenderObject() as RenderBox?;
     if (scrollBox == null) return;
 
