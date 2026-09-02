@@ -1,6 +1,6 @@
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -39,7 +39,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(AppSpacings.lg),
+                padding: const EdgeInsets.all(Spacings.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -110,15 +110,15 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
             // ── Bottom CTA ───────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                AppSpacings.lg,
-                AppSpacings.sm,
-                AppSpacings.lg,
-                AppSpacings.lg,
+                Spacings.lg,
+                Spacings.sm,
+                Spacings.lg,
+                Spacings.lg,
               ),
               child: AppButton(
                 label: 'Mulai Verifikasi Akun',
                 onPressed: () async => context.push(
-                  AppRoutes.ktpGuide,
+                  Routes.ktpGuide,
                   extra: _selected,
                 ),
                 borderRadius: 25,
@@ -156,8 +156,8 @@ class _AccountTypeCard extends StatelessWidget {
         height: 10.h,
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacings.md,
-          vertical: AppSpacings.sm,
+          horizontal: Spacings.md,
+          vertical: Spacings.sm,
         ),
         decoration: BoxDecoration(
           color: selected

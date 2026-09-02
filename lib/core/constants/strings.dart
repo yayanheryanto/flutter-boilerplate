@@ -1,6 +1,6 @@
-class AppStrings {
+class Strings {
 
-  AppStrings._();
+  Strings._();
 
   // General
   static const String appName = 'Boilerplate';

@@ -9,43 +9,33 @@ import 'package:injectable/injectable.dart';
 
 sealed class NotificationEvent {}
 
-/// Dipanggil saat app init untuk mulai listen stream notifikasi.
 class NotificationStartListening extends NotificationEvent {}
 
-/// Notifikasi baru masuk saat foreground.
 class NotificationReceived extends NotificationEvent {
   final AppNotificationPayload payload;
 
   NotificationReceived(this.payload);
 }
 
-/// User tap notifikasi (dari mana saja: foreground, background, terminated).
 class NotificationTapped extends NotificationEvent {
   final AppNotificationPayload payload;
 
   NotificationTapped(this.payload);
 }
 
-/// Hapus semua notifikasi yang sudah ditampilkan.
 class NotificationClearAll extends NotificationEvent {}
 
-/// Tandai notifikasi sebagai sudah dibaca.
 class NotificationMarkRead extends NotificationEvent {
   final String? entityId;
 
   NotificationMarkRead(this.entityId);
 }
 
-// ─── State ────────────────────────────────────────────────────────────────────
-
 class NotificationState {
-  /// Daftar notifikasi yang masuk selama app terbuka (in-memory only).
   final List<AppNotificationPayload> notifications;
 
-  /// Jumlah notifikasi yang belum dibaca.
   final int unreadCount;
 
-  /// Payload yang terakhir di-tap — digunakan untuk trigger navigasi di UI.
   final AppNotificationPayload? lastTapped;
 
   const NotificationState({
@@ -70,8 +60,6 @@ class NotificationState {
   bool get hasUnread => unreadCount > 0;
 }
 
-// ─── BLoC ─────────────────────────────────────────────────────────────────────
-
 @injectable
 class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
   final NotificationService _notificationService;
@@ -87,23 +75,18 @@ class NotificationBloc extends Bloc<NotificationEvent, NotificationState> {
     on<NotificationMarkRead>(_onMarkRead);
   }
 
-  // ── Handlers ─────────────────────────────────────────────────────────────────
-
   Future<void> _onStartListening(
     NotificationStartListening event,
     Emitter<NotificationState> emit,
   ) async {
-    // Cancel existing subscriptions sebelum buat yang baru
     await _foregroundSub?.cancel();
     await _tapSub?.cancel();
 
-    // Listen notifikasi masuk saat foreground
     _foregroundSub = _notificationService.onForegroundMessage.listen((payload) {
       AppLogger.d('NotificationBloc: foreground received: $payload', tag: 'NotifBloc');
       add(NotificationReceived(payload));
     });
 
-    // Listen tap notifikasi dari mana saja
     _tapSub = _notificationService.onNotificationTap.listen((payload) {
       AppLogger.d('NotificationBloc: notification tapped: $payload', tag: 'NotifBloc');
       add(NotificationTapped(payload));

@@ -1,6 +1,6 @@
-import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/images.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -39,7 +39,7 @@ class _AccountProcessedPageContent extends StatelessWidget {
       body: SafeArea(
         top: false,
         child: Container(
-          margin: const EdgeInsets.all(AppSpacings.md),
+          margin: const EdgeInsets.all(Spacings.md),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -68,7 +68,7 @@ class _AccountProcessedPageContent extends StatelessWidget {
               AppButton(
                 label: 'Kembali ke Beranda',
                 onPressed: () {
-                  context.go(AppRoutes.login);
+                  context.go(Routes.login);
                   // _onSubmit
                 },
                 borderRadius: 25,

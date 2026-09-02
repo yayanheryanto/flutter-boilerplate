@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 
 class AppCard extends StatelessWidget {
   final Widget child;

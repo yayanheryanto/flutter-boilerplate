@@ -1,13 +1,10 @@
-import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/shared/widgets/buttons/app_button.dart';
-import 'package:emas/shared/widgets/input/app_text_field.dart';
-import 'package:emas/shared/widgets/snackbar/app_snackbar.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -31,8 +28,8 @@ class _ForgotPasswordFormWidgetState extends State<ForgotPasswordFormWidget> wit
   void _onSubmit() {
     if (!validateForm()) return;
     context.read<AuthBloc>().add(
-          AuthForgotPasswordRequested(email: _phoneController.text.trim()),
-        );
+      AuthForgotPasswordRequested(email: _phoneController.text.trim()),
+    );
   }
 
   @override
@@ -90,12 +87,12 @@ class _FormView extends StatelessWidget {
               color: AppColors.primary500,
               fontWeight: FontWeight.w800,
             ),
-            const SizedBox(height: 8),
+            const AppSpacer.sm(),
             const AppText(
               'Mohon isi nomor handphone Anda di bawah ini',
               variant: AppTextVariant.titleSmall,
             ),
-            const SizedBox(height: 32),
+            const AppSpacer.xl(),
 
             AppTextField(
               controller: phoneController,
@@ -114,11 +111,11 @@ class _FormView extends StatelessWidget {
                 ),
               ]),
             ),
-            const SizedBox(height: 24),
+            const AppSpacer.lg(),
 
             AppButton(
               label: 'Lanjutkan',
-              onPressed: () async => context.push(AppRoutes.otp, extra: {'phone': phoneController.text}),
+              onPressed: () async => context.push(Routes.otp, extra: {'phone': phoneController.text}),
               isLoading: isLoading,
               borderRadius: 25,
             ),
@@ -138,8 +135,6 @@ class _SuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-
     return Padding(
       padding: EdgeInsets.symmetric(
         horizontal: context.responsive(mobile: 24.0, tablet: 48.0),
@@ -147,61 +142,58 @@ class _SuccessView extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(height: 16),
+          const AppSpacer.md(),
 
           // ── Success icon ─────────────────────────────────────────────────
           Container(
             width: 80,
             height: 80,
             decoration: BoxDecoration(
-              color: Colors.green.withOpacity(0.1),
+              color: AppColors.success500.withOpacity(0.1),
               shape: BoxShape.circle,
             ),
-            child: Icon(
+            child: const Icon(
               Icons.mark_email_read_rounded,
               size: 44,
-              color: Colors.green[600],
+              color: AppColors.success500,
             ),
           ),
-          const SizedBox(height: 24),
+          const AppSpacer.lg(),
 
           // ── Success message ──────────────────────────────────────────────
-          Text(
+          const AppText(
             'Kode Terkirim!',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            variant: AppTextVariant.headlineSmall,
+            fontWeight: FontWeight.w700,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
-          Text(
+          const AppSpacer.sm(),
+          const AppText(
             'Kode verifikasi telah dikirim ke',
-            style: TextStyle(color: scheme.onSurface.withOpacity(0.6)),
+            color: AppColors.textSecondary,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 4),
-          Text(
+          const AppSpacer.xs(),
+          AppText(
             phone,
-            style: const TextStyle(fontWeight: FontWeight.w600),
+            fontWeight: FontWeight.w600,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 8),
-          Text(
+          const AppSpacer.md(),
+          const AppText(
             'Periksa pesan masuk kamu. Kode akan kedaluwarsa dalam 30 menit.',
-            style: TextStyle(
-              fontSize: 12,
-              color: scheme.onSurface.withOpacity(0.5),
-            ),
+            variant: AppTextVariant.bodySmall,
+            color: AppColors.textSecondary,
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 40),
+          const AppSpacer.xl(),
 
           // ── Back to login ─────────────────────────────────────────────────
           AppButton(
             label: 'Kembali ke Login',
-            onPressed: () => AppNavigator.go(AppRoutes.login),
+            onPressed: () => AppNavigator.go(Routes.login),
           ),
-          const SizedBox(height: 24),
+          const AppSpacer.lg(),
         ],
       ),
     );

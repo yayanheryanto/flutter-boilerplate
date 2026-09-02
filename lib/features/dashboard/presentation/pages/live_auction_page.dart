@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/tokens/app_spacings.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/services/socket/app_socket_service.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
@@ -86,7 +86,7 @@ class _LiveAuctionViewState extends State<_LiveAuctionView> {
             title: 'Live Auction',
             actions: [
               Padding(
-                padding: const EdgeInsets.only(right: AppSpacings.md),
+                padding: const EdgeInsets.only(right: Spacings.md),
                 child: Center(child: _ConnectionStatusChip(state: state)),
               ),
             ],
@@ -110,19 +110,19 @@ class _LiveAuctionViewState extends State<_LiveAuctionView> {
                       year: 'Tahun 2021',
                     ),
 
-                    const SizedBox(height: AppSpacings.xs),
+                    const SizedBox(height: Spacings.xs),
 
                     // ── Main card ───────────────────────────────
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+                      padding: const EdgeInsets.symmetric(horizontal: Spacings.md),
                       child: _MainInfoCard(state: state),
                     ),
 
-                    const SizedBox(height: AppSpacings.lg),
+                    const SizedBox(height: Spacings.lg),
 
                     // ── Penawaran Saat Ini ───────────────────────
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+                      padding: const EdgeInsets.symmetric(horizontal: Spacings.md),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -137,17 +137,17 @@ class _LiveAuctionViewState extends State<_LiveAuctionView> {
                               if (state.isLive) const LiveBadge(),
                             ],
                           ),
-                          const SizedBox(height: AppSpacings.sm),
+                          const SizedBox(height: Spacings.sm),
                           state.status == LiveAuctionStatus.connecting ? const _BidTableSkeleton() : _BidTable(bids: state.bids),
                           if (state.status == LiveAuctionStatus.endingSoon && state.endingInSeconds != null) ...[
-                            const SizedBox(height: AppSpacings.sm),
+                            const SizedBox(height: Spacings.sm),
                             _EndingSoonBanner(secondsLeft: state.endingInSeconds!),
                           ],
                         ],
                       ),
                     ),
 
-                    const SizedBox(height: AppSpacings.xl),
+                    const SizedBox(height: Spacings.xl),
                   ],
                 ),
               ),
@@ -207,8 +207,8 @@ class _EndingSoonBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacings.md,
-        vertical: AppSpacings.sm,
+        horizontal: Spacings.md,
+        vertical: Spacings.sm,
       ),
       decoration: BoxDecoration(
         color: AppColors.warning500.withOpacity(0.12),
@@ -246,10 +246,10 @@ class _LocationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacings.md,
-        AppSpacings.md,
-        AppSpacings.md,
-        AppSpacings.xs,
+        Spacings.md,
+        Spacings.md,
+        Spacings.md,
+        Spacings.xs,
       ),
       child: Row(
         children: [
@@ -300,10 +300,10 @@ class _LotHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        AppSpacings.md,
-        AppSpacings.sm,
-        AppSpacings.md,
-        AppSpacings.sm,
+        Spacings.md,
+        Spacings.sm,
+        Spacings.md,
+        Spacings.sm,
       ),
       child: Row(
         children: [
@@ -675,7 +675,7 @@ class _BidTableSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.all(Spacings.md),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(RadiusTokens.xl),
@@ -685,13 +685,13 @@ class _BidTableSkeleton extends StatelessWidget {
         children: List.generate(
           4,
           (i) => const Padding(
-            padding: EdgeInsets.only(bottom: AppSpacings.sm),
+            padding: EdgeInsets.only(bottom: Spacings.sm),
             child: Row(
               children: [
                 Expanded(flex: 2, child: SkeletonText(height: 14)),
-                SizedBox(width: AppSpacings.sm),
+                SizedBox(width: Spacings.sm),
                 Expanded(flex: 3, child: SkeletonText(height: 14)),
-                SizedBox(width: AppSpacings.sm),
+                SizedBox(width: Spacings.sm),
                 Expanded(flex: 2, child: SkeletonText(height: 14)),
               ],
             ),
@@ -716,7 +716,7 @@ class _BidTable extends StatelessWidget {
     if (bids.isEmpty) {
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(AppSpacings.lg),
+        padding: const EdgeInsets.all(Spacings.lg),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
@@ -727,7 +727,7 @@ class _BidTable extends StatelessWidget {
         child: const Center(
           child: AppText(
             'Belum ada penawaran',
-            color: AppColors.textSecondary,
+            color: AppColors.textPrimary,
           ),
         ),
       );
@@ -943,10 +943,10 @@ class _BottomCTA extends StatelessWidget {
     return Container(
       color: AppColors.white,
       padding: const EdgeInsets.fromLTRB(
-        AppSpacings.md,
-        AppSpacings.sm,
-        AppSpacings.md,
-        AppSpacings.lg,
+        Spacings.md,
+        Spacings.sm,
+        Spacings.md,
+        Spacings.lg,
       ),
       child: AppButton(
         label: label,

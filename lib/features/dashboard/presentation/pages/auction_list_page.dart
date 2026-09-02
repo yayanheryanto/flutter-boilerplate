@@ -1,6 +1,6 @@
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_list_item.dart';
@@ -74,7 +74,7 @@ class _AuctionListPageState extends State<AuctionListPage> {
         context,
         title: 'Filter',
         content: Padding(
-          padding: const EdgeInsets.only(bottom: AppSpacings.md),
+          padding: const EdgeInsets.only(bottom: Spacings.md),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -84,7 +84,7 @@ class _AuctionListPageState extends State<AuctionListPage> {
               Row(
                 children: [
                   Expanded(child: AppTextField(controller: minController, hint: 'Min', keyboardType: TextInputType.number)),
-                  const Padding(padding: EdgeInsets.symmetric(horizontal: AppSpacings.sm), child: AppText('–')),
+                  const Padding(padding: EdgeInsets.symmetric(horizontal: Spacings.sm), child: AppText('–')),
                   Expanded(child: AppTextField(controller: maxController, hint: 'Maks', keyboardType: TextInputType.number)),
                 ],
               ),
@@ -156,17 +156,17 @@ class _AuctionListPageState extends State<AuctionListPage> {
     if (state.items.isEmpty) return const _EmptyState();
 
     return GridView.builder(
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.all(Spacings.md),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        crossAxisSpacing: AppSpacings.sm,
-        mainAxisSpacing: AppSpacings.sm,
+        crossAxisSpacing: Spacings.sm,
+        mainAxisSpacing: Spacings.sm,
         childAspectRatio: 0.78,
       ),
       itemCount: state.items.length,
       itemBuilder: (context, index) => _AuctionGridCard(
         data: state.items[index],
-        onTap: () async => context.push(AppRoutes.auctionDetail),
+        onTap: () async => context.push(Routes.auctionDetail),
       ),
     );
   }
@@ -196,7 +196,7 @@ class _SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
           IconButton(icon: const Icon(Icons.chevron_left_rounded, size: 28, color: AppColors.primary500), onPressed: onBack),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.only(right: AppSpacings.md),
+              padding: const EdgeInsets.only(right: Spacings.md),
               child: AppSearchField(controller: controller, hint: 'Cari', onChanged: onChanged),
             ),
           ),
@@ -219,11 +219,11 @@ class _FilterToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         color: AppColors.white,
-        padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md, vertical: AppSpacings.sm),
+        padding: const EdgeInsets.symmetric(horizontal: Spacings.md, vertical: Spacings.sm),
         child: Row(
           children: [
             _ToolbarChip(label: sortLabel, active: false, onTap: onSortTap),
-            const SizedBox(width: AppSpacings.sm),
+            const SizedBox(width: Spacings.sm),
             _ToolbarChip(label: 'Filter', active: filterActive, onTap: onFilterTap),
           ],
         ),
@@ -241,7 +241,7 @@ class _ToolbarChip extends StatelessWidget {
   Widget build(BuildContext context) => GestureDetector(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: AppSpacings.sm + 4, vertical: AppSpacings.xs + 2),
+          padding: const EdgeInsets.symmetric(horizontal: Spacings.sm + 4, vertical: Spacings.xs + 2),
           decoration: BoxDecoration(
             color: active ? AppColors.primary100 : AppColors.white,
             borderRadius: BorderRadius.circular(RadiusTokens.full),
@@ -288,7 +288,7 @@ class _AuctionGridCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.all(AppSpacings.sm),
+            padding: const EdgeInsets.all(Spacings.sm),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

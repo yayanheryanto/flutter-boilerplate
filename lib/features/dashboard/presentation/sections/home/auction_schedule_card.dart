@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class AuctionScheduleCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(AppSpacings.md),
+        borderRadius: BorderRadius.circular(Spacings.md),
         border: Border.all(
           color: Colors.black.withOpacity(0.3),
           width: 0.5,

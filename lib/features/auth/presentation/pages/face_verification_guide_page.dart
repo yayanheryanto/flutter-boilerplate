@@ -1,6 +1,6 @@
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -42,8 +42,8 @@ class FaceVerificationGuidePage extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacings.lg,
-                  vertical: AppSpacings.sm,
+                  horizontal: Spacings.lg,
+                  vertical: Spacings.sm,
                 ),
                 child: Container(
                   decoration: BoxDecoration(
@@ -68,7 +68,7 @@ class FaceVerificationGuidePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  padding: const EdgeInsets.all(AppSpacings.md),
+                  padding: const EdgeInsets.all(Spacings.md),
                   child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -117,15 +117,15 @@ class FaceVerificationGuidePage extends StatelessWidget {
             // ── Bottom CTA ─────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                AppSpacings.lg,
-                AppSpacings.sm,
-                AppSpacings.lg,
-                AppSpacings.lg,
+                Spacings.lg,
+                Spacings.sm,
+                Spacings.lg,
+                Spacings.lg,
               ),
               child: AppButton(
                 label: 'Mulai Verifikasi Wajah',
                 onPressed: () async {
-                  await context.push(AppRoutes.faceVerification);
+                  await context.push(Routes.faceVerification);
                 },
                 borderRadius: 25,
               ),

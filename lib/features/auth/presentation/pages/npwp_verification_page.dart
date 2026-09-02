@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/services/camera_service.dart';
 import 'package:emas/core/services/file_picker_service.dart';
 import 'package:emas/core/utils/account_type.dart';
@@ -125,7 +125,7 @@ class _NPWPVerificationPageState extends State<NPWPVerificationPage> with AppFor
       return;
     }
     // TODO: dispatch company verification event
-    context.go(AppRoutes.dashboard);
+    context.go(Routes.dashboard);
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
@@ -153,8 +153,8 @@ class _NPWPVerificationPageState extends State<NPWPVerificationPage> with AppFor
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacings.md,
-                    vertical: AppSpacings.sm,
+                    horizontal: Spacings.md,
+                    vertical: Spacings.sm,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -399,16 +399,16 @@ class _UploadPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: AppSpacings.lg,
-        horizontal: AppSpacings.md,
+        vertical: Spacings.lg,
+        horizontal: Spacings.md,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacings.xl,
-              vertical: AppSpacings.sm,
+              horizontal: Spacings.xl,
+              vertical: Spacings.sm,
             ),
             decoration: BoxDecoration(
               color: const Color(0xFF80CBC8),
@@ -421,7 +421,7 @@ class _UploadPlaceholder extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: AppSpacings.sm),
+          const SizedBox(height: Spacings.sm),
           AppText(
             acceptFormat,
             variant: AppTextVariant.bodySmall,
@@ -444,7 +444,7 @@ class _FilePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.all(Spacings.md),
       child: Row(
         children: [
           Container(
@@ -460,7 +460,7 @@ class _FilePreview extends StatelessWidget {
               size: 22,
             ),
           ),
-          const SizedBox(width: AppSpacings.sm),
+          const SizedBox(width: Spacings.sm),
           Expanded(
             child: AppText(
               file.path.split('/').last,

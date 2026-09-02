@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/pickers/wheel_date_picker.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -285,8 +285,8 @@ class _MonthYearPickerState extends State<_MonthYearPicker> {
             // Header
             Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: AppSpacings.lg,
-                vertical: AppSpacings.sm,
+                horizontal: Spacings.lg,
+                vertical: Spacings.sm,
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -307,7 +307,7 @@ class _MonthYearPickerState extends State<_MonthYearPicker> {
 
             // Year selector
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacings.lg),
+              padding: const EdgeInsets.symmetric(horizontal: Spacings.lg),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -321,8 +321,8 @@ class _MonthYearPickerState extends State<_MonthYearPicker> {
                     onTap: _pickYearFromList,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: AppSpacings.md,
-                        vertical: AppSpacings.sm,
+                        horizontal: Spacings.md,
+                        vertical: Spacings.sm,
                       ),
                       decoration: BoxDecoration(
                         color: scheme.primaryContainer,
@@ -346,17 +346,17 @@ class _MonthYearPickerState extends State<_MonthYearPicker> {
               ),
             ),
 
-            const SizedBox(height: AppSpacings.sm),
+            const SizedBox(height: Spacings.sm),
 
             // Month grid
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+              padding: const EdgeInsets.symmetric(horizontal: Spacings.md),
               child: GridView.count(
                 crossAxisCount: 3,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                mainAxisSpacing: AppSpacings.sm,
-                crossAxisSpacing: AppSpacings.sm,
+                mainAxisSpacing: Spacings.sm,
+                crossAxisSpacing: Spacings.sm,
                 childAspectRatio: 2.4,
                 children: List.generate(12, (index) {
                   final month = index + 1;
@@ -396,15 +396,15 @@ class _MonthYearPickerState extends State<_MonthYearPicker> {
               ),
             ),
 
-            const SizedBox(height: AppSpacings.md),
+            const SizedBox(height: Spacings.md),
 
             // Confirm button
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                AppSpacings.lg,
+                Spacings.lg,
                 0,
-                AppSpacings.lg,
-                AppSpacings.lg,
+                Spacings.lg,
+                Spacings.lg,
               ),
               child: SizedBox(
                 width: double.infinity,
@@ -446,7 +446,7 @@ class _MonthYearPickerState extends State<_MonthYearPicker> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Padding(
-                padding: EdgeInsets.all(AppSpacings.md),
+                padding: EdgeInsets.all(Spacings.md),
                 child: AppText('Select Year', variant: AppTextVariant.titleMedium, fontWeight: FontWeight.w600),
               ),
               const Divider(height: 1),

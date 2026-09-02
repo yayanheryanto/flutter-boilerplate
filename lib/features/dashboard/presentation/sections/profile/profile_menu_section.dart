@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -105,8 +105,8 @@ class _MenuGroup extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(
-            left: AppSpacings.xs,
-            bottom: AppSpacings.xs,
+            left: Spacings.xs,
+            bottom: Spacings.xs,
           ),
           child: AppText(
             title,
@@ -128,8 +128,8 @@ class _MenuGroup extends StatelessWidget {
                     Divider(
                       height: 1,
                       thickness: 1,
-                      indent: AppSpacings.md + 36,
-                      endIndent: AppSpacings.md,
+                      indent: Spacings.md + 36,
+                      endIndent: Spacings.md,
                       color: Colors.black.withOpacity(0.06),
                     ),
                 ],
@@ -164,24 +164,24 @@ class _MenuItem extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.zero,
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacings.md,
-        vertical: AppSpacings.sm + 2,
+        horizontal: Spacings.md,
+        vertical: Spacings.sm + 2,
       ),
       child: Row(
         children: [
           // Icon badge — reuses AppCard's surface pattern at small scale
           AppCard(
-            padding: const EdgeInsets.all(AppSpacings.xs),
+            padding: const EdgeInsets.all(Spacings.xs),
             backgroundColor: const Color(0xFFF4F6F9),
             borderRadius: BorderRadius.circular(RadiusTokens.md),
             child: Icon(icon, size: 18, color: Colors.black54),
           ),
-          const AppSpacer(AppSpacings.sm, horizontal: true),
+          const AppSpacer(Spacings.sm, horizontal: true),
           Expanded(
             child: AppText(label, fontWeight: FontWeight.w500),
           ),
           if (trailing != null) ...[
-            const AppSpacer(AppSpacings.xs, horizontal: true),
+            const AppSpacer(Spacings.xs, horizontal: true),
             trailing!,
           ] else
             const Icon(

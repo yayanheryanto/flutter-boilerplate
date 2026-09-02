@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/routes.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/dialogs/app_dialog.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class ProfileLogoutButton extends StatelessWidget {
     if ((confirmed ?? false) && context.mounted) {
       // TODO: dispatch AuthLogoutRequested BLoC event
       // context.read<AuthBloc>().add(const AuthLogoutRequested());
-      context.go(AppRoutes.login);
+      context.go(Routes.login);
     }
   }
 }

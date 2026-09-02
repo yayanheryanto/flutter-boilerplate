@@ -1,7 +1,7 @@
-import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/images.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/features/dashboard/domain/entities/buy_npl_result.dart';
@@ -29,16 +29,16 @@ class _BuyNplLayoutState extends State<BuyNplLayout> {
       appBar: const AppPageBar(
         elevation: 1,
         title: 'Beli NPL',
-        titleSpacing: AppSpacings.xl,
+        titleSpacing: Spacings.xl,
         showBackButton: false,
       ),
       body: _SectionContainer(
         color: AppColors.white,
         padding: const EdgeInsets.fromLTRB(
-          AppSpacings.md,
-          AppSpacings.md,
-          AppSpacings.md,
-          AppSpacings.lg,
+          Spacings.md,
+          Spacings.md,
+          Spacings.md,
+          Spacings.lg,
         ),
         child: Center(
           child: _CategorySelector(
@@ -94,7 +94,7 @@ class _CategorySelector extends StatelessWidget {
                 );
 
                 if (result != null && context.mounted) {
-                  await context.push(AppRoutes.buyNplDetail, extra: result);
+                  await context.push(Routes.buyNplDetail, extra: result);
                 }
               },
             ),
@@ -277,7 +277,7 @@ class _BuyNplFormState extends State<_BuyNplForm> {
     //     subtotal: _subtotal,
     //   ),
     // );
-    await context.push(AppRoutes.buyNplDetail);
+    await context.push(Routes.buyNplDetail);
   }
 
   @override
@@ -293,7 +293,7 @@ class _BuyNplFormState extends State<_BuyNplForm> {
           items: _dummyAuctionLocations,
           onChanged: (v) => setState(() => _location = v),
         ),
-        const SizedBox(height: AppSpacings.md),
+        const SizedBox(height: Spacings.md),
         AppDateField(
           label: 'Tanggal Lelang',
           hint: 'Pilih date lelang',
@@ -302,7 +302,7 @@ class _BuyNplFormState extends State<_BuyNplForm> {
           lastDate: DateTime.now().add(const Duration(days: 90)),
           onChanged: (d) => setState(() => _date = d),
         ),
-        const SizedBox(height: AppSpacings.lg),
+        const SizedBox(height: Spacings.lg),
 
         // ── Jumlah NPL ────────────────────────────────────────────
         Row(
@@ -319,15 +319,15 @@ class _BuyNplFormState extends State<_BuyNplForm> {
             ),
           ],
         ),
-        const SizedBox(height: AppSpacings.md),
+        const SizedBox(height: Spacings.md),
         const Divider(height: 1, color: AppColors.neutral200),
-        const SizedBox(height: AppSpacings.md),
+        const SizedBox(height: Spacings.md),
 
         // ── Harga & subtotal ──────────────────────────────────────
         _PriceRow(label: 'Harga per NPL', value: widget.pricePerNpl),
-        const SizedBox(height: AppSpacings.sm),
+        const SizedBox(height: Spacings.sm),
         _PriceRow(label: 'Subtotal', value: _subtotal, emphasize: true),
-        const SizedBox(height: AppSpacings.lg),
+        const SizedBox(height: Spacings.lg),
         AppButton(
           label: 'Tambah',
           borderRadius: RadiusTokens.full,

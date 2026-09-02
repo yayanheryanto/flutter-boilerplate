@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:emas/core/constants/app_constants.dart';
+import 'package:emas/core/constants/constants.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
@@ -25,8 +25,8 @@ class CameraServiceImpl implements CameraService {
   }) async {
     final picked = await _picker.pickImage(
       source: ImageSource.camera,
-      imageQuality: imageQuality ?? AppConstants.imageQuality,
-      maxWidth: (maxWidth ?? AppConstants.maxImageWidth).toDouble(),
+      imageQuality: imageQuality ?? Constants.imageQuality,
+      maxWidth: (maxWidth ?? Constants.maxImageWidth).toDouble(),
     );
     return picked != null ? File(picked.path) : null;
   }
@@ -39,8 +39,8 @@ class CameraServiceImpl implements CameraService {
     final picked = await _picker.pickImage(
       source: ImageSource.camera,
       preferredCameraDevice: CameraDevice.front,
-      imageQuality: imageQuality ?? AppConstants.imageQuality,
-      maxWidth: (maxWidth ?? AppConstants.maxImageWidth).toDouble(),
+      imageQuality: imageQuality ?? Constants.imageQuality,
+      maxWidth: (maxWidth ?? Constants.maxImageWidth).toDouble(),
     );
     return picked != null ? File(picked.path) : null;
   }
@@ -52,8 +52,8 @@ class CameraServiceImpl implements CameraService {
   }) async {
     final picked = await _picker.pickImage(
       source: ImageSource.gallery,
-      imageQuality: imageQuality ?? AppConstants.imageQuality,
-      maxWidth: (maxWidth ?? AppConstants.maxImageWidth).toDouble(),
+      imageQuality: imageQuality ?? Constants.imageQuality,
+      maxWidth: (maxWidth ?? Constants.maxImageWidth).toDouble(),
     );
     return picked != null ? File(picked.path) : null;
   }
@@ -61,7 +61,7 @@ class CameraServiceImpl implements CameraService {
   @override
   Future<List<File>> pickMultipleFromGallery({int? imageQuality}) async {
     final picked = await _picker.pickMultiImage(
-      imageQuality: imageQuality ?? AppConstants.imageQuality,
+      imageQuality: imageQuality ?? Constants.imageQuality,
     );
     return picked.map((x) => File(x.path)).toList();
   }

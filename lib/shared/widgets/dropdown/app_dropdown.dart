@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 import 'package:flutter/material.dart';
 
 /// A labeled dropdown field using [DropdownMenu] (Flutter 3.3+).

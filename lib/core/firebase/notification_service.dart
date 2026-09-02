@@ -58,7 +58,6 @@ class AppNotificationPayload {
       'AppNotificationPayload(title: $title, type: $type, route: $route, entityId: $entityId, imageUrl: $imageUrl, rawData: $rawData)';
 }
 
-// ─── Notification Channel Config ──────────────────────────────────────────────
 class NotificationChannels {
   NotificationChannels._();
 
@@ -96,7 +95,6 @@ class NotificationChannels {
         promo,
       ];
 
-  /// Pilih channel berdasarkan [type] dari payload.
   static AndroidNotificationChannel fromType(String? type) {
     switch (type) {
       case 'order':
@@ -114,31 +112,21 @@ class NotificationChannels {
 // ─── Abstract Interface ────────────────────────────────────────────────────────
 
 abstract class NotificationService {
-  /// Inisialisasi: minta izin, setup channel, daftarkan handler.
-  /// Harus dipanggil di [main()] setelah [Firebase.initializeApp()].
   Future<void> initialize();
 
-  /// Ambil FCM token perangkat untuk dikirim ke backend.
   Future<String?> getToken();
 
-  /// Subscribe ke topic FCM (e.g. 'all_users', 'promo').
   Future<void> subscribeToTopic(String topic);
 
-  /// Unsubscribe dari topic.
   Future<void> unsubscribeFromTopic(String topic);
 
-  /// Stream untuk mendengarkan payload saat notif di-tap dari mana saja.
-  /// Widget/BLoC bisa listen ke ini untuk navigasi.
   Stream<AppNotificationPayload> get onNotificationTap;
 
-  /// Stream untuk mendengarkan notif yang masuk saat app di foreground.
   Stream<AppNotificationPayload> get onForegroundMessage;
 
-  /// Tutup semua stream. Panggil saat app di-dispose.
   void close();
 }
 
-// ─── Background Handler (Top-level function) ──────────────────────────────────
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   AppLogger.i(
@@ -181,7 +169,6 @@ Future<void> _showLocalNotificationFromBackground(RemoteMessage message) async {
   );
 }
 
-// ─── Implementation ────────────────────────────────────────────────────────────
 @LazySingleton(as: NotificationService)
 class AppNotificationService implements NotificationService {
   final FirebaseMessaging? _fcm;
@@ -195,15 +182,12 @@ class AppNotificationService implements NotificationService {
       : _fcm = AppConfig.isFirebaseEnabled ? FirebaseMessaging.instance : null,
         _localPlugin = FlutterLocalNotificationsPlugin();
 
-  // ── Public streams ──────────────────────────────────────────────────────────
-
   @override
   Stream<AppNotificationPayload> get onNotificationTap => _tapController.stream;
 
   @override
   Stream<AppNotificationPayload> get onForegroundMessage => _foregroundController.stream;
 
-  // ── Initialize ──────────────────────────────────────────────────────────────
   @override
   Future<void> initialize() async {
     if (!AppConfig.isFirebaseEnabled) {
@@ -223,8 +207,6 @@ class AppNotificationService implements NotificationService {
 
     AppLogger.i('NotificationService initialized', tag: 'FCM');
   }
-
-  // ── Token ───────────────────────────────────────────────────────────────────
 
   @override
   Future<String?> getToken() async {
@@ -247,8 +229,6 @@ class AppNotificationService implements NotificationService {
     }
   }
 
-  // ── Topics ──────────────────────────────────────────────────────────────────
-
   @override
   Future<void> subscribeToTopic(String topic) async {
     await _fcm?.subscribeToTopic(topic);
@@ -260,8 +240,6 @@ class AppNotificationService implements NotificationService {
     await _fcm?.unsubscribeFromTopic(topic);
     AppLogger.d('Unsubscribed from topic: $topic', tag: 'FCM');
   }
-
-  // ── Private: Setup ──────────────────────────────────────────────────────────
 
   Future<void> _setupLocalNotifications() async {
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -277,7 +255,6 @@ class AppNotificationService implements NotificationService {
       onDidReceiveBackgroundNotificationResponse: _onBackgroundLocalNotificationTapped,
     );
 
-    // Buat semua Android channels
     if (Platform.isAndroid) {
       final androidPlugin = _localPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
       for (final channel in NotificationChannels.all) {
@@ -307,9 +284,6 @@ class AppNotificationService implements NotificationService {
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   }
 
-  // ── Private: Listeners ──────────────────────────────────────────────────────
-
-  /// Foreground: app terbuka, notif masuk
   void _listenForeground() {
     FirebaseMessaging.onMessage.listen((message) async {
       AppLogger.d(
@@ -321,15 +295,12 @@ class AppNotificationService implements NotificationService {
       final payload = AppNotificationPayload.fromMessage(message);
       _foregroundController.add(payload);
 
-      // Tampilkan sebagai local notification karena FCM tidak menampilkan
-      // notifikasi secara otomatis saat app di foreground
+      // Tampilkan sebagai local notification
       await _showLocalNotification(message);
     });
   }
 
-  /// Tap handler: app di background, user tap notif → app ke foreground
   void _listenNotificationTap() {
-    // FCM: user tap notif saat app di background (bukan terminated)
     FirebaseMessaging.onMessageOpenedApp.listen((message) async {
       AppLogger.d(
         'Notification tapped (background→foreground): ${message.messageId}',
@@ -352,7 +323,6 @@ class AppNotificationService implements NotificationService {
       final payload = AppNotificationPayload.fromMessage(initialMessage);
       _tapController.add(payload);
 
-      // Tunggu sampai navigator siap sebelum navigate
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _navigateFromPayload(payload);
       });
@@ -418,7 +388,6 @@ class AppNotificationService implements NotificationService {
     }
   }
 
-  // ── Private: Navigation ─────────────────────────────────────────────────────
   /// Navigate berdasarkan payload.route atau payload.type
   Future<void> _navigateFromPayload(AppNotificationPayload payload) async {
     final route = payload.route;

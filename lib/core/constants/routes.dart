@@ -1,7 +1,7 @@
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 
-class AppRoutes {
-  AppRoutes._();
+class Routes {
+  Routes._();
 
   static const String splash = '/';
   static const String onboarding = '/onboarding';

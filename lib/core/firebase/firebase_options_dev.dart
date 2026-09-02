@@ -1,6 +1,3 @@
-// ignore_for_file: lines_longer_than_80_chars
-// Replace with actual Firebase config from google-services.json / GoogleService-Info.plist
-
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show TargetPlatform, defaultTargetPlatform;

@@ -1,5 +1,5 @@
-class AppConstants {
-  AppConstants._();
+class Constants {
+  Constants._();
 
   // API
   static const int connectTimeout = 30000;

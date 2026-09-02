@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
@@ -27,8 +27,8 @@ class MetricCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(
-          vertical: AppSpacings.md,
-          horizontal: AppSpacings.sm,
+          vertical: Spacings.md,
+          horizontal: Spacings.sm,
         ),
         decoration: BoxDecoration(
           color: scheme.surface,
@@ -55,7 +55,7 @@ class MetricCard extends StatelessWidget {
                 child: Text(emoji, style: const TextStyle(fontSize: 15)),
               ),
             ),
-            const SizedBox(height: AppSpacings.sm),
+            const SizedBox(height: Spacings.sm),
             AppText(
               value,
               variant: AppTextVariant.titleLarge,

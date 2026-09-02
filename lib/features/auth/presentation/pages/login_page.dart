@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
     //         password: _passwordController.text,
     //       ),
     //     );
-    await context.push(AppRoutes.dashboard);
+    await context.push(Routes.dashboard);
   }
 
   @override
@@ -49,7 +49,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            context.go(AppRoutes.dashboard);
+            context.go(Routes.dashboard);
           }
           if (state is AuthError) {
             AppSnackbar.error(context, state.message);
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                           key: formKey,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: AppSpacings.lg,
+                              horizontal: Spacings.lg,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -128,7 +128,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                     'Lupa Password?',
                                     variant: AppTextVariant.titleMedium,
                                     color: AppColors.primary500,
-                                    onTap: () async => context.push(AppRoutes.forgotPassword),
+                                    onTap: () async => context.push(Routes.forgotPassword),
                                   ),
                                 ),
                                 const AppSpacer(56),
@@ -149,7 +149,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                       'Daftar',
                                       variant: AppTextVariant.titleMedium,
                                       color: AppColors.primary500,
-                                      onTap: () async => context.push(AppRoutes.register),
+                                      onTap: () async => context.push(Routes.register),
                                     ),
                                   ],
                                 ),

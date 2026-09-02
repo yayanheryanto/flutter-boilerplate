@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -148,7 +148,7 @@ class AppConfirmDialog extends StatelessWidget {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 400),
         child: Padding(
-          padding: const EdgeInsets.all(AppSpacings.lg),
+          padding: const EdgeInsets.all(Spacings.lg),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -162,7 +162,7 @@ class AppConfirmDialog extends StatelessWidget {
                 ),
                 child: Icon(iconData, color: iconColor, size: 28),
               ),
-              const SizedBox(height: AppSpacings.md),
+              const SizedBox(height: Spacings.md),
 
               // Title
               AppText(
@@ -174,7 +174,7 @@ class AppConfirmDialog extends StatelessWidget {
 
               // Message / custom content
               if (message != null) ...[
-                const SizedBox(height: AppSpacings.sm),
+                const SizedBox(height: Spacings.sm),
                 AppText(
                   message!,
                   color: scheme.onSurface.withOpacity(0.65),
@@ -182,11 +182,11 @@ class AppConfirmDialog extends StatelessWidget {
                 ),
               ],
               if (customContent != null) ...[
-                const SizedBox(height: AppSpacings.md),
+                const SizedBox(height: Spacings.md),
                 customContent!,
               ],
 
-              const SizedBox(height: AppSpacings.xl),
+              const SizedBox(height: Spacings.xl),
 
               // Actions
               Row(
@@ -199,7 +199,7 @@ class AppConfirmDialog extends StatelessWidget {
                         variant: AppButtonVariant.outlined,
                       ),
                     ),
-                    const SizedBox(width: AppSpacings.sm),
+                    const SizedBox(width: Spacings.sm),
                   ],
                   Expanded(
                     child: AppButton(
@@ -378,7 +378,7 @@ class _AppInputDialogState extends State<AppInputDialog> {
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 440),
         child: Padding(
-          padding: const EdgeInsets.all(AppSpacings.lg),
+          padding: const EdgeInsets.all(Spacings.lg),
           child: Form(
             key: _formKey,
             child: Column(
@@ -394,7 +394,7 @@ class _AppInputDialogState extends State<AppInputDialog> {
                     color: scheme.onSurface.withOpacity(0.6),
                   ),
                 ],
-                const SizedBox(height: AppSpacings.md),
+                const SizedBox(height: Spacings.md),
                 TextFormField(
                   controller: _controller,
                   keyboardType: widget.keyboardType,
@@ -407,7 +407,7 @@ class _AppInputDialogState extends State<AppInputDialog> {
                     hintText: widget.fieldHint,
                   ),
                 ),
-                const SizedBox(height: AppSpacings.md),
+                const SizedBox(height: Spacings.md),
                 Row(
                   children: [
                     Expanded(
@@ -417,7 +417,7 @@ class _AppInputDialogState extends State<AppInputDialog> {
                         variant: AppButtonVariant.outlined,
                       ),
                     ),
-                    const SizedBox(width: AppSpacings.sm),
+                    const SizedBox(width: Spacings.sm),
                     Expanded(
                       child: AppButton(
                         label: widget.confirmLabel,
@@ -470,8 +470,8 @@ class AppLoadingDialog extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacings.xl,
-            vertical: AppSpacings.lg,
+            horizontal: Spacings.xl,
+            vertical: Spacings.lg,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -483,7 +483,7 @@ class AppLoadingDialog extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                 ),
               ),
-              const SizedBox(width: AppSpacings.md),
+              const SizedBox(width: Spacings.md),
               Flexible(
                 child: AppText(
                   message ?? 'Please wait...',
@@ -555,9 +555,9 @@ class AppCustomDialog extends StatelessWidget {
             if (title != null || showCloseButton)
               Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  AppSpacings.lg,
-                  AppSpacings.md,
-                  AppSpacings.sm,
+                  Spacings.lg,
+                  Spacings.md,
+                  Spacings.sm,
                   0,
                 ),
                 child: Row(
@@ -585,10 +585,10 @@ class AppCustomDialog extends StatelessWidget {
               child: SingleChildScrollView(
                 padding: contentPadding ??
                     EdgeInsets.fromLTRB(
-                      AppSpacings.lg,
-                      title != null ? AppSpacings.sm : AppSpacings.lg,
-                      AppSpacings.lg,
-                      actions != null ? AppSpacings.sm : AppSpacings.lg,
+                      Spacings.lg,
+                      title != null ? Spacings.sm : Spacings.lg,
+                      Spacings.lg,
+                      actions != null ? Spacings.sm : Spacings.lg,
                     ),
                 child: content,
               ),
@@ -598,10 +598,10 @@ class AppCustomDialog extends StatelessWidget {
             if (actions != null && actions!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  AppSpacings.lg,
+                  Spacings.lg,
                   0,
-                  AppSpacings.lg,
-                  AppSpacings.lg,
+                  Spacings.lg,
+                  Spacings.lg,
                 ),
                 child: Row(
                   children: actions!
@@ -610,7 +610,7 @@ class AppCustomDialog extends StatelessWidget {
                       .expand(
                         (e) => [
                           Expanded(child: _buildAction(context, e.value)),
-                          if (e.key < actions!.length - 1) const SizedBox(width: AppSpacings.sm),
+                          if (e.key < actions!.length - 1) const SizedBox(width: Spacings.sm),
                         ],
                       )
                       .toList(),

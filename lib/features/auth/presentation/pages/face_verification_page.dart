@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/core/constants/images.dart';
@@ -44,11 +44,11 @@ class FaceVerificationPageState extends State<FaceVerificationPage> with AppForm
       return;
     }
     // TODO: dispatch KTP verification event
-    context.go(AppRoutes.dashboard);
+    context.go(Routes.dashboard);
   }
 
   Future<void> _openCamera() async {
-    final result = await context.push<File?>(AppRoutes.facePick);
+    final result = await context.push<File?>(Routes.facePick);
     if (result != null && mounted) {
       setState(() => _ktpPhoto = result);
     }
@@ -81,8 +81,8 @@ class FaceVerificationPageState extends State<FaceVerificationPage> with AppForm
                       ),
                       Container(
                         margin: const EdgeInsets.symmetric(
-                          horizontal: AppSpacings.md,
-                          vertical: AppSpacings.sm,
+                          horizontal: Spacings.md,
+                          vertical: Spacings.sm,
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,13 +104,13 @@ class FaceVerificationPageState extends State<FaceVerificationPage> with AppForm
 
               Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacings.md,
-                  vertical: AppSpacings.md,
+                  horizontal: Spacings.md,
+                  vertical: Spacings.md,
                 ),
                 child: AppButton(
                   label: 'Lanjut',
                   onPressed: () async {
-                    await context.push(AppRoutes.addressVerification);
+                    await context.push(Routes.addressVerification);
                     // _onSubmit
                   },
                   borderRadius: 25,
@@ -148,7 +148,7 @@ class _KtpPhotoCard extends StatelessWidget {
           top: BorderSide(color: AppColors.neutral200, width: 0.8),
         ),
       ),
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.all(Spacings.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,

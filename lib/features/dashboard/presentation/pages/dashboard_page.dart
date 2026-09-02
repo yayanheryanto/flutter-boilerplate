@@ -8,13 +8,12 @@ import 'package:emas/features/dashboard/presentation/pages/join_auction_page.dar
 import 'package:emas/features/dashboard/presentation/layouts/dashboard_layout.dart';
 import 'package:emas/features/dashboard/presentation/bloc/dashboard/dashboard_bloc.dart';
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sizer/sizer.dart';
-
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -50,7 +49,7 @@ class _DashboardViewState extends State<_DashboardView> {
 
       _bannerTimer = Timer.periodic(
         const Duration(seconds: 4),
-            (_) async {
+        (_) async {
           if (!mounted || !_bannerCtrl.hasClients) return;
 
           final bloc = context.read<DashboardBloc>();
@@ -89,20 +88,19 @@ class _DashboardViewState extends State<_DashboardView> {
             selected: state.navigationIndex == 2,
             onTap: () {
               context.read<DashboardBloc>().add(
-                const DashboardTabChanged(2),
-              );
+                    const DashboardTabChanged(2),
+                  );
             },
           ),
-          floatingActionButtonLocation:
-          FloatingActionButtonLocation.centerDocked,
+          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           bottomNavigationBar: _DashboardBottomNav(
             currentIndex: state.navigationIndex,
             onTap: (index) {
               if (index == 2) return;
 
               context.read<DashboardBloc>().add(
-                DashboardTabChanged(index),
-              );
+                    DashboardTabChanged(index),
+                  );
             },
           ),
         );
@@ -111,9 +109,9 @@ class _DashboardViewState extends State<_DashboardView> {
   }
 
   Widget _buildBody(
-      BuildContext context,
-      DashboardState state,
-      ) {
+    BuildContext context,
+    DashboardState state,
+  ) {
     final bloc = context.read<DashboardBloc>();
 
     return IndexedStack(
@@ -145,8 +143,8 @@ class _DashboardViewState extends State<_DashboardView> {
     return RefreshIndicator(
       onRefresh: () async {
         context.read<DashboardBloc>().add(
-          const DashboardRefreshRequested(),
-        );
+              const DashboardRefreshRequested(),
+            );
       },
       child: ListView(
         physics: const AlwaysScrollableScrollPhysics(),
@@ -157,10 +155,7 @@ class _DashboardViewState extends State<_DashboardView> {
               child: AppText(
                 title,
                 variant: AppTextVariant.titleMedium,
-                color: Theme.of(context)
-                    .colorScheme
-                    .onSurface
-                    .withOpacity(0.4),
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
               ),
             ),
           ),
@@ -182,7 +177,6 @@ class _DashboardBottomNav extends StatelessWidget {
   });
 
   @override
-
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
@@ -217,20 +211,12 @@ class _DashboardBottomNav extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const SizedBox(height: 2),
-                    const SizedBox(height: 24),
-                    const SizedBox(height: 2),
-                    Text(
+                    const AppSpacer(28),
+                    AppText(
                       'Ikut Lelang',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: currentIndex == 2
-                            ? AppColors.primary500
-                            : Colors.grey.shade400,
-                        fontWeight: currentIndex == 2
-                            ? FontWeight.w600
-                            : FontWeight.w400,
-                      ),
+                      fontSize: 10,
+                      color: currentIndex == 2 ? AppColors.primary500 : Colors.grey.shade400,
+                      fontWeight: currentIndex == 2 ? FontWeight.w600 : FontWeight.w400,
                     ),
                   ],
                 ),
@@ -307,13 +293,11 @@ class _NavItem extends StatelessWidget {
               colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
             ),
             const SizedBox(height: 2),
-            Text(
+            AppText(
               label,
-              style: TextStyle(
-                fontSize: 10,
-                color: color,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-              ),
+              fontSize: 10,
+              color: color,
+              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
             ),
             const Spacer(),
           ],

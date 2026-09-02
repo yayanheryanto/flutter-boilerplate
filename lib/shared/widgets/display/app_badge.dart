@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 
 class AppBadge extends StatelessWidget {
   final String? label;

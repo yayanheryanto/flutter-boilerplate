@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 
 class _SkeletonBase extends StatelessWidget {
   final double width;

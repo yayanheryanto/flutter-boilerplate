@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -72,7 +72,7 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
       return;
     }
     // TODO: dispatch KTP verification event
-    context.go(AppRoutes.dashboard);
+    context.go(Routes.dashboard);
   }
 
   @override
@@ -95,8 +95,8 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
                 const VerificationStepper(currentStep: 2),
                 Container(
                   margin: const EdgeInsets.symmetric(
-                    horizontal: AppSpacings.md,
-                    vertical: AppSpacings.sm,
+                    horizontal: Spacings.md,
+                    vertical: Spacings.sm,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +204,7 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
                       AppButton(
                         label: 'Lanjut',
                         onPressed: () async {
-                          await context.push(AppRoutes.bankVerification);
+                          await context.push(Routes.bankVerification);
                           // _onSubmit
                         },
                         borderRadius: 25,

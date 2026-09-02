@@ -6,8 +6,6 @@ import 'package:injectable/injectable.dart';
 import 'package:emas/core/config/app_config.dart';
 import 'package:emas/core/utils/app_logger.dart';
 
-// ─── Analytics Service ─────────────────────────────────────────────────────
-
 abstract class AnalyticsService {
   Future<void> logEvent(String name, {Map<String, Object>? parameters});
   Future<void> setUserId(String? userId);
@@ -61,8 +59,6 @@ class FirebaseAnalyticsService implements AnalyticsService {
   }
 }
 
-// ─── Crashlytics Service ─────────────────────────────────────────────────────
-
 abstract class CrashlyticsService {
   Future<void> recordError(dynamic exception, StackTrace? stack, {bool fatal = false});
   Future<void> setUserId(String userId);
@@ -109,8 +105,6 @@ class FirebaseCrashlyticsService implements CrashlyticsService {
     await _crashlytics.log(message);
   }
 }
-
-// ─── Remote Config Service ────────────────────────────────────────────────────
 
 abstract class RemoteConfigService {
   Future<void> initialize();

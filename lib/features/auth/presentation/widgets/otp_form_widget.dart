@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/phone_number_masker.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
@@ -119,7 +119,7 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
     if (otp.length == _kOtpLength) {
       debugPrint('OTP lengkap: $otp');
 
-      await context.push(AppRoutes.changePassword);
+      await context.push(Routes.changePassword);
       // Trigger API / Bloc
       // context.read<AuthBloc>().add(
       //   VerifyOtpRequested(otp),
@@ -130,7 +130,7 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
   void _onSubmit() {
     final otp = _otpValue;
     if (otp.length < _kOtpLength) return;
-    context.go(AppRoutes.dashboard);
+    context.go(Routes.dashboard);
   }
 
   @override
@@ -144,8 +144,8 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
       child: SingleChildScrollView(
         padding: EdgeInsets.symmetric(
           horizontal: context.responsive(
-            mobile: AppSpacings.lg,
-            tablet: AppSpacings.xxl,
+            mobile: Spacings.lg,
+            tablet: Spacings.xxl,
           ),
         ),
         child: Column(

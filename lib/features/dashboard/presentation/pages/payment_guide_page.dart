@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/tokens/app_spacings.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 import 'package:emas/features/dashboard/data/models/payment_guide_channel.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -36,17 +36,17 @@ class PaymentGuidePage extends StatelessWidget {
       backgroundColor: AppColors.neutral50,
       appBar: const AppPageBar(title: 'Cara Pembayaran'),
       body: ListView(
-        padding: const EdgeInsets.all(AppSpacings.md),
+        padding: const EdgeInsets.all(Spacings.md),
         children: [
           _BankAccountCard(
             bankName: bankName,
             accountNumber: accountNumber,
             totalPayment: totalPayment,
           ),
-          const SizedBox(height: AppSpacings.md),
+          const SizedBox(height: Spacings.md),
           for (var i = 0; i < paymentGuideChannels.length; i++)
             Padding(
-              padding: const EdgeInsets.only(bottom: AppSpacings.sm),
+              padding: const EdgeInsets.only(bottom: Spacings.sm),
               child: _AccordionSection(
                 title: paymentGuideChannels[i].title,
                 steps: paymentGuideChannels[i].steps,
@@ -83,7 +83,7 @@ class _BankAccountCard extends StatelessWidget {
     return AppCard(
       backgroundColor: AppColors.white,
       borderRadius: BorderRadius.circular(RadiusTokens.lg),
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.all(Spacings.md),
       borderColor: AppColors.neutral300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,13 +99,13 @@ class _BankAccountCard extends StatelessWidget {
                 ),
                 child: const Icon(Icons.account_balance_rounded, size: 14, color: AppColors.white),
               ),
-              const SizedBox(width: AppSpacings.sm),
+              const SizedBox(width: Spacings.sm),
               AppText(bankName, fontWeight: FontWeight.w700),
             ],
           ),
-          const SizedBox(height: AppSpacings.md),
+          const SizedBox(height: Spacings.md),
           _copyRow(context, label: 'Nomor Rekening', value: accountNumber),
-          const SizedBox(height: AppSpacings.md),
+          const SizedBox(height: Spacings.md),
           _copyRow(context, label: 'Total Pembayaran', value: _formatCurrency(totalPayment)),
         ],
       ),
@@ -186,7 +186,7 @@ class _AccordionSectionState extends State<_AccordionSection> {
             borderRadius: BorderRadius.circular(RadiusTokens.lg),
             onTap: () => setState(() => _expanded = !_expanded),
             child: Padding(
-              padding: const EdgeInsets.all(AppSpacings.md),
+              padding: const EdgeInsets.all(Spacings.md),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -203,14 +203,14 @@ class _AccordionSectionState extends State<_AccordionSection> {
           AnimatedCrossFade(
             firstChild: const SizedBox(width: double.infinity, height: 0),
             secondChild: Padding(
-              padding: const EdgeInsets.fromLTRB(AppSpacings.md, 0, AppSpacings.md, AppSpacings.md),
+              padding: const EdgeInsets.fromLTRB(Spacings.md, 0, Spacings.md, Spacings.md),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   for (var i = 0; i < widget.steps.length; i++)
                     Padding(
                       padding: EdgeInsets.only(
-                        bottom: i == widget.steps.length - 1 ? 0 : AppSpacings.sm,
+                        bottom: i == widget.steps.length - 1 ? 0 : Spacings.sm,
                       ),
                       child: _StepText(
                         number: i + 1,

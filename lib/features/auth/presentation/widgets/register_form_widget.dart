@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/core/utils/navigator_key.dart';
@@ -48,7 +48,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
       return;
     }
 
-    context.go(AppRoutes.otp, extra: {'phone': _phoneController.text});
+    context.go(Routes.otp, extra: {'phone': _phoneController.text});
   }
 
   @override
@@ -56,7 +56,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          AppNavigator.go(AppRoutes.dashboard);
+          AppNavigator.go(Routes.dashboard);
         }
         if (state is AuthError) {
           AppSnackbar.error(context, state.message);
@@ -70,8 +70,8 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
           child: Padding(
             padding: EdgeInsets.symmetric(
               horizontal: context.responsive(
-                mobile: AppSpacings.lg,
-                tablet: AppSpacings.xxl,
+                mobile: Spacings.lg,
+                tablet: Spacings.xxl,
               ),
             ),
             child: Column(
@@ -195,7 +195,7 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                       'Masuk',
                       variant: AppTextVariant.titleMedium,
                       color: AppColors.primary500,
-                      onTap: () => AppNavigator.go(AppRoutes.login),
+                      onTap: () => AppNavigator.go(Routes.login),
                     ),
                   ],
                 ),

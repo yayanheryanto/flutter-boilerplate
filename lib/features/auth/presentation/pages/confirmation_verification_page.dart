@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
@@ -24,7 +24,7 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
   void _onVerify() {
     if (!_agreedToTerms) return;
     // TODO: dispatch final verification submit event
-    context.go(AppRoutes.accountProcessed);
+    context.go(Routes.accountProcessed);
   }
 
   @override
@@ -46,7 +46,7 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
 
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(AppSpacings.md),
+                padding: const EdgeInsets.all(Spacings.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -60,7 +60,7 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
 
                     _ReviewItem(
                       label: 'Verifikasi KTP',
-                      onTap: () => context.go(AppRoutes.ktpVerification),
+                      onTap: () => context.go(Routes.ktpVerification),
                     ),
                     const AppSpacer.sm(),
                     _ReviewItem(
@@ -85,10 +85,10 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
             Container(
               color: AppColors.white,
               padding: const EdgeInsets.fromLTRB(
-                AppSpacings.lg,
-                AppSpacings.md,
-                AppSpacings.lg,
-                AppSpacings.lg,
+                Spacings.lg,
+                Spacings.md,
+                Spacings.lg,
+                Spacings.lg,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -161,17 +161,17 @@ class _ReviewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.white,
-      borderRadius: BorderRadius.circular(AppSpacings.md),
+      borderRadius: BorderRadius.circular(Spacings.md),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(AppSpacings.md),
+        borderRadius: BorderRadius.circular(Spacings.md),
         child: Container(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacings.md,
-            vertical: AppSpacings.md,
+            horizontal: Spacings.md,
+            vertical: Spacings.md,
           ),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(AppSpacings.md),
+            borderRadius: BorderRadius.circular(Spacings.md),
             border: Border.all(
               color: AppColors.border,
               width: 1.2,

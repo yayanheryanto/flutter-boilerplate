@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -69,9 +69,9 @@ class _AppBottomSheetShell extends StatelessWidget {
           if (title != null || showCloseButton)
             Padding(
               padding: EdgeInsets.fromLTRB(
-                AppSpacings.lg,
-                showHandle ? AppSpacings.xs : AppSpacings.md,
-                AppSpacings.sm,
+                Spacings.lg,
+                showHandle ? Spacings.xs : Spacings.md,
+                Spacings.sm,
                 0,
               ),
               child: Row(
@@ -113,10 +113,10 @@ class _AppBottomSheetShell extends StatelessWidget {
             child: SingleChildScrollView(
               padding: contentPadding ??
                   EdgeInsets.fromLTRB(
-                    AppSpacings.lg,
-                    AppSpacings.md,
-                    AppSpacings.lg,
-                    actions != null ? AppSpacings.sm : AppSpacings.lg + bottomPad,
+                    Spacings.lg,
+                    Spacings.md,
+                    Spacings.lg,
+                    actions != null ? Spacings.sm : Spacings.lg + bottomPad,
                   ),
               child: content,
             ),
@@ -126,10 +126,10 @@ class _AppBottomSheetShell extends StatelessWidget {
           if (actions != null && actions!.isNotEmpty)
             Padding(
               padding: EdgeInsets.fromLTRB(
-                AppSpacings.lg,
+                Spacings.lg,
                 0,
-                AppSpacings.lg,
-                AppSpacings.lg + bottomPad,
+                Spacings.lg,
+                Spacings.lg + bottomPad,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -140,7 +140,7 @@ class _AppBottomSheetShell extends StatelessWidget {
                       (e) => [
                         e.value,
                         if (e.key < actions!.length - 1)
-                          const SizedBox(height: AppSpacings.sm),
+                          const SizedBox(height: Spacings.sm),
                       ],
                     )
                     .toList(),
@@ -247,7 +247,7 @@ class AppOptionsBottomSheet {
         showHandle: showHandle,
         showCloseButton: false,
         isScrollControlled: true,
-        contentPadding: const EdgeInsets.symmetric(vertical: AppSpacings.xs),
+        contentPadding: const EdgeInsets.symmetric(vertical: Spacings.xs),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: options.map((opt) => _OptionTile<T>(option: opt)).toList(),
@@ -292,8 +292,8 @@ class _OptionTile<T> extends StatelessWidget {
       trailing: option.trailing,
       enabled: option.enabled,
       contentPadding: const EdgeInsets.symmetric(
-        horizontal: AppSpacings.lg,
-        vertical: AppSpacings.xs,
+        horizontal: Spacings.lg,
+        vertical: Spacings.xs,
       ),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(RadiusTokens.md)),
       onTap: option.enabled
@@ -381,7 +381,7 @@ class AppConfirmBottomSheet {
                 ),
                 child: Icon(iconData, color: iconColor, size: 28),
               ),
-              const SizedBox(height: AppSpacings.md),
+              const SizedBox(height: Spacings.md),
               AppText(
                 title,
                 variant: AppTextVariant.titleLarge,
@@ -389,7 +389,7 @@ class AppConfirmBottomSheet {
                 textAlign: TextAlign.center,
               ),
               if (message != null) ...[
-                const SizedBox(height: AppSpacings.sm),
+                const SizedBox(height: Spacings.sm),
                 AppText(
                   message,
                   color: scheme.onSurface.withOpacity(0.65),
@@ -397,7 +397,7 @@ class AppConfirmBottomSheet {
                 ),
               ],
               if (customContent != null) ...[
-                const SizedBox(height: AppSpacings.md),
+                const SizedBox(height: Spacings.md),
                 customContent,
               ],
             ],

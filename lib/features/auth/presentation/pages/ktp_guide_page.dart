@@ -1,6 +1,6 @@
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
@@ -41,8 +41,8 @@ class KtpGuidePage extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacings.lg,
-                  vertical: AppSpacings.sm,
+                  horizontal: Spacings.lg,
+                  vertical: Spacings.sm,
                 ),
                 child: Container(
                   decoration: BoxDecoration(
@@ -67,7 +67,7 @@ class KtpGuidePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  padding: const EdgeInsets.all(AppSpacings.md),
+                  padding: const EdgeInsets.all(Spacings.md),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -139,16 +139,16 @@ class KtpGuidePage extends StatelessWidget {
 
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                AppSpacings.lg,
-                AppSpacings.sm,
-                AppSpacings.lg,
-                AppSpacings.lg,
+                Spacings.lg,
+                Spacings.sm,
+                Spacings.lg,
+                Spacings.lg,
               ),
               child: AppButton(
                 label: 'Mulai Verifikasi KTP',
                 onPressed: () async {
                   await context.push(
-                    accountType == AccountType.personal ? AppRoutes.ktpVerification : AppRoutes.npwpVerification,
+                    accountType == AccountType.personal ? Routes.ktpVerification : Routes.npwpVerification,
                     extra: accountType,
                   );
                 },

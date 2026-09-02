@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/shared/widgets/design_system.dart';
@@ -54,7 +54,7 @@ class _CategoryItem extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTap: () async {
-        await context.push(AppRoutes.auctionList);
+        await context.push(Routes.auctionList);
       },
       child: SizedBox(
         width: 82,

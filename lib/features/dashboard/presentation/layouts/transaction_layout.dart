@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/data/models/transaction_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -72,9 +72,9 @@ class _TransactionLayoutState extends State<TransactionLayout> {
             child: _filteredItems.isEmpty
                 ? const _EmptyState()
                 : ListView.separated(
-                    padding: const EdgeInsets.all(AppSpacings.md),
+                    padding: const EdgeInsets.all(Spacings.md),
                     itemCount: _filteredItems.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: AppSpacings.md),
+                    separatorBuilder: (_, __) => const SizedBox(height: Spacings.md),
                     itemBuilder: (context, i) => _TransactionCard(item: _filteredItems[i]),
                   ),
           ),
@@ -94,7 +94,7 @@ class _TransactionTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacings.md,
+        horizontal: Spacings.md,
       ),
       decoration: const BoxDecoration(
         border: Border(
@@ -110,7 +110,7 @@ class _TransactionTabBar extends StatelessWidget {
             isSelected: selected == TransactionStatus.unpaid,
             onTap: () => onChanged(TransactionStatus.unpaid),
           ),
-          const SizedBox(width: AppSpacings.lg),
+          const SizedBox(width: Spacings.lg),
           _TabItem(
             label: 'Menunggu Pembayaran',
             isSelected: selected == TransactionStatus.pendingPayment,
@@ -145,7 +145,7 @@ class _TabItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: AppSpacings.md),
+              padding: const EdgeInsets.symmetric(vertical: Spacings.md),
               child: AppText(
                 label,
                 textAlign: TextAlign.center,
@@ -177,7 +177,7 @@ class _TransactionCard extends StatelessWidget {
     return AppCard(
       backgroundColor: AppColors.white,
       borderRadius: BorderRadius.circular(RadiusTokens.lg),
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.all(Spacings.md),
       borderColor: AppColors.neutral300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,7 +198,7 @@ class _TransactionCard extends StatelessWidget {
                   size: 32,
                 ),
               ),
-              const SizedBox(width: AppSpacings.md),
+              const SizedBox(width: Spacings.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +213,7 @@ class _TransactionCard extends StatelessWidget {
                       variant: AppTextVariant.labelSmall,
                       color: AppColors.textPrimary,
                     ),
-                    const SizedBox(height: AppSpacings.sm),
+                    const SizedBox(height: Spacings.sm),
                     const AppText(
                       'Harga Terbentuk',
                       variant: AppTextVariant.labelSmall,
@@ -228,7 +228,7 @@ class _TransactionCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: AppSpacings.md),
+          const SizedBox(height: Spacings.md),
           if (isPendingPayment)
             _PendingPaymentSection(item: item)
           else
@@ -264,14 +264,14 @@ class _UnpaidActions extends StatelessWidget {
             onPressed: () {},
           ),
         ),
-        const SizedBox(width: AppSpacings.md),
+        const SizedBox(width: Spacings.md),
         Expanded(
           child: AppButton(
             label: 'Bayar',
             size: AppButtonSize.small,
             borderRadius: RadiusTokens.full,
             onPressed: () async {
-              await context.push(AppRoutes.payment);
+              await context.push(Routes.payment);
             },
           ),
         ),
@@ -336,7 +336,7 @@ class _PendingPaymentSection extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: AppSpacings.md),
+        const SizedBox(height: Spacings.md),
 
         // ── Divider Line ──
         const Divider(
@@ -345,7 +345,7 @@ class _PendingPaymentSection extends StatelessWidget {
           color: AppColors.neutral200,
         ),
 
-        const SizedBox(height: AppSpacings.md),
+        const SizedBox(height: Spacings.md),
 
         // ── Bottom Section (Countdown & Action Button) ──
         Row(
@@ -362,7 +362,7 @@ class _PendingPaymentSection extends StatelessWidget {
                       color: AppColors.textPrimary,
                     ),
             ),
-            const SizedBox(width: AppSpacings.sm),
+            const SizedBox(width: Spacings.sm),
             SizedBox(
               width: 80,
               child: AppButton(
@@ -372,7 +372,7 @@ class _PendingPaymentSection extends StatelessWidget {
                 foregroundColor: AppColors.textPrimary,
                 borderRadius: RadiusTokens.full,
                 onPressed: () async {
-                  await context.push(AppRoutes.paymentGuide);
+                  await context.push(Routes.paymentGuide);
                 },
               ),
             ),
@@ -471,7 +471,7 @@ class _EmptyState extends StatelessWidget {
             size: 48,
             color: AppColors.neutral300,
           ),
-          SizedBox(height: AppSpacings.md),
+          SizedBox(height: Spacings.md),
           AppText(
             'Belum ada transaksi',
             color: AppColors.textPrimary,

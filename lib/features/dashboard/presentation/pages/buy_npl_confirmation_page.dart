@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/tokens/app_spacings.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/domain/entities/payment_method.dart';
@@ -66,7 +66,7 @@ class _BuyNplConfirmationPageState extends State<BuyNplConfirmationPage> {
       blocContext,
       title: 'Metode Pembayaran',
       contentPadding: const EdgeInsets.only(
-        top: AppSpacings.sm,
+        top: Spacings.sm,
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -105,14 +105,14 @@ class _BuyNplConfirmationPageState extends State<BuyNplConfirmationPage> {
                 Expanded(
                   child: ListView(
                     padding: const EdgeInsets.all(
-                      AppSpacings.md,
+                      Spacings.md,
                     ),
                     children: [
                       const _SectionTitle(
                         'Ringkasan Pembelian',
                       ),
                       const SizedBox(
-                        height: AppSpacings.sm,
+                        height: Spacings.sm,
                       ),
                       _InfoCard(
                         child: Column(
@@ -121,7 +121,7 @@ class _BuyNplConfirmationPageState extends State<BuyNplConfirmationPage> {
                             const AppText(
                               'Total Tagihan',
                               variant: AppTextVariant.labelSmall,
-                              color: AppColors.textSecondary,
+                              color: AppColors.textPrimary,
                             ),
                             const SizedBox(
                               height: 4,
@@ -135,13 +135,13 @@ class _BuyNplConfirmationPageState extends State<BuyNplConfirmationPage> {
                         ),
                       ),
                       const SizedBox(
-                        height: AppSpacings.lg,
+                        height: Spacings.lg,
                       ),
                       const _SectionTitle(
                         'Metode Pembayaran',
                       ),
                       const SizedBox(
-                        height: AppSpacings.sm,
+                        height: Spacings.sm,
                       ),
                       _PaymentMethodSelector(
                         selected: state.selectedMethod,
@@ -205,7 +205,7 @@ class _InfoCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(
-        AppSpacings.md,
+        Spacings.md,
       ),
       decoration: BoxDecoration(
         color: AppColors.white,
@@ -236,8 +236,8 @@ class _PaymentMethodSelector extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacings.md,
-          vertical: AppSpacings.sm + 6,
+          horizontal: Spacings.md,
+          vertical: Spacings.sm + 6,
         ),
         decoration: BoxDecoration(
           color: AppColors.white,
@@ -255,7 +255,7 @@ class _PaymentMethodSelector extends StatelessWidget {
                 logoAsset: selected!.logoAsset,
               ),
               const SizedBox(
-                width: AppSpacings.sm,
+                width: Spacings.sm,
               ),
             ],
             Expanded(
@@ -296,8 +296,8 @@ class _PaymentMethodTile extends StatelessWidget {
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacings.lg,
-              vertical: AppSpacings.md,
+              horizontal: Spacings.lg,
+              vertical: Spacings.md,
             ),
             child: Row(
               children: [
@@ -305,7 +305,7 @@ class _PaymentMethodTile extends StatelessWidget {
                   logoAsset: method.logoAsset,
                 ),
                 const SizedBox(
-                  width: AppSpacings.md,
+                  width: Spacings.md,
                 ),
                 Expanded(
                   child: AppText(
@@ -335,12 +335,12 @@ class _PaymentMethodTile extends StatelessWidget {
 
 class _BankLogo extends StatelessWidget {
   final String logoAsset;
-  final double size;
 
   const _BankLogo({
     required this.logoAsset,
-    this.size = 36,
   });
+
+  final double size = 36;
 
   @override
   Widget build(BuildContext context) {
@@ -390,10 +390,10 @@ class _BottomSection extends StatelessWidget {
     return Container(
       color: AppColors.white,
       padding: const EdgeInsets.fromLTRB(
-        AppSpacings.md,
-        AppSpacings.sm,
-        AppSpacings.md,
-        AppSpacings.lg,
+        Spacings.md,
+        Spacings.sm,
+        Spacings.md,
+        Spacings.lg,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -416,7 +416,7 @@ class _BottomSection extends StatelessWidget {
                 ),
               ),
               const SizedBox(
-                width: AppSpacings.sm,
+                width: Spacings.sm,
               ),
               Expanded(
                 child: RichText(
@@ -454,7 +454,7 @@ class _BottomSection extends StatelessWidget {
           ),
 
           const SizedBox(
-            height: AppSpacings.md,
+            height: Spacings.md,
           ),
 
           // ─────────────────────────────────────────────────────────────────

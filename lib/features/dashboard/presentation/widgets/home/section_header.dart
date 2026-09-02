@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +20,7 @@ class DashboardSectionHeader extends StatelessWidget {
     final scheme = Theme.of(context).colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+      padding: const EdgeInsets.symmetric(horizontal: Spacings.md),
       child: Row(
         children: [
           AppText(
@@ -29,7 +29,7 @@ class DashboardSectionHeader extends StatelessWidget {
             fontWeight: FontWeight.w700,
           ),
           if (trailing != null) ...[
-            const AppSpacer(AppSpacings.xs, horizontal: true),
+            const AppSpacer(Spacings.xs, horizontal: true),
             trailing!,
           ],
           const Spacer(),

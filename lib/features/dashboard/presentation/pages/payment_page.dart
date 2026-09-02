@@ -1,6 +1,6 @@
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/data/models/payment_option.dart';
 import 'package:emas/features/dashboard/domain/entities/payment_method.dart';
@@ -39,7 +39,7 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Future<void> _submitPayment() async {
-    await context.push(AppRoutes.paymentGuide);
+    await context.push(Routes.paymentGuide);
   }
 
   @override
@@ -60,17 +60,17 @@ class _PaymentPageState extends State<PaymentPage> {
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.all(AppSpacings.md),
+              padding: const EdgeInsets.all(Spacings.md),
               children: [
                 const AppText(
                   'Metode Pembayaran',
                   variant: AppTextVariant.titleSmall,
                   fontWeight: FontWeight.w700,
                 ),
-                const SizedBox(height: AppSpacings.sm),
+                const SizedBox(height: Spacings.sm),
                 ...dummyPaymentOptions.map(
                   (option) => Padding(
-                    padding: const EdgeInsets.only(bottom: AppSpacings.sm),
+                    padding: const EdgeInsets.only(bottom: Spacings.sm),
                     child: _PaymentOptionTile(
                       option: option,
                       isActive: _selectedMethodId == option.id,
@@ -78,15 +78,15 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: AppSpacings.xs),
+                const SizedBox(height: Spacings.xs),
                 const _MorePaymentMethodsRow(),
-                const SizedBox(height: AppSpacings.lg),
+                const SizedBox(height: Spacings.lg),
                 const AppText(
                   'Ringkasan Pembayaran',
                   variant: AppTextVariant.titleSmall,
                   fontWeight: FontWeight.w700,
                 ),
-                const SizedBox(height: AppSpacings.sm),
+                const SizedBox(height: Spacings.sm),
                 _PaymentSummaryCard(
                   priceAmount: widget.priceAmount,
                   adminFee: widget.adminFee,
@@ -122,7 +122,7 @@ class _PaymentOptionTile extends StatelessWidget {
     return AppCard(
       backgroundColor: AppColors.white,
       borderRadius: BorderRadius.circular(RadiusTokens.lg),
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.all(Spacings.md),
       borderColor: AppColors.neutral300,
       child: Row(
         children: [
@@ -135,7 +135,7 @@ class _PaymentOptionTile extends StatelessWidget {
             ),
             child: Icon(option.icon, color: AppColors.white, size: 20),
           ),
-          const SizedBox(width: AppSpacings.sm),
+          const SizedBox(width: Spacings.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +152,7 @@ class _PaymentOptionTile extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: AppSpacings.sm),
+          const SizedBox(width: Spacings.sm),
           if (!isActive)
             AppButton(
               label: 'Aktifkan',
@@ -184,8 +184,8 @@ class _MorePaymentMethodsRow extends StatelessWidget {
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacings.md,
-          vertical: AppSpacings.md,
+          horizontal: Spacings.md,
+          vertical: Spacings.md,
         ),
         decoration: BoxDecoration(
           color: AppColors.blue100,
@@ -222,14 +222,14 @@ class _PaymentSummaryCard extends StatelessWidget {
     return AppCard(
       backgroundColor: AppColors.white,
       borderRadius: BorderRadius.circular(RadiusTokens.lg),
-      padding: const EdgeInsets.all(AppSpacings.md),
+      padding: const EdgeInsets.all(Spacings.md),
       borderColor: AppColors.neutral300,
       child: Column(
         children: [
           _SummaryRow(label: 'Harga Terbentuk', value: priceAmount),
-          const SizedBox(height: AppSpacings.sm),
+          const SizedBox(height: Spacings.sm),
           _SummaryRow(label: 'Biaya Admin', value: adminFee),
-          const SizedBox(height: AppSpacings.sm),
+          const SizedBox(height: Spacings.sm),
           _SummaryRow(label: 'Biaya NPL', value: nplFee),
         ],
       ),
@@ -288,7 +288,7 @@ class _PaymentBottomBar extends StatelessWidget {
           if (showMethodWarning) const _MethodWarningBanner(),
           Padding(
             padding: const EdgeInsets.all(
-              AppSpacings.md,
+              Spacings.md,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -301,7 +301,7 @@ class _PaymentBottomBar extends StatelessWidget {
                       const AppText(
                         'Total Pembayaran',
                         variant: AppTextVariant.labelSmall,
-                        color: AppColors.textSecondary,
+                        color: AppColors.textPrimary,
                       ),
                       AppText(
                         CurrencyFormatter.rupiah(totalPayment),
@@ -311,7 +311,7 @@ class _PaymentBottomBar extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: AppSpacings.md),
+                const SizedBox(width: Spacings.md),
                 AppButton(
                   label: 'Bayar',
                   isExpanded: false,
@@ -340,21 +340,21 @@ class _MethodWarningBanner extends StatelessWidget {
         color: AppColors.blue100,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(
-            AppSpacings.md,
+            Spacings.md,
           ),
           topRight: Radius.circular(
-            AppSpacings.md,
+            Spacings.md,
           ),
         ),
       ),
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacings.md,
-        vertical: AppSpacings.sm,
+        horizontal: Spacings.md,
+        vertical: Spacings.sm,
       ),
       child: const Row(
         children: [
           Icon(Icons.info_rounded, size: 20, color: AppColors.warning500),
-          SizedBox(width: AppSpacings.sm),
+          SizedBox(width: Spacings.sm),
           Expanded(
             child: AppText(
               'Pilih metode pembayaran sebelum lanjut bayar',
@@ -407,7 +407,7 @@ Future<void> _showPaymentMethodSheet(BuildContext blocContext) async {
     blocContext,
     title: 'Metode Pembayaran',
     contentPadding: const EdgeInsets.only(
-      top: AppSpacings.sm,
+      top: Spacings.sm,
     ),
     content: Column(
       mainAxisSize: MainAxisSize.min,
@@ -446,8 +446,8 @@ class _PaymentMethodTile extends StatelessWidget {
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacings.lg,
-              vertical: AppSpacings.md,
+              horizontal: Spacings.lg,
+              vertical: Spacings.md,
             ),
             child: Row(
               children: [
@@ -460,7 +460,7 @@ class _PaymentMethodTile extends StatelessWidget {
                 ),
 
                 const SizedBox(
-                  width: AppSpacings.md,
+                  width: Spacings.md,
                 ),
 
                 // ───────────────────────────────────────────────────────────
@@ -500,12 +500,12 @@ class _PaymentMethodTile extends StatelessWidget {
 
 class _BankLogo extends StatelessWidget {
   final String logoAsset;
-  final double size;
 
   const _BankLogo({
     required this.logoAsset,
-    this.size = 36,
   });
+
+  final double size = 36;
 
   @override
   Widget build(BuildContext context) {

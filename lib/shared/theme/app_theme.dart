@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 import 'package:emas/shared/theme/typography_tokens.dart';
 
 class AppTheme {

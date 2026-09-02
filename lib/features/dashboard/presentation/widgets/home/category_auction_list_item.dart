@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
@@ -49,7 +49,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
+        margin: const EdgeInsets.symmetric(horizontal: Spacings.md),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(RadiusTokens.lg),
@@ -85,8 +85,8 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
                       ),
                     ),
                     Positioned(
-                      bottom: AppSpacings.xs,
-                      left: AppSpacings.xs,
+                      bottom: Spacings.xs,
+                      left: Spacings.xs,
                       child: _TimerChip(secs: _secs, urgent: _urgent),
                     ),
                   ],
@@ -98,10 +98,10 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  AppSpacings.sm,
-                  AppSpacings.sm,
-                  AppSpacings.sm,
-                  AppSpacings.sm,
+                  Spacings.sm,
+                  Spacings.sm,
+                  Spacings.sm,
+                  Spacings.sm,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +119,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
                             height: 1.35,
                           ),
                         ),
-                        const SizedBox(width: AppSpacings.xs),
+                        const SizedBox(width: Spacings.xs),
                         GestureDetector(
                           onTap: () =>
                               setState(() => _wishlisted = !_wishlisted),
@@ -140,7 +140,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
                       ],
                     ),
 
-                    const SizedBox(height: AppSpacings.xs),
+                    const SizedBox(height: Spacings.xs),
 
                     // Bid info
                     AppText(
@@ -155,7 +155,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
                       fontWeight: FontWeight.w700,
                     ),
 
-                    const SizedBox(height: AppSpacings.sm),
+                    const SizedBox(height: Spacings.sm),
 
                     // CTA
                     AppButton(

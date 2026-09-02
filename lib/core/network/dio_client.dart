@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:emas/core/config/app_config.dart';
-import 'package:emas/core/constants/app_constants.dart';
+import 'package:emas/core/constants/constants.dart';
 import 'package:emas/core/network/interceptors/auth_interceptor.dart';
 import 'package:emas/core/network/interceptors/logging_interceptor.dart';
 import 'package:emas/core/network/interceptors/retry_interceptor.dart';
@@ -20,13 +20,13 @@ class DioClient {
       BaseOptions(
         baseUrl: AppConfig.baseUrl,
         connectTimeout: const Duration(
-          milliseconds: AppConstants.connectTimeout,
+          milliseconds: Constants.connectTimeout,
         ),
         receiveTimeout: const Duration(
-          milliseconds: AppConstants.receiveTimeout,
+          milliseconds: Constants.receiveTimeout,
         ),
         sendTimeout: const Duration(
-          milliseconds: AppConstants.sendTimeout,
+          milliseconds: Constants.sendTimeout,
         ),
         headers: {
           'Content-Type': 'application/json',

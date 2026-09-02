@@ -1,8 +1,8 @@
-import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/dashboard/presentation/bloc/join_auction/join_auction_bloc.dart';
-import 'package:emas/core/constants/tokens/app_spacings.dart';
-import 'package:emas/core/constants/tokens/radius_tokens.dart';
+import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/radius_tokens.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -118,7 +118,7 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
       appBar: const AppPageBar(
         title: 'Ikut Lelang',
         showBackButton: false,
-        titleSpacing: AppSpacings.md,
+        titleSpacing: Spacings.md,
         titleVariant: AppPageBarTitleVariant.withIcon,
         titleIcon: Icons.gavel_rounded,
       ),
@@ -129,10 +129,10 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
           _SectionContainer(
             color: AppColors.white,
             padding: const EdgeInsets.fromLTRB(
-              AppSpacings.md,
-              AppSpacings.md,
-              AppSpacings.md,
-              AppSpacings.lg,
+              Spacings.md,
+              Spacings.md,
+              Spacings.md,
+              Spacings.lg,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +156,7 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
           // ── Sedang Berlangsung ────────────────────────────────────────
           _SectionContainer(
             color: AppColors.white,
-            padding: const EdgeInsets.all(AppSpacings.md),
+            padding: const EdgeInsets.all(Spacings.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -168,7 +168,7 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
                 const AppSpacer.md(),
                 ..._dummySedangBerlangsung.map(
                   (item) => Padding(
-                    padding: const EdgeInsets.only(bottom: AppSpacings.sm),
+                    padding: const EdgeInsets.only(bottom: Spacings.sm),
                     child: _AuctionListCard(item: item),
                   ),
                 ),
@@ -182,10 +182,10 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
           _SectionContainer(
             color: AppColors.white,
             padding: const EdgeInsets.fromLTRB(
-              AppSpacings.md,
-              AppSpacings.md,
-              AppSpacings.md,
-              AppSpacings.lg,
+              Spacings.md,
+              Spacings.md,
+              Spacings.md,
+              Spacings.lg,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +199,7 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
                 ..._dummyAkanDatang
                     .map(
                       (item) => Padding(
-                        padding: const EdgeInsets.only(bottom: AppSpacings.sm),
+                        padding: const EdgeInsets.only(bottom: Spacings.sm),
                         child: _AuctionListCard(item: item),
                       ),
                     ),
@@ -234,7 +234,7 @@ class _CategorySelector extends StatelessWidget {
       children: _auctionCategories
           .map(
             (cat) => Padding(
-              padding: const EdgeInsets.only(right: AppSpacings.sm),
+              padding: const EdgeInsets.only(right: Spacings.sm),
               child: _CategoryChip(
                 category: cat,
                 isSelected: cat == selected,
@@ -269,7 +269,7 @@ class _CategoryChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         width: 88,
-        padding: const EdgeInsets.symmetric(vertical: AppSpacings.sm),
+        padding: const EdgeInsets.symmetric(vertical: Spacings.sm),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary500.withOpacity(0.08) : AppColors.white,
           borderRadius: BorderRadius.circular(RadiusTokens.md),
@@ -338,7 +338,7 @@ class _AuctionListCard extends StatelessWidget {
           // CARD CONTENT
           // ===============================================================
           Padding(
-            padding: const EdgeInsets.all(AppSpacings.md),
+            padding: const EdgeInsets.all(Spacings.md),
             child: Row(
               children: [
                 // =========================================================
@@ -357,7 +357,7 @@ class _AuctionListCard extends StatelessWidget {
                 ),
 
                 const SizedBox(
-                  width: AppSpacings.md,
+                  width: Spacings.md,
                 ),
 
                 // =========================================================
@@ -430,7 +430,7 @@ class _AuctionListCard extends StatelessWidget {
             child: InkWell(
               onTap: () async {
                 await context.push(
-                  AppRoutes.liveAuction,
+                  Routes.liveAuction,
                 );
               },
               child: const SizedBox(
