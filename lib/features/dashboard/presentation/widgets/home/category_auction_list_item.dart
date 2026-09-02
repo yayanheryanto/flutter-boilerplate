@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -52,7 +52,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
         margin: const EdgeInsets.symmetric(horizontal: Spacings.md),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(RadiusTokens.lg),
+          borderRadius: BorderRadius.circular(Rounded.lg),
           boxShadow: [
             BoxShadow(
               color: _tint.withOpacity(0.08),
@@ -67,7 +67,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
             // ── Thumbnail ──────────────────────────────────────────
             ClipRRect(
               borderRadius: const BorderRadius.horizontal(
-                left: Radius.circular(RadiusTokens.lg),
+                left: Radius.circular(Rounded.lg),
               ),
               child: SizedBox(
                 width: 110,
@@ -189,7 +189,7 @@ class _TimerChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
         color: urgent ? AppColors.error500 : Colors.black54,
-        borderRadius: BorderRadius.circular(RadiusTokens.sm),
+        borderRadius: BorderRadius.circular(Rounded.sm),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

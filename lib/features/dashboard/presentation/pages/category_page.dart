@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
@@ -33,7 +33,7 @@ class _CategoryPageState extends State<CategoryPage> {
       context: ctx,
       backgroundColor: Colors.white,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(RadiusTokens.xl)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(Rounded.xl)),
       ),
       builder: (_) => _SortSheet(
         selected: bloc.state.sort,
@@ -163,7 +163,7 @@ class _CategorySliverAppBar extends StatelessWidget {
                 height: 44,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(RadiusTokens.md),
+                  borderRadius: BorderRadius.circular(Rounded.md),
                 ),
                 child: Center(
                   child: Text(
@@ -250,7 +250,7 @@ class _SortPillRow extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
               decoration: BoxDecoration(
                 color: active ? color : Colors.white,
-                borderRadius: BorderRadius.circular(RadiusTokens.full),
+                borderRadius: BorderRadius.circular(Rounded.full),
                 border: Border.all(
                   color: active ? color : color.withOpacity(0.18),
                 ),
@@ -304,7 +304,7 @@ class _SortSheet extends StatelessWidget {
             height: 4,
             decoration: BoxDecoration(
               color: Colors.grey.shade300,
-              borderRadius: BorderRadius.circular(2),
+              borderRadius: BorderRadius.circular(Rounded.xxs),
             ),
           ),
           const SizedBox(height: Spacings.md),

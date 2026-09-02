@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 import 'package:flutter/material.dart';
@@ -283,7 +283,7 @@ class _ToastWidgetState extends State<_ToastWidget> with SingleTickerProviderSta
                     ),
                     decoration: BoxDecoration(
                       color: bgColor,
-                      borderRadius: BorderRadius.circular(RadiusTokens.full),
+                      borderRadius: BorderRadius.circular(Rounded.full),
                       boxShadow: [
                         BoxShadow(
                           color: bgColor.withOpacity(0.35),

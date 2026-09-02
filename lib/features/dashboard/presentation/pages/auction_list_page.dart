@@ -1,6 +1,7 @@
+import 'package:emas/core/constants/elevations.dart';
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_list_item.dart';
@@ -186,11 +187,11 @@ class _SearchAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     final bar = AppBar(
-      elevation: 0,
-      scrolledUnderElevation: 0,
+      elevation: Elevations.none,
+      scrolledUnderElevation: Elevations.none,
       backgroundColor: AppColors.white,
       automaticallyImplyLeading: false,
-      titleSpacing: 0,
+      titleSpacing: Spacings.none,
       title: Row(
         children: [
           IconButton(icon: const Icon(Icons.chevron_left_rounded, size: 28, color: AppColors.primary500), onPressed: onBack),
@@ -244,7 +245,7 @@ class _ToolbarChip extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: Spacings.sm + 4, vertical: Spacings.xs + 2),
           decoration: BoxDecoration(
             color: active ? AppColors.primary100 : AppColors.white,
-            borderRadius: BorderRadius.circular(RadiusTokens.full),
+            borderRadius: BorderRadius.circular(Rounded.full),
             border: Border.all(color: active ? AppColors.primary500 : AppColors.neutral300, width: active ? 1.5 : 1),
           ),
           child: Row(
@@ -275,7 +276,7 @@ class _AuctionGridCard extends StatelessWidget {
     return AppCard(
       onTap: onTap,
       padding: EdgeInsets.zero,
-      borderRadius: BorderRadius.circular(RadiusTokens.lg),
+      borderRadius: BorderRadius.circular(Rounded.lg),
       borderColor: AppColors.neutral300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

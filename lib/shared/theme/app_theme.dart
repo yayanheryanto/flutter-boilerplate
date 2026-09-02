@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/shared/theme/typography_tokens.dart';
 
 class AppTheme {
@@ -220,7 +220,7 @@ class AppTheme {
         foregroundColor: AppColors.textPrimary,
         minimumSize: const Size(double.infinity, 48),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(RadiusTokens.md),
+          borderRadius: BorderRadius.circular(Rounded.md),
         ),
         textStyle: const TextStyle(
           fontSize: TypographyTokens.labelLarge,
@@ -240,7 +240,7 @@ class AppTheme {
         minimumSize: const Size(double.infinity, 48),
         side: BorderSide(color: colorScheme.primary),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(RadiusTokens.md),
+          borderRadius: BorderRadius.circular(Rounded.md),
         ),
         textStyle: const TextStyle(
           fontSize: TypographyTokens.labelLarge,
@@ -275,23 +275,23 @@ class AppTheme {
         vertical: 14,
       ),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(RadiusTokens.md),
+        borderRadius: BorderRadius.circular(Rounded.md),
         borderSide: BorderSide(color: colorScheme.outline),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(RadiusTokens.md),
+        borderRadius: BorderRadius.circular(Rounded.md),
         borderSide: BorderSide(color: colorScheme.outline),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(RadiusTokens.md),
+        borderRadius: BorderRadius.circular(Rounded.md),
         borderSide: BorderSide(color: colorScheme.primary, width: 2),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(RadiusTokens.md),
+        borderRadius: BorderRadius.circular(Rounded.md),
         borderSide: BorderSide(color: colorScheme.error),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(RadiusTokens.md),
+        borderRadius: BorderRadius.circular(Rounded.md),
         borderSide: BorderSide(color: colorScheme.error, width: 2),
       ),
       labelStyle: TextStyle(
@@ -311,7 +311,7 @@ class AppTheme {
     return CardTheme(
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        borderRadius: BorderRadius.circular(Rounded.lg),
       ),
       clipBehavior: Clip.antiAlias,
     );

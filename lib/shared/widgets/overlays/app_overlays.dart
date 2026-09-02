@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/core/utils/navigator_key.dart';
@@ -193,7 +193,7 @@ class _ProgressOverlayWidget extends StatelessWidget {
           ),
           decoration: BoxDecoration(
             color: scheme.surface,
-            borderRadius: BorderRadius.circular(RadiusTokens.xl),
+            borderRadius: BorderRadius.circular(Rounded.xl),
             boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 20)],
           ),
           child: Column(
@@ -268,7 +268,7 @@ class AppTooltipWrapper extends StatelessWidget {
       preferBelow: position == AppTooltipPosition.below,
       decoration: BoxDecoration(
         color: backgroundColor ?? scheme.inverseSurface,
-        borderRadius: BorderRadius.circular(RadiusTokens.sm),
+        borderRadius: BorderRadius.circular(Rounded.sm),
       ),
       textStyle: TextStyle(color: scheme.onInverseSurface, fontSize: 12),
       padding: const EdgeInsets.symmetric(horizontal: Spacings.sm, vertical: 6),
@@ -343,7 +343,7 @@ class AppPopover {
                     constraints: BoxConstraints(maxWidth: maxWidth),
                     decoration: BoxDecoration(
                       color: scheme.surface,
-                      borderRadius: BorderRadius.circular(RadiusTokens.lg),
+                      borderRadius: BorderRadius.circular(Rounded.lg),
                       boxShadow: const [
                         BoxShadow(color: Colors.black26, blurRadius: 16, offset: Offset(0, 6)),
                       ],

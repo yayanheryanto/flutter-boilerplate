@@ -1,5 +1,5 @@
 import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -114,7 +114,7 @@ class AuctionDetailPage extends StatelessWidget {
                                   padding: const EdgeInsets.all(Spacings.sm),
                                   decoration: BoxDecoration(
                                     color: AppColors.white,
-                                    borderRadius: BorderRadius.circular(RadiusTokens.md),
+                                    borderRadius: BorderRadius.circular(Rounded.md),
                                     border: Border.all(color: AppColors.neutral200),
                                   ),
                                   child: Column(
@@ -143,7 +143,7 @@ class AuctionDetailPage extends StatelessWidget {
                                 ),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFFFF9E6),
-                                  borderRadius: BorderRadius.circular(RadiusTokens.md),
+                                  borderRadius: BorderRadius.circular(Rounded.md),
                                   border: Border.all(color: AppColors.primary500),
                                 ),
                                 child: const Column(
@@ -191,7 +191,7 @@ class AuctionDetailPage extends StatelessWidget {
                 ),
                 child: AppButton(
                   label: 'Beli NPL',
-                  borderRadius: RadiusTokens.full,
+                  borderRadius: Rounded.full,
                   onPressed: () {},
                 ),
               ),
@@ -214,7 +214,7 @@ class _GradeAndSpecCard extends StatelessWidget {
       padding: const EdgeInsets.all(Spacings.md),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        borderRadius: BorderRadius.circular(Rounded.lg),
         border: Border.all(color: AppColors.neutral200),
       ),
       child: const Column(
@@ -280,7 +280,7 @@ class _GradeItem extends StatelessWidget {
           height: 44,
           decoration: BoxDecoration(
             color: const Color(0xFFFFF9E6),
-            borderRadius: BorderRadius.circular(RadiusTokens.md),
+            borderRadius: BorderRadius.circular(Rounded.md),
             border: Border.all(color: AppColors.primary500.withOpacity(0.6)),
           ),
           child: Center(
@@ -339,7 +339,7 @@ class _BidsHistoryList extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.md),
+        borderRadius: BorderRadius.circular(Rounded.md),
         border: Border.all(color: AppColors.neutral200),
       ),
       child: Column(

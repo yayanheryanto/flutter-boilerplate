@@ -1,7 +1,7 @@
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/features/dashboard/domain/entities/buy_npl_result.dart';
@@ -128,7 +128,7 @@ class _CategoryChip extends StatelessWidget {
         height: 156,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(RadiusTokens.lg),
+          borderRadius: BorderRadius.circular(Rounded.lg),
           border: Border.all(
             color: AppColors.neutral300,
           ),
@@ -330,7 +330,7 @@ class _BuyNplFormState extends State<_BuyNplForm> {
         const SizedBox(height: Spacings.lg),
         AppButton(
           label: 'Tambah',
-          borderRadius: RadiusTokens.full,
+          borderRadius: Rounded.full,
           onPressed: _submit,
         ),
       ],
@@ -382,7 +382,7 @@ class _StepperButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(RadiusTokens.full),
+      borderRadius: BorderRadius.circular(Rounded.full),
       child: Container(
         width: 32,
         height: 32,

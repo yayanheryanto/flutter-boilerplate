@@ -158,13 +158,13 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
               color: AppColors.primary500,
               fontWeight: FontWeight.w800,
             ),
-            const AppSpacer.sm(),
+            const AppSpacer.md(),
 
             AppText(
               'Kami akan kirim kode Verifikasi ke $_phoneNumberMasker',
               variant: AppTextVariant.titleSmall,
             ),
-            const AppSpacer(40),
+            const AppSpacer.xxl(),
 
             _OtpBoxRow(
               controllers: _controllers,
@@ -180,7 +180,7 @@ class _OtpFormWidgetState extends State<OtpFormWidget> {
                     'Belum menerima kode OTP?',
                     variant: AppTextVariant.titleMedium,
                   ),
-                  const AppSpacer.sm(),
+                  const AppSpacer.md(),
                   _ResendButton(
                     secondsLeft: _secondsLeft,
                     resendCount: _resendCount,

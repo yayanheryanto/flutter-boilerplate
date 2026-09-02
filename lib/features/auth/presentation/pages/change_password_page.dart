@@ -4,6 +4,7 @@ import 'package:emas/features/auth/presentation/widgets/change_password_form_wid
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -33,9 +34,9 @@ class _ChangePasswordPageContent extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              SizedBox(height: 16),
+              AppSpacer.md(),
               ChangePasswordFormWidget(),
-              SizedBox(height: 40),
+              AppSpacer.xxxl(),
             ],
           ),
         ),

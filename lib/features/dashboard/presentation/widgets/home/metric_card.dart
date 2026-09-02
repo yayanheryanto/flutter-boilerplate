@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class MetricCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: scheme.surface,
-          borderRadius: BorderRadius.circular(RadiusTokens.lg),
+          borderRadius: BorderRadius.circular(Rounded.lg),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -49,7 +49,7 @@ class MetricCard extends StatelessWidget {
               height: 32,
               decoration: BoxDecoration(
                 color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(RadiusTokens.sm),
+                borderRadius: BorderRadius.circular(Rounded.sm),
               ),
               child: Center(
                 child: Text(emoji, style: const TextStyle(fontSize: 15)),

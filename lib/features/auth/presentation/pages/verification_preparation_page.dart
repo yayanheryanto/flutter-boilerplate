@@ -1,5 +1,6 @@
+import 'package:emas/core/constants/elevations.dart';
 import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/constants/images.dart';
@@ -29,7 +30,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
     return AppScaffoldWrapper(
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
-        elevation: 1,
+        elevation: Elevations.xs,
         onBack: () => context.pop(),
       ),
       body: SafeArea(
@@ -166,7 +167,7 @@ class _AccountTypeCard extends StatelessWidget {
                 )
               : AppColors.white,
           borderRadius: BorderRadius.circular(
-            RadiusTokens.lg,
+            Rounded.lg,
           ),
           border: Border.all(
             color: selected ? AppColors.primary500 : AppColors.white,

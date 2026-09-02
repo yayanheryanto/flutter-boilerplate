@@ -1,3 +1,4 @@
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/di/injection.dart';
@@ -70,7 +71,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const SizedBox(height: 16),
+                        const AppSpacer.md(),
                         Form(
                           key: formKey,
                           child: Padding(
@@ -87,12 +88,12 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                   color: AppColors.primary500,
                                   fontWeight: FontWeight.w800,
                                 ),
-                                const AppSpacer(10),
+                                const AppSpacer.md(),
                                 const AppText(
                                   'Yuk masuk ke akun EMAS kamu sekarang',
                                   variant: AppTextVariant.titleMedium,
                                 ),
-                                const AppSpacer.xl(),
+                                const AppSpacer.lg(),
                                 AppTextField(
                                   controller: _phoneController,
                                   label: 'Nomor Handphone',
@@ -121,7 +122,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                     AppValidators.strongPassword(),
                                   ]),
                                 ),
-                                const AppSpacer(12),
+                                const AppSpacer.md(),
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: AppLinkText(
@@ -131,13 +132,13 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                     onTap: () async => context.push(Routes.forgotPassword),
                                   ),
                                 ),
-                                const AppSpacer(56),
+                                const AppSpacer.xxxl(),
                                 AppButton(
                                   label: 'Masuk',
                                   onPressed: () async => _onSubmit(context),
-                                  borderRadius: 25,
+                                  borderRadius: Rounded.xl,
                                 ),
-                                const AppSpacer(20),
+                                const AppSpacer.lg(),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -158,7 +159,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 40),
+                        const AppSpacer.xxl(),
                       ],
                     ),
                   ),
@@ -166,8 +167,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
               ),
 
               // ── Full-screen loading overlay ──────────────────────────
-              if (isLoading)
-                const AppLoading(),
+              if (isLoading) const AppLoading(),
             ],
           );
         },

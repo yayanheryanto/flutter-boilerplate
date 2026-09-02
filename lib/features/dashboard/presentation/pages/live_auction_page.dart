@@ -1,5 +1,5 @@
 import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/services/socket/app_socket_service.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
@@ -212,7 +212,7 @@ class _EndingSoonBanner extends StatelessWidget {
       ),
       decoration: BoxDecoration(
         color: AppColors.warning500.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(RadiusTokens.md),
+        borderRadius: BorderRadius.circular(Rounded.md),
       ),
       child: Row(
         children: [
@@ -678,7 +678,7 @@ class _BidTableSkeleton extends StatelessWidget {
       padding: const EdgeInsets.all(Spacings.md),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.xl),
+        borderRadius: BorderRadius.circular(Rounded.xl),
         border: Border.all(color: AppColors.neutral200),
       ),
       child: Column(
@@ -951,7 +951,7 @@ class _BottomCTA extends StatelessWidget {
       child: AppButton(
         label: label,
         size: AppButtonSize.large,
-        borderRadius: RadiusTokens.full,
+        borderRadius: Rounded.full,
         isLoading: state.isPlacingBid,
         onPressed: canBid
             ? () => context.read<LiveAuctionBloc>().add(

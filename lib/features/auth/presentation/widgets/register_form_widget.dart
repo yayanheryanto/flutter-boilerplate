@@ -1,3 +1,4 @@
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
@@ -84,13 +85,12 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                   color: AppColors.primary500,
                   fontWeight: FontWeight.w800,
                 ),
-                const AppSpacer(10),
+                const AppSpacer.md(),
                 const AppText(
                   'Dengan punya akun, kamu bisa akses semua layanan di EMAS',
                   variant: AppTextVariant.titleSmall,
                 ),
-                const AppSpacer.xl(),
-
+                const AppSpacer.lg(),
                 AppTextField(
                   controller: _nameController,
                   label: 'Nama Lengkap',
@@ -107,7 +107,6 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                   ]),
                 ),
                 const AppSpacer.md(),
-
                 AppTextField(
                   controller: _phoneController,
                   label: 'Nomor Handphone',
@@ -125,7 +124,6 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                   ]),
                 ),
                 const AppSpacer.md(),
-
                 AppTextField(
                   controller: _emailController,
                   label: 'Email',
@@ -138,7 +136,6 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                   ]),
                 ),
                 const AppSpacer.md(),
-
                 AppPasswordField(
                   controller: _passwordController,
                   hint: 'Masukkan password Anda',
@@ -152,7 +149,6 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                   ]),
                 ),
                 const AppSpacer.md(),
-
                 AppPasswordField(
                   controller: _confirmPasswordController,
                   label: 'Konfirmasi Password',
@@ -168,29 +164,27 @@ class _RegisterFormWidgetState extends State<RegisterFormWidget> with AppFormMix
                     ),
                   ]),
                 ),
-                const AppSpacer(20),
-
+                const AppSpacer.lg(),
                 _TermsCheckbox(
                   value: _agreedToTerms,
                   onChanged: (v) => setState(() => _agreedToTerms = v ?? false),
                 ),
-                const AppSpacer(28),
-
+                const AppSpacer.xl(),
                 AppButton(
                   label: 'Daftar',
                   onPressed: isLoading ? null : _onSubmit,
                   isLoading: isLoading,
-                  borderRadius: 25,
+                  borderRadius: Rounded.xl,
                 ),
-                const AppSpacer(20),
-
+                const AppSpacer.lg(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const AppText(
-                      'Belum punya akun? ',
+                      'Sudah punya akun? ',
                       variant: AppTextVariant.titleMedium,
                     ),
+                    const AppSpacer.sm(horizontal: true),
                     AppLinkText(
                       'Masuk',
                       variant: AppTextVariant.titleMedium,
@@ -228,7 +222,7 @@ class _TermsCheckbox extends StatelessWidget {
       height: 1.3,
     );
 
-    return Row( 
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
@@ -240,7 +234,7 @@ class _TermsCheckbox extends StatelessWidget {
             activeColor: primary,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4),
+              borderRadius: BorderRadius.circular(Rounded.xs),
             ),
           ),
         ),

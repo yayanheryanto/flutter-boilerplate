@@ -2,7 +2,7 @@ import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/dashboard/presentation/bloc/join_auction/join_auction_bloc.dart';
 import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -272,7 +272,7 @@ class _CategoryChip extends StatelessWidget {
         padding: const EdgeInsets.symmetric(vertical: Spacings.sm),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary500.withOpacity(0.08) : AppColors.white,
-          borderRadius: BorderRadius.circular(RadiusTokens.md),
+          borderRadius: BorderRadius.circular(Rounded.md),
           border: Border.all(
             color: isSelected ? AppColors.primary500 : AppColors.neutral200,
             width: isSelected ? 2 : 1,
@@ -286,7 +286,7 @@ class _CategoryChip extends StatelessWidget {
               height: 44,
               decoration: BoxDecoration(
                 // color: bgColor,
-                borderRadius: BorderRadius.circular(RadiusTokens.sm),
+                borderRadius: BorderRadius.circular(Rounded.sm),
               ),
               child: Center(
                 child: Icon(icon, color: iconColor, size: 30),
@@ -326,7 +326,7 @@ class _AuctionListCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        borderRadius: BorderRadius.circular(Rounded.lg),
         border: Border.all(
           color: AppColors.neutral200,
         ),

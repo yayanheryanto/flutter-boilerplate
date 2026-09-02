@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
@@ -57,7 +57,7 @@ class _AuctionCardState extends State<AuctionCard> {
         margin: const EdgeInsets.only(right: Spacings.sm),
         decoration: BoxDecoration(
           color: scheme.surface,
-          borderRadius: BorderRadius.circular(RadiusTokens.xl),
+          borderRadius: BorderRadius.circular(Rounded.xl),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.06),
@@ -107,7 +107,7 @@ class _CardImage extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(
-        top: Radius.circular(RadiusTokens.xl),
+        top: Radius.circular(Rounded.xl),
       ),
       child: Container(
         height: 100,
@@ -184,7 +184,7 @@ class _CountdownChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
         color: urgent ? AppColors.error500 : Colors.black54,
-        borderRadius: BorderRadius.circular(RadiusTokens.sm),
+        borderRadius: BorderRadius.circular(Rounded.sm),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

@@ -1,6 +1,6 @@
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/features/dashboard/domain/entities/npl_order_item.dart';
@@ -136,7 +136,7 @@ class _NplOrderCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        borderRadius: BorderRadius.circular(Rounded.lg),
         border: Border.all(color: AppColors.neutral200),
       ),
       clipBehavior: Clip.antiAlias,
@@ -152,7 +152,7 @@ class _NplOrderCard extends StatelessWidget {
                   height: 44,
                   decoration: BoxDecoration(
                     color: iconBg,
-                    borderRadius: BorderRadius.circular(RadiusTokens.md),
+                    borderRadius: BorderRadius.circular(Rounded.md),
                   ),
                   child: Center(
                     child: Icon(icon, color: iconColor, size: 26),
@@ -312,7 +312,7 @@ class _BottomCTA extends StatelessWidget {
       ),
       child: AppButton(
         label: 'Lanjut Pembayaran ${CurrencyFormatter.rupiah(total)}',
-        borderRadius: RadiusTokens.full,
+        borderRadius: Rounded.full,
         onPressed: () async {
           await context.push(Routes.buyNplConfirmation);
         },

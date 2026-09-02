@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
@@ -140,7 +140,7 @@ class _KtpPhotoCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFFDF6EE),
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        borderRadius: BorderRadius.circular(Rounded.lg),
         border: const Border(
           left: BorderSide(color: AppColors.neutral200, width: 0.8),
           right: BorderSide(color: AppColors.neutral200, width: 0.8),
@@ -156,7 +156,7 @@ class _KtpPhotoCard extends StatelessWidget {
           const AppText('Verifikasi Wajah', variant: AppTextVariant.titleMedium, fontWeight: FontWeight.bold),
           const AppSpacer.md(),
           ClipRRect(
-            borderRadius: BorderRadius.circular(RadiusTokens.md),
+            borderRadius: BorderRadius.circular(Rounded.md),
             child: photo != null
                 ? Center(
                     child: Image.file(

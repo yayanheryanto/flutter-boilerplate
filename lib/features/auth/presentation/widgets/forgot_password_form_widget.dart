@@ -1,3 +1,4 @@
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -87,12 +88,12 @@ class _FormView extends StatelessWidget {
               color: AppColors.primary500,
               fontWeight: FontWeight.w800,
             ),
-            const AppSpacer.sm(),
+            const AppSpacer.md(),
             const AppText(
               'Mohon isi nomor handphone Anda di bawah ini',
               variant: AppTextVariant.titleSmall,
             ),
-            const AppSpacer.xl(),
+            const AppSpacer.lg(),
 
             AppTextField(
               controller: phoneController,
@@ -111,13 +112,13 @@ class _FormView extends StatelessWidget {
                 ),
               ]),
             ),
-            const AppSpacer.lg(),
+            const AppSpacer.xxxl(),
 
             AppButton(
               label: 'Lanjutkan',
               onPressed: () async => context.push(Routes.otp, extra: {'phone': phoneController.text}),
               isLoading: isLoading,
-              borderRadius: 25,
+              borderRadius: Rounded.xl,
             ),
           ],
         ),

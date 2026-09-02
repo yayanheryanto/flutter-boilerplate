@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/data/models/transaction_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -176,7 +176,7 @@ class _TransactionCard extends StatelessWidget {
 
     return AppCard(
       backgroundColor: AppColors.white,
-      borderRadius: BorderRadius.circular(RadiusTokens.lg),
+      borderRadius: BorderRadius.circular(Rounded.lg),
       padding: const EdgeInsets.all(Spacings.md),
       borderColor: AppColors.neutral300,
       child: Column(
@@ -190,7 +190,7 @@ class _TransactionCard extends StatelessWidget {
                 height: 72,
                 decoration: BoxDecoration(
                   color: AppColors.neutral200,
-                  borderRadius: BorderRadius.circular(RadiusTokens.md),
+                  borderRadius: BorderRadius.circular(Rounded.md),
                 ),
                 child: const Icon(
                   Icons.directions_car_rounded,
@@ -256,7 +256,7 @@ class _UnpaidActions extends StatelessWidget {
           child: AppButton(
             label: 'Lihat Detail',
             variant: AppButtonVariant.outlined,
-            borderRadius: RadiusTokens.full,
+            borderRadius: Rounded.full,
             borderColor: AppColors.blue100,
             size: AppButtonSize.small,
             borderWidth: 2,
@@ -269,7 +269,7 @@ class _UnpaidActions extends StatelessWidget {
           child: AppButton(
             label: 'Bayar',
             size: AppButtonSize.small,
-            borderRadius: RadiusTokens.full,
+            borderRadius: Rounded.full,
             onPressed: () async {
               await context.push(Routes.payment);
             },
@@ -370,7 +370,7 @@ class _PendingPaymentSection extends StatelessWidget {
                 size: AppButtonSize.small,
                 backgroundColor: AppColors.primary500,
                 foregroundColor: AppColors.textPrimary,
-                borderRadius: RadiusTokens.full,
+                borderRadius: Rounded.full,
                 onPressed: () async {
                   await context.push(Routes.paymentGuide);
                 },

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 
 enum AppButtonVariant { primary, secondary, outlined, text, danger }
@@ -22,7 +22,7 @@ class AppButton extends StatelessWidget {
   /// Used internally by AppConfirmDialog.
   final bool dangerOverride;
 
-  /// Override the default corner radius. Defaults to [RadiusTokens.md].
+  /// Override the default corner radius. Defaults to [Rounded.md].
   final double? borderRadius;
 
   /// Custom inner content padding override.
@@ -139,7 +139,7 @@ class AppButton extends StatelessWidget {
 
   ButtonStyle _buildStyle(BuildContext context, ColorScheme colorScheme) {
     final radius = BorderRadius.circular(
-      borderRadius ?? RadiusTokens.md,
+      borderRadius ?? Rounded.md,
     );
     final buttonPadding = _getPadding();
 

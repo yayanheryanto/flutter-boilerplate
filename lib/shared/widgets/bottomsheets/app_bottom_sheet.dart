@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -44,7 +44,7 @@ class _AppBottomSheetShell extends StatelessWidget {
       decoration: BoxDecoration(
         color: scheme.surface,
         borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(RadiusTokens.xl),
+          top: Radius.circular(Rounded.xl),
         ),
       ),
       child: Column(
@@ -191,7 +191,7 @@ class AppCustomBottomSheet {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(RadiusTokens.xl)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(Rounded.xl)),
       ),
       builder: (_) => _AppBottomSheetShell(
         title: title,
@@ -295,7 +295,7 @@ class _OptionTile<T> extends StatelessWidget {
         horizontal: Spacings.lg,
         vertical: Spacings.xs,
       ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(RadiusTokens.md)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Rounded.md)),
       onTap: option.enabled
           ? () {
               Navigator.of(context).pop(option.value);

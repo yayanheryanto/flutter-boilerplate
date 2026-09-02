@@ -1,6 +1,6 @@
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/data/models/payment_option.dart';
 import 'package:emas/features/dashboard/domain/entities/payment_method.dart';
@@ -121,7 +121,7 @@ class _PaymentOptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       backgroundColor: AppColors.white,
-      borderRadius: BorderRadius.circular(RadiusTokens.lg),
+      borderRadius: BorderRadius.circular(Rounded.lg),
       padding: const EdgeInsets.all(Spacings.md),
       borderColor: AppColors.neutral300,
       child: Row(
@@ -131,7 +131,7 @@ class _PaymentOptionTile extends StatelessWidget {
             height: 24,
             decoration: BoxDecoration(
               color: option.iconBackgroundColor,
-              borderRadius: BorderRadius.circular(RadiusTokens.sm),
+              borderRadius: BorderRadius.circular(Rounded.sm),
             ),
             child: Icon(option.icon, color: AppColors.white, size: 20),
           ),
@@ -160,7 +160,7 @@ class _PaymentOptionTile extends StatelessWidget {
               size: AppButtonSize.small,
               isExpanded: false,
               borderWidth: 2,
-              borderRadius: RadiusTokens.full,
+              borderRadius: Rounded.full,
               borderColor: AppColors.blue100,
               foregroundColor: AppColors.textPrimary,
               onPressed: onActivate,
@@ -177,7 +177,7 @@ class _MorePaymentMethodsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(RadiusTokens.lg),
+      borderRadius: BorderRadius.circular(Rounded.lg),
       onTap: () async {
         await _showPaymentMethodSheet(context);
       },
@@ -189,7 +189,7 @@ class _MorePaymentMethodsRow extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: AppColors.blue100,
-          borderRadius: BorderRadius.circular(RadiusTokens.lg),
+          borderRadius: BorderRadius.circular(Rounded.lg),
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,7 +221,7 @@ class _PaymentSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       backgroundColor: AppColors.white,
-      borderRadius: BorderRadius.circular(RadiusTokens.lg),
+      borderRadius: BorderRadius.circular(Rounded.lg),
       padding: const EdgeInsets.all(Spacings.md),
       borderColor: AppColors.neutral300,
       child: Column(
@@ -316,7 +316,7 @@ class _PaymentBottomBar extends StatelessWidget {
                   label: 'Bayar',
                   isExpanded: false,
                   width: 140,
-                  borderRadius: RadiusTokens.full,
+                  borderRadius: Rounded.full,
                   onPressed: onPay,
                 ),
               ],
@@ -522,7 +522,7 @@ class _BankLogo extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.neutral100,
               borderRadius: BorderRadius.circular(
-                RadiusTokens.xs,
+                Rounded.xs,
               ),
             ),
             child: const Icon(

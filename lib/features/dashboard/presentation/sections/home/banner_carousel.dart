@@ -1,3 +1,4 @@
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
@@ -92,7 +93,7 @@ class _DotIndicator extends StatelessWidget {
           height: 6,
           decoration: BoxDecoration(
             color: active ? AppColors.primary500 : Colors.grey.shade300,
-            borderRadius: BorderRadius.circular(3),
+            borderRadius: BorderRadius.circular(Rounded.xxs),
           ),
         );
       }),

@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -173,7 +173,7 @@ class _MenuItem extends StatelessWidget {
           AppCard(
             padding: const EdgeInsets.all(Spacings.xs),
             backgroundColor: const Color(0xFFF4F6F9),
-            borderRadius: BorderRadius.circular(RadiusTokens.md),
+            borderRadius: BorderRadius.circular(Rounded.md),
             child: Icon(icon, size: 18, color: Colors.black54),
           ),
           const AppSpacer(Spacings.sm, horizontal: true),

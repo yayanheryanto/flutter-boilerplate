@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/services/camera_service.dart';
 import 'package:emas/core/services/file_picker_service.dart';
@@ -373,7 +373,7 @@ class _UploadPhotoField extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               color: const Color(0xFFE0F7F5),
-              borderRadius: BorderRadius.circular(RadiusTokens.lg),
+              borderRadius: BorderRadius.circular(Rounded.lg),
               border: Border.all(
                 color: const Color(0xFFB2EBE8),
               ),
@@ -412,7 +412,7 @@ class _UploadPlaceholder extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               color: const Color(0xFF80CBC8),
-              borderRadius: BorderRadius.circular(RadiusTokens.full),
+              borderRadius: BorderRadius.circular(Rounded.full),
             ),
             child: const AppText(
               'Unggah Foto',
@@ -452,7 +452,7 @@ class _FilePreview extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: const Color(0xFF80CBC8).withOpacity(0.3),
-              borderRadius: BorderRadius.circular(RadiusTokens.sm),
+              borderRadius: BorderRadius.circular(Rounded.sm),
             ),
             child: Icon(
               isPdf ? Icons.picture_as_pdf_rounded : Icons.image_rounded,

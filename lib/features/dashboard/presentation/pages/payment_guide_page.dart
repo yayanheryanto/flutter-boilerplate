@@ -1,5 +1,5 @@
 import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/features/dashboard/data/models/payment_guide_channel.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -82,7 +82,7 @@ class _BankAccountCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       backgroundColor: AppColors.white,
-      borderRadius: BorderRadius.circular(RadiusTokens.lg),
+      borderRadius: BorderRadius.circular(Rounded.lg),
       padding: const EdgeInsets.all(Spacings.md),
       borderColor: AppColors.neutral300,
       child: Column(
@@ -95,7 +95,7 @@ class _BankAccountCard extends StatelessWidget {
                 height: 24,
                 decoration: BoxDecoration(
                   color: AppColors.warning500,
-                  borderRadius: BorderRadius.circular(RadiusTokens.xs),
+                  borderRadius: BorderRadius.circular(Rounded.xs),
                 ),
                 child: const Icon(Icons.account_balance_rounded, size: 14, color: AppColors.white),
               ),
@@ -140,7 +140,7 @@ class _BankAccountCard extends StatelessWidget {
             variant: AppButtonVariant.outlined,
             size: AppButtonSize.small,
             isExpanded: false,
-            borderRadius: RadiusTokens.full,
+            borderRadius: Rounded.full,
             borderColor: AppColors.blue100,
             borderWidth: 2,
             foregroundColor: AppColors.textPrimary,
@@ -176,14 +176,14 @@ class _AccordionSectionState extends State<_AccordionSection> {
   Widget build(BuildContext context) {
     return AppCard(
       backgroundColor: AppColors.white,
-      borderRadius: BorderRadius.circular(RadiusTokens.lg),
+      borderRadius: BorderRadius.circular(Rounded.lg),
       padding: EdgeInsets.zero,
       borderColor: AppColors.neutral300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
-            borderRadius: BorderRadius.circular(RadiusTokens.lg),
+            borderRadius: BorderRadius.circular(Rounded.lg),
             onTap: () => setState(() => _expanded = !_expanded),
             child: Padding(
               padding: const EdgeInsets.all(Spacings.md),

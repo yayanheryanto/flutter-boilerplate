@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -60,44 +60,25 @@ _ImageSourceType _detectSource(String? src) {
 /// AppImage(src: 'https://example.com/avatar.jpg', width: 56, height: 56, circle: true)
 /// ```
 class AppImage extends StatelessWidget {
-  /// URL (http/https) atau path asset lokal.
-  /// Tipe sumber dideteksi otomatis dari nilai ini.
   final String? src;
 
   final double? width;
   final double? height;
   final BoxFit fit;
 
-  /// Border radius kustom. Diabaikan jika [circle] = true.
   final BorderRadius? borderRadius;
 
-  /// Radius default saat [borderRadius] null. Default [RadiusTokens.md].
   final double defaultRadius;
-
-  /// Jika true, gambar ditampilkan dalam bentuk lingkaran penuh.
   final bool circle;
-
-  /// Widget kustom saat loading. Default: shimmer skeleton.
   final Widget? loadingWidget;
-
-  /// Widget kustom saat error / src kosong. Default: icon broken image.
   final Widget? errorWidget;
 
   // ── SVG-specific ────────────────────────────────────────────────────────────
-
-  /// Tint warna untuk SVG (local & network).
-  /// Contoh: `ColorFilter.mode(AppColors.primary500, BlendMode.srcIn)`
   final ColorFilter? svgColorFilter;
-
-  /// Warna placeholder SVG saat loading (network SVG).
   final Color? svgPlaceholderColor;
 
   // ── Network-specific ────────────────────────────────────────────────────────
-
-  /// Header HTTP tambahan untuk network image.
   final Map<String, String>? httpHeaders;
-
-  /// Maksimum lebar cache (px). Default 800 untuk menghemat memori.
   final int? maxWidthDiskCache;
 
   const AppImage({
@@ -117,9 +98,6 @@ class AppImage extends StatelessWidget {
     this.maxWidthDiskCache = 800,
   });
 
-  // ── Named constructors ──────────────────────────────────────────────────────
-
-  /// Shorthand untuk avatar lingkaran.
   const AppImage.circle({
     super.key,
     this.src,
@@ -135,9 +113,8 @@ class AppImage extends StatelessWidget {
         height = size,
         circle = true,
         borderRadius = null,
-        defaultRadius = RadiusTokens.full;
+        defaultRadius = Rounded.full;
 
-  /// Shorthand untuk icon SVG kecil dengan tint.
   const AppImage.svgIcon({
     super.key,
     required this.src,
@@ -154,8 +131,6 @@ class AppImage extends StatelessWidget {
         circle = false,
         borderRadius = BorderRadius.zero,
         defaultRadius = 0;
-
-  // ── Build ───────────────────────────────────────────────────────────────────
 
   @override
   Widget build(BuildContext context) {
@@ -180,8 +155,6 @@ class AppImage extends StatelessWidget {
     return ClipRRect(borderRadius: clip, child: child);
   }
 
-  // ── Network raster ──────────────────────────────────────────────────────────
-
   Widget _buildNetworkImage(BuildContext context) {
     return CachedNetworkImage(
       imageUrl: src!,
@@ -195,8 +168,6 @@ class AppImage extends StatelessWidget {
     );
   }
 
-  // ── Network SVG ─────────────────────────────────────────────────────────────
-
   Widget _buildNetworkSvg(BuildContext context) {
     return SvgPicture.network(
       src!,
@@ -209,8 +180,6 @@ class AppImage extends StatelessWidget {
     );
   }
 
-  // ── Local SVG ───────────────────────────────────────────────────────────────
-
   Widget _buildLocalSvg(BuildContext context) {
     return SvgPicture.asset(
       src!,
@@ -221,8 +190,6 @@ class AppImage extends StatelessWidget {
       placeholderBuilder: (_) => loadingWidget ?? _buildShimmer(context),
     );
   }
-
-  // ── Local asset raster ──────────────────────────────────────────────────────
 
   Widget _buildLocalAsset(BuildContext context) {
     return Image.asset(
@@ -237,8 +204,6 @@ class AppImage extends StatelessWidget {
       },
     );
   }
-
-  // ── Skeleton shimmer ────────────────────────────────────────────────────────
 
   Widget _buildShimmer(BuildContext context) {
     final isDark = Theme.of(context).brightness == Brightness.dark;
@@ -256,8 +221,6 @@ class AppImage extends StatelessWidget {
     );
   }
 
-  // ── Error placeholder ───────────────────────────────────────────────────────
-
   Widget _buildError(BuildContext context) {
     return Container(
       width: width,
@@ -272,8 +235,6 @@ class AppImage extends StatelessWidget {
       ),
     );
   }
-
-  // ── Helpers ─────────────────────────────────────────────────────────────────
 
   BorderRadius _resolveClip() {
     if (circle) {

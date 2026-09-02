@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:flutter/material.dart';
 
@@ -108,7 +108,7 @@ class AppSnackbar {
           vertical: Spacings.sm + 2,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(RadiusTokens.md),
+          borderRadius: BorderRadius.circular(Rounded.md),
         ),
         content: Row(
           children: [

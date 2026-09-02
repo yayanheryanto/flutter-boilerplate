@@ -1,7 +1,8 @@
 import 'dart:io';
 
+import 'package:emas/core/constants/elevations.dart';
 import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/services/camera_service.dart';
 import 'package:emas/core/utils/account_type.dart';
@@ -149,7 +150,7 @@ class KtpVerificationPageState extends State<KtpVerificationPage> with AppFormMi
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
         onBack: () => context.pop(),
-        elevation: 1,
+        elevation: Elevations.xs,
       ),
       body: SafeArea(
         top: false,
@@ -307,7 +308,7 @@ class _KtpPhotoCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFFDF6EE),
-        borderRadius: BorderRadius.circular(RadiusTokens.lg),
+        borderRadius: BorderRadius.circular(Rounded.lg),
         border: const Border(
           left: BorderSide(
             color: AppColors.neutral200,
@@ -340,7 +341,7 @@ class _KtpPhotoCard extends StatelessWidget {
 
           // Photo area
           ClipRRect(
-            borderRadius: BorderRadius.circular(RadiusTokens.md),
+            borderRadius: BorderRadius.circular(Rounded.md),
             child: photo != null
                 ? Center(
                     child: Image.file(

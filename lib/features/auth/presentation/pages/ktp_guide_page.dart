@@ -1,5 +1,6 @@
+import 'package:emas/core/constants/elevations.dart';
 import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/constants/images.dart';
@@ -25,7 +26,7 @@ class KtpGuidePage extends StatelessWidget {
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
         onBack: () => context.pop(),
-        elevation: 1,
+        elevation: Elevations.xs,
       ),
       body: SafeArea(
         top: false,
@@ -47,7 +48,7 @@ class KtpGuidePage extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color(0xFFFDF6EE),
-                    borderRadius: BorderRadius.circular(RadiusTokens.lg),
+                    borderRadius: BorderRadius.circular(Rounded.lg),
                     border: const Border(
                       left: BorderSide(
                         color: AppColors.neutral200,

@@ -1,5 +1,5 @@
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -28,7 +28,7 @@ class BidCard extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: scheme.surface,
-          borderRadius: BorderRadius.circular(RadiusTokens.lg),
+          borderRadius: BorderRadius.circular(Rounded.lg),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.04),
@@ -44,7 +44,7 @@ class BidCard extends StatelessWidget {
               height: 48,
               decoration: BoxDecoration(
                 color: scheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(RadiusTokens.md),
+                borderRadius: BorderRadius.circular(Rounded.md),
               ),
               child: Center(
                 child: Text(item.image, style: const TextStyle(fontSize: 24)),
@@ -74,7 +74,7 @@ class BidCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 color: statusColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(RadiusTokens.full),
+                borderRadius: BorderRadius.circular(Rounded.full),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,

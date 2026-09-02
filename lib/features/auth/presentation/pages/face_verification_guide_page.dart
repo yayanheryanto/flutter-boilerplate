@@ -1,5 +1,5 @@
 import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
@@ -48,7 +48,7 @@ class FaceVerificationGuidePage extends StatelessWidget {
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color(0xFFFDF6EE),
-                    borderRadius: BorderRadius.circular(RadiusTokens.lg),
+                    borderRadius: BorderRadius.circular(Rounded.lg),
                     border: const Border(
                       left: BorderSide(
                         color: AppColors.neutral200,

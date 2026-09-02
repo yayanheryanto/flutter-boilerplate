@@ -1,5 +1,5 @@
 import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/domain/entities/payment_method.dart';
@@ -210,7 +210,7 @@ class _InfoCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(
-          RadiusTokens.lg,
+          Rounded.lg,
         ),
         border: Border.all(
           color: AppColors.neutral200,
@@ -242,7 +242,7 @@ class _PaymentMethodSelector extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(
-            RadiusTokens.lg,
+            Rounded.lg,
           ),
           border: Border.all(
             color: selected != null ? AppColors.primary500 : AppColors.neutral300,
@@ -357,7 +357,7 @@ class _BankLogo extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.neutral100,
               borderRadius: BorderRadius.circular(
-                RadiusTokens.xs,
+                Rounded.xs,
               ),
             ),
             child: const Icon(
@@ -463,7 +463,7 @@ class _BottomSection extends StatelessWidget {
 
           AppButton(
             label: 'Bayar',
-            borderRadius: RadiusTokens.full,
+            borderRadius: Rounded.full,
             onPressed: onPay,
           ),
         ],

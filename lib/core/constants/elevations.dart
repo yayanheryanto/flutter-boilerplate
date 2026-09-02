@@ -1,5 +1,5 @@
-class ElevationTokens {
-  ElevationTokens._();
+class Elevations {
+  Elevations._();
 
   static const double none = 0.0;
   static const double xs = 1.0;

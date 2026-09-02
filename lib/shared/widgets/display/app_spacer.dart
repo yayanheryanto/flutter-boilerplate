@@ -11,6 +11,8 @@ class AppSpacer extends StatelessWidget {
   const AppSpacer.md({super.key, this.horizontal = false}) : size = 16;
   const AppSpacer.lg({super.key, this.horizontal = false}) : size = 24;
   const AppSpacer.xl({super.key, this.horizontal = false}) : size = 32;
+  const AppSpacer.xxl({super.key, this.horizontal = false}) : size = 48;
+  const AppSpacer.xxxl({super.key, this.horizontal = false}) : size = 64;
 
   @override
   Widget build(BuildContext context) {

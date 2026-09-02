@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/shared/widgets/bottomsheets/app_bottom_sheet.dart';
@@ -277,7 +277,7 @@ class _HexColorDialogState extends State<_HexColorDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(RadiusTokens.xl)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Rounded.xl)),
       title: const Text('Custom Color'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -288,7 +288,7 @@ class _HexColorDialogState extends State<_HexColorDialog> {
               height: 56,
               decoration: BoxDecoration(
                 color: _preview,
-                borderRadius: BorderRadius.circular(RadiusTokens.md),
+                borderRadius: BorderRadius.circular(Rounded.md),
               ),
             ),
           const SizedBox(height: 16),
@@ -406,7 +406,7 @@ class _AppImagePickerFieldState extends State<AppImagePickerField> {
       case AppImagePickerShape.circle:
         return BorderRadius.circular(widget.size / 2);
       case AppImagePickerShape.rounded:
-        return BorderRadius.circular(RadiusTokens.lg);
+        return BorderRadius.circular(Rounded.lg);
       case AppImagePickerShape.square:
         return BorderRadius.zero;
     }

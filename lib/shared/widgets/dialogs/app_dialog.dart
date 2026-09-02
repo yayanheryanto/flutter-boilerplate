@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
@@ -50,7 +50,7 @@ class AppDialog extends StatelessWidget {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(RadiusTokens.xl),
+        borderRadius: BorderRadius.circular(Rounded.xl),
       ),
       clipBehavior: Clip.antiAlias,
       child: ConstrainedBox(
@@ -142,7 +142,7 @@ class AppConfirmDialog extends StatelessWidget {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(RadiusTokens.xl),
+        borderRadius: BorderRadius.circular(Rounded.xl),
       ),
       clipBehavior: Clip.antiAlias,
       child: ConstrainedBox(
@@ -372,7 +372,7 @@ class _AppInputDialogState extends State<AppInputDialog> {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(RadiusTokens.xl),
+        borderRadius: BorderRadius.circular(Rounded.xl),
       ),
       clipBehavior: Clip.antiAlias,
       child: ConstrainedBox(
@@ -466,7 +466,7 @@ class AppLoadingDialog extends StatelessWidget {
       child: Dialog(
         backgroundColor: Theme.of(context).colorScheme.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(RadiusTokens.lg),
+          borderRadius: BorderRadius.circular(Rounded.lg),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -542,7 +542,7 @@ class AppCustomDialog extends StatelessWidget {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(RadiusTokens.xl),
+        borderRadius: BorderRadius.circular(Rounded.xl),
       ),
       clipBehavior: Clip.antiAlias,
       child: ConstrainedBox(

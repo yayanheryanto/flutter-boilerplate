@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
-import 'package:emas/core/constants/radius_tokens.dart';
+import 'package:emas/core/constants/rounded.dart';
 
 class _SkeletonBase extends StatelessWidget {
   final double width;
@@ -52,7 +52,7 @@ class SkeletonBox extends StatelessWidget {
     return _SkeletonBase(
       width: width,
       height: height,
-      borderRadius: BorderRadius.circular(borderRadius ?? RadiusTokens.sm),
+      borderRadius: BorderRadius.circular(borderRadius ?? Rounded.sm),
     );
   }
 }
@@ -87,7 +87,7 @@ class SkeletonText extends StatelessWidget {
     return _SkeletonBase(
       width: width,
       height: height,
-      borderRadius: BorderRadius.circular(RadiusTokens.xs),
+      borderRadius: BorderRadius.circular(Rounded.xs),
     );
   }
 }
@@ -116,7 +116,7 @@ class SkeletonButton extends StatelessWidget {
     return SkeletonBox(
       width: width,
       height: height,
-      borderRadius: RadiusTokens.md,
+      borderRadius: Rounded.md,
     );
   }
 }
@@ -136,7 +136,7 @@ class SkeletonCard extends StatelessWidget {
     return SkeletonBox(
       width: width ?? double.infinity,
       height: height,
-      borderRadius: RadiusTokens.lg,
+      borderRadius: Rounded.lg,
     );
   }
 }

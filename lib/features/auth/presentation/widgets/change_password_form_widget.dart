@@ -73,12 +73,12 @@ class _ChangePasswordFormWidgetState extends State<ChangePasswordFormWidget> wit
                   color: AppColors.primary500,
                   fontWeight: FontWeight.w800,
                 ),
-                const AppSpacer(10),
+                const AppSpacer.md(),
                 const AppText(
                   'Masukan Password Baru',
                   variant: AppTextVariant.titleMedium,
                 ),
-                const AppSpacer.xl(),
+                const AppSpacer.lg(),
                 AppPasswordField(
                   controller: _passwordConfirmationController,
                   hint: 'Masukkan password baru',
@@ -99,7 +99,7 @@ class _ChangePasswordFormWidgetState extends State<ChangePasswordFormWidget> wit
                     AppValidators.strongPassword(),
                   ]),
                 ),
-                const AppSpacer(56),
+                const AppSpacer.xxxl(),
                 AppButton(
                   label: 'Lanjutkan',
                   onPressed: _onSubmit,

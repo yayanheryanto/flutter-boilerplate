@@ -1,3 +1,4 @@
+import 'package:emas/core/constants/elevations.dart';
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/constants/spacings.dart';
@@ -33,8 +34,8 @@ class _AccountProcessedPageContent extends StatelessWidget {
       appBar: const AppPageBar(
         title: 'Verifikasi Akun',
         showBackButton: false,
-        titleSpacing: 16,
-        elevation: 1,
+        titleSpacing: Spacings.md,
+        elevation: Elevations.xs,
       ),
       body: SafeArea(
         top: false,

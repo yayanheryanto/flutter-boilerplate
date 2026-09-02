@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:emas/core/constants/images.dart';
+import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/dashboard/presentation/layouts/buy_npl_layout.dart';
 import 'package:emas/features/dashboard/presentation/layouts/transaction_layout.dart';
@@ -282,7 +283,7 @@ class _NavItem extends StatelessWidget {
               width: isSelected ? 15.w : 0,
               decoration: BoxDecoration(
                 color: AppColors.primary500,
-                borderRadius: BorderRadius.circular(2),
+                borderRadius: BorderRadius.circular(Rounded.xxs),
               ),
             ),
             const Spacer(),
