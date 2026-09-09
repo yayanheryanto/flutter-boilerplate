@@ -12,10 +12,10 @@ import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class KtpGuidePage extends StatelessWidget {
+class IdCardGuidePage extends StatelessWidget {
   final AccountType accountType;
 
-  const KtpGuidePage({
+  const IdCardGuidePage({
     super.key,
     required this.accountType,
   });
@@ -149,7 +149,7 @@ class KtpGuidePage extends StatelessWidget {
                 label: 'Mulai Verifikasi KTP',
                 onPressed: () async {
                   await context.push(
-                    accountType == AccountType.personal ? Routes.ktpVerification : Routes.npwpVerification,
+                    accountType == AccountType.personal ? Routes.idCardVerification : Routes.taxIdVerification,
                     extra: accountType,
                   );
                 },

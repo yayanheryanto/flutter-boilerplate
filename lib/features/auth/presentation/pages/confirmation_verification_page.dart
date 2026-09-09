@@ -60,7 +60,7 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
 
                     _ReviewItem(
                       label: 'Verifikasi KTP',
-                      onTap: () => context.go(Routes.ktpVerification),
+                      onTap: () => context.go(Routes.idCardVerification),
                     ),
                     const AppSpacer.sm(),
                     _ReviewItem(

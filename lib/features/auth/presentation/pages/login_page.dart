@@ -1,6 +1,7 @@
 import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/strings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
@@ -83,41 +84,41 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 const AppText(
-                                  'Masuk ke Akun',
+                                  Strings.loginTitle,
                                   variant: AppTextVariant.headlineLarge,
                                   color: AppColors.primary500,
                                   fontWeight: FontWeight.w800,
                                 ),
                                 const AppSpacer.md(),
                                 const AppText(
-                                  'Yuk masuk ke akun EMAS kamu sekarang',
+                                  Strings.loginDescription,
                                   variant: AppTextVariant.titleMedium,
                                 ),
                                 const AppSpacer.lg(),
                                 AppTextField(
                                   controller: _phoneController,
-                                  label: 'Nomor Handphone',
-                                  hint: 'Masukkan nomor handphone Anda',
+                                  label: Strings.phone,
+                                  hint: Strings.phoneHint,
                                   keyboardType: TextInputType.phone,
                                   textInputAction: TextInputAction.next,
                                   inputFormatters: AppInputFormatters.phone(),
                                   validator: AppValidators.compose([
                                     AppValidators.required(
-                                      message: 'Nomor handphone belum diisi',
+                                      message: Strings.phoneRequired,
                                     ),
                                     AppValidators.phone(
-                                      message: 'Nomor handphone tidak valid',
+                                      message: Strings.invalidPhone,
                                     ),
                                   ]),
                                 ),
                                 const AppSpacer.md(),
                                 AppPasswordField(
                                   controller: _passwordController,
-                                  hint: 'Masukkan password Anda',
+                                  hint: Strings.passwordHint,
                                   textInputAction: TextInputAction.done,
                                   validator: AppValidators.compose([
                                     AppValidators.required(
-                                      message: 'Password belum diisi',
+                                      message: Strings.passwordRequired,
                                     ),
                                     AppValidators.strongPassword(),
                                   ]),
@@ -126,7 +127,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: AppLinkText(
-                                    'Lupa Password?',
+                                    Strings.forgotPassword,
                                     variant: AppTextVariant.titleMedium,
                                     color: AppColors.primary500,
                                     onTap: () async => context.push(Routes.forgotPassword),
@@ -134,7 +135,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                 ),
                                 const AppSpacer.xxxl(),
                                 AppButton(
-                                  label: 'Masuk',
+                                  label: Strings.login,
                                   onPressed: () async => _onSubmit(context),
                                   borderRadius: Rounded.xl,
                                 ),
@@ -143,11 +144,11 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const AppText(
-                                      'Belum punya akun? ',
+                                      Strings.noAccountTitle,
                                       variant: AppTextVariant.titleMedium,
                                     ),
                                     AppLinkText(
-                                      'Daftar',
+                                      Strings.register,
                                       variant: AppTextVariant.titleMedium,
                                       color: AppColors.primary500,
                                       onTap: () async => context.push(Routes.register),

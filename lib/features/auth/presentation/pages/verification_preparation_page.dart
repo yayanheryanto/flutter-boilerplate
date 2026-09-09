@@ -119,7 +119,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
               child: AppButton(
                 label: 'Mulai Verifikasi Akun',
                 onPressed: () async => context.push(
-                  Routes.ktpGuide,
+                  Routes.idCardGuide,
                   extra: _selected,
                 ),
                 borderRadius: 25,

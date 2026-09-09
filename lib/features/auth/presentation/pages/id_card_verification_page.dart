@@ -22,19 +22,19 @@ import 'package:intl/intl.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:sizer/sizer.dart';
 
-class KtpVerificationPage extends StatefulWidget {
+class IdCardVerificationPage extends StatefulWidget {
   final AccountType accountType;
 
-  const KtpVerificationPage({
+  const IdCardVerificationPage({
     super.key,
     required this.accountType,
   });
 
   @override
-  State<KtpVerificationPage> createState() => KtpVerificationPageState();
+  State<IdCardVerificationPage> createState() => IdCardVerificationPageState();
 }
 
-class KtpVerificationPageState extends State<KtpVerificationPage> with AppFormMixin<KtpVerificationPage> {
+class IdCardVerificationPageState extends State<IdCardVerificationPage> with AppFormMixin<IdCardVerificationPage> {
   // ── Controllers ──────────────────────────────────────────────────────────────
   final _nikController = TextEditingController();
   final _namaController = TextEditingController();

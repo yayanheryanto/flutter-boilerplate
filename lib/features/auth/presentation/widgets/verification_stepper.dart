@@ -1,7 +1,7 @@
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 
 enum VerificationStepState { completed, active, inactive }
@@ -151,7 +151,7 @@ class _StepItem extends StatelessWidget {
                   color: isInactive ? Colors.grey.shade500 : Colors.white,
                 ),
         ),
-        const SizedBox(width: 6),
+        const AppSpacer.sm(horizontal: true),
         AppText(
           label,
           variant: AppTextVariant.labelMedium,

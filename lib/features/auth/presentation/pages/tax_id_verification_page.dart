@@ -20,19 +20,19 @@ import 'package:emas/core/di/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class NPWPVerificationPage extends StatefulWidget {
+class TaxIdVerificationPage extends StatefulWidget {
   final AccountType accountType;
 
-  const NPWPVerificationPage({
+  const TaxIdVerificationPage({
     super.key,
     required this.accountType,
   });
 
   @override
-  State<NPWPVerificationPage> createState() => _NPWPVerificationPageState();
+  State<TaxIdVerificationPage> createState() => _TaxIdVerificationPageState();
 }
 
-class _NPWPVerificationPageState extends State<NPWPVerificationPage> with AppFormMixin<NPWPVerificationPage> {
+class _TaxIdVerificationPageState extends State<TaxIdVerificationPage> with AppFormMixin<TaxIdVerificationPage> {
   // ── Controllers ────────────────────────────────────────────────────────────
   final _namaPerusahaanController = TextEditingController();
   final _alamatController = TextEditingController();
