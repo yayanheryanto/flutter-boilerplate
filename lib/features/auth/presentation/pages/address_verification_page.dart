@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:emas/core/constants/elevations.dart';
 import 'package:emas/core/constants/routes.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
@@ -82,7 +83,7 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
         onBack: () => context.pop(),
-        elevation: 1,
+        elevation: Elevations.xs,
       ),
       body: SafeArea(
         top: false,

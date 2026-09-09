@@ -1,10 +1,11 @@
+import 'dart:async';
+
+import 'package:emas/core/constants/elevations.dart';
 import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/constants/spacings.dart';
 import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
-import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
-import 'package:emas/features/dashboard/domain/entities/buy_npl_result.dart';
+import 'package:emas/features/dashboard/data/models/npl_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
@@ -12,158 +13,151 @@ import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class BuyNplLayout extends StatefulWidget {
-  const BuyNplLayout({super.key});
+const _shortMonths = [
+  '',
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'Mei',
+  'Jun',
+  'Jul',
+  'Agu',
+  'Sep',
+  'Okt',
+  'Nov',
+  'Des',
+];
 
-  @override
-  State<BuyNplLayout> createState() => _BuyNplLayoutState();
+String _formatDateTime(DateTime dt) {
+  final hour = dt.hour.toString().padLeft(2, '0');
+  final minute = dt.minute.toString().padLeft(2, '0');
+  return '${dt.day} ${_shortMonths[dt.month]} ${dt.year}, $hour:$minute WIB';
 }
 
-class _BuyNplLayoutState extends State<BuyNplLayout> {
-  AuctionCategory _selectedCategory = AuctionCategory.mobil;
+class BuyNPLLayout extends StatefulWidget {
+  const BuyNPLLayout({super.key});
+
+  @override
+  State<BuyNPLLayout> createState() => _BuyNPLLayoutState();
+}
+
+class _BuyNPLLayoutState extends State<BuyNPLLayout> {
+  NPLStatus _selectedStatus = NPLStatus.unpaid;
+
+  List<NPLItem> get _filteredItems => dummyNPLItems.where((item) => item.status == _selectedStatus).toList();
 
   @override
   Widget build(BuildContext context) {
     return AppScaffoldWrapper(
-      backgroundColor: AppColors.white,
-      appBar: const AppPageBar(
-        elevation: 1,
-        title: 'Beli NPL',
-        titleSpacing: Spacings.xl,
-        showBackButton: false,
-      ),
-      body: _SectionContainer(
-        color: AppColors.white,
-        padding: const EdgeInsets.fromLTRB(
-          Spacings.md,
-          Spacings.md,
-          Spacings.md,
-          Spacings.lg,
-        ),
-        child: Center(
-          child: _CategorySelector(
-            selected: _selectedCategory,
-            onSelected: (cat) => setState(() => _selectedCategory = cat),
+      backgroundColor: AppColors.neutral50,
+      appBar: AppPageBar(
+        title: 'NPL',
+        elevation: Elevations.xs,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history_rounded, color: AppColors.info500),
+            onPressed: () {},
           ),
-        ),
+        ],
+      ),
+      body: Column(
+        children: [
+          const _BuyNPLRow(),
+          _NPLTabBar(
+            selected: _selectedStatus,
+            onChanged: (status) => setState(() => _selectedStatus = status),
+          ),
+          Expanded(
+            child: _filteredItems.isEmpty
+                ? const _EmptyState()
+                : ListView.separated(
+                    padding: const EdgeInsets.all(Spacings.md),
+                    itemCount: _filteredItems.length,
+                    separatorBuilder: (_, __) => const SizedBox(height: Spacings.md),
+                    itemBuilder: (context, i) => _NPLCard(item: _filteredItems[i]),
+                  ),
+          ),
+        ],
       ),
     );
   }
 }
 
-final _categoryIcons = {
-  AuctionCategory.mobil: Images.carIcon,
-  AuctionCategory.motor: Images.motorcycleIcon,
-};
+class _NPLTabBar extends StatelessWidget {
+  final NPLStatus selected;
+  final ValueChanged<NPLStatus> onChanged;
 
-const _auctionCategories = [
-  AuctionCategory.mobil,
-  AuctionCategory.motor,
-  // AuctionCategory.elektronik,
-];
-
-class _CategorySelector extends StatelessWidget {
-  final AuctionCategory selected;
-  final ValueChanged<AuctionCategory> onSelected;
-
-  const _CategorySelector({
-    required this.selected,
-    required this.onSelected,
-  });
+  const _NPLTabBar({required this.selected, required this.onChanged});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: _auctionCategories.asMap().entries.map(
-        (entry) {
-          final index = entry.key;
-          final cat = entry.value;
-          return Padding(
-            padding: EdgeInsets.only(
-              right: index != _auctionCategories.length - 1 ? 16.0 : 0.0,
-            ),
-            child: _CategoryChip(
-              category: cat,
-              isSelected: cat == selected,
-              onTap: () async {
-                onSelected(cat);
-                final result = await BuyNplBottomSheet.show(
-                  context,
-                  category: cat,
-                );
-
-                if (result != null && context.mounted) {
-                  await context.push(Routes.buyNplDetail, extra: result);
-                }
-              },
-            ),
-          );
-        },
-      ).toList(),
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        horizontal: Spacings.md,
+      ),
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: AppColors.neutral200,
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          _TabItem(
+            label: 'Tagihan',
+            isSelected: selected == NPLStatus.unpaid,
+            onTap: () => onChanged(NPLStatus.unpaid),
+          ),
+          const SizedBox(width: Spacings.lg),
+          _TabItem(
+            label: 'NPL Aktif',
+            isSelected: selected == NPLStatus.active,
+            onTap: () => onChanged(NPLStatus.active),
+          ),
+        ],
+      ),
     );
   }
 }
 
-class _CategoryChip extends StatelessWidget {
-  final AuctionCategory category;
+class _TabItem extends StatelessWidget {
+  final String label;
   final bool isSelected;
   final VoidCallback onTap;
 
-  const _CategoryChip({
-    required this.category,
+  const _TabItem({
+    required this.label,
     required this.isSelected,
     required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final icon = _categoryIcons[category];
+    final color = isSelected ? AppColors.textPrimary : AppColors.textPrimary;
 
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 180),
-        width: 156,
-        height: 156,
-        decoration: BoxDecoration(
-          color: AppColors.white,
-          borderRadius: BorderRadius.circular(Rounded.lg),
-          border: Border.all(
-            color: AppColors.neutral300,
-          ),
-        ),
+      child: IntrinsicWidth(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Spacer(),
-
-            // Area icon dibuat memiliki tinggi yang sama
-            SizedBox(
-              height: 56,
-              child: Center(
-                child: AppImage(
-                  src: icon,
-                  width: 56,
-                ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: Spacings.md),
+              child: AppText(
+                label,
+                textAlign: TextAlign.center,
+                color: color,
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
               ),
             ),
-
-            const AppSpacer.md(),
-
-            // Text selalu berada di posisi yang sama
-            SizedBox(
-              height: 20,
-              child: Center(
-                child: AppText(
-                  category.label,
-                  variant: AppTextVariant.titleSmall,
-                  fontWeight: FontWeight.w600,
-                  color: AppColors.textPrimary,
-                ),
-              ),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 180),
+              height: 4,
+              color: isSelected ? AppColors.blue100 : AppColors.transparent,
             ),
-
-            const Spacer(),
           ],
         ),
       ),
@@ -171,267 +165,379 @@ class _CategoryChip extends StatelessWidget {
   }
 }
 
-class _SectionContainer extends StatelessWidget {
-  final Widget child;
-  final Color color;
-  final EdgeInsetsGeometry padding;
+class _NPLCard extends StatelessWidget {
+  final NPLItem item;
 
-  const _SectionContainer({
-    required this.child,
-    required this.color,
-    required this.padding,
-  });
+  const _NPLCard({required this.item});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: color,
-      padding: padding,
-      child: child,
-    );
-  }
-}
+    final isPendingPayment = item.status == NPLStatus.unpaid;
 
-/// Hasil yang dikembalikan saat user menekan "Tambah".
-/// Dummy daftar location lelang — ganti dengan data dari API begitu tersedia.
-const _dummyAuctionLocations = [
-  'Mega Finance Fatmawati',
-  'Mega Finance Bogor',
-  'Mega Finance Bandung',
-  'Mega Finance Surabaya',
-];
+    return AppCard(
+      backgroundColor: AppColors.white,
+      borderRadius: BorderRadius.circular(Rounded.lg),
+      padding: const EdgeInsets.all(Spacings.md),
+      borderColor: AppColors.neutral300,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(
+                Icons.directions_car_filled_rounded,
+                color: Colors.amber,
+                size: 20,
+              ),
+              const SizedBox(width: Spacings.xs),
+              AppText(
+                item.categoryTitle,
+                fontWeight: FontWeight.w600,
+                variant: AppTextVariant.labelMedium,
+              ),
+            ],
+          ),
+          const SizedBox(height: Spacings.md),
 
-/// Bottom sheet "Beli NPL" — dipanggil sebelum masuk ke halaman detail NPL,
-/// supaya user set location, date lelang, dan quantity NPL yang mau dibeli.
-class BuyNplBottomSheet {
-  static Future<BuyNplResult?> show(
-    BuildContext context, {
-    required AuctionCategory category,
-    int pricePerNpl = 1000000,
-    int initialQuantity = 1,
-  }) {
-    return AppCustomBottomSheet.show<BuyNplResult>(
-      context,
-      title: 'Beli NPL',
-      content: _BuyNplForm(
-        category: category,
-        pricePerNpl: pricePerNpl,
-        initialQuantity: initialQuantity,
+          Row(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width / 2,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const AppText(
+                      'Nomor NPL',
+                      variant: AppTextVariant.labelSmall,
+                      color: AppColors.textPrimary,
+                    ),
+                    const SizedBox(height: 2),
+                    AppText(
+                      item.nplNumber,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const AppText(
+                      'Jadwal',
+                      variant: AppTextVariant.labelSmall,
+                      color: AppColors.textPrimary,
+                    ),
+                    const SizedBox(height: 2),
+                    AppText(
+                      item.schedule,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: Spacings.sm),
+
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const AppText(
+                'Lokasi',
+                variant: AppTextVariant.labelSmall,
+                color: AppColors.textPrimary,
+              ),
+              const SizedBox(height: 2),
+              AppText(
+                item.location,
+                fontWeight: FontWeight.w700,
+              ),
+            ],
+          ),
+          const SizedBox(height: Spacings.sm),
+
+          if (isPendingPayment)
+            _NPLUnpaidSection(item: item)
+          else
+            // _NPLActiveSection(
+            //   item: item,
+            // ),
+            const AppSpacer.xs(),
+        ],
       ),
     );
   }
 }
 
-class _BuyNplForm extends StatefulWidget {
-  final AuctionCategory category;
-  final int pricePerNpl;
-  final int initialQuantity;
+class _NPLUnpaidSection extends StatelessWidget {
+  final NPLItem item;
 
-  const _BuyNplForm({
-    required this.category,
-    required this.pricePerNpl,
-    required this.initialQuantity,
+  const _NPLUnpaidSection({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    final dueDate = item.payBeforeDate;
+    final total = item.totalBill;
+    final methodName = item.paymentMethodName;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const AppText(
+                    'Bayar sebelum',
+                    variant: AppTextVariant.labelSmall,
+                    color: AppColors.textPrimary,
+                  ),
+                  const AppSpacer.xxs(),
+                  AppText(
+                    dueDate != null ? _formatDateTime(dueDate) : '-',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const AppText(
+                    'Total Tagihan',
+                    variant: AppTextVariant.labelSmall,
+                    color: AppColors.textPrimary,
+                  ),
+                  const SizedBox(height: 2),
+                  AppText(
+                    total != null ? CurrencyFormatter.rupiah(total) : '-',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        const AppSpacer.md(),
+        const Divider(
+          height: 1,
+          thickness: 1,
+          color: AppColors.neutral200,
+        ),
+        const AppSpacer.md(),
+        Row(
+          children: [
+            Expanded(
+              child: dueDate != null
+                  ? _CountdownLabel(
+                      dueDate: dueDate,
+                      paymentMethodName: methodName ?? '-',
+                    )
+                  : const AppText(
+                      'Selesaikan pembayaran segera',
+                      variant: AppTextVariant.labelSmall,
+                      color: AppColors.textPrimary,
+                    ),
+            ),
+            const SizedBox(width: Spacings.sm),
+            SizedBox(
+              width: 72,
+              height: 32,
+              child: AppButton(
+                label: 'Bayar',
+                size: AppButtonSize.small,
+                backgroundColor: AppColors.primary500,
+                foregroundColor: AppColors.textPrimary,
+                borderRadius: Rounded.full,
+                onPressed: () async {
+                  await context.push(Routes.paymentGuide);
+                },
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _NPLActiveSection extends StatelessWidget {
+  final NPLItem item;
+
+  const _NPLActiveSection({required this.item});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: AppButton(
+            label: 'Lihat Detail',
+            variant: AppButtonVariant.outlined,
+            borderRadius: Rounded.full,
+            borderColor: AppColors.blue100,
+            size: AppButtonSize.small,
+            borderWidth: 2,
+            foregroundColor: AppColors.textPrimary,
+            onPressed: () {},
+          ),
+        ),
+        const SizedBox(width: Spacings.md),
+        Expanded(
+          child: AppButton(
+            label: 'Bayar',
+            size: AppButtonSize.small,
+            borderRadius: Rounded.full,
+            onPressed: () async {
+              await context.push(Routes.payment);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _CountdownLabel extends StatefulWidget {
+  final DateTime dueDate;
+  final String paymentMethodName;
+
+  const _CountdownLabel({
+    required this.dueDate,
+    required this.paymentMethodName,
   });
 
   @override
-  State<_BuyNplForm> createState() => _BuyNplFormState();
+  State<_CountdownLabel> createState() => _CountdownLabelState();
 }
 
-class _BuyNplFormState extends State<_BuyNplForm> {
-  String? _location;
-  DateTime? _date;
-  late int _quantity;
+class _CountdownLabelState extends State<_CountdownLabel> {
+  Timer? _timer;
+  late Duration _remaining;
 
   @override
   void initState() {
     super.initState();
-    _quantity = widget.initialQuantity;
+    _remaining = _computeRemaining();
+    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (!mounted) return;
+      setState(() => _remaining = _computeRemaining());
+    });
   }
 
-  int get _subtotal => widget.pricePerNpl * _quantity;
-
-  void _incrementQuantity() => setState(() => _quantity++);
-
-  void _decrementQuantity() {
-    if (_quantity <= 1) return;
-    setState(() => _quantity--);
+  Duration _computeRemaining() {
+    final diff = widget.dueDate.difference(DateTime.now());
+    return diff.isNegative ? Duration.zero : diff;
   }
 
-  void _submit() async {
-    // Uncomment validasi ini jika location dan date diwajibkan:
-    // if (_location == null || _date == null) {
-    //   AppToast.show(
-    //     'Lengkapi location dan date lelang terlebih dahulu',
-    //     type: AppToastType.warning,
-    //   );
-    //   return;
-    // }
-    // Navigator.of(context).pop(
-    //   BuyNplResult(
-    //     category: widget.category,
-    //     location: _location!,
-    //     date: _date!,
-    //     quantity: _quantity,
-    //     pricePerNpl: widget.pricePerNpl,
-    //     subtotal: _subtotal,
-    //   ),
-    // );
-    await context.push(Routes.buyNplDetail);
+  String get _formatted {
+    String two(int n) => n.toString().padLeft(2, '0');
+    return '${two(_remaining.inHours)}:${two(_remaining.inMinutes.remainder(60))}:${two(_remaining.inSeconds.remainder(60))}';
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        AppDropdownField<String>(
-          label: 'Lokasi Lelang',
-          hint: 'Pilih lokasi lelang',
-          value: _location,
-          items: _dummyAuctionLocations,
-          onChanged: (v) => setState(() => _location = v),
-        ),
-        const SizedBox(height: Spacings.md),
-        AppDateField(
-          label: 'Tanggal Lelang',
-          hint: 'Pilih date lelang',
-          initialValue: _date,
-          firstDate: DateTime.now(),
-          lastDate: DateTime.now().add(const Duration(days: 90)),
-          onChanged: (d) => setState(() => _date = d),
-        ),
-        const SizedBox(height: Spacings.lg),
-
-        // ── Jumlah NPL ────────────────────────────────────────────
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const AppText(
-              'Jumlah NPL',
-              fontWeight: FontWeight.w500,
-            ),
-            _QuantityStepper(
-              value: _quantity,
-              onDecrement: _decrementQuantity,
-              onIncrement: _incrementQuantity,
-            ),
-          ],
-        ),
-        const SizedBox(height: Spacings.md),
-        const Divider(height: 1, color: AppColors.neutral200),
-        const SizedBox(height: Spacings.md),
-
-        // ── Harga & subtotal ──────────────────────────────────────
-        _PriceRow(label: 'Harga per NPL', value: widget.pricePerNpl),
-        const SizedBox(height: Spacings.sm),
-        _PriceRow(label: 'Subtotal', value: _subtotal, emphasize: true),
-        const SizedBox(height: Spacings.lg),
-        AppButton(
-          label: 'Tambah',
-          borderRadius: Rounded.full,
-          onPressed: _submit,
-        ),
-      ],
+    const baseStyle = TextStyle(
+      fontFamily: 'Inter',
+      fontSize: 12,
+      color: AppColors.textPrimary,
     );
-  }
-}
 
-// ─── Quantity stepper ─────────────────────────────────────────────────────────
-
-class _QuantityStepper extends StatelessWidget {
-  final int value;
-  final VoidCallback onDecrement;
-  final VoidCallback onIncrement;
-
-  const _QuantityStepper({
-    required this.value,
-    required this.onDecrement,
-    required this.onIncrement,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _StepperButton(icon: Icons.remove_rounded, onTap: onDecrement),
-        SizedBox(
-          width: 32,
-          child: AppText(
-            '$value',
-            textAlign: TextAlign.center,
-            variant: AppTextVariant.titleSmall,
-            fontWeight: FontWeight.w700,
+    return RichText(
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      text: TextSpan(
+        style: baseStyle,
+        children: [
+          const TextSpan(text: 'Bayar dalam '),
+          TextSpan(
+            text: _formatted,
+            style: const TextStyle(
+              color: AppColors.info500,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-        _StepperButton(icon: Icons.add_rounded, onTap: onIncrement),
-      ],
-    );
-  }
-}
-
-class _StepperButton extends StatelessWidget {
-  final IconData icon;
-  final VoidCallback onTap;
-
-  const _StepperButton({required this.icon, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(Rounded.full),
-      child: Container(
-        width: 32,
-        height: 32,
-        alignment: Alignment.center,
-        decoration: const BoxDecoration(
-          color: AppColors.neutral100,
-          shape: BoxShape.circle,
-        ),
-        child: Icon(
-          icon,
-          size: 18,
-          color: AppColors.textPrimary,
-        ),
+          TextSpan(text: ' dengan ${widget.paymentMethodName}'),
+        ],
       ),
     );
   }
 }
 
-// ─── Price row ────────────────────────────────────────────────────────────────
-
-class _PriceRow extends StatelessWidget {
-  final String label;
-  final int value;
-  final bool emphasize;
-
-  const _PriceRow({
-    required this.label,
-    required this.value,
-    this.emphasize = false,
-  });
+class _EmptyState extends StatelessWidget {
+  const _EmptyState();
 
   @override
   Widget build(BuildContext context) {
-    final formatted = CurrencyFormatter.rupiah(value);
+    return const Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            Icons.receipt_long_outlined,
+            size: 48,
+            color: AppColors.neutral300,
+          ),
+          SizedBox(height: Spacings.md),
+          AppText(
+            'Belum ada transaksi',
+            color: AppColors.textPrimary,
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        AppText(
-          label,
-          color: emphasize ? AppColors.textPrimary : AppColors.textSecondary,
-          fontWeight: emphasize ? FontWeight.w600 : FontWeight.w400,
+class _BuyNPLRow extends StatelessWidget {
+  const _BuyNPLRow();
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(Rounded.lg),
+      onTap: () async {
+        await context.push(Routes.buyNpl);
+      },
+      child: Container(
+        width: double.infinity,
+        margin: const EdgeInsets.only(
+          top: Spacings.lg,
+          left: Spacings.md,
+          right: Spacings.md,
+          bottom: Spacings.xs,
         ),
-        AppText(
-          formatted,
-          variant: emphasize ? AppTextVariant.titleSmall : AppTextVariant.bodyMedium,
-          fontWeight: FontWeight.w700,
+        padding: const EdgeInsets.symmetric(
+          horizontal: Spacings.md,
+          vertical: Spacings.md,
         ),
-      ],
+        decoration: BoxDecoration(
+          color: AppColors.primary500,
+          borderRadius: BorderRadius.circular(Rounded.lg),
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            AppText(
+              'Beli NPL di sini',
+              fontWeight: FontWeight.w600,
+            ),
+            Icon(Icons.chevron_right_rounded),
+          ],
+        ),
+      ),
     );
   }
 }

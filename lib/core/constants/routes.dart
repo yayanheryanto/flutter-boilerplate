@@ -43,4 +43,7 @@ class Routes {
   static const String payment = '/payment';
   static const String paymentGuide = '/payment-guide';
 
+
+  static const String buyNpl = '/buy-npl';
+
 }

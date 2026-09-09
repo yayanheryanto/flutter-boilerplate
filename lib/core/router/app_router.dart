@@ -17,6 +17,7 @@ import 'package:emas/features/auth/presentation/pages/npwp_verification_page.dar
 import 'package:emas/features/auth/presentation/pages/verification_preparation_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/buy_npl_confirmation_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/buy_npl_detail_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/buy_npl_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/join_auction_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/auction_detail_page.dart';
 import 'package:emas/features/dashboard/presentation/pages/auction_list_page.dart';
@@ -218,7 +219,7 @@ class AppRouter {
         GoRoute(
           path: Routes.buyNplDetail,
           name: 'buy-npl-detail',
-          builder: (context, state) => const BuyNplPage(),
+          builder: (context, state) => const BuyNplDetailPage(),
         ),
         GoRoute(
           path: Routes.buyNplConfirmation,
@@ -251,6 +252,12 @@ class AppRouter {
           path: Routes.paymentGuide,
           name: 'payment-guide',
           builder: (context, state) => const PaymentGuidePage(),
+        ),
+
+        GoRoute(
+          path: Routes.buyNpl,
+          name: 'buy-npl',
+          builder: (context, state) => const BuyNplPage(),
         ),
       ],
 

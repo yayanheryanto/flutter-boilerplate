@@ -61,10 +61,10 @@ const _categoryIconBg = {
   AuctionCategory.lainnya: Color(0xFFF1F5F9),
 };
 
-class BuyNplPage extends StatelessWidget {
+class BuyNplDetailPage extends StatelessWidget {
   final List<NplOrderItem> orders;
 
-  const BuyNplPage({
+  const BuyNplDetailPage({
     super.key,
     this.orders = _dummyOrders,
   });

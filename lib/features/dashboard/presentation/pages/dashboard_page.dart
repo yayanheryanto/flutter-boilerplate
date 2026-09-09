@@ -4,6 +4,8 @@ import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/constants/rounded.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/dashboard/presentation/layouts/buy_npl_layout.dart';
+import 'package:emas/features/dashboard/presentation/layouts/profile_layout.dart';
+import 'package:emas/features/dashboard/presentation/pages/buy_npl_page.dart';
 import 'package:emas/features/dashboard/presentation/layouts/transaction_layout.dart';
 import 'package:emas/features/dashboard/presentation/pages/join_auction_page.dart';
 import 'package:emas/features/dashboard/presentation/layouts/dashboard_layout.dart';
@@ -132,10 +134,10 @@ class _DashboardViewState extends State<_DashboardView> {
             );
           },
         ),
-        const BuyNplLayout(),
+        const BuyNPLLayout(),
         const JoinAuctionPage(),
         const TransactionLayout(),
-        _buildPlaceholder('Profil'),
+        const ProfileLayout(),
       ],
     );
   }
@@ -279,10 +281,10 @@ class _NavItem extends StatelessWidget {
             // Active indicator bar di atas
             AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              height: 2,
+              height: 4,
               width: isSelected ? 15.w : 0,
               decoration: BoxDecoration(
-                color: AppColors.primary500,
+                color: AppColors.blue100,
                 borderRadius: BorderRadius.circular(Rounded.xxs),
               ),
             ),

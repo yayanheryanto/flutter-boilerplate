@@ -155,7 +155,7 @@ class _TabItem extends StatelessWidget {
             ),
             AnimatedContainer(
               duration: const Duration(milliseconds: 180),
-              height: 3,
+              height: 4,
               color: isSelected ? AppColors.blue100 : AppColors.transparent,
             ),
           ],

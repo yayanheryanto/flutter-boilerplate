@@ -6,6 +6,7 @@ class AppSpacer extends StatelessWidget {
 
   const AppSpacer(this.size, {super.key, this.horizontal = false});
 
+  const AppSpacer.xxs({super.key, this.horizontal = false}) : size = 2;
   const AppSpacer.xs({super.key, this.horizontal = false}) : size = 4;
   const AppSpacer.sm({super.key, this.horizontal = false}) : size = 8;
   const AppSpacer.md({super.key, this.horizontal = false}) : size = 16;
