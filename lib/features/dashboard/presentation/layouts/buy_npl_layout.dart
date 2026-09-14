@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:emas/core/constants/elevations.dart';
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_elevations.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/data/models/npl_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -53,7 +53,7 @@ class _BuyNPLLayoutState extends State<BuyNPLLayout> {
       backgroundColor: AppColors.neutral50,
       appBar: AppPageBar(
         title: 'NPL',
-        elevation: Elevations.xs,
+        elevation: AppElevations.xs,
         actions: [
           IconButton(
             icon: const Icon(Icons.history_rounded, color: AppColors.info500),
@@ -72,9 +72,9 @@ class _BuyNPLLayoutState extends State<BuyNPLLayout> {
             child: _filteredItems.isEmpty
                 ? const _EmptyState()
                 : ListView.separated(
-                    padding: const EdgeInsets.all(Spacings.md),
+                    padding: const EdgeInsets.all(AppSpacings.md),
                     itemCount: _filteredItems.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: Spacings.md),
+                    separatorBuilder: (_, __) => const SizedBox(height: AppSpacings.md),
                     itemBuilder: (context, i) => _NPLCard(item: _filteredItems[i]),
                   ),
           ),
@@ -94,7 +94,7 @@ class _NPLTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: Spacings.md,
+        horizontal: AppSpacings.md,
       ),
       decoration: const BoxDecoration(
         border: Border(
@@ -110,7 +110,7 @@ class _NPLTabBar extends StatelessWidget {
             isSelected: selected == NPLStatus.unpaid,
             onTap: () => onChanged(NPLStatus.unpaid),
           ),
-          const SizedBox(width: Spacings.lg),
+          const SizedBox(width: AppSpacings.lg),
           _TabItem(
             label: 'NPL Aktif',
             isSelected: selected == NPLStatus.active,
@@ -145,7 +145,7 @@ class _TabItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: Spacings.md),
+              padding: const EdgeInsets.symmetric(vertical: AppSpacings.md),
               child: AppText(
                 label,
                 textAlign: TextAlign.center,
@@ -176,8 +176,8 @@ class _NPLCard extends StatelessWidget {
 
     return AppCard(
       backgroundColor: AppColors.white,
-      borderRadius: BorderRadius.circular(Rounded.lg),
-      padding: const EdgeInsets.all(Spacings.md),
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      padding: const EdgeInsets.all(AppSpacings.md),
       borderColor: AppColors.neutral300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -189,7 +189,7 @@ class _NPLCard extends StatelessWidget {
                 color: Colors.amber,
                 size: 20,
               ),
-              const SizedBox(width: Spacings.xs),
+              const SizedBox(width: AppSpacings.xs),
               AppText(
                 item.categoryTitle,
                 fontWeight: FontWeight.w600,
@@ -197,7 +197,7 @@ class _NPLCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: Spacings.md),
+          const SizedBox(height: AppSpacings.md),
 
           Row(
             children: [
@@ -238,7 +238,7 @@ class _NPLCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: Spacings.sm),
+          const SizedBox(height: AppSpacings.sm),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -255,7 +255,7 @@ class _NPLCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: Spacings.sm),
+          const SizedBox(height: AppSpacings.sm),
 
           if (isPendingPayment)
             _NPLUnpaidSection(item: item)
@@ -345,7 +345,7 @@ class _NPLUnpaidSection extends StatelessWidget {
                       color: AppColors.textPrimary,
                     ),
             ),
-            const SizedBox(width: Spacings.sm),
+            const SizedBox(width: AppSpacings.sm),
             SizedBox(
               width: 72,
               height: 32,
@@ -354,9 +354,9 @@ class _NPLUnpaidSection extends StatelessWidget {
                 size: AppButtonSize.small,
                 backgroundColor: AppColors.primary500,
                 foregroundColor: AppColors.textPrimary,
-                borderRadius: Rounded.full,
+                borderRadius: AppRadius.full,
                 onPressed: () async {
-                  await context.push(Routes.paymentGuide);
+                  await context.push(AppRoutes.paymentGuide);
                 },
               ),
             ),
@@ -367,42 +367,6 @@ class _NPLUnpaidSection extends StatelessWidget {
   }
 }
 
-class _NPLActiveSection extends StatelessWidget {
-  final NPLItem item;
-
-  const _NPLActiveSection({required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: AppButton(
-            label: 'Lihat Detail',
-            variant: AppButtonVariant.outlined,
-            borderRadius: Rounded.full,
-            borderColor: AppColors.blue100,
-            size: AppButtonSize.small,
-            borderWidth: 2,
-            foregroundColor: AppColors.textPrimary,
-            onPressed: () {},
-          ),
-        ),
-        const SizedBox(width: Spacings.md),
-        Expanded(
-          child: AppButton(
-            label: 'Bayar',
-            size: AppButtonSize.small,
-            borderRadius: Rounded.full,
-            onPressed: () async {
-              await context.push(Routes.payment);
-            },
-          ),
-        ),
-      ],
-    );
-  }
-}
 
 class _CountdownLabel extends StatefulWidget {
   final DateTime dueDate;
@@ -490,7 +454,7 @@ class _EmptyState extends StatelessWidget {
             size: 48,
             color: AppColors.neutral300,
           ),
-          SizedBox(height: Spacings.md),
+          SizedBox(height: AppSpacings.md),
           AppText(
             'Belum ada transaksi',
             color: AppColors.textPrimary,
@@ -507,25 +471,25 @@ class _BuyNPLRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(Rounded.lg),
+      borderRadius: BorderRadius.circular(AppRadius.lg),
       onTap: () async {
-        await context.push(Routes.buyNpl);
+        await context.push(AppRoutes.buyNpl);
       },
       child: Container(
         width: double.infinity,
         margin: const EdgeInsets.only(
-          top: Spacings.lg,
-          left: Spacings.md,
-          right: Spacings.md,
-          bottom: Spacings.xs,
+          top: AppSpacings.lg,
+          left: AppSpacings.md,
+          right: AppSpacings.md,
+          bottom: AppSpacings.xs,
         ),
         padding: const EdgeInsets.symmetric(
-          horizontal: Spacings.md,
-          vertical: Spacings.md,
+          horizontal: AppSpacings.md,
+          vertical: AppSpacings.md,
         ),
         decoration: BoxDecoration(
           color: AppColors.primary500,
-          borderRadius: BorderRadius.circular(Rounded.lg),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

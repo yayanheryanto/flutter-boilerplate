@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 import 'package:flutter/material.dart';
@@ -43,13 +43,13 @@ class AppBanner {
       MaterialBanner(
         backgroundColor: bgColor,
         padding: const EdgeInsets.symmetric(
-          horizontal: Spacings.md,
-          vertical: Spacings.sm,
+          horizontal: AppSpacings.md,
+          vertical: AppSpacings.sm,
         ),
         content: Row(
           children: [
             Icon(iconData, color: Colors.white, size: 20),
-            const SizedBox(width: Spacings.sm),
+            const SizedBox(width: AppSpacings.sm),
             Expanded(
               child: Text(
                 message,
@@ -78,7 +78,7 @@ class AppBanner {
           IconButton(
             icon: const Icon(Icons.close_rounded, color: Colors.white, size: 18),
             onPressed: () => hide(context),
-            padding: const EdgeInsets.only(right: Spacings.sm),
+            padding: const EdgeInsets.only(right: AppSpacings.sm),
             constraints: const BoxConstraints(),
           ),
         ],
@@ -188,12 +188,12 @@ class _ProgressOverlayWidget extends StatelessWidget {
         child: Container(
           margin: const EdgeInsets.symmetric(horizontal: 48),
           padding: const EdgeInsets.symmetric(
-            horizontal: Spacings.xl,
-            vertical: Spacings.lg,
+            horizontal: AppSpacings.xl,
+            vertical: AppSpacings.lg,
           ),
           decoration: BoxDecoration(
             color: scheme.surface,
-            borderRadius: BorderRadius.circular(Rounded.xl),
+            borderRadius: BorderRadius.circular(AppRadius.xl),
             boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 20)],
           ),
           child: Column(
@@ -208,7 +208,7 @@ class _ProgressOverlayWidget extends StatelessWidget {
                     color: scheme.primary,
                   ),
                 ),
-                const SizedBox(height: Spacings.md),
+                const SizedBox(height: AppSpacings.md),
                 ClipRRect(
                   borderRadius: BorderRadius.circular(3),
                   child: LinearProgressIndicator(
@@ -223,7 +223,7 @@ class _ProgressOverlayWidget extends StatelessWidget {
                 ),
               ],
               if (message != null) ...[
-                const SizedBox(height: Spacings.md),
+                const SizedBox(height: AppSpacings.md),
                 AppText(message!, textAlign: TextAlign.center),
               ],
             ],
@@ -268,10 +268,10 @@ class AppTooltipWrapper extends StatelessWidget {
       preferBelow: position == AppTooltipPosition.below,
       decoration: BoxDecoration(
         color: backgroundColor ?? scheme.inverseSurface,
-        borderRadius: BorderRadius.circular(Rounded.sm),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
       ),
       textStyle: TextStyle(color: scheme.onInverseSurface, fontSize: 12),
-      padding: const EdgeInsets.symmetric(horizontal: Spacings.sm, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.sm, vertical: 6),
       child: child,
     );
   }
@@ -343,13 +343,13 @@ class AppPopover {
                     constraints: BoxConstraints(maxWidth: maxWidth),
                     decoration: BoxDecoration(
                       color: scheme.surface,
-                      borderRadius: BorderRadius.circular(Rounded.lg),
+                      borderRadius: BorderRadius.circular(AppRadius.lg),
                       boxShadow: const [
                         BoxShadow(color: Colors.black26, blurRadius: 16, offset: Offset(0, 6)),
                       ],
                       border: Border.all(color: scheme.outline.withOpacity(0.2)),
                     ),
-                    padding: const EdgeInsets.all(Spacings.md),
+                    padding: const EdgeInsets.all(AppSpacings.md),
                     child: content,
                   ),
                 ),
@@ -466,7 +466,7 @@ class AppStepperOverlay {
           ),
           const SizedBox(height: 4),
           AppText(step.description, variant: AppTextVariant.bodySmall),
-          const SizedBox(height: Spacings.sm),
+          const SizedBox(height: AppSpacings.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [

@@ -8,9 +8,9 @@ import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/strings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_strings.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 
@@ -120,45 +120,45 @@ class _FormView extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             const AppText(
-              Strings.forgotPassword,
+              AppStrings.forgotPassword,
               variant: AppTextVariant.headlineLarge,
               color: AppColors.primary500,
               fontWeight: FontWeight.w800,
             ),
             const AppSpacer.md(),
             const AppText(
-              Strings.forgotPasswordDescription,
+              AppStrings.forgotPasswordDescription,
               variant: AppTextVariant.titleSmall,
             ),
             const AppSpacer.lg(),
             AppTextField(
               controller: phoneController,
-              label: Strings.phone,
-              hint: Strings.phoneHint,
+              label: AppStrings.phone,
+              hint: AppStrings.phoneHint,
               keyboardType: TextInputType.phone,
               textInputAction: TextInputAction.done,
               inputFormatters: AppInputFormatters.phone(),
               onSubmitted: (_) => onSubmit(),
               validator: AppValidators.compose([
                 AppValidators.required(
-                  message: Strings.phoneRequired,
+                  message: AppStrings.phoneRequired,
                 ),
                 AppValidators.phone(
-                  message: Strings.invalidPhone,
+                  message: AppStrings.invalidPhone,
                 ),
               ]),
             ),
             const AppSpacer.xxxl(),
             AppButton(
-              label: Strings.next,
+              label: AppStrings.next,
               onPressed: () async => context.push(
-                Routes.otp,
+                AppRoutes.otp,
                 extra: {
                   'phone': phoneController.text,
                 },
               ),
               isLoading: isLoading,
-              borderRadius: Rounded.xl,
+              borderRadius: AppRadius.xl,
             ),
           ],
         ),
@@ -232,7 +232,7 @@ class _SuccessView extends StatelessWidget {
           // ── Back to login ─────────────────────────────────────────────────
           AppButton(
             label: 'Kembali ke Login',
-            onPressed: () => AppNavigator.go(Routes.login),
+            onPressed: () => AppNavigator.go(AppRoutes.login),
           ),
           const AppSpacer.lg(),
         ],

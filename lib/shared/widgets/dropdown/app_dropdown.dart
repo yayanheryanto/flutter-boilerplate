@@ -1,4 +1,4 @@
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:flutter/material.dart';
 
 /// A labeled dropdown field using [DropdownMenu] (Flutter 3.3+).
@@ -136,7 +136,7 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
                 elevation: const WidgetStatePropertyAll(4),
                 shape: WidgetStatePropertyAll(
                   RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(Rounded.md),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
                     side: BorderSide(
                       color: scheme.outline.withOpacity(0.2),
                     ),
@@ -153,7 +153,7 @@ class _AppDropdownFieldState<T> extends State<AppDropdownField<T>> {
                 enabledBorder: state.hasError
                     ? OutlineInputBorder(
                   borderRadius:
-                  BorderRadius.circular(Rounded.md),
+                  BorderRadius.circular(AppRadius.md),
                   borderSide: BorderSide(color: scheme.error),
                 )
                     : inputTheme.enabledBorder,

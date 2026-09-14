@@ -1,6 +1,6 @@
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/data/models/payment_option.dart';
 import 'package:emas/features/dashboard/domain/entities/payment_method.dart';
@@ -39,7 +39,7 @@ class _PaymentPageState extends State<PaymentPage> {
   }
 
   Future<void> _submitPayment() async {
-    await context.push(Routes.paymentGuide);
+    await context.push(AppRoutes.paymentGuide);
   }
 
   @override
@@ -60,17 +60,17 @@ class _PaymentPageState extends State<PaymentPage> {
         children: [
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.all(Spacings.md),
+              padding: const EdgeInsets.all(AppSpacings.md),
               children: [
                 const AppText(
                   'Metode Pembayaran',
                   variant: AppTextVariant.titleSmall,
                   fontWeight: FontWeight.w700,
                 ),
-                const SizedBox(height: Spacings.sm),
+                const SizedBox(height: AppSpacings.sm),
                 ...dummyPaymentOptions.map(
                   (option) => Padding(
-                    padding: const EdgeInsets.only(bottom: Spacings.sm),
+                    padding: const EdgeInsets.only(bottom: AppSpacings.sm),
                     child: _PaymentOptionTile(
                       option: option,
                       isActive: _selectedMethodId == option.id,
@@ -78,15 +78,15 @@ class _PaymentPageState extends State<PaymentPage> {
                     ),
                   ),
                 ),
-                const SizedBox(height: Spacings.xs),
+                const SizedBox(height: AppSpacings.xs),
                 const _MorePaymentMethodsRow(),
-                const SizedBox(height: Spacings.lg),
+                const SizedBox(height: AppSpacings.lg),
                 const AppText(
                   'Ringkasan Pembayaran',
                   variant: AppTextVariant.titleSmall,
                   fontWeight: FontWeight.w700,
                 ),
-                const SizedBox(height: Spacings.sm),
+                const SizedBox(height: AppSpacings.sm),
                 _PaymentSummaryCard(
                   priceAmount: widget.priceAmount,
                   adminFee: widget.adminFee,
@@ -121,8 +121,8 @@ class _PaymentOptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       backgroundColor: AppColors.white,
-      borderRadius: BorderRadius.circular(Rounded.lg),
-      padding: const EdgeInsets.all(Spacings.md),
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      padding: const EdgeInsets.all(AppSpacings.md),
       borderColor: AppColors.neutral300,
       child: Row(
         children: [
@@ -131,11 +131,11 @@ class _PaymentOptionTile extends StatelessWidget {
             height: 24,
             decoration: BoxDecoration(
               color: option.iconBackgroundColor,
-              borderRadius: BorderRadius.circular(Rounded.sm),
+              borderRadius: BorderRadius.circular(AppRadius.sm),
             ),
             child: Icon(option.icon, color: AppColors.white, size: 20),
           ),
-          const SizedBox(width: Spacings.sm),
+          const SizedBox(width: AppSpacings.sm),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +152,7 @@ class _PaymentOptionTile extends StatelessWidget {
               ],
             ),
           ),
-          const SizedBox(width: Spacings.sm),
+          const SizedBox(width: AppSpacings.sm),
           if (!isActive)
             AppButton(
               label: 'Aktifkan',
@@ -160,7 +160,7 @@ class _PaymentOptionTile extends StatelessWidget {
               size: AppButtonSize.small,
               isExpanded: false,
               borderWidth: 2,
-              borderRadius: Rounded.full,
+              borderRadius: AppRadius.full,
               borderColor: AppColors.blue100,
               foregroundColor: AppColors.textPrimary,
               onPressed: onActivate,
@@ -177,19 +177,19 @@ class _MorePaymentMethodsRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(Rounded.lg),
+      borderRadius: BorderRadius.circular(AppRadius.lg),
       onTap: () async {
         await _showPaymentMethodSheet(context);
       },
       child: Container(
         width: double.infinity,
         padding: const EdgeInsets.symmetric(
-          horizontal: Spacings.md,
-          vertical: Spacings.md,
+          horizontal: AppSpacings.md,
+          vertical: AppSpacings.md,
         ),
         decoration: BoxDecoration(
           color: AppColors.blue100,
-          borderRadius: BorderRadius.circular(Rounded.lg),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
         ),
         child: const Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -221,15 +221,15 @@ class _PaymentSummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       backgroundColor: AppColors.white,
-      borderRadius: BorderRadius.circular(Rounded.lg),
-      padding: const EdgeInsets.all(Spacings.md),
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      padding: const EdgeInsets.all(AppSpacings.md),
       borderColor: AppColors.neutral300,
       child: Column(
         children: [
           _SummaryRow(label: 'Harga Terbentuk', value: priceAmount),
-          const SizedBox(height: Spacings.sm),
+          const SizedBox(height: AppSpacings.sm),
           _SummaryRow(label: 'Biaya Admin', value: adminFee),
-          const SizedBox(height: Spacings.sm),
+          const SizedBox(height: AppSpacings.sm),
           _SummaryRow(label: 'Biaya NPL', value: nplFee),
         ],
       ),
@@ -288,7 +288,7 @@ class _PaymentBottomBar extends StatelessWidget {
           if (showMethodWarning) const _MethodWarningBanner(),
           Padding(
             padding: const EdgeInsets.all(
-              Spacings.md,
+              AppSpacings.md,
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -311,12 +311,12 @@ class _PaymentBottomBar extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(width: Spacings.md),
+                const SizedBox(width: AppSpacings.md),
                 AppButton(
                   label: 'Bayar',
                   isExpanded: false,
                   width: 140,
-                  borderRadius: Rounded.full,
+                  borderRadius: AppRadius.full,
                   onPressed: onPay,
                 ),
               ],
@@ -340,21 +340,21 @@ class _MethodWarningBanner extends StatelessWidget {
         color: AppColors.blue100,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(
-            Spacings.md,
+            AppSpacings.md,
           ),
           topRight: Radius.circular(
-            Spacings.md,
+            AppSpacings.md,
           ),
         ),
       ),
       padding: const EdgeInsets.symmetric(
-        horizontal: Spacings.md,
-        vertical: Spacings.sm,
+        horizontal: AppSpacings.md,
+        vertical: AppSpacings.sm,
       ),
       child: const Row(
         children: [
           Icon(Icons.info_rounded, size: 20, color: AppColors.warning500),
-          SizedBox(width: Spacings.sm),
+          SizedBox(width: AppSpacings.sm),
           Expanded(
             child: AppText(
               'Pilih metode pembayaran sebelum lanjut bayar',
@@ -407,7 +407,7 @@ Future<void> _showPaymentMethodSheet(BuildContext blocContext) async {
     blocContext,
     title: 'Metode Pembayaran',
     contentPadding: const EdgeInsets.only(
-      top: Spacings.sm,
+      top: AppSpacings.sm,
     ),
     content: Column(
       mainAxisSize: MainAxisSize.min,
@@ -446,8 +446,8 @@ class _PaymentMethodTile extends StatelessWidget {
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(
-              horizontal: Spacings.lg,
-              vertical: Spacings.md,
+              horizontal: AppSpacings.lg,
+              vertical: AppSpacings.md,
             ),
             child: Row(
               children: [
@@ -460,7 +460,7 @@ class _PaymentMethodTile extends StatelessWidget {
                 ),
 
                 const SizedBox(
-                  width: Spacings.md,
+                  width: AppSpacings.md,
                 ),
 
                 // ───────────────────────────────────────────────────────────
@@ -522,7 +522,7 @@ class _BankLogo extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.neutral100,
               borderRadius: BorderRadius.circular(
-                Rounded.xs,
+                AppRadius.xs,
               ),
             ),
             child: const Icon(

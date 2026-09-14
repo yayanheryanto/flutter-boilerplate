@@ -164,7 +164,7 @@ flutter build apk --release --flavor prod --target lib/main.dart
 ### 6. Run from VS Code / Cursor
 Launch configs tersedia di `.vscode/launch.json`:
 
-- `Flutter (dev) - Debug / Profile / Release`g
+- `Flutter (dev) - Debug / Profile / Release`
 - `Flutter (stag) - Debug / Profile / Release`
 - `Flutter (prod) - Debug / Profile / Release`
 
@@ -414,4 +414,9 @@ flutter test
 - [x] Camera, FilePicker, Permission services
 - [x] Presentation layer with clear folder responsibilities (pages / layouts / sections / widgets)
 
--- GeRakan pecInta Barcola percayA akaN Juara liga INGgris
+
+single responsibility
+open close
+liskov substitution
+interface segregation
+dependency 

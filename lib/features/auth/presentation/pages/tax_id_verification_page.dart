@@ -1,8 +1,8 @@
 import 'dart:io';
 
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/services/camera_service.dart';
 import 'package:emas/core/services/file_picker_service.dart';
 import 'package:emas/core/utils/account_type.dart';
@@ -125,7 +125,7 @@ class _TaxIdVerificationPageState extends State<TaxIdVerificationPage> with AppF
       return;
     }
     // TODO: dispatch company verification event
-    context.go(Routes.dashboard);
+    context.go(AppRoutes.dashboard);
   }
 
   // ── Build ──────────────────────────────────────────────────────────────────
@@ -153,8 +153,8 @@ class _TaxIdVerificationPageState extends State<TaxIdVerificationPage> with AppF
               Expanded(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: Spacings.md,
-                    vertical: Spacings.sm,
+                    horizontal: AppSpacings.md,
+                    vertical: AppSpacings.sm,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -373,7 +373,7 @@ class _UploadPhotoField extends StatelessWidget {
             width: double.infinity,
             decoration: BoxDecoration(
               color: const Color(0xFFE0F7F5),
-              borderRadius: BorderRadius.circular(Rounded.lg),
+              borderRadius: BorderRadius.circular(AppRadius.lg),
               border: Border.all(
                 color: const Color(0xFFB2EBE8),
               ),
@@ -399,20 +399,20 @@ class _UploadPlaceholder extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(
-        vertical: Spacings.lg,
-        horizontal: Spacings.md,
+        vertical: AppSpacings.lg,
+        horizontal: AppSpacings.md,
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Container(
             padding: const EdgeInsets.symmetric(
-              horizontal: Spacings.xl,
-              vertical: Spacings.sm,
+              horizontal: AppSpacings.xl,
+              vertical: AppSpacings.sm,
             ),
             decoration: BoxDecoration(
               color: const Color(0xFF80CBC8),
-              borderRadius: BorderRadius.circular(Rounded.full),
+              borderRadius: BorderRadius.circular(AppRadius.full),
             ),
             child: const AppText(
               'Unggah Foto',
@@ -421,7 +421,7 @@ class _UploadPlaceholder extends StatelessWidget {
               color: Colors.white,
             ),
           ),
-          const SizedBox(height: Spacings.sm),
+          const SizedBox(height: AppSpacings.sm),
           AppText(
             acceptFormat,
             variant: AppTextVariant.bodySmall,
@@ -444,7 +444,7 @@ class _FilePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(Spacings.md),
+      padding: const EdgeInsets.all(AppSpacings.md),
       child: Row(
         children: [
           Container(
@@ -452,7 +452,7 @@ class _FilePreview extends StatelessWidget {
             height: 40,
             decoration: BoxDecoration(
               color: const Color(0xFF80CBC8).withOpacity(0.3),
-              borderRadius: BorderRadius.circular(Rounded.sm),
+              borderRadius: BorderRadius.circular(AppRadius.sm),
             ),
             child: Icon(
               isPdf ? Icons.picture_as_pdf_rounded : Icons.image_rounded,
@@ -460,7 +460,7 @@ class _FilePreview extends StatelessWidget {
               size: 22,
             ),
           ),
-          const SizedBox(width: Spacings.sm),
+          const SizedBox(width: AppSpacings.sm),
           Expanded(
             child: AppText(
               file.path.split('/').last,

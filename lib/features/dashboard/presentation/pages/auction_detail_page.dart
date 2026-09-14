@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -44,10 +44,10 @@ class AuctionDetailPage extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: Spacings.md),
+                    const SizedBox(height: AppSpacings.md),
 
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: Spacings.md),
+                      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -64,7 +64,7 @@ class AuctionDetailPage extends StatelessWidget {
                             color: AppColors.textPrimary,
                           ),
 
-                          const SizedBox(height: Spacings.md),
+                          const SizedBox(height: AppSpacings.md),
 
                           // ── Harga Dasar + Info PPN ───────────────
                           const AppText(
@@ -91,12 +91,12 @@ class AuctionDetailPage extends StatelessWidget {
                             ],
                           ),
 
-                          const SizedBox(height: Spacings.lg),
+                          const SizedBox(height: AppSpacings.lg),
 
                           // ── Card Grade & Spesifikasi ────────────
                           const _GradeAndSpecCard(),
 
-                          const SizedBox(height: Spacings.lg),
+                          const SizedBox(height: AppSpacings.lg),
 
                           // ── Section Penawaran Saat Ini ──────────
                           const AppText(
@@ -104,17 +104,17 @@ class AuctionDetailPage extends StatelessWidget {
                             variant: AppTextVariant.titleSmall,
                             fontWeight: FontWeight.bold,
                           ),
-                          const SizedBox(height: Spacings.sm),
+                          const SizedBox(height: AppSpacings.sm),
 
                           // Ringkasan Tertinggi & COUNT
                           Row(
                             children: [
                               Expanded(
                                 child: Container(
-                                  padding: const EdgeInsets.all(Spacings.sm),
+                                  padding: const EdgeInsets.all(AppSpacings.sm),
                                   decoration: BoxDecoration(
                                     color: AppColors.white,
-                                    borderRadius: BorderRadius.circular(Rounded.md),
+                                    borderRadius: BorderRadius.circular(AppRadius.md),
                                     border: Border.all(color: AppColors.neutral200),
                                   ),
                                   child: Column(
@@ -135,15 +135,15 @@ class AuctionDetailPage extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: Spacings.sm),
+                              const SizedBox(width: AppSpacings.sm),
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: Spacings.md,
-                                  vertical: Spacings.xs,
+                                  horizontal: AppSpacings.md,
+                                  vertical: AppSpacings.xs,
                                 ),
                                 decoration: BoxDecoration(
                                   color: const Color(0xFFFFF9E6),
-                                  borderRadius: BorderRadius.circular(Rounded.md),
+                                  borderRadius: BorderRadius.circular(AppRadius.md),
                                   border: Border.all(color: AppColors.primary500),
                                 ),
                                 child: const Column(
@@ -165,7 +165,7 @@ class AuctionDetailPage extends StatelessWidget {
                             ],
                           ),
 
-                          const SizedBox(height: Spacings.sm),
+                          const SizedBox(height: AppSpacings.sm),
 
                           // Daftar Riwayat Nominal Penawaran
                           const _BidsHistoryList(
@@ -175,7 +175,7 @@ class AuctionDetailPage extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: Spacings.xl),
+                    const SizedBox(height: AppSpacings.xl),
                   ],
                 ),
               ),
@@ -184,14 +184,14 @@ class AuctionDetailPage extends StatelessWidget {
               Container(
                 color: AppColors.white,
                 padding: const EdgeInsets.fromLTRB(
-                  Spacings.md,
-                  Spacings.sm,
-                  Spacings.md,
-                  Spacings.lg,
+                  AppSpacings.md,
+                  AppSpacings.sm,
+                  AppSpacings.md,
+                  AppSpacings.lg,
                 ),
                 child: AppButton(
                   label: 'Beli NPL',
-                  borderRadius: Rounded.full,
+                  borderRadius: AppRadius.full,
                   onPressed: () {},
                 ),
               ),
@@ -211,10 +211,10 @@ class _GradeAndSpecCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(Spacings.md),
+      padding: const EdgeInsets.all(AppSpacings.md),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(Rounded.lg),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(color: AppColors.neutral200),
       ),
       child: const Column(
@@ -225,7 +225,7 @@ class _GradeAndSpecCard extends StatelessWidget {
             'Grade',
             fontWeight: FontWeight.bold,
           ),
-          SizedBox(height: Spacings.sm),
+          SizedBox(height: AppSpacings.sm),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -237,7 +237,7 @@ class _GradeAndSpecCard extends StatelessWidget {
           ),
 
           Padding(
-            padding: EdgeInsets.symmetric(vertical: Spacings.sm),
+            padding: EdgeInsets.symmetric(vertical: AppSpacings.sm),
             child: Divider(color: AppColors.neutral200),
           ),
 
@@ -246,7 +246,7 @@ class _GradeAndSpecCard extends StatelessWidget {
             'Spesifikasi',
             fontWeight: FontWeight.bold,
           ),
-          SizedBox(height: Spacings.xs),
+          SizedBox(height: AppSpacings.xs),
           _SpecRow(label: 'Nomor Polisi', value: 'BK8769ET'),
           _SpecRow(label: 'Kilometer', value: '142.524 KM'),
           _SpecRow(label: 'STNK', value: '27 Mei 2026'),
@@ -280,7 +280,7 @@ class _GradeItem extends StatelessWidget {
           height: 44,
           decoration: BoxDecoration(
             color: const Color(0xFFFFF9E6),
-            borderRadius: BorderRadius.circular(Rounded.md),
+            borderRadius: BorderRadius.circular(AppRadius.md),
             border: Border.all(color: AppColors.primary500.withOpacity(0.6)),
           ),
           child: Center(
@@ -339,7 +339,7 @@ class _BidsHistoryList extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(Rounded.md),
+        borderRadius: BorderRadius.circular(AppRadius.md),
         border: Border.all(color: AppColors.neutral200),
       ),
       child: Column(
@@ -349,8 +349,8 @@ class _BidsHistoryList extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: Spacings.md,
-                  vertical: Spacings.sm + 2,
+                  horizontal: AppSpacings.md,
+                  vertical: AppSpacings.sm + 2,
                 ),
                 child: Align(
                   alignment: Alignment.centerLeft,

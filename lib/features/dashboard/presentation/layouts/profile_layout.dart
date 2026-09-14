@@ -1,10 +1,12 @@
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class _ProfileMenuItem {
   final String label;
@@ -35,7 +37,7 @@ class ProfileLayout extends StatelessWidget {
 
   List<_ProfileMenuSection> _buildSections(BuildContext context) {
     void notImplemented() {
-      // TODO: navigasi ke halaman terkait begitu tersedia.
+      //dummy implemented
     }
 
     return [
@@ -45,12 +47,16 @@ class ProfileLayout extends StatelessWidget {
           _ProfileMenuItem(
             label: 'Pengaturan Profil',
             icon: Icons.person_outline,
-            onTap: notImplemented,
+            onTap: () async {
+              await context.push(AppRoutes.profileSettings);
+            },
           ),
           _ProfileMenuItem(
             label: 'Favorit Saya',
             icon: Icons.favorite_border,
-            onTap: notImplemented,
+            onTap: () async {
+              await context.push(AppRoutes.auctionList);
+            },
           ),
         ],
       ),
@@ -107,10 +113,10 @@ class ProfileLayout extends StatelessWidget {
       body: ListView.separated(
         padding: const EdgeInsets.symmetric(
           // horizontal: Spacings.md,
-          vertical: Spacings.xs,
+          vertical: AppSpacings.xs,
         ),
         itemCount: sections.length,
-        separatorBuilder: (_, __) => const SizedBox(height: Spacings.xs),
+        separatorBuilder: (_, __) => const AppSpacer.xs(),
         itemBuilder: (context, i) => _ProfileMenuCard(section: sections[i]),
       ),
     );
@@ -128,17 +134,17 @@ class _ProfileMenuCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppCard(
       backgroundColor: AppColors.white,
-      borderRadius: BorderRadius.circular(Rounded.md),
+      borderRadius: BorderRadius.circular(AppRadius.md),
       padding: EdgeInsets.zero,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(
-              Spacings.md,
-              Spacings.md,
-              Spacings.md,
-              Spacings.xs,
+              AppSpacings.md,
+              AppSpacings.md,
+              AppSpacings.md,
+              AppSpacings.xs,
             ),
             child: AppText(
               section.title,
@@ -151,8 +157,8 @@ class _ProfileMenuCard extends StatelessWidget {
               const Divider(
                 height: 1,
                 thickness: 1,
-                indent: Spacings.md,
-                endIndent: Spacings.md,
+                indent: AppSpacings.md,
+                endIndent: AppSpacings.md,
                 color: AppColors.neutral200,
               ),
           ],
@@ -176,8 +182,8 @@ class _ProfileMenuRow extends StatelessWidget {
       onTap: item.onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(
-          horizontal: Spacings.md,
-          vertical: Spacings.sm + 2,
+          horizontal: AppSpacings.md,
+          vertical: AppSpacings.sm + 2,
         ),
         child: Row(
           children: [

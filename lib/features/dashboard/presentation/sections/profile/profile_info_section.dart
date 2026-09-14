@@ -1,19 +1,19 @@
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
-/// Organism: baris statistik singkat user (Total Lelang / Dimenangkan / Wishlist).
 class ProfileInfoSection extends StatelessWidget {
   const ProfileInfoSection({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(Spacings.md),
+      padding: const EdgeInsets.all(AppSpacings.md),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(Rounded.lg),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.05),
@@ -52,7 +52,7 @@ class _StatItem extends StatelessWidget {
             fontWeight: FontWeight.w700,
             color: const Color(0xFFFF6B00),
           ),
-          const SizedBox(height: Spacings.xs / 2),
+          const AppSpacer.xxs(),
           AppText(
             label,
             variant: AppTextVariant.labelSmall,

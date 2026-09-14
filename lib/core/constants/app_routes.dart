@@ -1,7 +1,7 @@
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 
-class Routes {
-  Routes._();
+class AppRoutes {
+  AppRoutes._();
 
   static const String splash = '/';
   static const String onboarding = '/onboarding';
@@ -30,6 +30,7 @@ class Routes {
   static String category(String slug) => '/dashboard/category/$slug';
 
   static const String profile = '/profile';
+  static const String profileSettings = '/profile-settings';
   static const String joinAuction = '/join-auction';
   static const String auctionList = '/auction-list';
   static const String auctionDetail = '/auction-detail';

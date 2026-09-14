@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 
 enum AppButtonVariant { primary, secondary, outlined, text, danger }
 
@@ -22,7 +22,7 @@ class AppButton extends StatelessWidget {
   /// Used internally by AppConfirmDialog.
   final bool dangerOverride;
 
-  /// Override the default corner radius. Defaults to [Rounded.md].
+  /// Override the default corner radius. Defaults to [AppRadius.md].
   final double? borderRadius;
 
   /// Custom inner content padding override.
@@ -139,7 +139,7 @@ class AppButton extends StatelessWidget {
 
   ButtonStyle _buildStyle(BuildContext context, ColorScheme colorScheme) {
     final radius = BorderRadius.circular(
-      borderRadius ?? Rounded.md,
+      borderRadius ?? AppRadius.md,
     );
     final buttonPadding = _getPadding();
 
@@ -204,13 +204,13 @@ class AppButton extends StatelessWidget {
 
     if (prefixIcon != null) {
       children.add(Icon(prefixIcon, size: 18));
-      children.add(const SizedBox(width: Spacings.xs));
+      children.add(const SizedBox(width: AppSpacings.xs));
     }
 
     children.add(Text(label));
 
     if (suffixIcon != null) {
-      children.add(const SizedBox(width: Spacings.xs));
+      children.add(const SizedBox(width: AppSpacings.xs));
       children.add(Icon(suffixIcon, size: 18));
     }
 

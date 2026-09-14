@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/phone_number_masker.dart';
@@ -134,7 +134,7 @@ class _OtpPageContentState extends State<_OtpPageContent> {
     if (otp.length == _kOtpLength) {
       debugPrint('OTP lengkap: $otp');
 
-      await context.push(Routes.changePassword);
+      await context.push(AppRoutes.changePassword);
       // Trigger API / Bloc
       // context.read<AuthBloc>().add(
       //   VerifyOtpRequested(otp),
@@ -145,7 +145,7 @@ class _OtpPageContentState extends State<_OtpPageContent> {
   void _onSubmit() {
     final otp = _otpValue;
     if (otp.length < _kOtpLength) return;
-    context.go(Routes.dashboard);
+    context.go(AppRoutes.dashboard);
   }
 
   @override
@@ -166,8 +166,8 @@ class _OtpPageContentState extends State<_OtpPageContent> {
           child: SingleChildScrollView(
             padding: EdgeInsets.symmetric(
               horizontal: context.responsive(
-                mobile: Spacings.lg,
-                tablet: Spacings.xxl,
+                mobile: AppSpacings.lg,
+                tablet: AppSpacings.xxl,
               ),
             ),
             child: Column(

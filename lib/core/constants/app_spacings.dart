@@ -1,5 +1,5 @@
-class Spacings {
-  Spacings._();
+class AppSpacings {
+  AppSpacings._();
 
   static const double none = 0.0;
   static const double xxs = 2.0;

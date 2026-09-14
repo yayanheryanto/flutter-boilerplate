@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/services/socket/app_socket_service.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
@@ -86,7 +86,7 @@ class _LiveAuctionViewState extends State<_LiveAuctionView> {
             title: 'Live Auction',
             actions: [
               Padding(
-                padding: const EdgeInsets.only(right: Spacings.md),
+                padding: const EdgeInsets.only(right: AppSpacings.md),
                 child: Center(child: _ConnectionStatusChip(state: state)),
               ),
             ],
@@ -110,19 +110,19 @@ class _LiveAuctionViewState extends State<_LiveAuctionView> {
                       year: 'Tahun 2021',
                     ),
 
-                    const SizedBox(height: Spacings.xs),
+                    const SizedBox(height: AppSpacings.xs),
 
                     // ── Main card ───────────────────────────────
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: Spacings.md),
+                      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
                       child: _MainInfoCard(state: state),
                     ),
 
-                    const SizedBox(height: Spacings.lg),
+                    const SizedBox(height: AppSpacings.lg),
 
                     // ── Penawaran Saat Ini ───────────────────────
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: Spacings.md),
+                      padding: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -137,17 +137,17 @@ class _LiveAuctionViewState extends State<_LiveAuctionView> {
                               if (state.isLive) const LiveBadge(),
                             ],
                           ),
-                          const SizedBox(height: Spacings.sm),
+                          const SizedBox(height: AppSpacings.sm),
                           state.status == LiveAuctionStatus.connecting ? const _BidTableSkeleton() : _BidTable(bids: state.bids),
                           if (state.status == LiveAuctionStatus.endingSoon && state.endingInSeconds != null) ...[
-                            const SizedBox(height: Spacings.sm),
+                            const SizedBox(height: AppSpacings.sm),
                             _EndingSoonBanner(secondsLeft: state.endingInSeconds!),
                           ],
                         ],
                       ),
                     ),
 
-                    const SizedBox(height: Spacings.xl),
+                    const SizedBox(height: AppSpacings.xl),
                   ],
                 ),
               ),
@@ -207,12 +207,12 @@ class _EndingSoonBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
-        horizontal: Spacings.md,
-        vertical: Spacings.sm,
+        horizontal: AppSpacings.md,
+        vertical: AppSpacings.sm,
       ),
       decoration: BoxDecoration(
         color: AppColors.warning500.withOpacity(0.12),
-        borderRadius: BorderRadius.circular(Rounded.md),
+        borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       child: Row(
         children: [
@@ -246,10 +246,10 @@ class _LocationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        Spacings.md,
-        Spacings.md,
-        Spacings.md,
-        Spacings.xs,
+        AppSpacings.md,
+        AppSpacings.md,
+        AppSpacings.md,
+        AppSpacings.xs,
       ),
       child: Row(
         children: [
@@ -300,10 +300,10 @@ class _LotHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        Spacings.md,
-        Spacings.sm,
-        Spacings.md,
-        Spacings.sm,
+        AppSpacings.md,
+        AppSpacings.sm,
+        AppSpacings.md,
+        AppSpacings.sm,
       ),
       child: Row(
         children: [
@@ -675,23 +675,23 @@ class _BidTableSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(Spacings.md),
+      padding: const EdgeInsets.all(AppSpacings.md),
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(Rounded.xl),
+        borderRadius: BorderRadius.circular(AppRadius.xl),
         border: Border.all(color: AppColors.neutral200),
       ),
       child: Column(
         children: List.generate(
           4,
           (i) => const Padding(
-            padding: EdgeInsets.only(bottom: Spacings.sm),
+            padding: EdgeInsets.only(bottom: AppSpacings.sm),
             child: Row(
               children: [
                 Expanded(flex: 2, child: SkeletonText(height: 14)),
-                SizedBox(width: Spacings.sm),
+                SizedBox(width: AppSpacings.sm),
                 Expanded(flex: 3, child: SkeletonText(height: 14)),
-                SizedBox(width: Spacings.sm),
+                SizedBox(width: AppSpacings.sm),
                 Expanded(flex: 2, child: SkeletonText(height: 14)),
               ],
             ),
@@ -716,7 +716,7 @@ class _BidTable extends StatelessWidget {
     if (bids.isEmpty) {
       return Container(
         width: double.infinity,
-        padding: const EdgeInsets.all(Spacings.lg),
+        padding: const EdgeInsets.all(AppSpacings.lg),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
@@ -943,15 +943,15 @@ class _BottomCTA extends StatelessWidget {
     return Container(
       color: AppColors.white,
       padding: const EdgeInsets.fromLTRB(
-        Spacings.md,
-        Spacings.sm,
-        Spacings.md,
-        Spacings.lg,
+        AppSpacings.md,
+        AppSpacings.sm,
+        AppSpacings.md,
+        AppSpacings.lg,
       ),
       child: AppButton(
         label: label,
         size: AppButtonSize.large,
-        borderRadius: Rounded.full,
+        borderRadius: AppRadius.full,
         isLoading: state.isPlacingBid,
         onPressed: canBid
             ? () => context.read<LiveAuctionBloc>().add(

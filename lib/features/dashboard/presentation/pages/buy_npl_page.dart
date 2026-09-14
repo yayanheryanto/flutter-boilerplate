@@ -1,8 +1,8 @@
-import 'package:emas/core/constants/elevations.dart';
-import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/app_elevations.dart';
+import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/images.dart';
-import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/features/dashboard/domain/entities/buy_npl_result.dart';
@@ -28,16 +28,16 @@ class _BuyNplPageState extends State<BuyNplPage> {
     return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
       appBar: const AppPageBar(
-        elevation: Elevations.xs,
+        elevation: AppElevations.xs,
         title: 'Beli NPL',
       ),
       body: _SectionContainer(
         color: AppColors.white,
         padding: const EdgeInsets.fromLTRB(
-          Spacings.md,
-          Spacings.md,
-          Spacings.md,
-          Spacings.lg,
+          AppSpacings.md,
+          AppSpacings.md,
+          AppSpacings.md,
+          AppSpacings.lg,
         ),
         child: Center(
           child: _CategorySelector(
@@ -93,7 +93,7 @@ class _CategorySelector extends StatelessWidget {
                 );
 
                 if (result != null && context.mounted) {
-                  await context.push(Routes.buyNplDetail, extra: result);
+                  await context.push(AppRoutes.buyNplDetail, extra: result);
                 }
               },
             ),
@@ -127,7 +127,7 @@ class _CategoryChip extends StatelessWidget {
         height: 156,
         decoration: BoxDecoration(
           color: AppColors.white,
-          borderRadius: BorderRadius.circular(Rounded.lg),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           border: Border.all(
             color: AppColors.neutral300,
           ),
@@ -277,7 +277,7 @@ class _BuyNplFormState extends State<_BuyNplForm> {
     //   ),
     // );
     context.pop();
-    await context.push(Routes.buyNplDetail);
+    await context.push(AppRoutes.buyNplDetail);
   }
 
   @override
@@ -293,7 +293,7 @@ class _BuyNplFormState extends State<_BuyNplForm> {
           items: _dummyAuctionLocations,
           onChanged: (v) => setState(() => _location = v),
         ),
-        const SizedBox(height: Spacings.md),
+        const SizedBox(height: AppSpacings.md),
         AppDateField(
           label: 'Tanggal Lelang',
           hint: 'Pilih date lelang',
@@ -302,7 +302,7 @@ class _BuyNplFormState extends State<_BuyNplForm> {
           lastDate: DateTime.now().add(const Duration(days: 90)),
           onChanged: (d) => setState(() => _date = d),
         ),
-        const SizedBox(height: Spacings.lg),
+        const SizedBox(height: AppSpacings.lg),
 
         // ── Jumlah NPL ────────────────────────────────────────────
         Row(
@@ -319,18 +319,18 @@ class _BuyNplFormState extends State<_BuyNplForm> {
             ),
           ],
         ),
-        const SizedBox(height: Spacings.md),
+        const SizedBox(height: AppSpacings.md),
         const Divider(height: 1, color: AppColors.neutral200),
-        const SizedBox(height: Spacings.md),
+        const SizedBox(height: AppSpacings.md),
 
         // ── Harga & subtotal ──────────────────────────────────────
         _PriceRow(label: 'Harga per NPL', value: widget.pricePerNpl),
-        const SizedBox(height: Spacings.sm),
+        const SizedBox(height: AppSpacings.sm),
         _PriceRow(label: 'Subtotal', value: _subtotal, emphasize: true),
-        const SizedBox(height: Spacings.lg),
+        const SizedBox(height: AppSpacings.lg),
         AppButton(
           label: 'Tambah',
-          borderRadius: Rounded.full,
+          borderRadius: AppRadius.full,
           onPressed: _submit,
         ),
       ],
@@ -382,7 +382,7 @@ class _StepperButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(Rounded.full),
+      borderRadius: BorderRadius.circular(AppRadius.full),
       child: Container(
         width: 32,
         height: 32,

@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
@@ -68,7 +68,7 @@ class _ChangePasswordPageContentState extends State<_ChangePasswordPageContent> 
               BlocConsumer<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is AuthAuthenticated) {
-                    context.go(Routes.dashboard);
+                    context.go(AppRoutes.dashboard);
                   }
                   if (state is AuthError) {
                     AppSnackbar.error(context, state.message);
@@ -84,8 +84,8 @@ class _ChangePasswordPageContentState extends State<_ChangePasswordPageContent> 
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: context.responsive(
-                          mobile: Spacings.lg,
-                          tablet: Spacings.xxl,
+                          mobile: AppSpacings.lg,
+                          tablet: AppSpacings.xxl,
                         ),
                       ),
                       child: Column(

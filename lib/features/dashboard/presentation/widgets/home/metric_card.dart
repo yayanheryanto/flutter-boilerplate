@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
@@ -27,12 +27,12 @@ class MetricCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(
-          vertical: Spacings.md,
-          horizontal: Spacings.sm,
+          vertical: AppSpacings.md,
+          horizontal: AppSpacings.sm,
         ),
         decoration: BoxDecoration(
           color: scheme.surface,
-          borderRadius: BorderRadius.circular(Rounded.lg),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -49,13 +49,13 @@ class MetricCard extends StatelessWidget {
               height: 32,
               decoration: BoxDecoration(
                 color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(Rounded.sm),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
               child: Center(
                 child: Text(emoji, style: const TextStyle(fontSize: 15)),
               ),
             ),
-            const SizedBox(height: Spacings.sm),
+            const SizedBox(height: AppSpacings.sm),
             AppText(
               value,
               variant: AppTextVariant.titleLarge,

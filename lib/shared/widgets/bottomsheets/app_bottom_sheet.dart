@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +44,7 @@ class _AppBottomSheetShell extends StatelessWidget {
       decoration: BoxDecoration(
         color: scheme.surface,
         borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(Rounded.xl),
+          top: Radius.circular(AppRadius.xl),
         ),
       ),
       child: Column(
@@ -69,9 +69,9 @@ class _AppBottomSheetShell extends StatelessWidget {
           if (title != null || showCloseButton)
             Padding(
               padding: EdgeInsets.fromLTRB(
-                Spacings.lg,
-                showHandle ? Spacings.xs : Spacings.md,
-                Spacings.sm,
+                AppSpacings.lg,
+                showHandle ? AppSpacings.xs : AppSpacings.md,
+                AppSpacings.sm,
                 0,
               ),
               child: Row(
@@ -113,10 +113,10 @@ class _AppBottomSheetShell extends StatelessWidget {
             child: SingleChildScrollView(
               padding: contentPadding ??
                   EdgeInsets.fromLTRB(
-                    Spacings.lg,
-                    Spacings.md,
-                    Spacings.lg,
-                    actions != null ? Spacings.sm : Spacings.lg + bottomPad,
+                    AppSpacings.lg,
+                    AppSpacings.md,
+                    AppSpacings.lg,
+                    actions != null ? AppSpacings.sm : AppSpacings.lg + bottomPad,
                   ),
               child: content,
             ),
@@ -126,10 +126,10 @@ class _AppBottomSheetShell extends StatelessWidget {
           if (actions != null && actions!.isNotEmpty)
             Padding(
               padding: EdgeInsets.fromLTRB(
-                Spacings.lg,
+                AppSpacings.lg,
                 0,
-                Spacings.lg,
-                Spacings.lg + bottomPad,
+                AppSpacings.lg,
+                AppSpacings.lg + bottomPad,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -140,7 +140,7 @@ class _AppBottomSheetShell extends StatelessWidget {
                       (e) => [
                         e.value,
                         if (e.key < actions!.length - 1)
-                          const SizedBox(height: Spacings.sm),
+                          const SizedBox(height: AppSpacings.sm),
                       ],
                     )
                     .toList(),
@@ -191,7 +191,7 @@ class AppCustomBottomSheet {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black54,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(Rounded.xl)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(AppRadius.xl)),
       ),
       builder: (_) => _AppBottomSheetShell(
         title: title,
@@ -247,7 +247,7 @@ class AppOptionsBottomSheet {
         showHandle: showHandle,
         showCloseButton: false,
         isScrollControlled: true,
-        contentPadding: const EdgeInsets.symmetric(vertical: Spacings.xs),
+        contentPadding: const EdgeInsets.symmetric(vertical: AppSpacings.xs),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: options.map((opt) => _OptionTile<T>(option: opt)).toList(),
@@ -292,10 +292,10 @@ class _OptionTile<T> extends StatelessWidget {
       trailing: option.trailing,
       enabled: option.enabled,
       contentPadding: const EdgeInsets.symmetric(
-        horizontal: Spacings.lg,
-        vertical: Spacings.xs,
+        horizontal: AppSpacings.lg,
+        vertical: AppSpacings.xs,
       ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Rounded.md)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.md)),
       onTap: option.enabled
           ? () {
               Navigator.of(context).pop(option.value);
@@ -381,7 +381,7 @@ class AppConfirmBottomSheet {
                 ),
                 child: Icon(iconData, color: iconColor, size: 28),
               ),
-              const SizedBox(height: Spacings.md),
+              const SizedBox(height: AppSpacings.md),
               AppText(
                 title,
                 variant: AppTextVariant.titleLarge,
@@ -389,7 +389,7 @@ class AppConfirmBottomSheet {
                 textAlign: TextAlign.center,
               ),
               if (message != null) ...[
-                const SizedBox(height: Spacings.sm),
+                const SizedBox(height: AppSpacings.sm),
                 AppText(
                   message,
                   color: scheme.onSurface.withOpacity(0.65),
@@ -397,7 +397,7 @@ class AppConfirmBottomSheet {
                 ),
               ],
               if (customContent != null) ...[
-                const SizedBox(height: Spacings.md),
+                const SizedBox(height: AppSpacings.md),
                 customContent,
               ],
             ],

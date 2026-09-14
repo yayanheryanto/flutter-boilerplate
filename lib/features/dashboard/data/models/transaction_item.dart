@@ -57,7 +57,7 @@ final dummyTransactionItems = [
     lot: 15,
     formedPrice: 150000000,
     status: TransactionStatus.pendingPayment,
-    payBeforeDate: DateTime(2026, 9, 1, 23, 59),
+    payBeforeDate: DateTime(2026, 09, 15, 23, 59),
     totalBill: 146000000,
     paymentMethodName: 'Allo Bank',
   ),

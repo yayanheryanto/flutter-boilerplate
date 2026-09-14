@@ -1,7 +1,7 @@
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/strings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/core/constants/app_strings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
     //         password: _passwordController.text,
     //       ),
     //     );
-    await context.push(Routes.dashboard);
+    await context.push(AppRoutes.dashboard);
   }
 
   @override
@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
       child: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthAuthenticated) {
-            context.go(Routes.dashboard);
+            context.go(AppRoutes.dashboard);
           }
           if (state is AuthError) {
             AppSnackbar.error(context, state.message);
@@ -77,48 +77,48 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                           key: formKey,
                           child: Padding(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: Spacings.lg,
+                              horizontal: AppSpacings.lg,
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisSize: MainAxisSize.min,
                               children: [
                                 const AppText(
-                                  Strings.loginTitle,
+                                  AppStrings.loginTitle,
                                   variant: AppTextVariant.headlineLarge,
                                   color: AppColors.primary500,
                                   fontWeight: FontWeight.w800,
                                 ),
                                 const AppSpacer.md(),
                                 const AppText(
-                                  Strings.loginDescription,
+                                  AppStrings.loginDescription,
                                   variant: AppTextVariant.titleMedium,
                                 ),
                                 const AppSpacer.lg(),
                                 AppTextField(
                                   controller: _phoneController,
-                                  label: Strings.phone,
-                                  hint: Strings.phoneHint,
+                                  label: AppStrings.phone,
+                                  hint: AppStrings.phoneHint,
                                   keyboardType: TextInputType.phone,
                                   textInputAction: TextInputAction.next,
                                   inputFormatters: AppInputFormatters.phone(),
                                   validator: AppValidators.compose([
                                     AppValidators.required(
-                                      message: Strings.phoneRequired,
+                                      message: AppStrings.phoneRequired,
                                     ),
                                     AppValidators.phone(
-                                      message: Strings.invalidPhone,
+                                      message: AppStrings.invalidPhone,
                                     ),
                                   ]),
                                 ),
                                 const AppSpacer.md(),
                                 AppPasswordField(
                                   controller: _passwordController,
-                                  hint: Strings.passwordHint,
+                                  hint: AppStrings.passwordHint,
                                   textInputAction: TextInputAction.done,
                                   validator: AppValidators.compose([
                                     AppValidators.required(
-                                      message: Strings.passwordRequired,
+                                      message: AppStrings.passwordRequired,
                                     ),
                                     AppValidators.strongPassword(),
                                   ]),
@@ -127,31 +127,31 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                 Align(
                                   alignment: Alignment.centerLeft,
                                   child: AppLinkText(
-                                    Strings.forgotPassword,
+                                    AppStrings.forgotPassword,
                                     variant: AppTextVariant.titleMedium,
                                     color: AppColors.primary500,
-                                    onTap: () async => context.push(Routes.forgotPassword),
+                                    onTap: () async => context.push(AppRoutes.forgotPassword),
                                   ),
                                 ),
                                 const AppSpacer.xxxl(),
                                 AppButton(
-                                  label: Strings.login,
+                                  label: AppStrings.login,
                                   onPressed: () async => _onSubmit(context),
-                                  borderRadius: Rounded.xl,
+                                  borderRadius: AppRadius.xl,
                                 ),
                                 const AppSpacer.lg(),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     const AppText(
-                                      Strings.noAccountTitle,
+                                      AppStrings.noAccountTitle,
                                       variant: AppTextVariant.titleMedium,
                                     ),
                                     AppLinkText(
-                                      Strings.register,
+                                      AppStrings.register,
                                       variant: AppTextVariant.titleMedium,
                                       color: AppColors.primary500,
-                                      onTap: () async => context.push(Routes.register),
+                                      onTap: () async => context.push(AppRoutes.register),
                                     ),
                                   ],
                                 ),

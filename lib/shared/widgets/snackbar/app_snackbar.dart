@@ -1,5 +1,5 @@
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:flutter/material.dart';
 
 // ─── AppSnackbar ──────────────────────────────────────────────────────────────
@@ -102,19 +102,19 @@ class AppSnackbar {
         duration: duration,
         behavior: SnackBarBehavior.floating,
         backgroundColor: bgColor,
-        margin: const EdgeInsets.all(Spacings.md),
+        margin: const EdgeInsets.all(AppSpacings.md),
         padding: const EdgeInsets.symmetric(
-          horizontal: Spacings.md,
-          vertical: Spacings.sm + 2,
+          horizontal: AppSpacings.md,
+          vertical: AppSpacings.sm + 2,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Rounded.md),
+          borderRadius: BorderRadius.circular(AppRadius.md),
         ),
         content: Row(
           children: [
             if (showIcon) ...[
               Icon(iconData, color: Colors.white, size: 20),
-              const SizedBox(width: Spacings.sm),
+              const SizedBox(width: AppSpacings.sm),
             ],
             Expanded(
               child: Text(

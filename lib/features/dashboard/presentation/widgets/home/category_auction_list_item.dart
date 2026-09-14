@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
@@ -49,10 +49,10 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
     return GestureDetector(
       onTap: () {},
       child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: Spacings.md),
+        margin: const EdgeInsets.symmetric(horizontal: AppSpacings.md),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(Rounded.lg),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           boxShadow: [
             BoxShadow(
               color: _tint.withOpacity(0.08),
@@ -67,7 +67,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
             // ── Thumbnail ──────────────────────────────────────────
             ClipRRect(
               borderRadius: const BorderRadius.horizontal(
-                left: Radius.circular(Rounded.lg),
+                left: Radius.circular(AppRadius.lg),
               ),
               child: SizedBox(
                 width: 110,
@@ -85,8 +85,8 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
                       ),
                     ),
                     Positioned(
-                      bottom: Spacings.xs,
-                      left: Spacings.xs,
+                      bottom: AppSpacings.xs,
+                      left: AppSpacings.xs,
                       child: _TimerChip(secs: _secs, urgent: _urgent),
                     ),
                   ],
@@ -98,10 +98,10 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(
-                  Spacings.sm,
-                  Spacings.sm,
-                  Spacings.sm,
-                  Spacings.sm,
+                  AppSpacings.sm,
+                  AppSpacings.sm,
+                  AppSpacings.sm,
+                  AppSpacings.sm,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -119,7 +119,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
                             height: 1.35,
                           ),
                         ),
-                        const SizedBox(width: Spacings.xs),
+                        const SizedBox(width: AppSpacings.xs),
                         GestureDetector(
                           onTap: () =>
                               setState(() => _wishlisted = !_wishlisted),
@@ -140,7 +140,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
                       ],
                     ),
 
-                    const SizedBox(height: Spacings.xs),
+                    const SizedBox(height: AppSpacings.xs),
 
                     // Bid info
                     AppText(
@@ -155,7 +155,7 @@ class _CategoryAuctionListItemState extends State<CategoryAuctionListItem> {
                       fontWeight: FontWeight.w700,
                     ),
 
-                    const SizedBox(height: Spacings.sm),
+                    const SizedBox(height: AppSpacings.sm),
 
                     // CTA
                     AppButton(
@@ -189,7 +189,7 @@ class _TimerChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
       decoration: BoxDecoration(
         color: urgent ? AppColors.error500 : Colors.black54,
-        borderRadius: BorderRadius.circular(Rounded.sm),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/features/auth/presentation/pages/face_detection_page.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/features/auth/presentation/pages/account_processed_page.dart';
@@ -13,6 +13,7 @@ import 'package:emas/features/auth/presentation/pages/face_verification_guide_pa
 import 'package:emas/features/auth/presentation/pages/face_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/id_card_guide_page.dart';
 import 'package:emas/features/auth/presentation/pages/id_card_verification_page.dart';
+import 'package:emas/features/auth/presentation/pages/profile_seettings_page.dart';
 import 'package:emas/features/auth/presentation/pages/register_page.dart';
 import 'package:emas/features/auth/presentation/pages/tax_id_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/verification_preparation_page.dart';
@@ -46,25 +47,25 @@ class AppRouter {
     router = GoRouter(
       // Shares the same navigatorKey used by AppToast, AppPopover, etc.
       navigatorKey: AppNavigator.navigatorKey,
-      initialLocation: Routes.login,
+      initialLocation: AppRoutes.login,
       debugLogDiagnostics: true,
       extraCodec: const _AppExtraCodec(),
       routes: [
         // ── Auth ─────────────────────────────────────────────────────────────
         GoRoute(
-          path: Routes.login,
+          path: AppRoutes.login,
           name: 'login',
           builder: (context, state) => const LoginPage(),
         ),
 
         GoRoute(
-          path: Routes.forgotPassword,
+          path: AppRoutes.forgotPassword,
           name: 'forgot-password',
           builder: (context, state) => const ForgotPasswordPage(),
         ),
 
         GoRoute(
-          path: Routes.otp,
+          path: AppRoutes.otp,
           name: 'otp',
           builder: (context, state) {
             final extra = state.extra as Map<String, dynamic>? ?? {};
@@ -74,13 +75,13 @@ class AppRouter {
         ),
 
         GoRoute(
-          path: Routes.verificationPreparation,
+          path: AppRoutes.verificationPreparation,
           name: 'verification-preparation',
           builder: (context, state) => const VerificationPreparationPage(),
         ),
 
         GoRoute(
-          path: Routes.idCardGuide,
+          path: AppRoutes.idCardGuide,
           name: 'id-card-guide',
           builder: (context, state) {
             final accountType = state.extra as AccountType? ?? AccountType.personal;
@@ -91,7 +92,7 @@ class AppRouter {
         ),
 
         GoRoute(
-          path: Routes.idCardVerification,
+          path: AppRoutes.idCardVerification,
           name: 'id-card-verification',
           builder: (context, state) {
             final accountType = state.extra as AccountType? ?? AccountType.personal;
@@ -102,7 +103,7 @@ class AppRouter {
         ),
 
         GoRoute(
-          path: Routes.taxIdVerification,
+          path: AppRoutes.taxIdVerification,
           name: 'tax-id-verification',
           builder: (context, state) {
             final accountType = state.extra as AccountType? ?? AccountType.personal;
@@ -113,7 +114,7 @@ class AppRouter {
         ),
 
         GoRoute(
-          path: Routes.faceGuide,
+          path: AppRoutes.faceGuide,
           name: 'face-guide',
           builder: (context, state) {
             final accountType = state.extra as AccountType? ?? AccountType.personal;
@@ -124,7 +125,7 @@ class AppRouter {
         ),
 
         GoRoute(
-          path: Routes.faceVerification,
+          path: AppRoutes.faceVerification,
           name: 'face-verification',
           builder: (context, state) {
             final accountType = state.extra as AccountType? ?? AccountType.personal;
@@ -135,50 +136,50 @@ class AppRouter {
         ),
 
         GoRoute(
-          path: Routes.confirmationVerification,
+          path: AppRoutes.confirmationVerification,
           name: 'confirmation-verification',
           builder: (context, state) => const ConfirmationVerificationPage(),
         ),
 
         GoRoute(
-          path: Routes.changePassword,
+          path: AppRoutes.changePassword,
           name: 'change-password',
           builder: (context, state) => const ChangePasswordPage(),
         ),
 
         GoRoute(
-          path: Routes.cameraPick,
+          path: AppRoutes.cameraPick,
           name: 'camera-pick',
           builder: (context, state) => const CameraPickPage(),
         ),
 
         GoRoute(
-          path: Routes.facePick,
+          path: AppRoutes.facePick,
           name: 'face-pick',
           builder: (context, state) => const FaceDetectionPage(),
         ),
 
         GoRoute(
-          path: Routes.addressVerification,
+          path: AppRoutes.addressVerification,
           name: 'address-verification',
           builder: (context, state) => const AddressVerificationPage(),
         ),
 
         GoRoute(
-          path: Routes.bankVerification,
+          path: AppRoutes.bankVerification,
           name: 'bank-verification',
           builder: (context, state) => const BankVerificationPage(),
         ),
 
         GoRoute(
-          path: Routes.accountProcessed,
+          path: AppRoutes.accountProcessed,
           name: 'account-processed',
           builder: (context, state) => const AccountProcessedPage(),
         ),
 
         // ── App ──────────────────────────────────────────────────────────────
         GoRoute(
-          path: Routes.dashboard,
+          path: AppRoutes.dashboard,
           name: 'dashboard',
           builder: (context, state) => const DashboardPage(),
           routes: [
@@ -196,66 +197,71 @@ class AppRouter {
         ),
 
         GoRoute(
-          path: Routes.joinAuction,
+          path: AppRoutes.joinAuction,
           name: 'join-auction',
           builder: (context, state) => const JoinAuctionPage(),
         ),
 
         GoRoute(
-          path: Routes.auctionList,
+          path: AppRoutes.auctionList,
           name: 'auction-list',
           builder: (context, state) => const AuctionListPage(),
         ),
         GoRoute(
-          path: Routes.auctionDetail,
+          path: AppRoutes.auctionDetail,
           name: 'auction-detail',
           builder: (context, state) => const AuctionDetailPage(),
         ),
         GoRoute(
-          path: Routes.liveAuction,
+          path: AppRoutes.liveAuction,
           name: 'live-auction',
           builder: (context, state) => const LiveAuctionPage(),
         ),
         GoRoute(
-          path: Routes.buyNplDetail,
+          path: AppRoutes.buyNplDetail,
           name: 'buy-npl-detail',
           builder: (context, state) => const BuyNplDetailPage(),
         ),
         GoRoute(
-          path: Routes.buyNplConfirmation,
+          path: AppRoutes.buyNplConfirmation,
           name: 'buy-npl-confirmation',
           builder: (context, state) => const BuyNplConfirmationPage(),
         ),
         GoRoute(
-          path: Routes.profile,
+          path: AppRoutes.profile,
           name: 'profile',
           builder: (context, state) => const _PlaceholderPage(title: 'Profile'),
         ),
         GoRoute(
-          path: Routes.settings,
+          path: AppRoutes.profileSettings,
+          name: 'profile-settings',
+          builder: (context, state) => const ProfileSettingsPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settings,
           name: 'settings',
           builder: (context, state) => const _PlaceholderPage(title: 'Settings'),
         ),
         GoRoute(
-          path: Routes.register,
+          path: AppRoutes.register,
           name: 'register',
           builder: (context, state) => const RegisterPage(),
         ),
 
         GoRoute(
-          path: Routes.payment,
+          path: AppRoutes.payment,
           name: 'payment',
           builder: (context, state) => const PaymentPage(),
         ),
 
         GoRoute(
-          path: Routes.paymentGuide,
+          path: AppRoutes.paymentGuide,
           name: 'payment-guide',
           builder: (context, state) => const PaymentGuidePage(),
         ),
 
         GoRoute(
-          path: Routes.buyNpl,
+          path: AppRoutes.buyNpl,
           name: 'buy-npl',
           builder: (context, state) => const BuyNplPage(),
         ),

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/shared/widgets/bottomsheets/app_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -79,10 +79,10 @@ class _AppColorPickerState extends State<AppColorPicker> {
             variant: AppTextVariant.labelLarge,
             color: scheme.onSurface.withOpacity(0.7),
           ),
-          const SizedBox(height: Spacings.sm),
+          const SizedBox(height: AppSpacings.sm),
           Wrap(
-            spacing: Spacings.sm,
-            runSpacing: Spacings.sm,
+            spacing: AppSpacings.sm,
+            runSpacing: AppSpacings.sm,
             children: [
               ...widget.colors.map(
                 (c) => _ColorSwatch(
@@ -115,7 +115,7 @@ class _AppColorPickerState extends State<AppColorPicker> {
             ),
           ],
           if (_selected != null) ...[
-            const SizedBox(height: Spacings.sm),
+            const SizedBox(height: AppSpacings.sm),
             Row(
               children: [
                 Container(
@@ -277,7 +277,7 @@ class _HexColorDialogState extends State<_HexColorDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Rounded.xl)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppRadius.xl)),
       title: const Text('Custom Color'),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -288,7 +288,7 @@ class _HexColorDialogState extends State<_HexColorDialog> {
               height: 56,
               decoration: BoxDecoration(
                 color: _preview,
-                borderRadius: BorderRadius.circular(Rounded.md),
+                borderRadius: BorderRadius.circular(AppRadius.md),
               ),
             ),
           const SizedBox(height: 16),
@@ -406,7 +406,7 @@ class _AppImagePickerFieldState extends State<AppImagePickerField> {
       case AppImagePickerShape.circle:
         return BorderRadius.circular(widget.size / 2);
       case AppImagePickerShape.rounded:
-        return BorderRadius.circular(Rounded.lg);
+        return BorderRadius.circular(AppRadius.lg);
       case AppImagePickerShape.square:
         return BorderRadius.zero;
     }
@@ -429,7 +429,7 @@ class _AppImagePickerFieldState extends State<AppImagePickerField> {
             variant: AppTextVariant.labelLarge,
             color: scheme.onSurface.withOpacity(0.7),
           ),
-          const SizedBox(height: Spacings.sm),
+          const SizedBox(height: AppSpacings.sm),
           GestureDetector(
             onTap: _showPicker,
             child: Stack(

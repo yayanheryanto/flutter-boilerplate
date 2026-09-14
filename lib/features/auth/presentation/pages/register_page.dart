@@ -1,6 +1,6 @@
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
@@ -64,7 +64,7 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
       return;
     }
 
-    context.go(Routes.otp, extra: {'phone': _phoneController.text});
+    context.go(AppRoutes.otp, extra: {'phone': _phoneController.text});
   }
 
   @override
@@ -80,11 +80,11 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const SizedBox(height: 16),
+              const AppSpacer.md(),
               BlocConsumer<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is AuthAuthenticated) {
-                    AppNavigator.go(Routes.dashboard);
+                    AppNavigator.go(AppRoutes.dashboard);
                   }
                   if (state is AuthError) {
                     AppSnackbar.error(context, state.message);
@@ -98,8 +98,8 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                     child: Padding(
                       padding: EdgeInsets.symmetric(
                         horizontal: context.responsive(
-                          mobile: Spacings.lg,
-                          tablet: Spacings.xxl,
+                          mobile: AppSpacings.lg,
+                          tablet: AppSpacings.xxl,
                         ),
                       ),
                       child: Column(
@@ -203,7 +203,7 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                             label: 'Daftar',
                             onPressed: isLoading ? null : _onSubmit,
                             isLoading: isLoading,
-                            borderRadius: Rounded.xl,
+                            borderRadius: AppRadius.xl,
                           ),
                           const AppSpacer.lg(),
                           Row(
@@ -218,7 +218,7 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                                 'Masuk',
                                 variant: AppTextVariant.titleMedium,
                                 color: AppColors.primary500,
-                                onTap: () => AppNavigator.go(Routes.login),
+                                onTap: () => AppNavigator.go(AppRoutes.login),
                               ),
                             ],
                           ),
@@ -228,7 +228,7 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                   );
                 },
               ),
-              const SizedBox(height: 40),
+              const AppSpacer.xxl(),
             ],
           ),
         ),
@@ -269,7 +269,7 @@ class _TermsCheckbox extends StatelessWidget {
             activeColor: primary,
             materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(Rounded.xs),
+              borderRadius: BorderRadius.circular(AppRadius.xs),
             ),
           ),
         ),

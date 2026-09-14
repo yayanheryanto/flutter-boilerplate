@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_radius.dart';
 
 class AppCard extends StatelessWidget {
   final Widget child;
@@ -28,7 +28,7 @@ class AppCard extends StatelessWidget {
       elevation: elevation ?? 0,
       color: backgroundColor ?? Theme.of(context).colorScheme.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: borderRadius ?? BorderRadius.circular(Rounded.lg),
+        borderRadius: borderRadius ?? BorderRadius.circular(AppRadius.lg),
         side: BorderSide(
           color: borderColor ?? Theme.of(context).colorScheme.outline.withOpacity(0.5),
         ),

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/data/models/transaction_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -72,9 +72,9 @@ class _TransactionLayoutState extends State<TransactionLayout> {
             child: _filteredItems.isEmpty
                 ? const _EmptyState()
                 : ListView.separated(
-                    padding: const EdgeInsets.all(Spacings.md),
+                    padding: const EdgeInsets.all(AppSpacings.md),
                     itemCount: _filteredItems.length,
-                    separatorBuilder: (_, __) => const SizedBox(height: Spacings.md),
+                    separatorBuilder: (_, __) => const SizedBox(height: AppSpacings.md),
                     itemBuilder: (context, i) => _TransactionCard(item: _filteredItems[i]),
                   ),
           ),
@@ -94,7 +94,7 @@ class _TransactionTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(
-        horizontal: Spacings.md,
+        horizontal: AppSpacings.md,
       ),
       decoration: const BoxDecoration(
         border: Border(
@@ -110,7 +110,7 @@ class _TransactionTabBar extends StatelessWidget {
             isSelected: selected == TransactionStatus.unpaid,
             onTap: () => onChanged(TransactionStatus.unpaid),
           ),
-          const SizedBox(width: Spacings.lg),
+          const SizedBox(width: AppSpacings.lg),
           _TabItem(
             label: 'Menunggu Pembayaran',
             isSelected: selected == TransactionStatus.pendingPayment,
@@ -145,7 +145,7 @@ class _TabItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: Spacings.md),
+              padding: const EdgeInsets.symmetric(vertical: AppSpacings.md),
               child: AppText(
                 label,
                 textAlign: TextAlign.center,
@@ -176,8 +176,8 @@ class _TransactionCard extends StatelessWidget {
 
     return AppCard(
       backgroundColor: AppColors.white,
-      borderRadius: BorderRadius.circular(Rounded.lg),
-      padding: const EdgeInsets.all(Spacings.md),
+      borderRadius: BorderRadius.circular(AppRadius.lg),
+      padding: const EdgeInsets.all(AppSpacings.md),
       borderColor: AppColors.neutral300,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,7 +190,7 @@ class _TransactionCard extends StatelessWidget {
                 height: 72,
                 decoration: BoxDecoration(
                   color: AppColors.neutral200,
-                  borderRadius: BorderRadius.circular(Rounded.md),
+                  borderRadius: BorderRadius.circular(AppRadius.md),
                 ),
                 child: const Icon(
                   Icons.directions_car_rounded,
@@ -198,7 +198,7 @@ class _TransactionCard extends StatelessWidget {
                   size: 32,
                 ),
               ),
-              const SizedBox(width: Spacings.md),
+              const SizedBox(width: AppSpacings.md),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +213,7 @@ class _TransactionCard extends StatelessWidget {
                       variant: AppTextVariant.labelSmall,
                       color: AppColors.textPrimary,
                     ),
-                    const SizedBox(height: Spacings.sm),
+                    const SizedBox(height: AppSpacings.sm),
                     const AppText(
                       'Harga Terbentuk',
                       variant: AppTextVariant.labelSmall,
@@ -228,7 +228,7 @@ class _TransactionCard extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: Spacings.md),
+          const SizedBox(height: AppSpacings.md),
           if (isPendingPayment)
             _PendingPaymentSection(item: item)
           else
@@ -256,7 +256,7 @@ class _UnpaidActions extends StatelessWidget {
           child: AppButton(
             label: 'Lihat Detail',
             variant: AppButtonVariant.outlined,
-            borderRadius: Rounded.full,
+            borderRadius: AppRadius.full,
             borderColor: AppColors.blue100,
             size: AppButtonSize.small,
             borderWidth: 2,
@@ -264,14 +264,14 @@ class _UnpaidActions extends StatelessWidget {
             onPressed: () {},
           ),
         ),
-        const SizedBox(width: Spacings.md),
+        const SizedBox(width: AppSpacings.md),
         Expanded(
           child: AppButton(
             label: 'Bayar',
             size: AppButtonSize.small,
-            borderRadius: Rounded.full,
+            borderRadius: AppRadius.full,
             onPressed: () async {
-              await context.push(Routes.payment);
+              await context.push(AppRoutes.payment);
             },
           ),
         ),
@@ -336,7 +336,7 @@ class _PendingPaymentSection extends StatelessWidget {
           ],
         ),
 
-        const SizedBox(height: Spacings.md),
+        const SizedBox(height: AppSpacings.md),
 
         // ── Divider Line ──
         const Divider(
@@ -345,7 +345,7 @@ class _PendingPaymentSection extends StatelessWidget {
           color: AppColors.neutral200,
         ),
 
-        const SizedBox(height: Spacings.md),
+        const SizedBox(height: AppSpacings.md),
 
         // ── Bottom Section (Countdown & Action Button) ──
         Row(
@@ -362,7 +362,7 @@ class _PendingPaymentSection extends StatelessWidget {
                       color: AppColors.textPrimary,
                     ),
             ),
-            const SizedBox(width: Spacings.sm),
+            const SizedBox(width: AppSpacings.sm),
             SizedBox(
               width: 80,
               child: AppButton(
@@ -370,9 +370,9 @@ class _PendingPaymentSection extends StatelessWidget {
                 size: AppButtonSize.small,
                 backgroundColor: AppColors.primary500,
                 foregroundColor: AppColors.textPrimary,
-                borderRadius: Rounded.full,
+                borderRadius: AppRadius.full,
                 onPressed: () async {
-                  await context.push(Routes.paymentGuide);
+                  await context.push(AppRoutes.paymentGuide);
                 },
               ),
             ),
@@ -471,7 +471,7 @@ class _EmptyState extends StatelessWidget {
             size: 48,
             color: AppColors.neutral300,
           ),
-          SizedBox(height: Spacings.md),
+          SizedBox(height: AppSpacings.md),
           AppText(
             'Belum ada transaksi',
             color: AppColors.textPrimary,

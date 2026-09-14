@@ -1,7 +1,7 @@
-import 'package:emas/core/constants/elevations.dart';
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_elevations.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -30,7 +30,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
     return AppScaffoldWrapper(
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
-        elevation: Elevations.xs,
+        elevation: AppElevations.xs,
         onBack: () => context.pop(),
       ),
       body: SafeArea(
@@ -40,7 +40,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(Spacings.lg),
+                padding: const EdgeInsets.all(AppSpacings.lg),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -111,15 +111,15 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
             // ── Bottom CTA ───────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                Spacings.lg,
-                Spacings.sm,
-                Spacings.lg,
-                Spacings.lg,
+                AppSpacings.lg,
+                AppSpacings.sm,
+                AppSpacings.lg,
+                AppSpacings.lg,
               ),
               child: AppButton(
                 label: 'Mulai Verifikasi Akun',
                 onPressed: () async => context.push(
-                  Routes.idCardGuide,
+                  AppRoutes.idCardGuide,
                   extra: _selected,
                 ),
                 borderRadius: 25,
@@ -157,8 +157,8 @@ class _AccountTypeCard extends StatelessWidget {
         height: 10.h,
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(
-          horizontal: Spacings.md,
-          vertical: Spacings.sm,
+          horizontal: AppSpacings.md,
+          vertical: AppSpacings.sm,
         ),
         decoration: BoxDecoration(
           color: selected
@@ -167,7 +167,7 @@ class _AccountTypeCard extends StatelessWidget {
                 )
               : AppColors.white,
           borderRadius: BorderRadius.circular(
-            Rounded.lg,
+            AppRadius.lg,
           ),
           border: Border.all(
             color: selected ? AppColors.primary500 : AppColors.white,

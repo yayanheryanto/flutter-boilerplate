@@ -1,5 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -113,7 +113,7 @@ class AppImage extends StatelessWidget {
         height = size,
         circle = true,
         borderRadius = null,
-        defaultRadius = Rounded.full;
+        defaultRadius = AppRadius.full;
 
   const AppImage.svgIcon({
     super.key,

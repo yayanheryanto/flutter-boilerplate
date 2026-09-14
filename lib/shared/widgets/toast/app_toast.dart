@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 import 'package:flutter/material.dart';
 
@@ -276,14 +276,14 @@ class _ToastWidgetState extends State<_ToastWidget> with SingleTickerProviderSta
                 child: Material(
                   color: Colors.transparent,
                   child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: Spacings.xl),
+                    margin: const EdgeInsets.symmetric(horizontal: AppSpacings.xl),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: Spacings.md,
-                      vertical: Spacings.sm + 2,
+                      horizontal: AppSpacings.md,
+                      vertical: AppSpacings.sm + 2,
                     ),
                     decoration: BoxDecoration(
                       color: bgColor,
-                      borderRadius: BorderRadius.circular(Rounded.full),
+                      borderRadius: BorderRadius.circular(AppRadius.full),
                       boxShadow: [
                         BoxShadow(
                           color: bgColor.withOpacity(0.35),
@@ -296,7 +296,7 @@ class _ToastWidgetState extends State<_ToastWidget> with SingleTickerProviderSta
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(iconData, color: Colors.white, size: 18),
-                        const SizedBox(width: Spacings.sm),
+                        const SizedBox(width: AppSpacings.sm),
                         Flexible(
                           child: Text(
                             widget.message,

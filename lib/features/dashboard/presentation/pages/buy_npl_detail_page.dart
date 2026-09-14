@@ -1,6 +1,6 @@
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/utils/currency_formatter.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/features/dashboard/domain/entities/npl_order_item.dart';
@@ -85,7 +85,7 @@ class BuyNplDetailPage extends StatelessWidget {
               // ── Scrollable content ─────────────────────────────────────
               Expanded(
                 child: ListView(
-                  padding: const EdgeInsets.all(Spacings.md),
+                  padding: const EdgeInsets.all(AppSpacings.md),
                   children: [
                     // Header teks
                     const AppText(
@@ -93,18 +93,18 @@ class BuyNplDetailPage extends StatelessWidget {
                       variant: AppTextVariant.titleLarge,
                       fontWeight: FontWeight.w700,
                     ),
-                    const SizedBox(height: Spacings.xs),
+                    const SizedBox(height: AppSpacings.xs),
                     const AppText(
                       'Silakan cek kembali yang sudah Anda pilih sebelum lanjut ke pembayaran',
                       color: AppColors.textPrimary,
                     ),
 
-                    const SizedBox(height: Spacings.lg),
+                    const SizedBox(height: AppSpacings.lg),
 
                     // Order cards
                     ...orders.map(
                       (order) => Padding(
-                        padding: const EdgeInsets.only(bottom: Spacings.md),
+                        padding: const EdgeInsets.only(bottom: AppSpacings.md),
                         child: _NplOrderCard(order: order),
                       ),
                     ),
@@ -136,7 +136,7 @@ class _NplOrderCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(Rounded.lg),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(color: AppColors.neutral200),
       ),
       clipBehavior: Clip.antiAlias,
@@ -144,7 +144,7 @@ class _NplOrderCard extends StatelessWidget {
         children: [
           // ── Header: icon + label categoryLabel ─────────────────────────
           Padding(
-            padding: const EdgeInsets.all(Spacings.md),
+            padding: const EdgeInsets.all(AppSpacings.md),
             child: Row(
               children: [
                 Container(
@@ -152,13 +152,13 @@ class _NplOrderCard extends StatelessWidget {
                   height: 44,
                   decoration: BoxDecoration(
                     color: iconBg,
-                    borderRadius: BorderRadius.circular(Rounded.md),
+                    borderRadius: BorderRadius.circular(AppRadius.md),
                   ),
                   child: Center(
                     child: Icon(icon, color: iconColor, size: 26),
                   ),
                 ),
-                const SizedBox(width: Spacings.sm),
+                const SizedBox(width: AppSpacings.sm),
                 AppText(
                   order.category.label,
                   variant: AppTextVariant.titleSmall,
@@ -171,7 +171,7 @@ class _NplOrderCard extends StatelessWidget {
           const Divider(height: 1, color: AppColors.neutral200),
 
           Padding(
-            padding: const EdgeInsets.all(Spacings.md),
+            padding: const EdgeInsets.all(AppSpacings.md),
             child: Column(
               children: [
                 _DetailRow(
@@ -184,7 +184,7 @@ class _NplOrderCard extends StatelessWidget {
                     value: order.location,
                   ),
                 ),
-                const SizedBox(height: Spacings.md),
+                const SizedBox(height: AppSpacings.md),
                 _DetailRow(
                   left: _DetailCell(
                     label: 'Tanggal Lelang',
@@ -195,7 +195,7 @@ class _NplOrderCard extends StatelessWidget {
                     value: order.time,
                   ),
                 ),
-                const SizedBox(height: Spacings.md),
+                const SizedBox(height: AppSpacings.md),
                 _DetailRow(
                   left: _DetailCell(
                     label: 'Jumlah NPL',
@@ -271,8 +271,8 @@ class _SubtotalBar extends StatelessWidget {
     return Container(
       color: AppColors.primary500,
       padding: const EdgeInsets.symmetric(
-        horizontal: Spacings.md,
-        vertical: Spacings.sm + 4,
+        horizontal: AppSpacings.md,
+        vertical: AppSpacings.sm + 4,
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -305,16 +305,16 @@ class _BottomCTA extends StatelessWidget {
     return Container(
       color: AppColors.white,
       padding: const EdgeInsets.fromLTRB(
-        Spacings.md,
-        Spacings.sm,
-        Spacings.md,
-        Spacings.lg,
+        AppSpacings.md,
+        AppSpacings.sm,
+        AppSpacings.md,
+        AppSpacings.lg,
       ),
       child: AppButton(
         label: 'Lanjut Pembayaran ${CurrencyFormatter.rupiah(total)}',
-        borderRadius: Rounded.full,
+        borderRadius: AppRadius.full,
         onPressed: () async {
-          await context.push(Routes.buyNplConfirmation);
+          await context.push(AppRoutes.buyNplConfirmation);
         },
       ),
     );

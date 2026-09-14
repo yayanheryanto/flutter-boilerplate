@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_radius.dart';
 
 class AppBadge extends StatelessWidget {
   final String? label;
@@ -27,7 +27,7 @@ class AppBadge extends StatelessWidget {
       padding: padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
       decoration: BoxDecoration(
         color: bg,
-        borderRadius: BorderRadius.circular(Rounded.full),
+        borderRadius: BorderRadius.circular(AppRadius.full),
       ),
       child: label != null
           ? Text(

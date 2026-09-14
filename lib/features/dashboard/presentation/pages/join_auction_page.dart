@@ -1,8 +1,8 @@
-import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/dashboard/presentation/bloc/join_auction/join_auction_bloc.dart';
-import 'package:emas/core/constants/spacings.dart';
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
@@ -118,7 +118,7 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
       appBar: const AppPageBar(
         title: 'Ikut Lelang',
         showBackButton: false,
-        titleSpacing: Spacings.md,
+        titleSpacing: AppSpacings.md,
         titleVariant: AppPageBarTitleVariant.withIcon,
         titleIcon: Icons.gavel_rounded,
       ),
@@ -129,10 +129,10 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
           _SectionContainer(
             color: AppColors.white,
             padding: const EdgeInsets.fromLTRB(
-              Spacings.md,
-              Spacings.md,
-              Spacings.md,
-              Spacings.lg,
+              AppSpacings.md,
+              AppSpacings.md,
+              AppSpacings.md,
+              AppSpacings.lg,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,7 +156,7 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
           // ── Sedang Berlangsung ────────────────────────────────────────
           _SectionContainer(
             color: AppColors.white,
-            padding: const EdgeInsets.all(Spacings.md),
+            padding: const EdgeInsets.all(AppSpacings.md),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -168,7 +168,7 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
                 const AppSpacer.md(),
                 ..._dummySedangBerlangsung.map(
                   (item) => Padding(
-                    padding: const EdgeInsets.only(bottom: Spacings.sm),
+                    padding: const EdgeInsets.only(bottom: AppSpacings.sm),
                     child: _AuctionListCard(item: item),
                   ),
                 ),
@@ -182,10 +182,10 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
           _SectionContainer(
             color: AppColors.white,
             padding: const EdgeInsets.fromLTRB(
-              Spacings.md,
-              Spacings.md,
-              Spacings.md,
-              Spacings.lg,
+              AppSpacings.md,
+              AppSpacings.md,
+              AppSpacings.md,
+              AppSpacings.lg,
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -199,7 +199,7 @@ class _JoinAuctionPageState extends State<JoinAuctionPage> {
                 ..._dummyAkanDatang
                     .map(
                       (item) => Padding(
-                        padding: const EdgeInsets.only(bottom: Spacings.sm),
+                        padding: const EdgeInsets.only(bottom: AppSpacings.sm),
                         child: _AuctionListCard(item: item),
                       ),
                     ),
@@ -234,7 +234,7 @@ class _CategorySelector extends StatelessWidget {
       children: _auctionCategories
           .map(
             (cat) => Padding(
-              padding: const EdgeInsets.only(right: Spacings.sm),
+              padding: const EdgeInsets.only(right: AppSpacings.sm),
               child: _CategoryChip(
                 category: cat,
                 isSelected: cat == selected,
@@ -269,10 +269,10 @@ class _CategoryChip extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         width: 88,
-        padding: const EdgeInsets.symmetric(vertical: Spacings.sm),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacings.sm),
         decoration: BoxDecoration(
           color: isSelected ? AppColors.primary500.withOpacity(0.08) : AppColors.white,
-          borderRadius: BorderRadius.circular(Rounded.md),
+          borderRadius: BorderRadius.circular(AppRadius.md),
           border: Border.all(
             color: isSelected ? AppColors.primary500 : AppColors.neutral200,
             width: isSelected ? 2 : 1,
@@ -286,7 +286,7 @@ class _CategoryChip extends StatelessWidget {
               height: 44,
               decoration: BoxDecoration(
                 // color: bgColor,
-                borderRadius: BorderRadius.circular(Rounded.sm),
+                borderRadius: BorderRadius.circular(AppRadius.sm),
               ),
               child: Center(
                 child: Icon(icon, color: iconColor, size: 30),
@@ -326,7 +326,7 @@ class _AuctionListCard extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.white,
-        borderRadius: BorderRadius.circular(Rounded.lg),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         border: Border.all(
           color: AppColors.neutral200,
         ),
@@ -338,7 +338,7 @@ class _AuctionListCard extends StatelessWidget {
           // CARD CONTENT
           // ===============================================================
           Padding(
-            padding: const EdgeInsets.all(Spacings.md),
+            padding: const EdgeInsets.all(AppSpacings.md),
             child: Row(
               children: [
                 // =========================================================
@@ -357,7 +357,7 @@ class _AuctionListCard extends StatelessWidget {
                 ),
 
                 const SizedBox(
-                  width: Spacings.md,
+                  width: AppSpacings.md,
                 ),
 
                 // =========================================================
@@ -430,7 +430,7 @@ class _AuctionListCard extends StatelessWidget {
             child: InkWell(
               onTap: () async {
                 await context.push(
-                  Routes.liveAuction,
+                  AppRoutes.liveAuction,
                 );
               },
               child: const SizedBox(

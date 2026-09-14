@@ -1,11 +1,10 @@
 import 'dart:async';
 
 import 'package:emas/core/constants/images.dart';
-import 'package:emas/core/constants/rounded.dart';
+import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/dashboard/presentation/layouts/buy_npl_layout.dart';
 import 'package:emas/features/dashboard/presentation/layouts/profile_layout.dart';
-import 'package:emas/features/dashboard/presentation/pages/buy_npl_page.dart';
 import 'package:emas/features/dashboard/presentation/layouts/transaction_layout.dart';
 import 'package:emas/features/dashboard/presentation/pages/join_auction_page.dart';
 import 'package:emas/features/dashboard/presentation/layouts/dashboard_layout.dart';
@@ -101,9 +100,7 @@ class _DashboardViewState extends State<_DashboardView> {
             onTap: (index) {
               if (index == 2) return;
 
-              context.read<DashboardBloc>().add(
-                    DashboardTabChanged(index),
-                  );
+              context.read<DashboardBloc>().add(DashboardTabChanged(index));
             },
           ),
         );
@@ -124,14 +121,10 @@ class _DashboardViewState extends State<_DashboardView> {
           bannerCtrl: _bannerCtrl,
           bannerPage: state.bannerIndex,
           onBannerChanged: (index) {
-            bloc.add(
-              DashboardBannerChanged(index),
-            );
+            bloc.add(DashboardBannerChanged(index));
           },
           onRefresh: () async {
-            bloc.add(
-              const DashboardRefreshRequested(),
-            );
+            bloc.add(const DashboardRefreshRequested());
           },
         ),
         const BuyNPLLayout(),
@@ -139,31 +132,6 @@ class _DashboardViewState extends State<_DashboardView> {
         const TransactionLayout(),
         const ProfileLayout(),
       ],
-    );
-  }
-
-  Widget _buildPlaceholder(String title) {
-    return RefreshIndicator(
-      onRefresh: () async {
-        context.read<DashboardBloc>().add(
-              const DashboardRefreshRequested(),
-            );
-      },
-      child: ListView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        children: [
-          SizedBox(
-            height: MediaQuery.of(context).size.height * 0.6,
-            child: Center(
-              child: AppText(
-                title,
-                variant: AppTextVariant.titleMedium,
-                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -285,7 +253,7 @@ class _NavItem extends StatelessWidget {
               width: isSelected ? 15.w : 0,
               decoration: BoxDecoration(
                 color: AppColors.blue100,
-                borderRadius: BorderRadius.circular(Rounded.xxs),
+                borderRadius: BorderRadius.circular(AppRadius.xxs),
               ),
             ),
             const Spacer(),
@@ -295,7 +263,7 @@ class _NavItem extends StatelessWidget {
               height: 24,
               colorFilter: ColorFilter.mode(color, BlendMode.srcIn),
             ),
-            const SizedBox(height: 2),
+            const AppSpacer.xxs(),
             AppText(
               label,
               fontSize: 10,

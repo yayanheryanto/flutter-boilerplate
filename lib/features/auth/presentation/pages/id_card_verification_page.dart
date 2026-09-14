@@ -1,9 +1,9 @@
 import 'dart:io';
 
-import 'package:emas/core/constants/elevations.dart';
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_elevations.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/services/camera_service.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
@@ -71,10 +71,10 @@ class IdCardVerificationPageState extends State<IdCardVerificationPage> with App
       context,
       showCloseButton: false,
       contentPadding: const EdgeInsets.fromLTRB(
-        Spacings.lg,
-        Spacings.sm,
-        Spacings.lg,
-        Spacings.lg,
+        AppSpacings.lg,
+        AppSpacings.sm,
+        AppSpacings.lg,
+        AppSpacings.lg,
       ),
       content: _PhotoPickerContent(
         onCamera: () async {
@@ -140,7 +140,7 @@ class IdCardVerificationPageState extends State<IdCardVerificationPage> with App
       return;
     }
     // TODO: dispatch KTP verification event
-    context.go(Routes.dashboard);
+    context.go(AppRoutes.dashboard);
   }
 
   @override
@@ -150,7 +150,7 @@ class IdCardVerificationPageState extends State<IdCardVerificationPage> with App
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
         onBack: () => context.pop(),
-        elevation: Elevations.xs,
+        elevation: AppElevations.xs,
       ),
       body: SafeArea(
         top: false,
@@ -166,8 +166,8 @@ class IdCardVerificationPageState extends State<IdCardVerificationPage> with App
                 ),
                 Container(
                   margin: const EdgeInsets.symmetric(
-                    horizontal: Spacings.md,
-                    vertical: Spacings.sm,
+                    horizontal: AppSpacings.md,
+                    vertical: AppSpacings.sm,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -270,7 +270,7 @@ class IdCardVerificationPageState extends State<IdCardVerificationPage> with App
                       AppButton(
                         label: 'Lanjut',
                         onPressed: () async {
-                          await context.push(Routes.faceGuide);
+                          await context.push(AppRoutes.faceGuide);
                           // _onSubmit
                         },
                         borderRadius: 25,
@@ -308,7 +308,7 @@ class _KtpPhotoCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFFFDF6EE),
-        borderRadius: BorderRadius.circular(Rounded.lg),
+        borderRadius: BorderRadius.circular(AppRadius.lg),
         border: const Border(
           left: BorderSide(
             color: AppColors.neutral200,
@@ -328,7 +328,7 @@ class _KtpPhotoCard extends StatelessWidget {
           ),
         ),
       ),
-      padding: const EdgeInsets.all(Spacings.md),
+      padding: const EdgeInsets.all(AppSpacings.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -341,7 +341,7 @@ class _KtpPhotoCard extends StatelessWidget {
 
           // Photo area
           ClipRRect(
-            borderRadius: BorderRadius.circular(Rounded.md),
+            borderRadius: BorderRadius.circular(AppRadius.md),
             child: photo != null
                 ? Center(
                     child: Image.file(

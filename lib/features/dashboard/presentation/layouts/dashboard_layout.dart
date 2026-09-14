@@ -1,7 +1,7 @@
 import 'package:emas/core/constants/images.dart';
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/auction_schedule_card.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
@@ -50,7 +50,7 @@ class DashboardLayout extends StatelessWidget {
           const SliverToBoxAdapter(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                horizontal: Spacings.md,
+                horizontal: AppSpacings.md,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,7 +78,7 @@ class DashboardLayout extends StatelessWidget {
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                horizontal: Spacings.md,
+                horizontal: AppSpacings.md,
               ),
               child: Row(
                 children: [
@@ -88,7 +88,7 @@ class DashboardLayout extends StatelessWidget {
                     height: 34,
                     decoration: BoxDecoration(
                       color: AppColors.primary500.withOpacity(0.10),
-                      borderRadius: BorderRadius.circular(Rounded.md),
+                      borderRadius: BorderRadius.circular(AppRadius.md),
                     ),
                     child: const Icon(
                       Icons.calendar_month_rounded,
@@ -144,7 +144,7 @@ class DashboardLayout extends StatelessWidget {
                     scrollDirection: Axis.horizontal,
                     physics: const BouncingScrollPhysics(),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: Spacings.md,
+                      horizontal: AppSpacings.md,
                     ),
                     itemCount: dummyAuctionSchedule.length,
                     itemBuilder: (_, index) {
@@ -176,12 +176,12 @@ class _VerificationBanner extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(
-        horizontal: Spacings.md,
-        vertical: Spacings.sm,
+        horizontal: AppSpacings.md,
+        vertical: AppSpacings.sm,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(Rounded.md),
+        borderRadius: BorderRadius.circular(AppRadius.md),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withOpacity(0.1),
@@ -235,7 +235,7 @@ class _VerificationBanner extends StatelessWidget {
             behavior: HitTestBehavior.opaque,
             onTap: () async {
               await context.push(
-                Routes.verificationPreparation,
+                AppRoutes.verificationPreparation,
               );
             },
             child: Container(
@@ -246,7 +246,7 @@ class _VerificationBanner extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.primary500,
                 borderRadius: BorderRadius.circular(
-                  Rounded.full,
+                  AppRadius.full,
                 ),
               ),
               child: const AppText(

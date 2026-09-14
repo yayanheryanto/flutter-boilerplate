@@ -1,7 +1,7 @@
-import 'package:emas/core/constants/elevations.dart';
-import 'package:emas/core/constants/routes.dart';
+import 'package:emas/core/constants/app_elevations.dart';
+import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/images.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -34,13 +34,13 @@ class _AccountProcessedPageContent extends StatelessWidget {
       appBar: const AppPageBar(
         title: 'Verifikasi Akun',
         showBackButton: false,
-        titleSpacing: Spacings.md,
-        elevation: Elevations.xs,
+        titleSpacing: AppSpacings.md,
+        elevation: AppElevations.xs,
       ),
       body: SafeArea(
         top: false,
         child: Container(
-          margin: const EdgeInsets.all(Spacings.md),
+          margin: const EdgeInsets.all(AppSpacings.md),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -69,7 +69,7 @@ class _AccountProcessedPageContent extends StatelessWidget {
               AppButton(
                 label: 'Kembali ke Beranda',
                 onPressed: () {
-                  context.go(Routes.login);
+                  context.go(AppRoutes.login);
                   // _onSubmit
                 },
                 borderRadius: 25,

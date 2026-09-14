@@ -1,6 +1,6 @@
-import 'package:emas/core/constants/routes.dart';
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/utils/account_type.dart';
 import 'package:emas/features/auth/presentation/widgets/verification_stepper.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -42,13 +42,13 @@ class FaceVerificationGuidePage extends StatelessWidget {
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: Spacings.lg,
-                  vertical: Spacings.sm,
+                  horizontal: AppSpacings.lg,
+                  vertical: AppSpacings.sm,
                 ),
                 child: Container(
                   decoration: BoxDecoration(
                     color: const Color(0xFFFDF6EE),
-                    borderRadius: BorderRadius.circular(Rounded.lg),
+                    borderRadius: BorderRadius.circular(AppRadius.lg),
                     border: const Border(
                       left: BorderSide(
                         color: AppColors.neutral200,
@@ -68,7 +68,7 @@ class FaceVerificationGuidePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  padding: const EdgeInsets.all(Spacings.md),
+                  padding: const EdgeInsets.all(AppSpacings.md),
                   child: const Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -117,15 +117,15 @@ class FaceVerificationGuidePage extends StatelessWidget {
             // ── Bottom CTA ─────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.fromLTRB(
-                Spacings.lg,
-                Spacings.sm,
-                Spacings.lg,
-                Spacings.lg,
+                AppSpacings.lg,
+                AppSpacings.sm,
+                AppSpacings.lg,
+                AppSpacings.lg,
               ),
               child: AppButton(
                 label: 'Mulai Verifikasi Wajah',
                 onPressed: () async {
-                  await context.push(Routes.faceVerification);
+                  await context.push(AppRoutes.faceVerification);
                 },
                 borderRadius: 25,
               ),

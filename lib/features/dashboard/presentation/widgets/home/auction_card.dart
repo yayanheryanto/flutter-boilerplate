@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
 import 'package:emas/features/dashboard/data/models/dashboard_formatters.dart';
@@ -54,10 +54,10 @@ class _AuctionCardState extends State<AuctionCard> {
       onTap: () {},
       child: Container(
         width: 160,
-        margin: const EdgeInsets.only(right: Spacings.sm),
+        margin: const EdgeInsets.only(right: AppSpacings.sm),
         decoration: BoxDecoration(
           color: scheme.surface,
-          borderRadius: BorderRadius.circular(Rounded.xl),
+          borderRadius: BorderRadius.circular(AppRadius.xl),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.06),
@@ -107,7 +107,7 @@ class _CardImage extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(
-        top: Radius.circular(Rounded.xl),
+        top: Radius.circular(AppRadius.xl),
       ),
       child: Container(
         height: 100,
@@ -118,8 +118,8 @@ class _CardImage extends StatelessWidget {
               child: Text(item.image, style: const TextStyle(fontSize: 48)),
             ),
             Positioned(
-              top: Spacings.sm,
-              right: Spacings.sm,
+              top: AppSpacings.sm,
+              right: AppSpacings.sm,
               child: _WishlistButton(
                 isWishlisted: item.wishlisted,
                 surfaceColor: scheme.surface,
@@ -127,8 +127,8 @@ class _CardImage extends StatelessWidget {
             ),
             if (showTimer)
               Positioned(
-                bottom: Spacings.sm,
-                left: Spacings.sm,
+                bottom: AppSpacings.sm,
+                left: AppSpacings.sm,
                 child: _CountdownChip(secs: secs, urgent: urgent),
               ),
           ],
@@ -184,7 +184,7 @@ class _CountdownChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
         color: urgent ? AppColors.error500 : Colors.black54,
-        borderRadius: BorderRadius.circular(Rounded.sm),
+        borderRadius: BorderRadius.circular(AppRadius.sm),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -219,10 +219,10 @@ class _CardInfo extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.fromLTRB(
-        Spacings.sm,
-        Spacings.sm,
-        Spacings.sm,
-        Spacings.md,
+        AppSpacings.sm,
+        AppSpacings.sm,
+        AppSpacings.sm,
+        AppSpacings.md,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

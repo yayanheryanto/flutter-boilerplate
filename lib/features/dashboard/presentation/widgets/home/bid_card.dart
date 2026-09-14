@@ -1,6 +1,6 @@
 import 'package:emas/shared/theme/app_colors.dart';
-import 'package:emas/core/constants/rounded.dart';
-import 'package:emas/core/constants/spacings.dart';
+import 'package:emas/core/constants/app_radius.dart';
+import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
@@ -23,12 +23,12 @@ class BidCard extends StatelessWidget {
       onTap: () {},
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: Spacings.md,
-          vertical: Spacings.sm + 4,
+          horizontal: AppSpacings.md,
+          vertical: AppSpacings.sm + 4,
         ),
         decoration: BoxDecoration(
           color: scheme.surface,
-          borderRadius: BorderRadius.circular(Rounded.lg),
+          borderRadius: BorderRadius.circular(AppRadius.lg),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.04),
@@ -44,13 +44,13 @@ class BidCard extends StatelessWidget {
               height: 48,
               decoration: BoxDecoration(
                 color: scheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(Rounded.md),
+                borderRadius: BorderRadius.circular(AppRadius.md),
               ),
               child: Center(
                 child: Text(item.image, style: const TextStyle(fontSize: 24)),
               ),
             ),
-            const AppSpacer(Spacings.sm, horizontal: true),
+            const AppSpacer(AppSpacings.sm, horizontal: true),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -74,7 +74,7 @@ class BidCard extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
               decoration: BoxDecoration(
                 color: statusColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(Rounded.full),
+                borderRadius: BorderRadius.circular(AppRadius.full),
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,

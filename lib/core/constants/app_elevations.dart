@@ -1,5 +1,5 @@
-class Elevations {
-  Elevations._();
+class AppElevations {
+  AppElevations._();
 
   static const double none = 0.0;
   static const double xs = 1.0;
