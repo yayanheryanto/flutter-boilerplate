@@ -13,6 +13,7 @@ import 'package:emas/features/auth/presentation/pages/face_verification_guide_pa
 import 'package:emas/features/auth/presentation/pages/face_verification_page.dart';
 import 'package:emas/features/auth/presentation/pages/id_card_guide_page.dart';
 import 'package:emas/features/auth/presentation/pages/id_card_verification_page.dart';
+import 'package:emas/features/auth/presentation/pages/input_old_password_page.dart';
 import 'package:emas/features/auth/presentation/pages/profile_seettings_page.dart';
 import 'package:emas/features/auth/presentation/pages/register_page.dart';
 import 'package:emas/features/auth/presentation/pages/tax_id_verification_page.dart';
@@ -145,6 +146,12 @@ class AppRouter {
           path: AppRoutes.changePassword,
           name: 'change-password',
           builder: (context, state) => const ChangePasswordPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.inputOldPassword,
+          name: 'input-old-password',
+          builder: (context, state) => const InputOldPasswordPage(),
         ),
 
         GoRoute(

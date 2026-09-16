@@ -66,7 +66,9 @@ class ProfileLayout extends StatelessWidget {
           _ProfileMenuItem(
             label: 'Ubah Password',
             icon: Icons.person_outline,
-            onTap: notImplemented,
+            onTap: () async {
+              await context.push(AppRoutes.inputOldPassword);
+            },
           ),
         ],
       ),
