@@ -1,45 +1,27 @@
 import 'dart:convert';
 
-import 'package:emas/core/constants/app_routes.dart';
-import 'package:emas/features/kyc/presentation/pages/face_detection_page.dart';
-import 'package:emas/features/kyc/domain/entities/account_type.dart';
-import 'package:emas/features/kyc/presentation/pages/account_processed_page.dart';
-import 'package:emas/features/kyc/presentation/pages/address_verification_page.dart';
-import 'package:emas/features/kyc/presentation/pages/bank_verification_page.dart';
-import 'package:emas/features/kyc/presentation/pages/camera_pick_page.dart';
-import 'package:emas/features/auth/presentation/pages/change_password_page.dart';
-import 'package:emas/features/kyc/presentation/pages/confirmation_verification_page.dart';
-import 'package:emas/features/kyc/presentation/pages/face_verification_guide_page.dart';
-import 'package:emas/features/kyc/presentation/pages/face_verification_page.dart';
-import 'package:emas/features/kyc/presentation/pages/id_card_guide_page.dart';
-import 'package:emas/features/kyc/presentation/pages/id_card_verification_page.dart';
-import 'package:emas/features/auth/presentation/pages/verify_old_password_page.dart';
-import 'package:emas/features/profile/presentation/pages/profile_settings_page.dart';
-import 'package:emas/features/auth/presentation/pages/register_page.dart';
-import 'package:emas/features/kyc/presentation/pages/tax_id_verification_page.dart';
-import 'package:emas/features/kyc/presentation/pages/verification_preparation_page.dart';
-import 'package:emas/features/npl/presentation/pages/buy_npl_confirmation_page.dart';
-import 'package:emas/features/npl/presentation/pages/buy_npl_detail_page.dart';
-import 'package:emas/features/npl/presentation/pages/buy_npl_page.dart';
-import 'package:emas/features/auction/presentation/pages/join_auction_page.dart';
-import 'package:emas/features/auction/presentation/pages/auction_detail_page.dart';
-import 'package:emas/features/auction/presentation/pages/auction_list_page.dart';
-import 'package:emas/features/live_auction/presentation/pages/live_auction_page.dart';
-import 'package:emas/features/payment/presentation/pages/payment_guide_page.dart';
-import 'package:emas/features/payment/presentation/pages/payment_page.dart';
-import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
-import 'package:emas/core/utils/navigator_key.dart';
-import 'package:emas/features/auth/presentation/pages/login_page.dart';
-import 'package:emas/features/auth/presentation/pages/otp_page.dart';
-import 'package:emas/features/auction/domain/entities/auction_item.dart';
-import 'package:emas/features/auction/presentation/pages/category_page.dart';
-import 'package:emas/features/dashboard/presentation/pages/dashboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
-import 'package:emas/features/auth/presentation/pages/forgot_password_page.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/utils/navigator_key.dart';
+import 'package:emas/features/auction/presentation/routes/auction_routes.dart';
+import 'package:emas/features/auth/presentation/routes/auth_routes.dart';
+import 'package:emas/features/dashboard/presentation/routes/dashboard_routes.dart';
+import 'package:emas/features/kyc/domain/entities/account_type.dart';
+import 'package:emas/features/kyc/presentation/routes/kyc_routes.dart';
+import 'package:emas/features/live_auction/presentation/routes/live_auction_routes.dart';
+import 'package:emas/features/npl/presentation/routes/npl_routes.dart';
+import 'package:emas/features/payment/presentation/routes/payment_routes.dart';
+import 'package:emas/features/profile/presentation/routes/profile_routes.dart';
+import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 
+/// Router aplikasi. Setiap fitur mendefinisikan route-nya sendiri di
+/// `features/<fitur>/presentation/routes/`; kelas ini hanya menggabungkan.
+///
+/// Menambah fitur baru: buat `<fitur>_routes.dart`, lalu tambahkan ke
+/// daftar [routes] di bawah — tidak perlu menyentuh fitur lain.
 @singleton
 class AppRouter {
   late final GoRouter router;
@@ -52,225 +34,25 @@ class AppRouter {
       debugLogDiagnostics: true,
       extraCodec: const _AppExtraCodec(),
       routes: [
-        // ── Auth ─────────────────────────────────────────────────────────────
-        GoRoute(
-          path: AppRoutes.login,
-          name: 'login',
-          builder: (context, state) => const LoginPage(),
-        ),
+        ...authRoutes,
+        ...kycRoutes,
+        ...dashboardRoutes,
+        ...auctionRoutes,
+        ...liveAuctionRoutes,
+        ...nplRoutes,
+        ...paymentRoutes,
+        ...profileRoutes,
 
-        GoRoute(
-          path: AppRoutes.forgotPassword,
-          name: 'forgot-password',
-          builder: (context, state) => const ForgotPasswordPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.otp,
-          name: 'otp',
-          builder: (context, state) {
-            final extra = state.extra as Map<String, dynamic>? ?? {};
-            final phone = extra['phone'] as String? ?? '';
-            return OtpPage(phone: phone);
-          },
-        ),
-
-        GoRoute(
-          path: AppRoutes.verificationPreparation,
-          name: 'verification-preparation',
-          builder: (context, state) => const VerificationPreparationPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.idCardGuide,
-          name: 'id-card-guide',
-          builder: (context, state) {
-            final accountType = state.extra as AccountType? ?? AccountType.personal;
-            return IdCardGuidePage(
-              accountType: accountType,
-            );
-          },
-        ),
-
-        GoRoute(
-          path: AppRoutes.idCardVerification,
-          name: 'id-card-verification',
-          builder: (context, state) {
-            final accountType = state.extra as AccountType? ?? AccountType.personal;
-            return IdCardVerificationPage(
-              accountType: accountType,
-            );
-          },
-        ),
-
-        GoRoute(
-          path: AppRoutes.taxIdVerification,
-          name: 'tax-id-verification',
-          builder: (context, state) {
-            final accountType = state.extra as AccountType? ?? AccountType.personal;
-            return TaxIdVerificationPage(
-              accountType: accountType,
-            );
-          },
-        ),
-
-        GoRoute(
-          path: AppRoutes.faceGuide,
-          name: 'face-guide',
-          builder: (context, state) {
-            final accountType = state.extra as AccountType? ?? AccountType.personal;
-            return FaceVerificationGuidePage(
-              accountType: accountType,
-            );
-          },
-        ),
-
-        GoRoute(
-          path: AppRoutes.faceVerification,
-          name: 'face-verification',
-          builder: (context, state) {
-            final accountType = state.extra as AccountType? ?? AccountType.personal;
-            return FaceVerificationPage(
-              accountType: accountType,
-            );
-          },
-        ),
-
-        GoRoute(
-          path: AppRoutes.confirmationVerification,
-          name: 'confirmation-verification',
-          builder: (context, state) => const ConfirmationVerificationPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.changePassword,
-          name: 'change-password',
-          builder: (context, state) => const ChangePasswordPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.inputOldPassword,
-          name: 'input-old-password',
-          builder: (context, state) => const VerifyOldPasswordPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.cameraPick,
-          name: 'camera-pick',
-          builder: (context, state) => const CameraPickPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.facePick,
-          name: 'face-pick',
-          builder: (context, state) => const FaceDetectionPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.addressVerification,
-          name: 'address-verification',
-          builder: (context, state) => const AddressVerificationPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.bankVerification,
-          name: 'bank-verification',
-          builder: (context, state) => const BankVerificationPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.accountProcessed,
-          name: 'account-processed',
-          builder: (context, state) => const AccountProcessedPage(),
-        ),
-
-        // ── App ──────────────────────────────────────────────────────────────
-        GoRoute(
-          path: AppRoutes.dashboard,
-          name: 'dashboard',
-          builder: (context, state) => const DashboardPage(),
-          routes: [
-            // /dashboard/category/:slug
-            GoRoute(
-              path: 'category/:slug',
-              name: 'category-detail',
-              builder: (_, state) {
-                final slug = state.pathParameters['slug'] ?? '';
-                final category = AuctionCategory.fromSlug(slug);
-                return CategoryPage(category: category);
-              },
-            ),
-          ],
-        ),
-
-        GoRoute(
-          path: AppRoutes.joinAuction,
-          name: 'join-auction',
-          builder: (context, state) => const JoinAuctionPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.auctionList,
-          name: 'auction-list',
-          builder: (context, state) => const AuctionListPage(),
-        ),
-        GoRoute(
-          path: AppRoutes.auctionDetail,
-          name: 'auction-detail',
-          builder: (context, state) => const AuctionDetailPage(),
-        ),
-        GoRoute(
-          path: AppRoutes.liveAuction,
-          name: 'live-auction',
-          builder: (context, state) => const LiveAuctionPage(),
-        ),
-        GoRoute(
-          path: AppRoutes.buyNplDetail,
-          name: 'buy-npl-detail',
-          builder: (context, state) => const BuyNplDetailPage(),
-        ),
-        GoRoute(
-          path: AppRoutes.buyNplConfirmation,
-          name: 'buy-npl-confirmation',
-          builder: (context, state) => const BuyNplConfirmationPage(),
-        ),
+        // TODO: ganti placeholder dengan halaman sungguhan.
         GoRoute(
           path: AppRoutes.profile,
           name: 'profile',
           builder: (context, state) => const _PlaceholderPage(title: 'Profile'),
         ),
         GoRoute(
-          path: AppRoutes.profileSettings,
-          name: 'profile-settings',
-          builder: (context, state) => const ProfileSettingsPage(),
-        ),
-        GoRoute(
           path: AppRoutes.settings,
           name: 'settings',
           builder: (context, state) => const _PlaceholderPage(title: 'Settings'),
-        ),
-        GoRoute(
-          path: AppRoutes.register,
-          name: 'register',
-          builder: (context, state) => const RegisterPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.payment,
-          name: 'payment',
-          builder: (context, state) => const PaymentPage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.paymentGuide,
-          name: 'payment-guide',
-          builder: (context, state) => const PaymentGuidePage(),
-        ),
-
-        GoRoute(
-          path: AppRoutes.buyNpl,
-          name: 'buy-npl',
-          builder: (context, state) => const BuyNplPage(),
         ),
       ],
 
