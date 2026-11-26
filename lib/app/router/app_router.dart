@@ -21,7 +21,7 @@ import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 /// `features/<fitur>/presentation/routes/`; kelas ini hanya menggabungkan.
 ///
 /// Menambah fitur baru: buat `<fitur>_routes.dart`, lalu tambahkan ke
-/// daftar [routes] di bawah — tidak perlu menyentuh fitur lain.
+/// daftar `routes` di bawah — tidak perlu menyentuh fitur lain.
 @singleton
 class AppRouter {
   late final GoRouter router;

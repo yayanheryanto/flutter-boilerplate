@@ -1,6 +1,6 @@
 import 'package:emas/features/auction/domain/entities/auction_item.dart';
 
-// TODO(api): sumber data dummy untuk [AuctionDummyDataSource] — hapus begitu
+// TODO(api): sumber data dummy untuk `AuctionDummyDataSource` — hapus begitu
 // datasource remote tersedia.
 
 // ── Data per kategori ─────────────────────────────────────────────────────────

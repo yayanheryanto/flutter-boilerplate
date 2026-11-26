@@ -5,7 +5,7 @@ Enterprise-grade Flutter boilerplate with Clean Architecture, BLoC state managem
 ## 📋 Specs
 
 - **Flutter**: 3.22.0
-- **Package**: `com.yayan.boilerplate`
+- **Package**: `com.mf.emas` (Dart package: `emas`)
 - **Architecture**: Clean Architecture (Domain / Data / Presentation)
 - **State Management**: flutter_bloc
 - **DI**: injectable + get_it
@@ -19,74 +19,66 @@ Enterprise-grade Flutter boilerplate with Clean Architecture, BLoC state managem
 
 ```
 lib/
-├── core/                        # Pure infrastructure — no UI, no features
+├── app/                         # Composition root — boleh mengimpor semua lapisan
+│   ├── bootstrap.dart           # bootstrap(Environment): init Firebase, DI, Hive, runApp
+│   ├── app.dart                 # Root widget (MaterialApp.router + global BlocProvider)
+│   └── router/app_router.dart   # Menggabungkan route dari tiap fitur + extra codec
+│
+├── core/                        # Infrastruktur murni — tidak boleh impor shared/ atau features/
 │   ├── bloc/                    # Global BLoC (NotificationBloc)
 │   ├── config/                  # AppConfig, Environment
-│   ├── constants/               # AppConstants, AppRoutes, AppStrings
-│   │   └── tokens/              # Pure Dart design tokens (spacing, radius, elevation)
+│   ├── constants/               # AppRoutes (path string), Images, spacing/radius/elevation
 │   ├── di/                      # Injectable setup (get_it)
 │   ├── errors/                  # AppFailure, AppException, ErrorMapper
-│   ├── firebase/                # Firebase service abstractions & options
+│   ├── firebase/                # Firebase services & options per environment
 │   ├── network/                 # DioClient + interceptors (auth, logging, retry)
 │   ├── responsive/              # Breakpoints, Builder, Grid, ContextExtensions
-│   ├── router/                  # AppRouter (GoRouter)
-│   ├── services/                # TokenService, Camera, FilePicker, Permission, Connectivity
+│   ├── services/                # Token, Camera, FilePicker, Permission, Connectivity, Socket
 │   ├── usecases/                # BaseUseCase abstractions
-│   └── utils/                   # AppLogger, AppBlocObserver, DateConverter, etc.
+│   └── utils/                   # Logger, formatters, navigator key, dll.
 │
-├── shared/                      # Cross-feature UI — reusable, no business logic
-│   ├── layouts/                 # AppScaffoldWrapper (adaptive nav: BottomNav / NavigationRail)
-│   ├── theme/                   # AppTheme, ColorTokens, TypographyTokens (Flutter-dependent)
-│   └── widgets/                 # All shared UI components
-│       ├── buttons/             # AppButton
-│       ├── display/             # AppAvatar, AppBadge, AppCard, AppChip, AppImage, AppSpacer, etc.
-│       ├── feedback/            # AppLoader, AppProgressIndicator
-│       ├── input/               # AppTextField, AppPasswordField, AppFormInputs
-│       ├── navigation/          # AppNavigation
-│       ├── typography/          # AppText, AppLinkText
-│       ├── bottomsheets/        # AppBottomSheet
-│       ├── dialogs/             # AppDialog
-│       ├── overlays/            # AppOverlays
-│       ├── pickers/             # AppDatePicker, AppPickers
-│       ├── snackbar/            # AppSnackbar
-│       ├── toast/               # AppToast
-│       ├── skeleton/            # SkeletonAtoms, SkeletonMolecules, SkeletonOrganisms
-│       ├── app_molecules.dart   # EmptyState, ErrorState, LoadingSection, InfoCard, etc.
-│       └── design_system.dart   # Single barrel export for all shared widgets
+├── shared/                      # UI lintas fitur — tidak boleh impor features/
+│   ├── layouts/                 # AppScaffoldWrapper
+│   ├── theme/                   # AppTheme, AppColors, TypographyTokens
+│   └── widgets/                 # Design system (design_system.dart = barrel export),
+│                                #   notification/ (NotificationBadge, AppNotificationWrapper)
 │
 ├── features/
-│   ├── auth/
-│   │   ├── data/
-│   │   │   ├── datasources/     # Remote (Retrofit) + Local (Hive)
-│   │   │   ├── models/          # AuthModel (freezed + json_serializable)
-│   │   │   └── repositories/    # AuthRepositoryImpl
-│   │   ├── di/                  # AuthModule (injectable)
-│   │   ├── domain/
-│   │   │   ├── entities/        # AuthEntity
-│   │   │   ├── repositories/    # AuthRepository (interface)
-│   │   │   └── usecases/        # Login, Register, Logout, GetCached, ForgotPassword
-│   │   └── presentation/
-│   │       ├── bloc/            # AuthBloc, AuthEvent, AuthState
-│   │       ├── layouts/         # AuthLayout (mobile/tablet responsive wrapper)
-│   │       ├── pages/           # LoginPage, RegisterPage, ForgotPasswordPage
-│   │       └── sections/        # LoginFormSection, RegisterFormSection, ForgotPasswordFormSection
-│   │
-│   └── dashboard/
-│       ├── data/
-│       │   └── models/          # AuctionItem, DummyData, Formatters
-│       └── presentation/
-│           ├── layouts/         # DashboardLayout, ProfileLayout, HomeTabLayout, ProfileTabLayout
-│           ├── pages/           # DashboardPage, CategoryPage
-│           ├── sections/
-│           │   ├── home/        # DashboardHeader, BannerCarousel, CategorySection,
-│           │   │                #   ActivitySection, AuctionListSection
-│           │   └── profile/     # ProfileHeader, ProfileInfoSection, ProfileMenuSection
-│           └── widgets/
-│               ├── home/        # AuctionCard, BidCard, CategoryAuctionListItem,
-│               │                #   LiveBadge, MetricCard, SectionHeader
-│               └── profile/     # ProfileLogoutButton
+│   ├── auth/                    # Login, register, OTP, lupa & ganti password
+│   ├── kyc/                     # Verifikasi akun: KTP, NPWP, wajah, alamat, rekening bank
+│   ├── dashboard/               # Shell tab + konten tab Beranda (composer)
+│   ├── auction/                 # Kategori, daftar/detail lelang, ikut lelang
+│   ├── live_auction/            # Lelang live real-time (socket)
+│   ├── npl/                     # Beli NPL: daftar, detail, konfirmasi
+│   ├── payment/                 # Pembayaran & panduan pembayaran
+│   ├── transaction/             # Tab transaksi
+│   └── profile/                 # Tab profil & pengaturan profil
 │
-└── main.dart                    # Production entry point
+├── main.dart                    # Production  → bootstrap(Environment.prod)
+├── main.dev.dart                # Development → bootstrap(Environment.dev)
+└── main.stag.dart               # Staging     → bootstrap(Environment.stag)
+```
+
+Setiap fitur mengikuti pola yang sama (folder yang belum dibutuhkan boleh tidak ada):
+
+```
+features/<fitur>/
+├── data/
+│   ├── datasources/             # Remote (Retrofit) / Local (Hive) / Socket / Dummy
+│   ├── models/                  # DTO + mapper JSON → entity
+│   └── repositories/            # Implementasi repository
+├── di/                          # @module injectable khusus fitur (opsional)
+├── domain/                      # Dart murni — TANPA import Flutter
+│   ├── entities/
+│   ├── repositories/            # Kontrak (abstract class)
+│   └── usecases/
+└── presentation/
+    ├── bloc/
+    ├── dummy/                   # Data dummy sementara (TODO: ganti dengan BLoC/repository)
+    ├── extensions/              # Atribut visual entity (warna, ikon)
+    ├── layouts/  pages/  sections/  widgets/
+    ├── models/                  # View model yang butuh tipe Flutter (IconData, Color)
+    └── routes/<fitur>_routes.dart
 ```
 
 ---
@@ -96,10 +88,27 @@ lib/
 ### Dependency Rule
 
 ```
-features/ → may import from shared/ and core/
-shared/   → may import from core/  |  must NOT import from features/
-core/     → must NOT import from shared/ or features/
+app/      → boleh mengimpor semuanya (composition root)
+features/ → boleh mengimpor shared/ dan core/
+shared/   → boleh mengimpor core/        | TIDAK boleh mengimpor features/ atau app/
+core/     → TIDAK boleh mengimpor shared/, features/, atau app/
 ```
+
+Di dalam satu fitur:
+
+```
+presentation → domain        (BLoC hanya memanggil use case, tidak menyentuh data/)
+data         → domain        (implementasi repository + mapper)
+domain       → (core saja)   Dart murni, tanpa Flutter
+```
+
+Antar fitur:
+
+- Sebuah fitur **hanya boleh mengimpor `domain/` fitur lain** (mis. `npl` memakai
+  entity `AuctionItem` dari `auction`).
+- Hanya `dashboard` (shell tab) yang boleh menyusun `presentation/` fitur lain.
+- Navigasi antar fitur memakai path di `core/constants/app_routes.dart`, bukan
+  mengimpor halaman fitur lain.
 
 ### Presentation Layer Responsibilities
 
@@ -127,7 +136,7 @@ flutter pub get
 ```
 
 ### 2. Configure Firebase
-Replace placeholder values in:
+Replace placeholder values in (dipilih otomatis per environment oleh `lib/app/bootstrap.dart`):
 - `lib/core/firebase/firebase_options_dev.dart`
 - `lib/core/firebase/firebase_options_staging.dart`
 - `lib/core/firebase/firebase_options_prod.dart`
@@ -242,7 +251,7 @@ ResponsiveLayoutBuilder(
 Import the single barrel file to access all shared widgets:
 
 ```dart
-import 'package:boilerplate/shared/widgets/design_system.dart';
+import 'package:emas/shared/widgets/design_system.dart';
 ```
 
 ### Widgets
@@ -329,32 +338,29 @@ SkeletonCircle(size: 48)
 
 ## 🔑 Adding a New Feature
 
-Follow this structure for every new feature:
-
-```
-features/{feature_name}/
-├── data/
-│   ├── datasources/         # Remote + Local data sources
-│   ├── models/              # Freezed models (json_serializable / retrofit)
-│   └── repositories/        # Repository implementation
-├── di/                      # Feature injectable module
-├── domain/
-│   ├── entities/            # Pure Dart domain objects
-│   ├── repositories/        # Abstract repository interface
-│   └── usecases/            # One class per use case
-└── presentation/
-    ├── bloc/                # FeatureBloc, FeatureEvent, FeatureState
-    ├── layouts/             # Responsive wrappers for this feature
-    ├── pages/               # Full screens (routed)
-    ├── sections/            # Large UI blocks inside a page
-    └── widgets/             # Small reusable components
-```
+1. Buat `lib/features/<fitur>/` dengan struktur di atas.
+2. Daftarkan route di `presentation/routes/<fitur>_routes.dart`:
+   ```dart
+   final List<RouteBase> orderRoutes = [
+     GoRoute(path: AppRoutes.orders, builder: (_, __) => const OrderPage()),
+   ];
+   ```
+3. Tambahkan path ke `core/constants/app_routes.dart` dan `...orderRoutes`
+   ke daftar `routes` di `lib/app/router/app_router.dart`.
+4. Anotasi class dengan `@injectable` / `@LazySingleton(as: ...)`, lalu jalankan
+   `build_runner`.
 
 **Import rules:**
-- Feature widgets import from `shared/widgets/` and `core/` — never from another feature
-- Sections can read BLoC state via `BlocBuilder` / `BlocConsumer`
 - Pages own the `BlocProvider` and route entry point
+- Sections can read BLoC state via `BlocBuilder` / `BlocConsumer`
 - Layouts are stateless wrappers — no business logic, no BLoC reads
+- Jangan mengimpor `data/` dari `presentation/`; jangan mengimpor Flutter dari `domain/`
+
+Cek otomatis aturan di atas (tanpa Dart SDK):
+
+```bash
+python3 scripts/check_architecture.py .
+```
 
 ---
 
