@@ -1,0 +1,46 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizer/sizer.dart';
+
+import 'package:emas/app/router/app_router.dart';
+import 'package:emas/core/bloc/notification_bloc.dart';
+import 'package:emas/core/config/app_config.dart';
+import 'package:emas/core/di/injection.dart';
+import 'package:emas/shared/theme/app_theme.dart';
+
+/// Root widget aplikasi (sebelumnya `MyApp` yang diduplikasi di tiap main).
+class App extends StatelessWidget {
+  const App({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final router = getIt<AppRouter>().router;
+
+    return Sizer(
+      builder: (context, orientation, deviceType) {
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider<NotificationBloc>(
+              create: (_) => getIt<NotificationBloc>()..add(NotificationStartListening()),
+            ),
+          ],
+          child: MaterialApp.router(
+            title: AppConfig.appName,
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
+            routerConfig: router,
+            builder: (context, child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  textScaler: TextScaler.noScaling,
+                ),
+                child: child!,
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+}

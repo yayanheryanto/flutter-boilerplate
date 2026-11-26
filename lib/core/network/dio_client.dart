@@ -40,6 +40,11 @@ class DioClient {
       retryInterceptor,
       loggingInterceptor,
     ]);
+
+    // Request yang diulang (refresh token / retry) memakai Dio yang sama,
+    // bukan `Dio()` baru tanpa baseUrl, timeout, dan interceptor.
+    authInterceptor.attach(_dio);
+    retryInterceptor.attach(_dio);
   }
 
   Dio get dio => _dio;
