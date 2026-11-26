@@ -33,6 +33,7 @@ class AuthMockApi {
         MockRoute.post(AuthEndpoints.requestOtp, _requestOtp),
         MockRoute.post(AuthEndpoints.verifyOtp, _verifyOtp),
         MockRoute.post(AuthEndpoints.resendOtp, _resendOtp),
+        MockRoute.post(AuthEndpoints.logout, _logout),
       ];
 
   // ── POST /auth/register ────────────────────────────────────────────────────
@@ -171,6 +172,12 @@ class AuthMockApi {
     session.resendCount++;
     return MockResponse.ok(_challengeJson(id, session.phone));
   }
+
+  // ── POST /auth/logout ──────────────────────────────────────────────────────
+
+  // Selalu sukses: login saat ini masih di-bypass (tanpa token), dan sesi
+  // lokal tetap dihapus aplikasi apa pun respons server.
+  MockResponse _logout(MockRequest req) => const MockResponse.ok({'message': 'Berhasil keluar'});
 
   Map<String, dynamic> _challengeJson(String id, String phone) => {
         'verification_id': id,

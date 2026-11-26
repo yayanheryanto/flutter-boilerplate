@@ -354,6 +354,10 @@ SkeletonCircle(size: 48)
 - Sections can read BLoC state via `BlocBuilder` / `BlocConsumer`
 - Layouts are stateless wrappers — no business logic, no BLoC reads
 - Jangan mengimpor `data/` dari `presentation/`; jangan mengimpor Flutter dari `domain/`
+- Tombol back: pakai `context.popOrGo()` (`core/utils/navigation_extension.dart`), bukan `context.pop()` —
+  `pop()` crash bila halaman dibuka lewat `go()`. `AppPageBar` sudah memakainya secara default dan
+  menyembunyikan tombol back bila tidak ada halaman sebelumnya.
+- Pindah ke area login/logout pakai `context.go()` (stack dibersihkan); selain itu `context.push()`.
 
 Cek otomatis aturan di atas (tanpa Dart SDK):
 

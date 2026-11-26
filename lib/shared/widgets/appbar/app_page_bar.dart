@@ -1,3 +1,5 @@
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
@@ -45,22 +47,26 @@ class AppPageBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Tombol back hanya tampil bila ada aksi kustom atau memang ada halaman
+    // sebelumnya — mis. tab dashboard (root) otomatis tanpa tombol back.
+    final hasBack = showBackButton && (onBack != null || context.canPop());
+
     final bar = AppBar(
       elevation: elevation ?? 0,
       shadowColor: AppColors.black,
       scrolledUnderElevation: 0,
-      titleSpacing: titleSpacing,
+      titleSpacing: !hasBack && (titleSpacing ?? 0) == 0 ? AppSpacings.md : titleSpacing,
       automaticallyImplyLeading: false,
       surfaceTintColor: Colors.transparent,
       backgroundColor: backgroundColor,
-      leading: showBackButton
+      leading: hasBack
           ? IconButton(
               icon: const Icon(
                 Icons.chevron_left_rounded,
                 size: 28,
                 color: AppColors.primary500,
               ),
-              onPressed: onBack ?? () => context.pop(),
+              onPressed: onBack ?? context.popOrGo,
             )
           : null,
       title: _buildTitle(context),

@@ -12,7 +12,7 @@ import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 //
@@ -82,7 +82,7 @@ class _LiveAuctionViewState extends State<_LiveAuctionView> {
         return AppScaffoldWrapper(
           backgroundColor: AppColors.neutral50,
           appBar: AppPageBar(
-            onBack: () => context.pop(),
+            onBack: () => context.popOrGo(),
             title: 'Live Auction',
             actions: [
               Padding(

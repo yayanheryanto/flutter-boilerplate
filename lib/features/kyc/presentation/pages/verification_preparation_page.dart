@@ -14,6 +14,7 @@ import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sizer/sizer.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class VerificationPreparationPage extends StatefulWidget {
   const VerificationPreparationPage({super.key});
@@ -31,7 +32,7 @@ class _VerificationPreparationPageState extends State<VerificationPreparationPag
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
         elevation: AppElevations.xs,
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(),
       ),
       body: SafeArea(
         top: false,

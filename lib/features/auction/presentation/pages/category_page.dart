@@ -7,8 +7,8 @@ import 'package:emas/features/auction/presentation/widgets/category_auction_list
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:emas/features/auction/presentation/extensions/auction_category_style.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class CategoryPage extends StatefulWidget {
   final AuctionCategory category;
@@ -131,7 +131,7 @@ class _CategorySliverAppBar extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       leading: IconButton(
         icon: const Icon(Icons.arrow_back_rounded, color: Colors.white),
-        onPressed: () => context.pop(),
+        onPressed: () => context.popOrGo(),
       ),
       actions: [
         IconButton(

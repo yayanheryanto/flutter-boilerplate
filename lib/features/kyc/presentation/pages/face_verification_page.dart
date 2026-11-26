@@ -16,6 +16,7 @@ import 'package:go_router/go_router.dart';
 
 import 'package:emas/features/kyc/presentation/widgets/verification_stepper.dart';
 import 'package:sizer/sizer.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class FaceVerificationPage extends StatefulWidget {
   final AccountType accountType;
@@ -64,7 +65,7 @@ class FaceVerificationPageState extends State<FaceVerificationPage> with AppForm
       backgroundColor: AppColors.white,
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(),
         elevation: AppElevations.xs,
       ),
       body: SafeArea(

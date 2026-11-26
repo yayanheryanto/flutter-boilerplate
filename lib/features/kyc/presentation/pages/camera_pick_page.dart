@@ -8,6 +8,7 @@ import 'package:emas/shared/widgets/snackbar/app_snackbar.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class CameraPickPage extends StatefulWidget {
   const CameraPickPage({super.key});
@@ -123,7 +124,7 @@ class _CameraPickPageState extends State<CameraPickPage> with WidgetsBindingObse
       backgroundColor: Colors.black,
       appBar: AppPageBar(
         title: 'Verifikasi Wajah',
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(),
       ),
       body: Column(
         children: [

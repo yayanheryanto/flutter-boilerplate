@@ -41,7 +41,7 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
     //         password: _passwordController.text,
     //       ),
     //     );
-    await context.push(AppRoutes.dashboard);
+    context.go(AppRoutes.dashboard);
   }
 
   @override

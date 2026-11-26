@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 const _kOtpLength = OtpBloc.codeLength;
 
@@ -114,7 +115,7 @@ class _OtpPageContentState extends State<_OtpPageContent> {
     return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
       appBar: AppPageBar(
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(AppRoutes.login),
       ),
       body: SafeArea(
         top: false,

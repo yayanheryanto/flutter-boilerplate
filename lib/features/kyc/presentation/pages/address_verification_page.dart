@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:emas/features/kyc/presentation/widgets/verification_stepper.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class AddressVerificationPage extends StatelessWidget {
   const AddressVerificationPage({super.key});
@@ -85,7 +86,7 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
       backgroundColor: AppColors.white,
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(),
         elevation: AppElevations.xs,
       ),
       body: SafeArea(

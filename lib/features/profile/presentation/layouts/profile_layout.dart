@@ -1,6 +1,7 @@
 import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/features/profile/presentation/widgets/profile_logout_button.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
@@ -117,9 +118,23 @@ class ProfileLayout extends StatelessWidget {
           // horizontal: Spacings.md,
           vertical: AppSpacings.xs,
         ),
-        itemCount: sections.length,
+        // +1 untuk tombol Keluar di paling bawah.
+        itemCount: sections.length + 1,
         separatorBuilder: (_, __) => const AppSpacer.xs(),
-        itemBuilder: (context, i) => _ProfileMenuCard(section: sections[i]),
+        itemBuilder: (context, i) {
+          if (i == sections.length) {
+            return const Padding(
+              padding: EdgeInsets.fromLTRB(
+                AppSpacings.md,
+                AppSpacings.md,
+                AppSpacings.md,
+                AppSpacings.xl,
+              ),
+              child: ProfileLogoutButton(),
+            );
+          }
+          return _ProfileMenuCard(section: sections[i]);
+        },
       ),
     );
   }

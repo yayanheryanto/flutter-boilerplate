@@ -15,6 +15,7 @@ import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/app_strings.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/navigator_key.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class ForgotPasswordPage extends StatelessWidget {
   const ForgotPasswordPage({super.key});
@@ -57,7 +58,7 @@ class _ForgotPasswordPageContentState extends State<_ForgotPasswordPageContent>
     return AppScaffoldWrapper(
       backgroundColor: AppColors.white,
       appBar: AppPageBar(
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(AppRoutes.login),
       ),
       body: SafeArea(
         top: false,

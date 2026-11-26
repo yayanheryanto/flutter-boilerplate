@@ -10,6 +10,7 @@ import 'package:emas/features/kyc/presentation/widgets/verification_stepper.dart
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class ConfirmationVerificationPage extends StatefulWidget {
   const ConfirmationVerificationPage({super.key});
@@ -34,7 +35,7 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
       appBar: AppPageBar(
         elevation: 1,
         title: 'Verifikasi Akun',
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(),
       ),
       body: SafeArea(
         top: false,
@@ -60,7 +61,8 @@ class _ConfirmationVerificationPageState extends State<ConfirmationVerificationP
 
                     _ReviewItem(
                       label: 'Verifikasi KTP',
-                      onTap: () => context.go(AppRoutes.idCardVerification),
+                      // push (bukan go) agar tombol back kembali ke halaman konfirmasi.
+                      onTap: () async => context.push(AppRoutes.idCardVerification),
                     ),
                     const AppSpacer.sm(),
                     _ReviewItem(

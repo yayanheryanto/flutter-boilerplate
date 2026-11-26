@@ -19,6 +19,7 @@ import 'package:emas/features/kyc/presentation/widgets/verification_stepper.dart
 import 'package:emas/core/di/injection.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class TaxIdVerificationPage extends StatefulWidget {
   final AccountType accountType;
@@ -135,7 +136,7 @@ class _TaxIdVerificationPageState extends State<TaxIdVerificationPage> with AppF
     return AppScaffoldWrapper(
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(),
       ),
       body: SafeArea(
         top: false,

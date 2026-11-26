@@ -70,6 +70,8 @@ import '../../features/npl/presentation/bloc/buy_npl_confirmation/buy_npl_confir
     as _i544;
 import '../../features/npl/presentation/bloc/buy_npl_detail/buy_npl_detail_bloc.dart'
     as _i520;
+import '../../features/profile/presentation/bloc/logout/logout_cubit.dart'
+    as _i4001;
 import '../bloc/notification_bloc.dart' as _i1015;
 import '../firebase/firebase_services.dart' as _i454;
 import '../firebase/notification_service.dart' as _i650;
@@ -220,6 +222,11 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i210.RegisterBloc>(
         () => _i210.RegisterBloc(gh<_i47.RegisterUseCase>()));
+    gh.factory<_i4001.LogoutCubit>(() => _i4001.LogoutCubit(
+          gh<_i726.LogoutUseCase>(),
+          gh<_i454.AnalyticsService>(),
+          gh<_i454.CrashlyticsService>(),
+        ));
     return this;
   }
 }

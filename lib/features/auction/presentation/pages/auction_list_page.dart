@@ -17,6 +17,7 @@ import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class AuctionListPage extends StatefulWidget {
   const AuctionListPage({super.key});
@@ -123,7 +124,7 @@ class _AuctionListPageState extends State<AuctionListPage> {
             appBar: _SearchAppBar(
               controller: _searchController,
               onChanged: (value) => context.read<AuctionListBloc>().add(AuctionListSearchChanged(value)),
-              onBack: () => context.pop(),
+              onBack: () => context.popOrGo(),
               topMargin: MediaQuery.of(context).padding.top,
             ),
             body: Column(

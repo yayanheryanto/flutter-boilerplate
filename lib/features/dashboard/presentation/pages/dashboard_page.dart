@@ -83,28 +83,42 @@ class _DashboardViewState extends State<_DashboardView> {
   Widget build(BuildContext context) {
     return BlocBuilder<DashboardBloc, DashboardState>(
       builder: (context, state) {
-        return AppScaffoldWrapper(
-          backgroundColor: Colors.white,
-          body: _buildBody(context, state),
-          floatingActionButton: _CenterFAB(
-            selected: state.navigationIndex == 2,
-            onTap: () {
-              context.read<DashboardBloc>().add(
-                    const DashboardTabChanged(2),
-                  );
-            },
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          bottomNavigationBar: _DashboardBottomNav(
-            currentIndex: state.navigationIndex,
-            onTap: (index) {
-              if (index == 2) return;
-
-              context.read<DashboardBloc>().add(DashboardTabChanged(index));
-            },
-          ),
+        // Tombol back HP di tab selain Beranda → kembali ke Beranda dulu,
+        // baru keluar aplikasi bila sudah di Beranda.
+        return PopScope(
+          canPop: state.navigationIndex == 0,
+          onPopInvoked: (didPop) {
+            if (!didPop) {
+              context.read<DashboardBloc>().add(const DashboardTabChanged(0));
+            }
+          },
+          child: _buildScaffold(context, state),
         );
       },
+    );
+  }
+
+  Widget _buildScaffold(BuildContext context, DashboardState state) {
+    return AppScaffoldWrapper(
+      backgroundColor: Colors.white,
+      body: _buildBody(context, state),
+      floatingActionButton: _CenterFAB(
+        selected: state.navigationIndex == 2,
+        onTap: () {
+          context.read<DashboardBloc>().add(
+                const DashboardTabChanged(2),
+              );
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: _DashboardBottomNav(
+        currentIndex: state.navigationIndex,
+        onTap: (index) {
+          if (index == 2) return;
+
+          context.read<DashboardBloc>().add(DashboardTabChanged(index));
+        },
+      ),
     );
   }
 

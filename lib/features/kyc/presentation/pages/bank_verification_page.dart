@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:emas/features/kyc/presentation/widgets/verification_stepper.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class BankVerificationPage extends StatelessWidget {
   const BankVerificationPage({super.key});
@@ -48,7 +49,7 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
       backgroundColor: AppColors.white,
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(),
         elevation: AppElevations.xs,
       ),
       body: SafeArea(

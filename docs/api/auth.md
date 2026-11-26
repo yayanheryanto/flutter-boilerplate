@@ -144,6 +144,22 @@ Respons `200` — bentuk sama dengan respons `/auth/otp/request`.
 
 ---
 
+### `POST /auth/logout`
+
+Tanpa body; token dikirim lewat header `Authorization: Bearer …`.
+
+Respons `200`
+
+```json
+{ "message": "Berhasil keluar" }
+```
+
+Sesi lokal (token & data user di Hive) **selalu** dihapus aplikasi, apa pun
+respons server — gagal logout di server (mis. offline) tidak menahan user tetap
+login.
+
+---
+
 ## Skenario mock
 
 | Input | Hasil |

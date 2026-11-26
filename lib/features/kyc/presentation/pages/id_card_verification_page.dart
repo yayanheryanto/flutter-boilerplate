@@ -21,6 +21,7 @@ import 'package:intl/intl.dart';
 
 import 'package:emas/features/kyc/presentation/widgets/verification_stepper.dart';
 import 'package:sizer/sizer.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class IdCardVerificationPage extends StatefulWidget {
   final AccountType accountType;
@@ -152,7 +153,7 @@ class IdCardVerificationPageState extends State<IdCardVerificationPage> with App
       backgroundColor: AppColors.white,
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(),
         elevation: AppElevations.xs,
       ),
       body: SafeArea(

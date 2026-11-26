@@ -9,6 +9,7 @@ import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class FaceVerificationGuidePage extends StatelessWidget {
   final AccountType accountType;
@@ -23,7 +24,7 @@ class FaceVerificationGuidePage extends StatelessWidget {
     return AppScaffoldWrapper(
       appBar: AppPageBar(
         title: 'Verifikasi Akun',
-        onBack: () => context.pop(),
+        onBack: () => context.popOrGo(),
         elevation: 1,
       ),
       body: SafeArea(

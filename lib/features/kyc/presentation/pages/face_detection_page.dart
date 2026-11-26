@@ -9,10 +9,10 @@ import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:go_router/go_router.dart';
 import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as imglib;
 import 'package:permission_handler/permission_handler.dart';
+import 'package:emas/core/utils/navigation_extension.dart';
 
 class FaceDetectionPage extends StatefulWidget {
   const FaceDetectionPage({super.key});
@@ -382,7 +382,7 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
 
     // Pop langsung.
     if (mounted) {
-      context.pop();
+      context.popOrGo();
     }
   }
 
@@ -1305,9 +1305,19 @@ class _FaceDetectionPageState extends State<FaceDetectionPage>
   // ─────────────────────────────────────────────────────────────────────────
 
   @override
-  Widget build(
-      BuildContext context,
-      ) {
+  Widget build(BuildContext context) {
+    // Tombol back HP harus lewat _handleBack juga agar kamera & image stream
+    // dihentikan dulu; tanpa ini kamera di-dispose saat masih streaming.
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (didPop) {
+        if (!didPop) _handleBack();
+      },
+      child: _buildPage(context),
+    );
+  }
+
+  Widget _buildPage(BuildContext context) {
     final cam = _cam;
 
     final canShowCamera =
