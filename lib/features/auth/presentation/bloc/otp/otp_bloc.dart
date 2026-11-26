@@ -189,11 +189,18 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
 
   void _startCooldown(Duration duration, Emitter<OtpState> emit) {
     _ticker?.cancel();
+    // Request bisa selesai setelah user menutup halaman (bloc sudah close).
+    // Membuat timer di titik ini akan memanggil add() pada bloc yang
+    // tertutup → StateError → crash.
+    if (isClosed) return;
     emit(state.copyWith(resendCountdown: duration.inSeconds));
-    _ticker = Timer.periodic(
-      const Duration(seconds: 1),
-      (_) => add(const _OtpCooldownTicked()),
-    );
+    _ticker = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (isClosed) {
+        timer.cancel();
+        return;
+      }
+      add(const _OtpCooldownTicked());
+    });
   }
 
   @override

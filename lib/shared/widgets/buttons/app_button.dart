@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/shared/theme/app_colors.dart';
 
 enum AppButtonVariant { primary, secondary, outlined, text, danger }
 
@@ -187,6 +188,9 @@ class AppButton extends StatelessWidget {
         return ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           foregroundColor: foregroundColor,
+          // Eksplisit agar tombol nonaktif (onPressed: null) jelas terlihat.
+          disabledBackgroundColor: AppColors.neutral200,
+          disabledForegroundColor: AppColors.neutral400,
           shape: RoundedRectangleBorder(borderRadius: radius),
         ).merge(baseStyle);
     }

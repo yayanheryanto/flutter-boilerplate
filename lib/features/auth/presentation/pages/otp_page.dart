@@ -89,6 +89,7 @@ class _OtpPageContentState extends State<_OtpPageContent> {
   }
 
   void _clearCode() {
+    if (!mounted) return;
     for (final c in _controllers) {
       c.clear();
     }
@@ -99,6 +100,7 @@ class _OtpPageContentState extends State<_OtpPageContent> {
   Future<void> _onVerified(OtpState state) async {
     switch (state.purpose) {
       case OtpPurpose.register:
+        if (!mounted) return;
         // Sesi sudah disimpan repository → masuk ke aplikasi.
         context.go(AppRoutes.dashboard);
       case OtpPurpose.forgotPassword:
