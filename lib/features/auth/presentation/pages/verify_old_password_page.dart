@@ -13,26 +13,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class InputOldPasswordPage extends StatelessWidget {
-  const InputOldPasswordPage({super.key});
+class VerifyOldPasswordPage extends StatelessWidget {
+  const VerifyOldPasswordPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => getIt<AuthBloc>()..add(const AuthCheckCacheRequested()),
-      child: const _InputOldPasswordPageContent(),
+      child: const _VerifyOldPasswordPageContent(),
     );
   }
 }
 
-class _InputOldPasswordPageContent extends StatefulWidget {
-  const _InputOldPasswordPageContent();
+class _VerifyOldPasswordPageContent extends StatefulWidget {
+  const _VerifyOldPasswordPageContent();
 
   @override
-  State<_InputOldPasswordPageContent> createState() => _InputOldPasswordPageContentState();
+  State<_VerifyOldPasswordPageContent> createState() => _VerifyOldPasswordPageContentState();
 }
 
-class _InputOldPasswordPageContentState extends State<_InputOldPasswordPageContent> with AppFormMixin<_InputOldPasswordPageContent> {
+class _VerifyOldPasswordPageContentState extends State<_VerifyOldPasswordPageContent> with AppFormMixin<_VerifyOldPasswordPageContent> {
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
