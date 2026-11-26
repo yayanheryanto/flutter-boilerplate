@@ -39,12 +39,6 @@ class _LoginPageContentState extends State<_LoginPageContent> with AppFormMixin<
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  /// Tombol Masuk aktif hanya bila nomor HP & password terisi.
-  late final Listenable _formChanges = Listenable.merge([_phoneController, _passwordController]);
-
-  bool get _canSubmit =>
-      _phoneController.text.trim().isNotEmpty && _passwordController.text.isNotEmpty;
-
   @override
   void dispose() {
     _phoneController.dispose();
@@ -53,7 +47,8 @@ class _LoginPageContentState extends State<_LoginPageContent> with AppFormMixin<
   }
 
   void _onSubmit() {
-    if (!_canSubmit || !validateForm()) return;
+    // Tombol selalu aktif; validasi form dijalankan saat ditekan.
+    if (!validateForm()) return;
     FocusScope.of(context).unfocus();
 
     context.read<LoginBloc>().add(
@@ -178,13 +173,10 @@ class _LoginPageContentState extends State<_LoginPageContent> with AppFormMixin<
                                   ),
                                 ),
                                 const AppSpacer.xxxl(),
-                                ListenableBuilder(
-                                  listenable: _formChanges,
-                                  builder: (context, _) => AppButton(
-                                    label: AppStrings.login,
-                                    onPressed: isLoading || !_canSubmit ? null : _onSubmit,
-                                    borderRadius: AppRadius.xl,
-                                  ),
+                                AppButton(
+                                  label: AppStrings.login,
+                                  onPressed: isLoading ? null : _onSubmit,
+                                  borderRadius: AppRadius.xl,
                                 ),
                                 const AppSpacer.lg(),
                                 Row(

@@ -46,28 +46,6 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
 
   bool _agreedToTerms = false;
 
-  /// Berubah setiap kali salah satu field diketik — dipakai untuk
-  /// mengaktifkan/menonaktifkan tombol Daftar tanpa rebuild seluruh form.
-  late final Listenable _formChanges = Listenable.merge([
-    _nameController,
-    _phoneController,
-    _emailController,
-    _passwordController,
-    _confirmPasswordController,
-  ]);
-
-  bool get _isFormFilled => [
-        _nameController,
-        _phoneController,
-        _emailController,
-        _passwordController,
-        _confirmPasswordController,
-      ].every((c) => c.text.trim().isNotEmpty);
-
-  /// Tombol Daftar aktif hanya bila semua field terisi dan S&K dicentang.
-  /// Validasi format tetap dijalankan saat tombol ditekan.
-  bool get _canSubmit => _isFormFilled && _agreedToTerms;
-
   @override
   void dispose() {
     _nameController.dispose();
@@ -79,7 +57,8 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
   }
 
   void _onSubmit() {
-    if (!_canSubmit || !validateForm()) return;
+    // Tombol selalu aktif; validasi form & S&K dijalankan saat ditekan.
+    if (!validateForm()) return;
 
     if (!_agreedToTerms) {
       AppSnackbar.error(
@@ -274,15 +253,11 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                             ),
                           ],
                           const AppSpacer.xl(),
-                          ListenableBuilder(
-                            listenable: _formChanges,
-                            builder: (context, _) => AppButton(
-                              label: 'Daftar',
-                              // Nonaktif sampai semua field terisi & S&K dicentang.
-                              onPressed: isLoading || !_canSubmit ? null : _onSubmit,
-                              isLoading: isLoading,
-                              borderRadius: AppRadius.xl,
-                            ),
+                          AppButton(
+                            label: 'Daftar',
+                            onPressed: isLoading ? null : _onSubmit,
+                            isLoading: isLoading,
+                            borderRadius: AppRadius.xl,
                           ),
                           const AppSpacer.lg(),
                           Row(
