@@ -14,7 +14,6 @@ class DummySocketService implements AppSocketService {
   SocketConnectionStatus _status = SocketConnectionStatus.disconnected;
 
   _RoomSimulator? _room;
-  String? _channel;
 
   /// Digunakan untuk mencegah race condition ketika connect/disconnect
   /// dipanggil berdekatan.
@@ -36,8 +35,6 @@ class DummySocketService implements AppSocketService {
     if (_disposed) return;
 
     final generation = ++_connectionGeneration;
-
-    _channel = channel;
 
     _setStatus(SocketConnectionStatus.connecting);
 
@@ -95,7 +92,6 @@ class DummySocketService implements AppSocketService {
     final room = _room;
 
     _room = null;
-    _channel = null;
 
     if (room != null) {
       await room.stop();
@@ -150,7 +146,6 @@ class DummySocketService implements AppSocketService {
     final room = _room;
 
     _room = null;
-    _channel = null;
 
     if (room != null) {
       unawaited(room.stop());

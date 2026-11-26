@@ -129,6 +129,9 @@ class IdCardVerificationPageState extends State<IdCardVerificationPage> with App
 
   // ── Submit ────────────────────────────────────────────────────────────────────
 
+  // Validasi submit; sementara tombol langsung lanjut (lihat `// _onSubmit`
+  // di onPressed). Aktifkan lagi saat event verifikasi sudah dibuat.
+  // ignore: unused_element
   void _onSubmit() {
     if (!validateForm()) return;
     if (_ktpPhoto == null) {

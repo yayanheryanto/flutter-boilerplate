@@ -142,6 +142,9 @@ class _OtpPageContentState extends State<_OtpPageContent> {
     }
   }
 
+  // Submit OTP; belum dipanggil dari UI. Sambungkan ke tombol/onCompleted
+  // saat verifikasi OTP ke AuthBloc sudah dibuat.
+  // ignore: unused_element
   void _onSubmit() {
     final otp = _otpValue;
     if (otp.length < _kOtpLength) return;

@@ -1,6 +1,5 @@
 import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/constants/app_spacings.dart';
-import 'package:emas/features/profile/domain/entities/profile_settings.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';

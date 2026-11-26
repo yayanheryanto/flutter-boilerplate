@@ -31,13 +31,16 @@ class FaceVerificationPage extends StatefulWidget {
 
 class FaceVerificationPageState extends State<FaceVerificationPage> with AppFormMixin<FaceVerificationPage> {
   File? _ktpPhoto;
-  bool _isLoadingPhoto = false;
+  final bool _isLoadingPhoto = false;
 
   @override
   void dispose() {
     super.dispose();
   }
 
+  // Validasi submit; sementara tombol langsung lanjut (lihat `// _onSubmit`
+  // di onPressed). Aktifkan lagi saat event verifikasi sudah dibuat.
+  // ignore: unused_element
   void _onSubmit() {
     if (!validateForm()) return;
     if (_ktpPhoto == null) {

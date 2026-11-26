@@ -62,6 +62,9 @@ class _AddressVerificationContentState extends State<_AddressVerificationContent
     super.dispose();
   }
 
+  // Validasi submit; sementara tombol langsung lanjut (lihat `// _onSubmit`
+  // di onPressed). Aktifkan lagi saat event verifikasi sudah dibuat.
+  // ignore: unused_element
   void _onSubmit() {
     if (!validateForm()) return;
     if (_ktpPhoto == null) {

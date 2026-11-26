@@ -1,7 +1,6 @@
 import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/design_system.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 
 class ProfileInfoSection extends StatelessWidget {

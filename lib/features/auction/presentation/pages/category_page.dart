@@ -5,8 +5,6 @@ import 'package:emas/features/auction/domain/entities/auction_item.dart';
 import 'package:emas/features/auction/presentation/bloc/category/category_bloc.dart';
 import 'package:emas/features/auction/presentation/widgets/category_auction_list_item.dart';
 import 'package:emas/shared/widgets/design_system.dart';
-import 'package:emas/shared/widgets/input/app_text_field.dart';
-import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';

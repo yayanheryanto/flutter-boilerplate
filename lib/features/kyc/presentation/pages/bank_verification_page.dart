@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:emas/core/constants/app_elevations.dart';
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/app_spacings.dart';
@@ -33,8 +31,6 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
   final _accountNameController = TextEditingController();
   final _accountNoController = TextEditingController();
 
-  File? _ktpPhoto;
-  DateTime? _selectedDob;
   String? _bank;
 
   static const _bankOptions = ['BCA', 'BNI'];
@@ -45,20 +41,6 @@ class _BankVerificationContentState extends State<_BankVerificationContent> with
     _accountNoController.dispose();
     super.dispose();
   }
-
-  // void _onSubmit() {
-  //   if (!validateForm()) return;
-  //   if (_ktpPhoto == null) {
-  //     AppSnackbar.error(context, 'Foto KTP wajib dilampirkan');
-  //     return;
-  //   }
-  //   if (_selectedDob == null) {
-  //     AppSnackbar.error(context, 'Tanggal lahir wajib diisi');
-  //     return;
-  //   }
-  //   // TODO: dispatch KTP verification event
-  //   context.go(AppRoutes.dashboard);
-  // }
 
   @override
   Widget build(BuildContext context) {
