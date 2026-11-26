@@ -20,7 +20,6 @@ Enterprise-grade Flutter boilerplate with Clean Architecture, BLoC state managem
 ```
 lib/
 ├── app/                         # Composition root — boleh mengimpor semua lapisan
-│   ├── bootstrap.dart           # bootstrap(Environment): init Firebase, DI, Hive, runApp
 │   ├── app.dart                 # Root widget (MaterialApp.router + global BlocProvider)
 │   └── router/app_router.dart   # Menggabungkan route dari tiap fitur + extra codec
 │
@@ -54,9 +53,9 @@ lib/
 │   ├── transaction/             # Tab transaksi
 │   └── profile/                 # Tab profil & pengaturan profil
 │
-├── main.dart                    # Production  → bootstrap(Environment.prod)
-├── main.dev.dart                # Development → bootstrap(Environment.dev)
-└── main.stag.dart               # Staging     → bootstrap(Environment.stag)
+├── main.dart                    # Entry Production  (init env, Firebase prod, DI, runApp)
+├── main.dev.dart                # Entry Development (Firebase dev)
+└── main.stag.dart               # Entry Staging     (Firebase staging)
 ```
 
 Setiap fitur mengikuti pola yang sama (folder yang belum dibutuhkan boleh tidak ada):
@@ -136,7 +135,7 @@ flutter pub get
 ```
 
 ### 2. Configure Firebase
-Replace placeholder values in (dipilih otomatis per environment oleh `lib/app/bootstrap.dart`):
+Replace placeholder values in (masing-masing dipakai oleh `main.dev.dart`, `main.stag.dart`, `main.dart`):
 - `lib/core/firebase/firebase_options_dev.dart`
 - `lib/core/firebase/firebase_options_staging.dart`
 - `lib/core/firebase/firebase_options_prod.dart`

@@ -8,7 +8,7 @@ import 'package:emas/core/config/app_config.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/shared/theme/app_theme.dart';
 
-/// Root widget aplikasi (sebelumnya `MyApp` yang diduplikasi di tiap main).
+/// Root widget aplikasi, dipakai bersama oleh `main.dart`, `main.dev.dart`, dan `main.stag.dart`.
 class App extends StatelessWidget {
   const App({super.key});
 
