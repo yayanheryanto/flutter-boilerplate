@@ -72,6 +72,8 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
             phone: _phoneController.text,
             email: _emailController.text,
             password: _passwordController.text,
+            passwordConfirmation: _confirmPasswordController.text,
+            termsAccepted: _agreedToTerms,
           ),
         );
   }
@@ -81,9 +83,14 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
   }
 
   Future<void> _onRegistered(RegisterSuccess state) async {
+    AppSnackbar.success(context, 'Pendaftaran berhasil, ${state.user.name}');
+    // OTP di-request oleh OtpBloc saat halaman OTP dibuka (verificationId kosong).
     await context.push(
       AppRoutes.otp,
-      extra: OtpPageArgs.fromChallenge(OtpPurpose.register, state.challenge).toExtra(),
+      extra: OtpPageArgs(
+        purpose: OtpPurpose.register,
+        destination: state.user.phone,
+      ).toExtra(),
     );
   }
 
@@ -212,6 +219,8 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                           const AppSpacer.md(),
                           AppPasswordField(
                             controller: _confirmPasswordController,
+                            errorText: fieldErrors['password_confirmation'],
+                            onChanged: (_) => _clearServerError('password_confirmation'),
                             label: 'Konfirmasi Password',
                             hint: 'Konfirmasi password Anda',
                             textInputAction: TextInputAction.done,
@@ -228,12 +237,24 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                           const AppSpacer.lg(),
                           _TermsCheckbox(
                             value: _agreedToTerms,
-                            onChanged: (v) => setState(() => _agreedToTerms = v ?? false),
+                            onChanged: (v) {
+                              setState(() => _agreedToTerms = v ?? false);
+                              _clearServerError('terms_accepted');
+                            },
                           ),
+                          if (fieldErrors['terms_accepted'] case final termsError?) ...[
+                            const AppSpacer.sm(),
+                            AppText(
+                              termsError,
+                              variant: AppTextVariant.bodySmall,
+                              color: Theme.of(context).colorScheme.error,
+                            ),
+                          ],
                           const AppSpacer.xl(),
                           AppButton(
                             label: 'Daftar',
-                            onPressed: isLoading ? null : _onSubmit,
+                            // Nonaktif sampai Syarat & Ketentuan dicentang.
+                            onPressed: isLoading || !_agreedToTerms ? null : _onSubmit,
                             isLoading: isLoading,
                             borderRadius: AppRadius.xl,
                           ),

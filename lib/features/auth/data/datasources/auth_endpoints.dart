@@ -6,6 +6,7 @@
 abstract final class AuthEndpoints {
   static const String login = '/auth/login';
   static const String register = '/auth/register';
+  static const String requestOtp = '/auth/otp/request';
   static const String verifyOtp = '/auth/otp/verify';
   static const String resendOtp = '/auth/otp/resend';
   static const String logout = '/auth/logout';

@@ -23,23 +23,30 @@ pertama tampil langsung di bawah field terkait pada form.
 ## Alur register
 
 ```
-RegisterPage ──POST /auth/register──▶ OTP terkirim (verification_id)
-     │
+RegisterPage ──POST /auth/register──────▶ akun dibuat (pending_verification)
+     │                                     (respons: data user)
      ▼
-OtpPage ──POST /auth/otp/verify──▶ token disimpan ──▶ /dashboard
-     └────POST /auth/otp/resend──▶ OTP baru + cooldown
+OtpPage dibuka ──POST /auth/otp/request──▶ OTP terkirim (verification_id)
+     ├────────────POST /auth/otp/verify──▶ token disimpan ──▶ /dashboard
+     └────────────POST /auth/otp/resend──▶ OTP baru + cooldown
 ```
+
+Request OTP dilakukan `OtpBloc` saat halaman OTP terbuka, terpisah dari
+register. Bila gagal (mis. SMS gateway down), user cukup menekan "Kirim ulang"
+— tidak perlu mendaftar ulang.
 
 ### `POST /auth/register`
 
-Request
+Request — seluruh isi form:
 
 ```json
 {
   "name": "Dinar Daniswara",
   "phone": "081234567889",
   "email": "dinar@gmail.com",
-  "password": "rahasia123"
+  "password": "rahasia123",
+  "password_confirmation": "rahasia123",
+  "terms_accepted": true
 }
 ```
 
@@ -50,7 +57,36 @@ Respons `201`
 
 ```json
 {
-  "verification_id": "reg_1717000000000",
+  "user_id": "usr_1717000000000",
+  "name": "Dinar Daniswara",
+  "phone": "081234567889",
+  "email": "dinar@gmail.com",
+  "status": "pending_verification",
+  "created_at": "2026-11-26T14:00:00.000"
+}
+```
+
+| Status | Kapan |
+|---|---|
+| 422 | Validasi gagal / email atau HP sudah terdaftar / konfirmasi password beda / S&K belum disetujui (`errors` per field) |
+| 500 | Server error |
+
+### `POST /auth/otp/request`
+
+Request
+
+```json
+{ "phone": "081234567889", "purpose": "register" }
+```
+
+`purpose`: `register` \| `forgot_password` \| `change_password`
+(mock saat ini baru mendukung `register`).
+
+Respons `200`
+
+```json
+{
+  "verification_id": "otp_1717000000000",
   "destination": "08******7889",
   "expires_in": 300,
   "resend_in": 60
@@ -59,15 +95,16 @@ Respons `201`
 
 | Status | Kapan |
 |---|---|
-| 422 | Validasi gagal / email atau HP sudah terdaftar (`errors` per field) |
-| 500 | Server error |
+| 404 | Nomor belum terdaftar |
+| 409 | Nomor sudah terverifikasi |
+| 503 | Gagal mengirim SMS |
 
 ### `POST /auth/otp/verify`
 
 Request
 
 ```json
-{ "verification_id": "reg_1717000000000", "code": "123456" }
+{ "verification_id": "otp_1717000000000", "code": "123456" }
 ```
 
 Respons `200` — sesi login (sama dengan respons login):
@@ -95,10 +132,10 @@ Respons `200` — sesi login (sama dengan respons login):
 Request
 
 ```json
-{ "verification_id": "reg_1717000000000" }
+{ "verification_id": "otp_1717000000000" }
 ```
 
-Respons `200` — bentuk sama dengan respons register.
+Respons `200` — bentuk sama dengan respons `/auth/otp/request`.
 
 | Status | Kapan |
 |---|---|
@@ -113,7 +150,8 @@ Respons `200` — bentuk sama dengan respons register.
 |---|---|
 | Email `terdaftar@emas.id` | 422 — email sudah terdaftar |
 | HP `081200000000` | 422 — nomor sudah terdaftar |
-| HP `081299999999` | 500 — server error |
+| HP `081299999999` | 500 — server error saat register |
+| HP `081288888888` | Register berhasil, request OTP gagal 503 → tekan "Kirim ulang" |
 | OTP `123456` | Berhasil, login, masuk dashboard |
 | OTP `000000` | 410 — kedaluwarsa |
 | OTP lain | 422 — kode salah |

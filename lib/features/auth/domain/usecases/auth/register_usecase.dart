@@ -4,7 +4,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:emas/core/errors/app_failure.dart';
 import 'package:emas/core/usecases/base_usecase.dart';
-import 'package:emas/features/auth/domain/entities/otp_challenge.dart';
+import 'package:emas/features/auth/domain/entities/registered_user.dart';
 import 'package:emas/features/auth/domain/repositories/auth_repository.dart';
 
 class RegisterParams extends Equatable {
@@ -12,32 +12,38 @@ class RegisterParams extends Equatable {
   final String phone;
   final String email;
   final String password;
+  final String passwordConfirmation;
+  final bool termsAccepted;
 
   const RegisterParams({
     required this.name,
     required this.phone,
     required this.email,
     required this.password,
+    required this.passwordConfirmation,
+    required this.termsAccepted,
   });
 
   @override
-  List<Object?> get props => [name, phone, email, password];
+  List<Object?> get props => [name, phone, email, termsAccepted];
 }
 
-/// Mendaftarkan akun dan memicu pengiriman OTP ke nomor HP.
+/// Mendaftarkan akun baru. OTP diminta terpisah lewat `RequestOtpUseCase`.
 @injectable
-class RegisterUseCase extends UseCase<OtpChallenge, RegisterParams> {
+class RegisterUseCase extends UseCase<RegisteredUser, RegisterParams> {
   final AuthRepository _repository;
 
   RegisterUseCase(this._repository);
 
   @override
-  Future<Either<AppFailure, OtpChallenge>> call(RegisterParams params) {
+  Future<Either<AppFailure, RegisteredUser>> call(RegisterParams params) {
     return _repository.register(
       name: params.name.trim(),
       phone: normalizePhone(params.phone),
       email: params.email.trim().toLowerCase(),
       password: params.password,
+      passwordConfirmation: params.passwordConfirmation,
+      termsAccepted: params.termsAccepted,
     );
   }
 }

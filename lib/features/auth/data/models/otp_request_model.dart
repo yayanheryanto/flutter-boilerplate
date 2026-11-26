@@ -1,3 +1,18 @@
+/// Body `POST AuthEndpoints.requestOtp` — minta OTP dikirim ke [phone].
+class RequestOtpRequestModel {
+  final String phone;
+
+  /// `register` | `forgot_password` | `change_password`.
+  final String purpose;
+
+  const RequestOtpRequestModel({required this.phone, required this.purpose});
+
+  Map<String, dynamic> toJson() => {
+        'phone': phone,
+        'purpose': purpose,
+      };
+}
+
 /// Body `POST AuthEndpoints.verifyOtp`.
 class VerifyOtpRequestModel {
   final String verificationId;

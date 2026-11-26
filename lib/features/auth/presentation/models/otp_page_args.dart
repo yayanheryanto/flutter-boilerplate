@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 
-import 'package:emas/features/auth/domain/entities/otp_challenge.dart';
 import 'package:emas/features/auth/domain/entities/otp_purpose.dart';
 
 /// Argumen halaman OTP, dikirim lewat `GoRouter` `extra`.
@@ -10,10 +9,12 @@ import 'package:emas/features/auth/domain/entities/otp_purpose.dart';
 class OtpPageArgs extends Equatable {
   final OtpPurpose purpose;
 
-  /// Tujuan OTP untuk ditampilkan (sudah disamarkan bila dari server).
+  /// Nomor HP tujuan OTP. Untuk register, nomor ini dipakai untuk
+  /// me-request OTP saat halaman dibuka.
   final String destination;
 
-  /// `null` untuk alur yang belum punya endpoint (lupa/ganti password).
+  /// Diisi bila OTP sudah di-request sebelum halaman dibuka. `null` →
+  /// `OtpBloc` me-request OTP sendiri (purpose register).
   final String? verificationId;
 
   final Duration resendCooldown;
@@ -24,15 +25,6 @@ class OtpPageArgs extends Equatable {
     this.verificationId,
     this.resendCooldown = const Duration(seconds: 60),
   });
-
-  factory OtpPageArgs.fromChallenge(OtpPurpose purpose, OtpChallenge challenge) {
-    return OtpPageArgs(
-      purpose: purpose,
-      destination: challenge.maskedDestination,
-      verificationId: challenge.verificationId,
-      resendCooldown: challenge.resendCooldown,
-    );
-  }
 
   factory OtpPageArgs.fromExtra(Object? extra) {
     final map = extra is Map<Object?, Object?> ? extra : const <String, Object?>{};

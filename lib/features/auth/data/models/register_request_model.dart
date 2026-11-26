@@ -1,4 +1,4 @@
-/// Body `POST AuthEndpoints.register`.
+/// Body `POST AuthEndpoints.register` — seluruh isi form pendaftaran.
 ///
 /// JSON ditulis manual (bukan json_serializable) supaya kontraknya mudah
 /// dibaca dan disesuaikan saat backend final tersedia.
@@ -7,12 +7,16 @@ class RegisterRequestModel {
   final String phone;
   final String email;
   final String password;
+  final String passwordConfirmation;
+  final bool termsAccepted;
 
   const RegisterRequestModel({
     required this.name,
     required this.phone,
     required this.email,
     required this.password,
+    required this.passwordConfirmation,
+    required this.termsAccepted,
   });
 
   Map<String, dynamic> toJson() => {
@@ -20,5 +24,7 @@ class RegisterRequestModel {
         'phone': phone,
         'email': email,
         'password': password,
+        'password_confirmation': passwordConfirmation,
+        'terms_accepted': termsAccepted,
       };
 }

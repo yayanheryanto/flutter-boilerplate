@@ -13,23 +13,28 @@ final class RegisterSubmitted extends RegisterEvent {
   final String phone;
   final String email;
   final String password;
+  final String passwordConfirmation;
+  final bool termsAccepted;
 
   const RegisterSubmitted({
     required this.name,
     required this.phone,
     required this.email,
     required this.password,
+    required this.passwordConfirmation,
+    required this.termsAccepted,
   });
 
   // Password sengaja tidak dimasukkan ke props agar tidak ikut tercetak
   // oleh AppBlocObserver / log.
   @override
-  List<Object?> get props => [name, phone, email];
+  List<Object?> get props => [name, phone, email, termsAccepted];
 }
 
 /// User mengubah isi field — dipakai untuk menghapus error dari server.
 final class RegisterFieldEdited extends RegisterEvent {
-  /// Nama field sesuai key error backend: `name`, `phone`, `email`, `password`.
+  /// Nama field sesuai key error backend: `name`, `phone`, `email`,
+  /// `password`, `password_confirmation`, `terms_accepted`.
   final String field;
 
   const RegisterFieldEdited(this.field);

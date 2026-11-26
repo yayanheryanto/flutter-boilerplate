@@ -6,6 +6,7 @@ import 'package:emas/features/auth/data/datasources/auth_endpoints.dart';
 /// Skenario uji (lihat juga `docs/api/auth.md`):
 /// - Email `terdaftar@emas.id` atau HP `081200000000` → 422 sudah terdaftar
 /// - HP `081299999999` → 500 (simulasi server error)
+/// - HP `081288888888` → daftar berhasil, tapi request OTP gagal 503
 /// - OTP `123456` → benar; OTP lain → 422; OTP `000000` → 410 kedaluwarsa
 /// - Kirim ulang OTP maksimal 3x per sesi → 429
 ///
@@ -16,14 +17,20 @@ class AuthMockApi {
   static const takenEmail = 'terdaftar@emas.id';
   static const takenPhone = '081200000000';
   static const serverErrorPhone = '081299999999';
+  static const otpErrorPhone = '081288888888';
   static const _maxResend = 3;
   static const _otpTtl = 300;
   static const _resendCooldown = 60;
 
-  final Map<String, _PendingRegistration> _pending = {};
+  /// Akun hasil register, key = nomor HP.
+  final Map<String, _MockUser> _users = {};
+
+  /// Sesi OTP aktif, key = verification_id.
+  final Map<String, _OtpSession> _sessions = {};
 
   List<MockRoute> get routes => [
         MockRoute.post(AuthEndpoints.register, _register),
+        MockRoute.post(AuthEndpoints.requestOtp, _requestOtp),
         MockRoute.post(AuthEndpoints.verifyOtp, _verifyOtp),
         MockRoute.post(AuthEndpoints.resendOtp, _resendOtp),
       ];
@@ -36,14 +43,25 @@ class AuthMockApi {
     final phone = (body['phone'] as String? ?? '').trim();
     final email = (body['email'] as String? ?? '').trim().toLowerCase();
     final password = body['password'] as String? ?? '';
+    final confirmation = body['password_confirmation'] as String? ?? '';
+    final termsAccepted = body['terms_accepted'] == true;
+
+    final emailTaken = email == takenEmail || _users.values.any((u) => u.email == email);
+    final phoneTaken = phone == takenPhone || _users.containsKey(phone);
 
     final errors = <String, List<String>>{
       if (name.length < 3) 'name': ['Nama minimal 3 karakter'],
-      if (!RegExp(r'^08\d{7,13}$').hasMatch(phone)) 'phone': ['Nomor handphone tidak valid'],
-      if (!email.contains('@')) 'email': ['Format email tidak valid'],
+      if (!RegExp(r'^08\d{7,13}$').hasMatch(phone))
+        'phone': ['Nomor handphone tidak valid']
+      else if (phoneTaken)
+        'phone': ['Nomor handphone sudah terdaftar'],
+      if (!email.contains('@'))
+        'email': ['Format email tidak valid']
+      else if (emailTaken)
+        'email': ['Email sudah terdaftar'],
       if (password.length < 8) 'password': ['Password minimal 8 karakter'],
-      if (email == takenEmail) 'email': ['Email sudah terdaftar'],
-      if (phone == takenPhone) 'phone': ['Nomor handphone sudah terdaftar'],
+      if (confirmation != password) 'password_confirmation': ['Konfirmasi password tidak sama'],
+      if (!termsAccepted) 'terms_accepted': ['Syarat & Ketentuan wajib disetujui'],
     };
 
     if (errors.isNotEmpty) {
@@ -53,10 +71,49 @@ class AuthMockApi {
       return MockResponse.error(500, 'Terjadi kesalahan pada server');
     }
 
-    final id = 'reg_${DateTime.now().millisecondsSinceEpoch}';
-    _pending[id] = _PendingRegistration(name: name, phone: phone, email: email);
+    final now = DateTime.now();
+    final user = _MockUser(
+      id: 'usr_${now.millisecondsSinceEpoch}',
+      name: name,
+      phone: phone,
+      email: email,
+      createdAt: now,
+    );
+    _users[phone] = user;
 
-    return MockResponse.created(_challengeJson(id, phone));
+    return MockResponse.created(user.toJson());
+  }
+
+  // ── POST /auth/otp/request ─────────────────────────────────────────────────
+
+  MockResponse _requestOtp(MockRequest req) {
+    final phone = (req.body['phone'] as String? ?? '').trim();
+    final purpose = req.body['purpose'] as String? ?? '';
+
+    if (purpose != 'register') {
+      return MockResponse.error(
+        422,
+        'Purpose tidak didukung',
+        errors: {
+          'purpose': ['Mock baru mendukung purpose "register"'],
+        },
+      );
+    }
+
+    final user = _users[phone];
+    if (user == null) {
+      return MockResponse.error(404, 'Nomor handphone belum terdaftar');
+    }
+    if (user.isVerified) {
+      return MockResponse.error(409, 'Nomor handphone sudah terverifikasi, silakan masuk');
+    }
+    if (phone == otpErrorPhone) {
+      return MockResponse.error(503, 'Layanan SMS sedang gangguan, coba kirim ulang');
+    }
+
+    final id = 'otp_${DateTime.now().millisecondsSinceEpoch}';
+    _sessions[id] = _OtpSession(phone: phone);
+    return MockResponse.ok(_challengeJson(id, phone));
   }
 
   // ── POST /auth/otp/verify ──────────────────────────────────────────────────
@@ -64,10 +121,11 @@ class AuthMockApi {
   MockResponse _verifyOtp(MockRequest req) {
     final id = req.body['verification_id'] as String? ?? '';
     final code = req.body['code'] as String? ?? '';
-    final pending = _pending[id];
+    final session = _sessions[id];
+    final user = session == null ? null : _users[session.phone];
 
-    if (pending == null) {
-      return MockResponse.error(404, 'Sesi verifikasi tidak ditemukan, silakan daftar ulang');
+    if (session == null || user == null) {
+      return MockResponse.error(404, 'Sesi verifikasi tidak ditemukan, silakan minta OTP lagi');
     }
     if (code == expiredOtp) {
       return MockResponse.error(410, 'Kode OTP sudah kedaluwarsa, silakan kirim ulang');
@@ -82,12 +140,14 @@ class AuthMockApi {
       );
     }
 
-    _pending.remove(id);
+    _sessions.remove(id);
+    user.isVerified = true;
+
     final now = DateTime.now();
     return MockResponse.ok({
-      'user_id': 'usr_${now.millisecondsSinceEpoch}',
-      'email': pending.email,
-      'display_name': pending.name,
+      'user_id': user.id,
+      'email': user.email,
+      'display_name': user.name,
       'photo_url': null,
       'access_token': 'mock-access-${now.millisecondsSinceEpoch}',
       'refresh_token': 'mock-refresh-${now.millisecondsSinceEpoch}',
@@ -99,17 +159,17 @@ class AuthMockApi {
 
   MockResponse _resendOtp(MockRequest req) {
     final id = req.body['verification_id'] as String? ?? '';
-    final pending = _pending[id];
+    final session = _sessions[id];
 
-    if (pending == null) {
-      return MockResponse.error(404, 'Sesi verifikasi tidak ditemukan, silakan daftar ulang');
+    if (session == null) {
+      return MockResponse.error(404, 'Sesi verifikasi tidak ditemukan, silakan minta OTP lagi');
     }
-    if (pending.resendCount >= _maxResend) {
+    if (session.resendCount >= _maxResend) {
       return MockResponse.error(429, 'Batas kirim ulang OTP tercapai, coba lagi nanti');
     }
 
-    pending.resendCount++;
-    return MockResponse.ok(_challengeJson(id, pending.phone));
+    session.resendCount++;
+    return MockResponse.ok(_challengeJson(id, session.phone));
   }
 
   Map<String, dynamic> _challengeJson(String id, String phone) => {
@@ -125,11 +185,35 @@ class AuthMockApi {
   }
 }
 
-class _PendingRegistration {
+class _MockUser {
+  final String id;
   final String name;
   final String phone;
   final String email;
+  final DateTime createdAt;
+  bool isVerified = false;
+
+  _MockUser({
+    required this.id,
+    required this.name,
+    required this.phone,
+    required this.email,
+    required this.createdAt,
+  });
+
+  Map<String, dynamic> toJson() => {
+        'user_id': id,
+        'name': name,
+        'phone': phone,
+        'email': email,
+        'status': isVerified ? 'active' : 'pending_verification',
+        'created_at': createdAt.toIso8601String(),
+      };
+}
+
+class _OtpSession {
+  final String phone;
   int resendCount = 0;
 
-  _PendingRegistration({required this.name, required this.phone, required this.email});
+  _OtpSession({required this.phone});
 }

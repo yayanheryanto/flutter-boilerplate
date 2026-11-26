@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:emas/core/errors/app_failure.dart';
-import 'package:emas/features/auth/domain/entities/otp_challenge.dart';
+import 'package:emas/features/auth/domain/entities/registered_user.dart';
 import 'package:emas/features/auth/domain/usecases/auth/register_usecase.dart';
 
 part 'register_event.dart';
@@ -11,8 +11,9 @@ part 'register_state.dart';
 
 /// Mengelola submit form pendaftaran.
 ///
-/// Hanya bertanggung jawab atas langkah "daftar → OTP terkirim". Verifikasi
-/// OTP ditangani `OtpBloc`, sehingga keduanya bisa dipakai ulang terpisah.
+/// Hanya bertanggung jawab atas langkah "kirim form daftar → akun dibuat".
+/// Request & verifikasi OTP ditangani `OtpBloc` di halaman OTP, sehingga
+/// kegagalan kirim OTP bisa dicoba ulang tanpa mendaftar ulang.
 @injectable
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase _registerUseCase;
@@ -37,6 +38,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         phone: event.phone,
         email: event.email,
         password: event.password,
+        passwordConfirmation: event.passwordConfirmation,
+        termsAccepted: event.termsAccepted,
       ),
     );
 
@@ -47,7 +50,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           fieldErrors: _fieldErrorsOf(failure),
         ),
       ),
-      (challenge) => emit(RegisterSuccess(challenge)),
+      (user) => emit(RegisterSuccess(user)),
     );
   }
 

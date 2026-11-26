@@ -18,14 +18,15 @@ final class RegisterInProgress extends RegisterState {
   const RegisterInProgress();
 }
 
-/// Akun terdaftar dan OTP sudah dikirim — lanjut ke halaman OTP.
+/// Akun berhasil dibuat (respons register) — lanjut ke halaman OTP,
+/// yang akan me-request OTP ke [RegisteredUser.phone].
 final class RegisterSuccess extends RegisterState {
-  final OtpChallenge challenge;
+  final RegisteredUser user;
 
-  const RegisterSuccess(this.challenge);
+  const RegisterSuccess(this.user);
 
   @override
-  List<Object?> get props => [challenge];
+  List<Object?> get props => [user];
 }
 
 final class RegisterFailure extends RegisterState {

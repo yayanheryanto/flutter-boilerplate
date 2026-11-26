@@ -6,6 +6,7 @@ import 'package:emas/features/auth/data/models/auth_model.dart';
 import 'package:emas/features/auth/data/models/otp_challenge_model.dart';
 import 'package:emas/features/auth/data/models/otp_request_model.dart';
 import 'package:emas/features/auth/data/models/register_request_model.dart';
+import 'package:emas/features/auth/data/models/register_response_model.dart';
 
 part 'auth_remote_datasource.g.dart';
 
@@ -18,9 +19,13 @@ abstract class AuthRemoteDataSource {
   @POST(AuthEndpoints.login)
   Future<AuthModel> login(@Body() Map<String, dynamic> body);
 
-  /// Mendaftarkan akun dan mengirim OTP ke nomor HP.
+  /// Mendaftarkan akun (status menunggu verifikasi nomor HP).
   @POST(AuthEndpoints.register)
-  Future<OtpChallengeModel> register(@Body() RegisterRequestModel body);
+  Future<RegisterResponseModel> register(@Body() RegisterRequestModel body);
+
+  /// Meminta OTP dikirim ke nomor HP untuk keperluan tertentu.
+  @POST(AuthEndpoints.requestOtp)
+  Future<OtpChallengeModel> requestOtp(@Body() RequestOtpRequestModel body);
 
   /// Memverifikasi OTP; bila benar server mengembalikan token (login).
   @POST(AuthEndpoints.verifyOtp)

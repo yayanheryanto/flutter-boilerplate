@@ -125,10 +125,12 @@ class _OtpPageContentState extends State<_OtpPageContent> {
               case OtpStatus.failure:
                 AppSnackbar.error(context, state.message ?? 'Terjadi kesalahan');
                 _clearCode();
+              case OtpStatus.codeSent:
               case OtpStatus.codeResent:
-                AppSnackbar.success(context, state.message ?? 'Kode OTP baru telah dikirim');
+                AppSnackbar.success(context, state.message ?? 'Kode OTP telah dikirim');
                 _clearCode();
               case OtpStatus.idle:
+              case OtpStatus.requesting:
               case OtpStatus.verifying:
                 break;
             }
@@ -158,14 +160,14 @@ class _OtpPageContentState extends State<_OtpPageContent> {
                   ),
                   const AppSpacer.xxl(),
                   AbsorbPointer(
-                    absorbing: state.isVerifying,
+                    absorbing: state.isVerifying || state.isRequesting,
                     child: _OtpBoxRow(
                       controllers: _controllers,
                       focusNodes: _focusNodes,
                       onChanged: _onDigitChanged,
                     ),
                   ),
-                  if (state.isVerifying) ...[
+                  if (state.isVerifying || state.isRequesting) ...[
                     const AppSpacer.lg(),
                     const Center(child: CircularProgressIndicator()),
                   ],

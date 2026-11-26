@@ -2,6 +2,13 @@ part of 'otp_bloc.dart';
 
 enum OtpStatus {
   idle,
+
+  /// Sedang me-request OTP pertama kali.
+  requesting,
+
+  /// OTP pertama berhasil dikirim — pesan info di [OtpState.message].
+  codeSent,
+
   verifying,
 
   /// OTP benar. Untuk purpose register, [OtpState.auth] berisi sesi login.
@@ -53,9 +60,12 @@ final class OtpState extends Equatable {
 
   bool get isVerifying => status == OtpStatus.verifying;
 
+  bool get isRequesting => status == OtpStatus.requesting;
+
   bool get resendExhausted => resendCount >= OtpBloc.maxResend;
 
-  bool get canResend => resendCountdown == 0 && !resendExhausted && !isResending && !isVerifying;
+  bool get canResend =>
+      resendCountdown == 0 && !resendExhausted && !isResending && !isVerifying && !isRequesting;
 
   OtpState copyWith({
     OtpPurpose? purpose,

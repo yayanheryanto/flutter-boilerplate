@@ -13,6 +13,8 @@ import 'package:emas/features/auth/data/models/otp_request_model.dart';
 import 'package:emas/features/auth/data/models/register_request_model.dart';
 import 'package:emas/features/auth/domain/entities/auth_entity.dart';
 import 'package:emas/features/auth/domain/entities/otp_challenge.dart';
+import 'package:emas/features/auth/domain/entities/otp_purpose.dart';
+import 'package:emas/features/auth/domain/entities/registered_user.dart';
 import 'package:emas/features/auth/domain/repositories/auth_repository.dart';
 
 @LazySingleton(as: AuthRepository)
@@ -43,11 +45,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<AppFailure, OtpChallenge>> register({
+  Future<Either<AppFailure, RegisteredUser>> register({
     required String name,
     required String phone,
     required String email,
     required String password,
+    required String passwordConfirmation,
+    required bool termsAccepted,
   }) {
     return _guard(() async {
       final model = await _remoteDataSource.register(
@@ -56,7 +60,22 @@ class AuthRepositoryImpl implements AuthRepository {
           phone: phone,
           email: email,
           password: password,
+          passwordConfirmation: passwordConfirmation,
+          termsAccepted: termsAccepted,
         ),
+      );
+      return model.toEntity();
+    });
+  }
+
+  @override
+  Future<Either<AppFailure, OtpChallenge>> requestOtp({
+    required String phone,
+    required OtpPurpose purpose,
+  }) {
+    return _guard(() async {
+      final model = await _remoteDataSource.requestOtp(
+        RequestOtpRequestModel(phone: phone, purpose: _purposeToApi(purpose)),
       );
       return model.toEntity();
     });
@@ -133,6 +152,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   // ── Helpers ────────────────────────────────────────────────────────────────
+
+  /// Nilai `purpose` di API (snake_case) — format wire, jadi ada di data layer.
+  String _purposeToApi(OtpPurpose purpose) => switch (purpose) {
+        OtpPurpose.register => 'register',
+        OtpPurpose.forgotPassword => 'forgot_password',
+        OtpPurpose.changePassword => 'change_password',
+      };
 
   /// Satu tempat untuk mengubah exception menjadi [AppFailure], supaya tiap
   /// method repository cukup berisi "jalur bahagia".

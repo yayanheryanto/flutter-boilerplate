@@ -1,6 +1,6 @@
 import 'package:emas/features/auth/domain/entities/otp_challenge.dart';
 
-/// Respons `register` dan `resendOtp`: OTP sudah dikirim dan menunggu
+/// Respons `requestOtp` dan `resendOtp`: OTP sudah dikirim dan menunggu
 /// diverifikasi.
 ///
 /// ```json

@@ -16,14 +16,20 @@ part 'otp_state.dart';
 /// Verifikasi & kirim ulang OTP, termasuk aturan cooldown dan batas kirim
 /// ulang (sebelumnya tersebar di `State` widget).
 ///
-/// Purpose [OtpPurpose.register] memanggil API. Purpose lain belum punya
-/// endpoint, jadi untuk sementara langsung dianggap terverifikasi agar
-/// alur lupa/ganti password tetap jalan seperti sebelumnya.
+/// Alur purpose [OtpPurpose.register]:
+/// 1. [OtpStarted] tanpa `verificationId` → `POST /auth/otp/request`
+/// 2. [OtpCodeSubmitted] → `POST /auth/otp/verify` (login)
+/// 3. [OtpResendRequested] → `/auth/otp/resend`, atau request ulang bila
+///    request pertama gagal.
+///
+/// Purpose lain belum punya endpoint, jadi untuk sementara langsung dianggap
+/// terverifikasi agar alur lupa/ganti password tetap jalan seperti sebelumnya.
 @injectable
 class OtpBloc extends Bloc<OtpEvent, OtpState> {
   static const int maxResend = 3;
   static const int codeLength = 6;
 
+  final RequestOtpUseCase _requestOtp;
   final VerifyOtpUseCase _verifyOtp;
   final ResendOtpUseCase _resendOtp;
   final AnalyticsService _analytics;
@@ -32,6 +38,7 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
   Timer? _ticker;
 
   OtpBloc(
+    this._requestOtp,
     this._verifyOtp,
     this._resendOtp,
     this._analytics,
@@ -43,7 +50,7 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
     on<_OtpCooldownTicked>(_onCooldownTicked);
   }
 
-  void _onStarted(OtpStarted event, Emitter<OtpState> emit) {
+  Future<void> _onStarted(OtpStarted event, Emitter<OtpState> emit) async {
     final args = event.args;
     emit(
       OtpState.initial().copyWith(
@@ -52,21 +59,63 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
         verificationId: args.verificationId,
       ),
     );
-    _startCooldown(args.resendCooldown, emit);
+
+    if (_needsInitialRequest) {
+      await _requestInitialOtp(emit);
+    } else {
+      _startCooldown(args.resendCooldown, emit);
+    }
+  }
+
+  /// Register tanpa `verificationId` → OTP belum pernah di-request.
+  bool get _needsInitialRequest =>
+      state.purpose == OtpPurpose.register && state.verificationId == null;
+
+  Future<void> _requestInitialOtp(Emitter<OtpState> emit) async {
+    emit(state.copyWith(status: OtpStatus.requesting, clearMessage: true));
+
+    final result = await _requestOtp(
+      RequestOtpParams(phone: state.destination, purpose: state.purpose),
+    );
+
+    result.fold(
+      // Countdown tetap 0 → tombol kirim ulang aktif untuk mencoba lagi.
+      (failure) => emit(state.copyWith(status: OtpStatus.failure, message: failure.message)),
+      (challenge) {
+        emit(
+          state.copyWith(
+            status: OtpStatus.codeSent,
+            verificationId: challenge.verificationId,
+            destination: challenge.maskedDestination,
+            message: 'Kode OTP telah dikirim ke ${challenge.maskedDestination}',
+          ),
+        );
+        _startCooldown(challenge.resendCooldown, emit);
+      },
+    );
   }
 
   Future<void> _onCodeSubmitted(
     OtpCodeSubmitted event,
     Emitter<OtpState> emit,
   ) async {
-    if (state.isVerifying || event.code.length != codeLength) return;
+    if (state.isVerifying || state.isRequesting || event.code.length != codeLength) return;
 
     emit(state.copyWith(status: OtpStatus.verifying, clearMessage: true));
 
     final verificationId = state.verificationId;
-    if (state.purpose != OtpPurpose.register || verificationId == null) {
+    if (state.purpose != OtpPurpose.register) {
       // TODO(api): sambungkan ke endpoint OTP lupa/ganti password.
       emit(state.copyWith(status: OtpStatus.verified));
+      return;
+    }
+    if (verificationId == null) {
+      emit(
+        state.copyWith(
+          status: OtpStatus.failure,
+          message: 'Kode OTP belum terkirim, silakan tekan kirim ulang',
+        ),
+      );
       return;
     }
 
@@ -94,6 +143,12 @@ class OtpBloc extends Bloc<OtpEvent, OtpState> {
     Emitter<OtpState> emit,
   ) async {
     if (!state.canResend) return;
+
+    // Request pertama gagal → ulangi request, bukan resend.
+    if (_needsInitialRequest) {
+      await _requestInitialOtp(emit);
+      return;
+    }
 
     emit(state.copyWith(isResending: true, clearMessage: true));
 
