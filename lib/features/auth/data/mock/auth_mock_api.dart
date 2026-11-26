@@ -9,6 +9,8 @@ import 'package:emas/features/auth/data/datasources/auth_endpoints.dart';
 /// - HP `081288888888` → daftar berhasil, tapi request OTP gagal 503
 /// - OTP `123456` → benar; OTP lain → 422; OTP `000000` → 410 kedaluwarsa
 /// - Kirim ulang OTP maksimal 3x per sesi → 429
+/// - Login: akun demo [demoPhone] / [demoPassword]; [unverifiedPhone] → 403
+///   belum verifikasi; password salah 3x → 429 terkunci 1 menit
 ///
 /// State disimpan di memori, hilang saat aplikasi di-restart.
 class AuthMockApi {
@@ -18,23 +20,107 @@ class AuthMockApi {
   static const takenPhone = '081200000000';
   static const serverErrorPhone = '081299999999';
   static const otpErrorPhone = '081288888888';
+
+  /// Akun demo yang sudah aktif — bisa langsung login.
+  static const demoPhone = '081234567890';
+  static const demoPassword = 'Rahasia123';
+
+  /// Akun demo yang belum verifikasi OTP — login → 403.
+  static const unverifiedPhone = '081211111111';
+
+  static const _maxLoginAttempts = 3;
+  static const _lockDuration = Duration(minutes: 1);
   static const _maxResend = 3;
   static const _otpTtl = 300;
   static const _resendCooldown = 60;
 
-  /// Akun hasil register, key = nomor HP.
-  final Map<String, _MockUser> _users = {};
+  /// Akun terdaftar (demo + hasil register), key = nomor HP.
+  final Map<String, _MockUser> _users = {
+    demoPhone: _MockUser(
+      id: 'usr_demo',
+      name: 'Pengguna Demo',
+      phone: demoPhone,
+      email: 'demo@emas.id',
+      password: demoPassword,
+      createdAt: DateTime(2026),
+    )..isVerified = true,
+    unverifiedPhone: _MockUser(
+      id: 'usr_unverified',
+      name: 'Belum Verifikasi',
+      phone: unverifiedPhone,
+      email: 'belum@emas.id',
+      password: demoPassword,
+      createdAt: DateTime(2026),
+    ),
+  };
+
+  /// Percobaan login gagal berturut-turut per nomor HP.
+  final Map<String, int> _failedLogins = {};
+  final Map<String, DateTime> _lockedUntil = {};
 
   /// Sesi OTP aktif, key = verification_id.
   final Map<String, _OtpSession> _sessions = {};
 
   List<MockRoute> get routes => [
+        MockRoute.post(AuthEndpoints.login, _login),
         MockRoute.post(AuthEndpoints.register, _register),
         MockRoute.post(AuthEndpoints.requestOtp, _requestOtp),
         MockRoute.post(AuthEndpoints.verifyOtp, _verifyOtp),
         MockRoute.post(AuthEndpoints.resendOtp, _resendOtp),
         MockRoute.post(AuthEndpoints.logout, _logout),
       ];
+
+  // ── POST /auth/login ───────────────────────────────────────────────────────
+
+  MockResponse _login(MockRequest req) {
+    final phone = (req.body['phone'] as String? ?? '').trim();
+    final password = req.body['password'] as String? ?? '';
+
+    final errors = <String, List<String>>{
+      if (!RegExp(r'^08\d{7,13}$').hasMatch(phone)) 'phone': ['Nomor handphone tidak valid'],
+      if (password.isEmpty) 'password': ['Password wajib diisi'],
+    };
+    if (errors.isNotEmpty) {
+      return MockResponse.error(422, 'Data login tidak valid', errors: errors);
+    }
+    if (phone == serverErrorPhone) {
+      return MockResponse.error(500, 'Terjadi kesalahan pada server');
+    }
+
+    final lockedUntil = _lockedUntil[phone];
+    if (lockedUntil != null && DateTime.now().isBefore(lockedUntil)) {
+      final seconds = lockedUntil.difference(DateTime.now()).inSeconds + 1;
+      return MockResponse.error(429, 'Terlalu banyak percobaan. Coba lagi dalam $seconds detik');
+    }
+
+    final user = _users[phone];
+    if (user == null || user.password != password) {
+      final attempts = (_failedLogins[phone] ?? 0) + 1;
+      if (attempts >= _maxLoginAttempts) {
+        _failedLogins.remove(phone);
+        _lockedUntil[phone] = DateTime.now().add(_lockDuration);
+        return MockResponse.error(429, 'Terlalu banyak percobaan. Akun dikunci selama 1 menit');
+      }
+      _failedLogins[phone] = attempts;
+      final left = _maxLoginAttempts - attempts;
+      return MockResponse.error(401, 'Nomor handphone atau password salah ($left percobaan tersisa)');
+    }
+
+    _failedLogins.remove(phone);
+    _lockedUntil.remove(phone);
+
+    if (!user.isVerified) {
+      return MockResponse(
+        403,
+        data: {
+          'message': 'Nomor handphone belum diverifikasi. Kami kirim kode OTP ke nomor Anda',
+          'code': 'ACCOUNT_NOT_VERIFIED',
+        },
+      );
+    }
+
+    return MockResponse.ok(_sessionJson(user));
+  }
 
   // ── POST /auth/register ────────────────────────────────────────────────────
 
@@ -78,6 +164,7 @@ class AuthMockApi {
       name: name,
       phone: phone,
       email: email,
+      password: password,
       createdAt: now,
     );
     _users[phone] = user;
@@ -144,8 +231,13 @@ class AuthMockApi {
     _sessions.remove(id);
     user.isVerified = true;
 
+    return MockResponse.ok(_sessionJson(user));
+  }
+
+  /// Respons sesi login — dipakai `/auth/login` dan `/auth/otp/verify`.
+  Map<String, dynamic> _sessionJson(_MockUser user) {
     final now = DateTime.now();
-    return MockResponse.ok({
+    return {
       'user_id': user.id,
       'email': user.email,
       'display_name': user.name,
@@ -153,7 +245,7 @@ class AuthMockApi {
       'access_token': 'mock-access-${now.millisecondsSinceEpoch}',
       'refresh_token': 'mock-refresh-${now.millisecondsSinceEpoch}',
       'token_expiry': now.add(const Duration(days: 1)).toIso8601String(),
-    });
+    };
   }
 
   // ── POST /auth/otp/resend ──────────────────────────────────────────────────
@@ -197,6 +289,7 @@ class _MockUser {
   final String name;
   final String phone;
   final String email;
+  final String password;
   final DateTime createdAt;
   bool isVerified = false;
 
@@ -205,6 +298,7 @@ class _MockUser {
     required this.name,
     required this.phone,
     required this.email,
+    required this.password,
     required this.createdAt,
   });
 

@@ -9,6 +9,7 @@ import 'package:emas/core/services/token_service.dart';
 import 'package:emas/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:emas/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:emas/features/auth/data/models/auth_model.dart';
+import 'package:emas/features/auth/data/models/login_request_model.dart';
 import 'package:emas/features/auth/data/models/otp_request_model.dart';
 import 'package:emas/features/auth/data/models/register_request_model.dart';
 import 'package:emas/features/auth/domain/entities/auth_entity.dart';
@@ -31,14 +32,13 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<Either<AppFailure, AuthEntity>> login({
-    required String email,
+    required String phone,
     required String password,
   }) {
     return _guard(() async {
-      final model = await _remoteDataSource.login({
-        'email': email,
-        'password': password,
-      });
+      final model = await _remoteDataSource.login(
+        LoginRequestModel(phone: phone, password: password),
+      );
       await _saveAuth(model);
       return model.toEntity();
     });

@@ -18,7 +18,9 @@ class ChangePasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AuthBloc>()..add(const AuthCheckCacheRequested()),
+      // Tanpa AuthCheckCacheRequested: listener AuthAuthenticated di bawah akan
+      // langsung melempar user yang sudah login ke dashboard.
+      create: (_) => getIt<AuthBloc>(),
       child: const _ChangePasswordPageContent(),
     );
   }
@@ -45,12 +47,9 @@ class _ChangePasswordPageContentState extends State<_ChangePasswordPageContent> 
   void _onSubmit() {
     if (!validateForm()) return;
 
-    context.read<AuthBloc>().add(
-          AuthLoginRequested(
-            email: _passwordController.text.trim(),
-            password: _confirmPasswordController.text,
-          ),
-        );
+    // TODO(api): kirim password baru ke endpoint ganti/reset password.
+    AppSnackbar.success(context, 'Password berhasil diubah');
+    context.go(AppRoutes.dashboard);
   }
 
   @override

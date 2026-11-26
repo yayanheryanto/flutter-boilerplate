@@ -63,8 +63,16 @@ class AuthInterceptor extends QueuedInterceptor {
       return;
     }
 
+    final sentToken = _bearerOf(options);
+
+    // Request tanpa token (mis. login dengan password salah) → 401 adalah
+    // jawaban final, bukan token kedaluwarsa. Jangan coba refresh.
+    if (sentToken == null) {
+      handler.next(err);
+      return;
+    }
+
     try {
-      final sentToken = _bearerOf(options);
       var currentToken = await _tokenService.getToken();
 
       // Token sudah diperbarui oleh request lain di antrean → cukup ulangi.

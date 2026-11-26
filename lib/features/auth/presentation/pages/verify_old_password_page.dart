@@ -21,7 +21,9 @@ class VerifyOldPasswordPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AuthBloc>()..add(const AuthCheckCacheRequested()),
+      // Tanpa AuthCheckCacheRequested: user di halaman ini sudah login, dan
+      // listener AuthAuthenticated di bawah akan langsung melempar ke dashboard.
+      create: (_) => getIt<AuthBloc>(),
       child: const _VerifyOldPasswordPageContent(),
     );
   }
@@ -46,14 +48,7 @@ class _VerifyOldPasswordPageContentState extends State<_VerifyOldPasswordPageCon
   }
 
   void _onSubmit() async {
-    // if (!validateForm()) return;
-    //
-    // context.read<AuthBloc>().add(
-    //   AuthLoginRequested(
-    //     email: _passwordController.text.trim(),
-    //     password: _confirmPasswordController.text,
-    //   ),
-    // );
+    // TODO(api): verifikasi password lama ke server sebelum kirim OTP.
     // TODO(api): ambil nomor HP user dari sesi/profil.
     await context.push(
       AppRoutes.otp,

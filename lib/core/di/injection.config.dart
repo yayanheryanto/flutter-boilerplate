@@ -51,6 +51,7 @@ import '../../features/auth/domain/usecases/auth/logout_usecase.dart' as _i726;
 import '../../features/auth/domain/usecases/auth/otp_usecase.dart' as _i880;
 import '../../features/auth/domain/usecases/auth/register_usecase.dart' as _i47;
 import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
+import '../../features/auth/presentation/bloc/login/login_bloc.dart' as _i4002;
 import '../../features/auth/presentation/bloc/otp/otp_bloc.dart' as _i75;
 import '../../features/auth/presentation/bloc/register/register_bloc.dart'
     as _i210;
@@ -212,8 +213,13 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i454.AnalyticsService>(),
           gh<_i454.CrashlyticsService>(),
         ));
+    gh.factory<_i4002.LoginBloc>(() => _i4002.LoginBloc(
+          gh<_i985.LoginUseCase>(),
+          gh<_i25.GetCachedAuthUseCase>(),
+          gh<_i454.AnalyticsService>(),
+          gh<_i454.CrashlyticsService>(),
+        ));
     gh.factory<_i797.AuthBloc>(() => _i797.AuthBloc(
-          gh<_i370.LoginUseCase>(),
           gh<_i370.LogoutUseCase>(),
           gh<_i370.GetCachedAuthUseCase>(),
           gh<_i370.ForgotPasswordUseCase>(),

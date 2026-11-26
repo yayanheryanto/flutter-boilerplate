@@ -4,7 +4,9 @@ import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/constants/app_strings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
-import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:emas/features/auth/domain/entities/otp_purpose.dart';
+import 'package:emas/features/auth/presentation/bloc/login/login_bloc.dart';
+import 'package:emas/features/auth/presentation/models/otp_page_args.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
@@ -14,16 +16,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<LoginBloc>()..add(const LoginStarted()),
+      child: const _LoginPageContent(),
+    );
+  }
 }
 
-class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
+class _LoginPageContent extends StatefulWidget {
+  const _LoginPageContent();
+
+  @override
+  State<_LoginPageContent> createState() => _LoginPageContentState();
+}
+
+class _LoginPageContentState extends State<_LoginPageContent> with AppFormMixin<_LoginPageContent> {
   final _phoneController = TextEditingController();
   final _passwordController = TextEditingController();
+
+  /// Tombol Masuk aktif hanya bila nomor HP & password terisi.
+  late final Listenable _formChanges = Listenable.merge([_phoneController, _passwordController]);
+
+  bool get _canSubmit =>
+      _phoneController.text.trim().isNotEmpty && _passwordController.text.isNotEmpty;
 
   @override
   void dispose() {
@@ -32,33 +52,54 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
     super.dispose();
   }
 
-  Future<void> _onSubmit(BuildContext context) async {
-    // if (!validateForm()) return;
-    //
-    // context.read<AuthBloc>().add(
-    //       AuthLoginRequested(
-    //         email: _phoneController.text.trim(),
-    //         password: _passwordController.text,
-    //       ),
-    //     );
-    context.go(AppRoutes.dashboard);
+  void _onSubmit() {
+    if (!_canSubmit || !validateForm()) return;
+    FocusScope.of(context).unfocus();
+
+    context.read<LoginBloc>().add(
+          LoginSubmitted(
+            phone: _phoneController.text,
+            password: _passwordController.text,
+          ),
+        );
+  }
+
+  void _clearServerError(String field) {
+    context.read<LoginBloc>().add(LoginFieldEdited(field));
+  }
+
+  Future<void> _onNeedsVerification(LoginNeedsVerification state) async {
+    AppSnackbar.warning(context, state.message);
+    // OtpBloc me-request OTP (purpose register) begitu halaman dibuka.
+    await context.push(
+      AppRoutes.otp,
+      extra: OtpPageArgs(purpose: OtpPurpose.register, destination: state.phone).toExtra(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<AuthBloc>()..add(const AuthCheckCacheRequested()),
-      child: BlocConsumer<AuthBloc, AuthState>(
-        listener: (context, state) {
-          if (state is AuthAuthenticated) {
-            context.go(AppRoutes.dashboard);
-          }
-          if (state is AuthError) {
-            AppSnackbar.error(context, state.message);
+    return BlocConsumer<LoginBloc, LoginState>(
+        listenWhen: (prev, curr) =>
+            curr is LoginSuccess ||
+            curr is LoginNeedsVerification ||
+            (curr is LoginFailure && prev is LoginInProgress),
+        listener: (context, state) async {
+          switch (state) {
+            case LoginSuccess():
+              // go → stack dibersihkan; back dari dashboard tidak kembali ke login.
+              context.go(AppRoutes.dashboard);
+            case final LoginNeedsVerification needsVerification:
+              await _onNeedsVerification(needsVerification);
+            case LoginFailure(:final message):
+              AppSnackbar.error(context, message);
+            case LoginInitial() || LoginCheckingSession() || LoginInProgress():
+              break;
           }
         },
         builder: (context, state) {
-          final isLoading = state is AuthLoading;
+          final isLoading = state is LoginInProgress || state is LoginCheckingSession;
+          final fieldErrors = state.fieldErrors;
 
           return Stack(
             children: [
@@ -97,6 +138,8 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                 const AppSpacer.lg(),
                                 AppTextField(
                                   controller: _phoneController,
+                                  errorText: fieldErrors['phone'],
+                                  onChanged: (_) => _clearServerError('phone'),
                                   label: AppStrings.phone,
                                   hint: AppStrings.phoneHint,
                                   keyboardType: TextInputType.phone,
@@ -116,12 +159,13 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                   controller: _passwordController,
                                   hint: AppStrings.passwordHint,
                                   textInputAction: TextInputAction.done,
-                                  validator: AppValidators.compose([
-                                    AppValidators.required(
-                                      message: AppStrings.passwordRequired,
-                                    ),
-                                    AppValidators.strongPassword(),
-                                  ]),
+                                  errorText: fieldErrors['password'],
+                                  onChanged: (_) => _clearServerError('password'),
+                                  // Login cukup cek terisi; aturan kekuatan password
+                                  // hanya berlaku saat membuat password (register).
+                                  validator: AppValidators.required(
+                                    message: AppStrings.passwordRequired,
+                                  ),
                                 ),
                                 const AppSpacer.md(),
                                 Align(
@@ -134,10 +178,13 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
                                   ),
                                 ),
                                 const AppSpacer.xxxl(),
-                                AppButton(
-                                  label: AppStrings.login,
-                                  onPressed: () async => _onSubmit(context),
-                                  borderRadius: AppRadius.xl,
+                                ListenableBuilder(
+                                  listenable: _formChanges,
+                                  builder: (context, _) => AppButton(
+                                    label: AppStrings.login,
+                                    onPressed: isLoading || !_canSubmit ? null : _onSubmit,
+                                    borderRadius: AppRadius.xl,
+                                  ),
                                 ),
                                 const AppSpacer.lg(),
                                 Row(
@@ -172,7 +219,6 @@ class _LoginPageState extends State<LoginPage> with AppFormMixin<LoginPage> {
             ],
           );
         },
-      ),
     );
   }
 }

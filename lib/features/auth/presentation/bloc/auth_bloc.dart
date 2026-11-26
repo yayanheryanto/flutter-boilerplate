@@ -12,7 +12,6 @@ part 'auth_state.dart';
 
 @injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final LoginUseCase _loginUseCase;
   final LogoutUseCase _logoutUseCase;
   final GetCachedAuthUseCase _getCachedAuthUseCase;
   final ForgotPasswordUseCase _forgotPasswordUseCase;
@@ -20,44 +19,15 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final CrashlyticsService _crashlyticsService;
 
   AuthBloc(
-    this._loginUseCase,
     this._logoutUseCase,
     this._getCachedAuthUseCase,
     this._forgotPasswordUseCase,
     this._analyticsService,
     this._crashlyticsService,
   ) : super(const AuthInitial()) {
-    on<AuthLoginRequested>(_onLoginRequested);
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<AuthCheckCacheRequested>(_onCheckCacheRequested);
     on<AuthForgotPasswordRequested>(_onForgotPasswordRequested);
-  }
-
-  Future<void> _onLoginRequested(
-    AuthLoginRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    emit(const AuthLoading());
-
-    final result = await _loginUseCase(
-      LoginParams(
-        email: event.email,
-        password: event.password,
-      ),
-    );
-
-    result.fold(
-      (failure) {
-        _crashlyticsService.log('Login failed: ${failure.message}');
-        emit(AuthError(message: failure.message));
-      },
-      (auth) {
-        _analyticsService.logLogin();
-        _analyticsService.setUserId(auth.userId);
-        _crashlyticsService.setUserId(auth.userId);
-        emit(AuthAuthenticated(auth: auth));
-      },
-    );
   }
 
   Future<void> _onLogoutRequested(

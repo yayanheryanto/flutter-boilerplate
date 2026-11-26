@@ -20,6 +20,51 @@ pertama tampil langsung di bawah field terkait pada form.
 
 ---
 
+## Alur login
+
+```
+LoginPage dibuka ── sesi tersimpan & belum kedaluwarsa? ──▶ /dashboard (auto-login)
+     │
+     ▼
+POST /auth/login ──200──▶ token disimpan ──▶ /dashboard
+     ├──────────403──▶ nomor belum diverifikasi ──▶ OtpPage (request OTP register)
+     └──401/422/429──▶ pesan error (field / snackbar)
+```
+
+### `POST /auth/login`
+
+Request
+
+```json
+{ "phone": "081234567890", "password": "Rahasia123" }
+```
+
+`phone` dinormalisasi aplikasi ke format `08…`.
+
+Respons `200` — sesi login (sama dengan respons `/auth/otp/verify`):
+
+```json
+{
+  "user_id": "usr_demo",
+  "email": "demo@emas.id",
+  "display_name": "Pengguna Demo",
+  "photo_url": null,
+  "access_token": "…",
+  "refresh_token": "…",
+  "token_expiry": "2026-11-27T14:00:00.000"
+}
+```
+
+| Status | Kapan |
+|---|---|
+| 401 | Nomor HP atau password salah |
+| 403 | Nomor belum diverifikasi — body berisi `"code": "ACCOUNT_NOT_VERIFIED"`; aplikasi membuka halaman OTP |
+| 422 | Format input tidak valid (`errors.phone` / `errors.password`) |
+| 429 | Terlalu banyak percobaan gagal (terkunci sementara) |
+| 500 | Server error |
+
+---
+
 ## Alur register
 
 ```
@@ -164,6 +209,12 @@ login.
 
 | Input | Hasil |
 |---|---|
+| Login `081234567890` / `Rahasia123` | Berhasil → dashboard (akun demo aktif) |
+| Login `081211111111` / `Rahasia123` | 403 → halaman OTP (akun demo belum verifikasi) |
+| Login password salah | 401 + sisa percobaan |
+| Login password salah 3x | 429 — terkunci 1 menit |
+| Login HP `081299999999` | 500 — server error |
+| Login dengan akun hasil register | Berhasil setelah OTP diverifikasi; sebelum itu 403 |
 | Email `terdaftar@emas.id` | 422 — email sudah terdaftar |
 | HP `081200000000` | 422 — nomor sudah terdaftar |
 | HP `081299999999` | 500 — server error saat register |

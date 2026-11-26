@@ -7,8 +7,11 @@ import 'package:emas/features/auth/domain/entities/otp_purpose.dart';
 import 'package:emas/features/auth/domain/entities/registered_user.dart';
 
 abstract class AuthRepository {
+  /// Login dengan nomor HP & password. Berhasil → sesi disimpan.
+  ///
+  /// Gagal dengan `statusCode == 403` berarti nomor belum diverifikasi OTP.
   Future<Either<AppFailure, AuthEntity>> login({
-    required String email,
+    required String phone,
     required String password,
   });
 

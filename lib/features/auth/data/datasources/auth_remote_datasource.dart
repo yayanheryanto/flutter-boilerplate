@@ -3,6 +3,7 @@ import 'package:retrofit/retrofit.dart';
 
 import 'package:emas/features/auth/data/datasources/auth_endpoints.dart';
 import 'package:emas/features/auth/data/models/auth_model.dart';
+import 'package:emas/features/auth/data/models/login_request_model.dart';
 import 'package:emas/features/auth/data/models/otp_challenge_model.dart';
 import 'package:emas/features/auth/data/models/otp_request_model.dart';
 import 'package:emas/features/auth/data/models/register_request_model.dart';
@@ -16,8 +17,9 @@ part 'auth_remote_datasource.g.dart';
 abstract class AuthRemoteDataSource {
   factory AuthRemoteDataSource(Dio dio, {String baseUrl}) = _AuthRemoteDataSource;
 
+  /// Login dengan nomor HP + password; berhasil → sesi (token).
   @POST(AuthEndpoints.login)
-  Future<AuthModel> login(@Body() Map<String, dynamic> body);
+  Future<AuthModel> login(@Body() LoginRequestModel body);
 
   /// Mendaftarkan akun (status menunggu verifikasi nomor HP).
   @POST(AuthEndpoints.register)
