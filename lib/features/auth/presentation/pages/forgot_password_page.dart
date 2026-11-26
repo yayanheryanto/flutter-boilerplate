@@ -1,6 +1,8 @@
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:emas/features/auth/domain/entities/otp_purpose.dart';
+import 'package:emas/features/auth/presentation/models/otp_page_args.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
@@ -153,9 +155,10 @@ class _FormView extends StatelessWidget {
               label: AppStrings.next,
               onPressed: () async => context.push(
                 AppRoutes.otp,
-                extra: {
-                  'phone': phoneController.text,
-                },
+                extra: OtpPageArgs(
+                  purpose: OtpPurpose.forgotPassword,
+                  destination: phoneController.text,
+                ).toExtra(),
               ),
               isLoading: isLoading,
               borderRadius: AppRadius.xl,

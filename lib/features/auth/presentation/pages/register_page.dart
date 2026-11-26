@@ -5,7 +5,9 @@ import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/app_form_utils.dart';
 import 'package:emas/core/utils/navigator_key.dart';
-import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:emas/features/auth/domain/entities/otp_purpose.dart';
+import 'package:emas/features/auth/presentation/bloc/register/register_bloc.dart';
+import 'package:emas/features/auth/presentation/models/otp_page_args.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
@@ -21,7 +23,7 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AuthBloc>(),
+      create: (_) => getIt<RegisterBloc>(),
       child: const _RegisterPageContent(),
     );
   }
@@ -64,7 +66,25 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
       return;
     }
 
-    context.go(AppRoutes.otp, extra: {'phone': _phoneController.text});
+    context.read<RegisterBloc>().add(
+          RegisterSubmitted(
+            name: _nameController.text,
+            phone: _phoneController.text,
+            email: _emailController.text,
+            password: _passwordController.text,
+          ),
+        );
+  }
+
+  void _clearServerError(String field) {
+    context.read<RegisterBloc>().add(RegisterFieldEdited(field));
+  }
+
+  Future<void> _onRegistered(RegisterSuccess state) async {
+    await context.push(
+      AppRoutes.otp,
+      extra: OtpPageArgs.fromChallenge(OtpPurpose.register, state.challenge).toExtra(),
+    );
   }
 
   @override
@@ -81,17 +101,21 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               const AppSpacer.md(),
-              BlocConsumer<AuthBloc, AuthState>(
-                listener: (context, state) {
-                  if (state is AuthAuthenticated) {
-                    AppNavigator.go(AppRoutes.dashboard);
-                  }
-                  if (state is AuthError) {
-                    AppSnackbar.error(context, state.message);
+              BlocConsumer<RegisterBloc, RegisterState>(
+                listenWhen: (prev, curr) => curr is RegisterSuccess || (curr is RegisterFailure && prev is RegisterInProgress),
+                listener: (context, state) async {
+                  switch (state) {
+                    case final RegisterSuccess success:
+                      await _onRegistered(success);
+                    case RegisterFailure(:final message):
+                      AppSnackbar.error(context, message);
+                    case RegisterInitial() || RegisterInProgress():
+                      break;
                   }
                 },
                 builder: (context, state) {
-                  final isLoading = state is AuthLoading;
+                  final isLoading = state is RegisterInProgress;
+                  final fieldErrors = state.fieldErrors;
 
                   return Form(
                     key: formKey,
@@ -120,6 +144,8 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                           const AppSpacer.lg(),
                           AppTextField(
                             controller: _nameController,
+                            errorText: fieldErrors['name'],
+                            onChanged: (_) => _clearServerError('name'),
                             label: 'Nama Lengkap',
                             hint: 'Masukkan nama lengkap sesuai KTP',
                             keyboardType: TextInputType.name,
@@ -138,6 +164,8 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                           const AppSpacer.md(),
                           AppTextField(
                             controller: _phoneController,
+                            errorText: fieldErrors['phone'],
+                            onChanged: (_) => _clearServerError('phone'),
                             label: 'Nomor Handphone',
                             hint: 'Masukkan nomor handphone Anda',
                             keyboardType: TextInputType.phone,
@@ -155,6 +183,8 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                           const AppSpacer.md(),
                           AppTextField(
                             controller: _emailController,
+                            errorText: fieldErrors['email'],
+                            onChanged: (_) => _clearServerError('email'),
                             label: 'Email',
                             hint: 'Email (contoh: email@gmail.com)',
                             keyboardType: TextInputType.emailAddress,
@@ -167,6 +197,8 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                           const AppSpacer.md(),
                           AppPasswordField(
                             controller: _passwordController,
+                            errorText: fieldErrors['password'],
+                            onChanged: (_) => _clearServerError('password'),
                             hint: 'Masukkan password Anda',
                             textInputAction: TextInputAction.next,
                             validator: AppValidators.compose([

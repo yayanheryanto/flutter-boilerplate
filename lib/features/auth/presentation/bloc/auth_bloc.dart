@@ -13,7 +13,6 @@ part 'auth_state.dart';
 @injectable
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase _loginUseCase;
-  final RegisterUseCase _registerUseCase;
   final LogoutUseCase _logoutUseCase;
   final GetCachedAuthUseCase _getCachedAuthUseCase;
   final ForgotPasswordUseCase _forgotPasswordUseCase;
@@ -22,7 +21,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   AuthBloc(
     this._loginUseCase,
-    this._registerUseCase,
     this._logoutUseCase,
     this._getCachedAuthUseCase,
     this._forgotPasswordUseCase,
@@ -30,7 +28,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     this._crashlyticsService,
   ) : super(const AuthInitial()) {
     on<AuthLoginRequested>(_onLoginRequested);
-    on<AuthRegisterRequested>(_onRegisterRequested);
     on<AuthLogoutRequested>(_onLogoutRequested);
     on<AuthCheckCacheRequested>(_onCheckCacheRequested);
     on<AuthForgotPasswordRequested>(_onForgotPasswordRequested);
@@ -58,33 +55,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         _analyticsService.logLogin();
         _analyticsService.setUserId(auth.userId);
         _crashlyticsService.setUserId(auth.userId);
-        emit(AuthAuthenticated(auth: auth));
-      },
-    );
-  }
-
-  Future<void> _onRegisterRequested(
-    AuthRegisterRequested event,
-    Emitter<AuthState> emit,
-  ) async {
-    emit(const AuthLoading());
-
-    final result = await _registerUseCase(
-      RegisterParams(
-        email: event.email,
-        password: event.password,
-        name: event.name,
-      ),
-    );
-
-    result.fold(
-      (failure) {
-        _crashlyticsService.log('Register failed: ${failure.message}');
-        emit(AuthError(message: failure.message));
-      },
-      (auth) {
-        _analyticsService.logSignUp();
-        _analyticsService.setUserId(auth.userId);
         emit(AuthAuthenticated(auth: auth));
       },
     );

@@ -1,11 +1,11 @@
-import 'dart:async';
-
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/responsive/responsive_context_extension.dart';
 import 'package:emas/core/utils/phone_number_masker.dart';
-import 'package:emas/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:emas/features/auth/domain/entities/otp_purpose.dart';
+import 'package:emas/features/auth/presentation/bloc/otp/otp_bloc.dart';
+import 'package:emas/features/auth/presentation/models/otp_page_args.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
@@ -15,53 +15,40 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
-const _kOtpLength = 6;
-const _kResendCooldown = 60;
-const _kMaxResend = 3;
+const _kOtpLength = OtpBloc.codeLength;
 
+/// Halaman input OTP untuk register, lupa password, dan ganti password.
+/// Konteks dan tujuan navigasi ditentukan oleh [OtpPageArgs.purpose].
 class OtpPage extends StatelessWidget {
-  final String phone;
+  final OtpPageArgs args;
 
-  const OtpPage({super.key, required this.phone});
+  const OtpPage({super.key, required this.args});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<AuthBloc>(),
-      child: _OtpPageContent(phone: phone),
+      create: (_) => getIt<OtpBloc>()..add(OtpStarted(args)),
+      child: const _OtpPageContent(),
     );
   }
 }
 
 class _OtpPageContent extends StatefulWidget {
-  final String phone;
-  const _OtpPageContent({required this.phone});
+  const _OtpPageContent();
 
   @override
   State<_OtpPageContent> createState() => _OtpPageContentState();
 }
 
+/// State widget hanya mengurus kontrol input (controller & fokus).
+/// Aturan bisnis (cooldown, batas kirim ulang, verifikasi) ada di [OtpBloc].
 class _OtpPageContentState extends State<_OtpPageContent> {
   final List<TextEditingController> _controllers =
-  List.generate(_kOtpLength, (_) => TextEditingController());
-  final List<FocusNode> _focusNodes =
-  List.generate(_kOtpLength, (_) => FocusNode());
-
-  int _resendCount = 0;
-  int _secondsLeft = _kResendCooldown;
-  Timer? _timer;
-  String _phoneNumberMasker = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _startTimer();
-    _phoneNumberMasker = PhoneNumberMasker.mask(widget.phone);
-  }
+      List.generate(_kOtpLength, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(_kOtpLength, (_) => FocusNode());
 
   @override
   void dispose() {
-    _timer?.cancel();
     for (final c in _controllers) {
       c.dispose();
     }
@@ -71,51 +58,18 @@ class _OtpPageContentState extends State<_OtpPageContent> {
     super.dispose();
   }
 
-  // ── Timer ──────────────────────────────────────────────────────────────────
-
-  void _startTimer() {
-    _timer?.cancel();
-    setState(() => _secondsLeft = _kResendCooldown);
-    _timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      if (_secondsLeft <= 1) {
-        _timer?.cancel();
-        setState(() => _secondsLeft = 0);
-      } else {
-        setState(() => _secondsLeft--);
-      }
-    });
-  }
-
-  void _onResend() {
-    if (_secondsLeft > 0 || _resendCount >= _kMaxResend) return;
-    setState(() => _resendCount++);
-    _startTimer();
-  }
-
   String get _otpValue => _controllers.map((c) => c.text).join();
 
-  Future<void> _onDigitChanged(int index, String value) async {
+  void _onDigitChanged(int index, String value) {
     if (value.length > 1) {
+      // Tempel (paste) beberapa digit sekaligus.
       final digits = value.replaceAll(RegExp(r'\D'), '');
-
       for (int i = 0; i < _kOtpLength; i++) {
-        if (i < digits.length) {
-          _controllers[i].text = digits[i];
-        } else {
-          _controllers[i].text = '';
-        }
+        _controllers[i].text = i < digits.length ? digits[i] : '';
       }
-
-      final nextFocusIndex = (digits.length).clamp(0, _kOtpLength - 1);
+      final nextFocusIndex = digits.length.clamp(0, _kOtpLength - 1);
       _focusNodes[nextFocusIndex].requestFocus();
-
-      await _checkOtpCompleted();
-
-      setState(() {});
-      return;
-    }
-
-    if (value.isNotEmpty) {
+    } else if (value.isNotEmpty) {
       if (index < _kOtpLength - 1) {
         _focusNodes[index + 1].requestFocus();
       } else {
@@ -123,32 +77,34 @@ class _OtpPageContentState extends State<_OtpPageContent> {
       }
     }
 
-    await _checkOtpCompleted();
-
     setState(() {});
+    _submitIfComplete();
   }
 
-  Future<void> _checkOtpCompleted() async {
-    final otp = _controllers.map((e) => e.text).join();
-
+  void _submitIfComplete() {
+    final otp = _otpValue;
     if (otp.length == _kOtpLength) {
-      debugPrint('OTP lengkap: $otp');
-
-      await context.push(AppRoutes.changePassword);
-      // Trigger API / Bloc
-      // context.read<AuthBloc>().add(
-      //   VerifyOtpRequested(otp),
-      // );
+      context.read<OtpBloc>().add(OtpCodeSubmitted(otp));
     }
   }
 
-  // Submit OTP; belum dipanggil dari UI. Sambungkan ke tombol/onCompleted
-  // saat verifikasi OTP ke AuthBloc sudah dibuat.
-  // ignore: unused_element
-  void _onSubmit() {
-    final otp = _otpValue;
-    if (otp.length < _kOtpLength) return;
-    context.go(AppRoutes.dashboard);
+  void _clearCode() {
+    for (final c in _controllers) {
+      c.clear();
+    }
+    _focusNodes.first.requestFocus();
+    setState(() {});
+  }
+
+  Future<void> _onVerified(OtpState state) async {
+    switch (state.purpose) {
+      case OtpPurpose.register:
+        // Sesi sudah disimpan repository → masuk ke aplikasi.
+        context.go(AppRoutes.dashboard);
+      case OtpPurpose.forgotPassword:
+      case OtpPurpose.changePassword:
+        await context.push(AppRoutes.changePassword);
+    }
   }
 
   @override
@@ -160,66 +116,91 @@ class _OtpPageContentState extends State<_OtpPageContent> {
       ),
       body: SafeArea(
         top: false,
-        child: BlocListener<AuthBloc, AuthState>(
-          listener: (context, state) {
-            if (state is AuthError) {
-              AppSnackbar.error(context, state.message);
+        child: BlocConsumer<OtpBloc, OtpState>(
+          listenWhen: (prev, curr) => prev.status != curr.status,
+          listener: (context, state) async {
+            switch (state.status) {
+              case OtpStatus.verified:
+                await _onVerified(state);
+              case OtpStatus.failure:
+                AppSnackbar.error(context, state.message ?? 'Terjadi kesalahan');
+                _clearCode();
+              case OtpStatus.codeResent:
+                AppSnackbar.success(context, state.message ?? 'Kode OTP baru telah dikirim');
+                _clearCode();
+              case OtpStatus.idle:
+              case OtpStatus.verifying:
+                break;
             }
           },
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(
-              horizontal: context.responsive(
-                mobile: AppSpacings.lg,
-                tablet: AppSpacings.xxl,
+          builder: (context, state) {
+            return SingleChildScrollView(
+              padding: EdgeInsets.symmetric(
+                horizontal: context.responsive(
+                  mobile: AppSpacings.lg,
+                  tablet: AppSpacings.xxl,
+                ),
               ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const AppSpacer.md(),
-                const AppText(
-                  'Masukan Kode OTP',
-                  variant: AppTextVariant.headlineLarge,
-                  color: AppColors.primary500,
-                  fontWeight: FontWeight.w800,
-                ),
-                const AppSpacer.md(),
-                AppText(
-                  'Kami akan kirim kode Verifikasi ke $_phoneNumberMasker',
-                  variant: AppTextVariant.titleSmall,
-                ),
-                const AppSpacer.xxl(),
-                _OtpBoxRow(
-                  controllers: _controllers,
-                  focusNodes: _focusNodes,
-                  onChanged: _onDigitChanged,
-                ),
-                const AppSpacer.xl(),
-                Center(
-                  child: Column(
-                    children: [
-                      const AppText(
-                        'Belum menerima kode OTP?',
-                        variant: AppTextVariant.titleMedium,
-                      ),
-                      const AppSpacer.md(),
-                      _ResendButton(
-                        secondsLeft: _secondsLeft,
-                        resendCount: _resendCount,
-                        maxResend: _kMaxResend,
-                        onResend: _onResend,
-                      ),
-                    ],
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const AppSpacer.md(),
+                  const AppText(
+                    'Masukan Kode OTP',
+                    variant: AppTextVariant.headlineLarge,
+                    color: AppColors.primary500,
+                    fontWeight: FontWeight.w800,
                   ),
-                ),
-                const AppSpacer(40),
-              ],
-            ),
-          ),
+                  const AppSpacer.md(),
+                  AppText(
+                    'Kami akan kirim kode Verifikasi ke ${_displayDestination(state.destination)}',
+                    variant: AppTextVariant.titleSmall,
+                  ),
+                  const AppSpacer.xxl(),
+                  AbsorbPointer(
+                    absorbing: state.isVerifying,
+                    child: _OtpBoxRow(
+                      controllers: _controllers,
+                      focusNodes: _focusNodes,
+                      onChanged: _onDigitChanged,
+                    ),
+                  ),
+                  if (state.isVerifying) ...[
+                    const AppSpacer.lg(),
+                    const Center(child: CircularProgressIndicator()),
+                  ],
+                  const AppSpacer.xl(),
+                  Center(
+                    child: Column(
+                      children: [
+                        const AppText(
+                          'Belum menerima kode OTP?',
+                          variant: AppTextVariant.titleMedium,
+                        ),
+                        const AppSpacer.md(),
+                        _ResendButton(
+                          secondsLeft: state.resendCountdown,
+                          resendCount: state.resendCount,
+                          maxResend: OtpBloc.maxResend,
+                          enabled: state.canResend,
+                          onResend: () => context.read<OtpBloc>().add(const OtpResendRequested()),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const AppSpacer(40),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );
   }
+
+  /// Tujuan dari server sudah disamarkan; nomor mentah (alur lama) disamarkan di sini.
+  String _displayDestination(String destination) =>
+      destination.contains('*') ? destination : PhoneNumberMasker.mask(destination);
 }
 
 // ─── OTP Row Component ────────────────────────────────────────────────────────
@@ -350,19 +331,21 @@ class _ResendButton extends StatelessWidget {
   final int secondsLeft;
   final int resendCount;
   final int maxResend;
+  final bool enabled;
   final VoidCallback onResend;
 
   const _ResendButton({
     required this.secondsLeft,
     required this.resendCount,
     required this.maxResend,
+    required this.enabled,
     required this.onResend,
   });
 
   @override
   Widget build(BuildContext context) {
     final exhausted = resendCount >= maxResend;
-    final canResend = secondsLeft == 0 && !exhausted;
+    final canResend = enabled;
 
     if (exhausted) {
       return AppText(

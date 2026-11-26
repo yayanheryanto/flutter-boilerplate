@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:emas/core/network/interceptors/logging_interceptor.dart';
+import 'package:emas/core/network/interceptors/mock_interceptor.dart';
 import 'package:emas/core/services/token_service.dart';
 
 /// Menambahkan bearer token dan me-refresh token saat 401.
@@ -27,10 +28,12 @@ class AuthInterceptor extends QueuedInterceptor {
 
   /// Dipanggil oleh `DioClient` setelah Dio utama dibuat.
   void attach(Dio dio) {
-    // Hanya logging yang ikut; Dio baru sudah memasang interceptor bawaannya
-    // sendiri, dan Auth/Retry sengaja tidak disertakan.
+    // Hanya logging & mock yang ikut; Dio baru sudah memasang interceptor
+    // bawaannya sendiri, dan Auth/Retry sengaja tidak disertakan.
     _retryDio = Dio(dio.options)
-      ..interceptors.addAll(dio.interceptors.whereType<LoggingInterceptor>());
+      ..interceptors.addAll(
+        dio.interceptors.where((i) => i is LoggingInterceptor || i is MockInterceptor),
+      );
   }
 
   @override

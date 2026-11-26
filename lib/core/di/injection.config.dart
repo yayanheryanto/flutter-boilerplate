@@ -30,6 +30,13 @@ import '../../features/auth/domain/usecases/auth/login_usecase.dart' as _i985;
 import '../../features/auth/domain/usecases/auth/logout_usecase.dart' as _i726;
 import '../../features/auth/domain/usecases/auth/register_usecase.dart' as _i47;
 import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
+import '../../features/auth/domain/usecases/auth/otp_usecase.dart' as _i3001;
+import '../../features/auth/presentation/bloc/otp/otp_bloc.dart' as _i3002;
+import '../../features/auth/presentation/bloc/register/register_bloc.dart'
+    as _i3003;
+import '../../app/di/mock_module.dart' as _i3004;
+import '../network/mock/mock_api.dart' as _i3005;
+import '../network/interceptors/mock_interceptor.dart' as _i3006;
 import '../../features/auction/data/datasources/auction_datasource.dart'
     as _i688;
 import '../../features/live_auction/data/datasources/live_auction_socket_datasource.dart'
@@ -94,6 +101,10 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final appModule = _$AppModule();
     final authModule = _$AuthModule();
+    final mockModule = _$MockModule();
+    gh.singleton<_i3005.MockRegistry>(() => mockModule.mockRegistry);
+    gh.singleton<_i3006.MockInterceptor>(
+        () => _i3006.MockInterceptor(gh<_i3005.MockRegistry>()));
     gh.factory<_i339.AuctionDetailBloc>(() => _i339.AuctionDetailBloc());
     gh.factory<_i592.BuyNplConfirmationBloc>(
         () => _i592.BuyNplConfirmationBloc());
@@ -158,6 +169,7 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i745.AuthInterceptor>(),
           gh<_i344.LoggingInterceptor>(),
           gh<_i914.RetryInterceptor>(),
+          gh<_i3006.MockInterceptor>(),
         ));
     gh.factory<_i217.GetAuctionsByCategoryUseCase>(() =>
         _i217.GetAuctionsByCategoryUseCase(gh<_i746.AuctionRepository>()));
@@ -184,9 +196,20 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i726.LogoutUseCase(gh<_i787.AuthRepository>()));
     gh.factory<_i47.RegisterUseCase>(
         () => _i47.RegisterUseCase(gh<_i787.AuthRepository>()));
+    gh.factory<_i3001.VerifyOtpUseCase>(
+        () => _i3001.VerifyOtpUseCase(gh<_i787.AuthRepository>()));
+    gh.factory<_i3001.ResendOtpUseCase>(
+        () => _i3001.ResendOtpUseCase(gh<_i787.AuthRepository>()));
+    gh.factory<_i3003.RegisterBloc>(
+        () => _i3003.RegisterBloc(gh<_i47.RegisterUseCase>()));
+    gh.factory<_i3002.OtpBloc>(() => _i3002.OtpBloc(
+          gh<_i3001.VerifyOtpUseCase>(),
+          gh<_i3001.ResendOtpUseCase>(),
+          gh<_i454.AnalyticsService>(),
+          gh<_i454.CrashlyticsService>(),
+        ));
     gh.factory<_i797.AuthBloc>(() => _i797.AuthBloc(
           gh<_i370.LoginUseCase>(),
-          gh<_i370.RegisterUseCase>(),
           gh<_i370.LogoutUseCase>(),
           gh<_i370.GetCachedAuthUseCase>(),
           gh<_i370.ForgotPasswordUseCase>(),
@@ -200,3 +223,5 @@ extension GetItInjectableX on _i174.GetIt {
 class _$AppModule extends _i460.AppModule {}
 
 class _$AuthModule extends _i433.AuthModule {}
+
+class _$MockModule extends _i3004.MockModule {}

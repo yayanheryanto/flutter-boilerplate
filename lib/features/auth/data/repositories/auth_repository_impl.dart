@@ -6,11 +6,14 @@ import 'package:emas/core/errors/app_exception.dart';
 import 'package:emas/core/errors/app_failure.dart';
 import 'package:emas/core/errors/error_mapper.dart';
 import 'package:emas/core/services/token_service.dart';
-import 'package:emas/features/auth/domain/entities/auth_entity.dart';
-import 'package:emas/features/auth/domain/repositories/auth_repository.dart';
 import 'package:emas/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:emas/features/auth/data/datasources/auth_remote_datasource.dart';
 import 'package:emas/features/auth/data/models/auth_model.dart';
+import 'package:emas/features/auth/data/models/otp_request_model.dart';
+import 'package:emas/features/auth/data/models/register_request_model.dart';
+import 'package:emas/features/auth/domain/entities/auth_entity.dart';
+import 'package:emas/features/auth/domain/entities/otp_challenge.dart';
+import 'package:emas/features/auth/domain/repositories/auth_repository.dart';
 
 @LazySingleton(as: AuthRepository)
 class AuthRepositoryImpl implements AuthRepository {
@@ -28,109 +31,118 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<Either<AppFailure, AuthEntity>> login({
     required String email,
     required String password,
-  }) async {
-    try {
+  }) {
+    return _guard(() async {
       final model = await _remoteDataSource.login({
         'email': email,
         'password': password,
       });
-
       await _saveAuth(model);
-
-      return Right(model.toEntity());
-    } on DioException catch (e) {
-      return Left(ErrorMapper.mapDioException(e));
-    } on AppException catch (e) {
-      return Left(ErrorMapper.mapException(e));
-    } catch (e) {
-      return Left(UnknownFailure(message: e.toString()));
-    }
+      return model.toEntity();
+    });
   }
 
   @override
-  Future<Either<AppFailure, AuthEntity>> register({
+  Future<Either<AppFailure, OtpChallenge>> register({
+    required String name,
+    required String phone,
     required String email,
     required String password,
-    required String name,
-  }) async {
-    try {
-      final model = await _remoteDataSource.register({
-        'email': email,
-        'password': password,
-        'name': name,
-      });
+  }) {
+    return _guard(() async {
+      final model = await _remoteDataSource.register(
+        RegisterRequestModel(
+          name: name,
+          phone: phone,
+          email: email,
+          password: password,
+        ),
+      );
+      return model.toEntity();
+    });
+  }
 
+  @override
+  Future<Either<AppFailure, AuthEntity>> verifyOtp({
+    required String verificationId,
+    required String code,
+  }) {
+    return _guard(() async {
+      final model = await _remoteDataSource.verifyOtp(
+        VerifyOtpRequestModel(verificationId: verificationId, code: code),
+      );
       await _saveAuth(model);
+      return model.toEntity();
+    });
+  }
 
-      return Right(model.toEntity());
-    } on DioException catch (e) {
-      return Left(ErrorMapper.mapDioException(e));
-    } on AppException catch (e) {
-      return Left(ErrorMapper.mapException(e));
-    } catch (e) {
-      return Left(UnknownFailure(message: e.toString()));
-    }
+  @override
+  Future<Either<AppFailure, OtpChallenge>> resendOtp({
+    required String verificationId,
+  }) {
+    return _guard(() async {
+      final model = await _remoteDataSource.resendOtp(
+        ResendOtpRequestModel(verificationId: verificationId),
+      );
+      return model.toEntity();
+    });
   }
 
   @override
   Future<Either<AppFailure, Unit>> logout() async {
-    try {
+    // Sesi lokal selalu dibersihkan, apa pun hasil request ke server.
+    final result = await _guard(() async {
       await _remoteDataSource.logout();
-      await _clearAuth();
-      return const Right(unit);
-    } on DioException catch (e) {
-      // Still clear local auth even if remote fails
-      await _clearAuth();
-      return Left(ErrorMapper.mapDioException(e));
-    } catch (e) {
-      await _clearAuth();
-      return const Right(unit);
-    }
+      return unit;
+    });
+    await _clearAuth();
+    return result;
   }
 
   @override
   Future<Either<AppFailure, AuthEntity>> refreshToken() async {
-    try {
-      final refreshToken = await _tokenService.getRefreshToken();
-      if (refreshToken == null) {
-        return const Left(UnauthorizedFailure());
-      }
-
+    final refreshToken = await _tokenService.getRefreshToken();
+    if (refreshToken == null) {
+      return const Left(UnauthorizedFailure());
+    }
+    return _guard(() async {
       final model = await _remoteDataSource.refreshToken({
         'refresh_token': refreshToken,
       });
-
       await _saveAuth(model);
-
-      return Right(model.toEntity());
-    } on DioException catch (e) {
-      return Left(ErrorMapper.mapDioException(e));
-    } catch (e) {
-      return Left(UnknownFailure(message: e.toString()));
-    }
+      return model.toEntity();
+    });
   }
 
   @override
-  Future<Either<AppFailure, AuthEntity?>> getCachedAuth() async {
-    try {
+  Future<Either<AppFailure, AuthEntity?>> getCachedAuth() {
+    return _guard(() async {
       final model = await _localDataSource.getAuth();
-      return Right(model?.toEntity());
-    } on CacheException catch (e) {
-      return Left(CacheFailure(message: e.message));
-    } catch (e) {
-      return Left(UnknownFailure(message: e.toString()));
-    }
+      return model?.toEntity();
+    });
   }
 
   @override
   Future<Either<AppFailure, Unit>> forgotPassword({
     required String email,
-  }) async {
-    try {
+  }) {
+    return _guard(() async {
       await _remoteDataSource.forgotPassword({'email': email});
-      return const Right(unit);
+      return unit;
+    });
+  }
+
+  // ── Helpers ────────────────────────────────────────────────────────────────
+
+  /// Satu tempat untuk mengubah exception menjadi [AppFailure], supaya tiap
+  /// method repository cukup berisi "jalur bahagia".
+  Future<Either<AppFailure, T>> _guard<T>(Future<T> Function() action) async {
+    try {
+      return Right(await action());
     } on DioException catch (e) {
       return Left(ErrorMapper.mapDioException(e));
+    } on AppException catch (e) {
+      return Left(ErrorMapper.mapException(e));
     } catch (e) {
       return Left(UnknownFailure(message: e.toString()));
     }

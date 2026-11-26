@@ -7,6 +7,7 @@ import 'package:emas/features/auth/presentation/pages/login_page.dart';
 import 'package:emas/features/auth/presentation/pages/otp_page.dart';
 import 'package:emas/features/auth/presentation/pages/register_page.dart';
 import 'package:emas/features/auth/presentation/pages/verify_old_password_page.dart';
+import 'package:emas/features/auth/presentation/models/otp_page_args.dart';
 
 /// Route fitur auth. Digabungkan oleh `AppRouter` di `lib/app/router/`.
 final List<RouteBase> authRoutes = [
@@ -28,11 +29,7 @@ final List<RouteBase> authRoutes = [
   GoRoute(
     path: AppRoutes.otp,
     name: 'otp',
-    builder: (context, state) {
-      final extra = state.extra as Map<String, dynamic>? ?? {};
-      final phone = extra['phone'] as String? ?? '';
-      return OtpPage(phone: phone);
-    },
+    builder: (context, state) => OtpPage(args: OtpPageArgs.fromExtra(state.extra)),
   ),
   GoRoute(
     path: AppRoutes.changePassword,

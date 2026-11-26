@@ -5,6 +5,7 @@ import 'package:emas/core/config/app_config.dart';
 import 'package:emas/core/constants/constants.dart';
 import 'package:emas/core/network/interceptors/auth_interceptor.dart';
 import 'package:emas/core/network/interceptors/logging_interceptor.dart';
+import 'package:emas/core/network/interceptors/mock_interceptor.dart';
 import 'package:emas/core/network/interceptors/retry_interceptor.dart';
 
 @singleton
@@ -15,6 +16,7 @@ class DioClient {
     AuthInterceptor authInterceptor,
     LoggingInterceptor loggingInterceptor,
     RetryInterceptor retryInterceptor,
+    MockInterceptor mockInterceptor,
   ) {
     _dio = Dio(
       BaseOptions(
@@ -39,6 +41,8 @@ class DioClient {
       authInterceptor,
       retryInterceptor,
       loggingInterceptor,
+      // Harus paling akhir: lihat dokumentasi MockInterceptor.
+      mockInterceptor,
     ]);
 
     // Request yang diulang (refresh token / retry) memakai Dio yang sama,

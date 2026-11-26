@@ -363,6 +363,35 @@ python3 scripts/check_architecture.py .
 
 ---
 
+## 🧪 Mock API (selama backend belum tersedia)
+
+Request tetap lewat Retrofit ke endpoint sungguhan. Bila `AppConfig.useMock`
+aktif, `MockInterceptor` (interceptor Dio terakhir) menjawab request yang punya
+handler mock — tanpa jaringan. Request tanpa handler tetap diteruskan ke server.
+
+| Environment | Default `useMock` |
+|---|---|
+| dev | ✅ |
+| stag | ✅ (ubah ke `false` saat backend staging siap) |
+| prod | ❌ |
+
+Override: `flutter run --flavor dev -t lib/main.dev.dart --dart-define=USE_MOCK=false`
+
+Struktur:
+
+```
+core/network/mock/mock_api.dart                 # MockRoute, MockResponse, MockRegistry
+core/network/interceptors/mock_interceptor.dart # menjawab request saat useMock
+features/<fitur>/data/datasources/<fitur>_endpoints.dart  # path — dipakai Retrofit & mock
+features/<fitur>/data/mock/<fitur>_mock_api.dart          # backend palsu per fitur
+app/di/mock_module.dart                         # mendaftarkan semua mock
+```
+
+Kontrak & skenario uji: [`docs/api/auth.md`](docs/api/auth.md)
+(mis. OTP `123456` = benar, email `terdaftar@emas.id` = sudah terdaftar).
+
+---
+
 ## 🔥 Firebase Remote Config Keys
 
 | Key | Type | Default |
