@@ -9,7 +9,7 @@ import 'package:emas/core/di/injection.dart';
 import 'package:emas/core/firebase/firebase_options_dev.dart';
 import 'package:emas/core/bloc/notification_bloc.dart';
 import 'package:emas/core/firebase/notification_service.dart';
-import 'package:emas/core/router/app_router.dart';
+import 'package:emas/app/router/app_router.dart';
 import 'package:emas/shared/theme/app_theme.dart';
 import 'package:emas/core/utils/app_bloc_observer.dart';
 import 'package:sizer/sizer.dart';

@@ -1,8 +1,8 @@
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
-import 'package:emas/features/dashboard/data/models/dashboard_dummy_data.dart';
-import 'package:emas/features/dashboard/presentation/widgets/home/bid_card.dart';
+import 'package:emas/features/dashboard/presentation/dummy/home_dummy_data.dart';
+import 'package:emas/features/auction/presentation/widgets/bid_card.dart';
 import 'package:emas/features/dashboard/presentation/widgets/home/metric_card.dart';
 import 'package:emas/features/dashboard/presentation/widgets/home/section_header.dart';
 import 'package:flutter/material.dart';

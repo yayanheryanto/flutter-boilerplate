@@ -1,0 +1,77 @@
+import 'package:emas/core/constants/app_elevations.dart';
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/core/constants/images.dart';
+import 'package:emas/core/constants/app_spacings.dart';
+import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
+import 'package:emas/shared/theme/app_colors.dart';
+import 'package:emas/shared/widgets/appbar/app_page_bar.dart';
+import 'package:emas/shared/widgets/design_system.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+
+class AccountProcessedPage extends StatelessWidget {
+  const AccountProcessedPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const _AccountProcessedPageContent();
+  }
+}
+
+class _AccountProcessedPageContent extends StatelessWidget {
+  const _AccountProcessedPageContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return AppScaffoldWrapper(
+      backgroundColor: AppColors.white,
+      appBar: const AppPageBar(
+        title: 'Verifikasi Akun',
+        showBackButton: false,
+        titleSpacing: AppSpacings.md,
+        elevation: AppElevations.xs,
+      ),
+      body: SafeArea(
+        top: false,
+        child: Container(
+          margin: const EdgeInsets.all(AppSpacings.md),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(),
+              AppImage(
+                src: Images.accountProcessed,
+              ),
+              const AppSpacer.lg(),
+              const AppText(
+                'Verifikasi Akun Anda',
+                variant: AppTextVariant.titleLarge,
+                fontWeight: FontWeight.w600,
+              ),
+              const AppText(
+                'Sedang Diproses',
+                variant: AppTextVariant.titleLarge,
+              ),
+              const AppSpacer.lg(),
+              const AppText(
+                'Mohon menunggu maksimal 1 x 24 jam.',
+              ),
+              const AppText(
+                'Kami sedang memproses verifikasi akun Anda.',
+              ),
+              const Spacer(),
+              AppButton(
+                label: 'Kembali ke Beranda',
+                onPressed: () {
+                  context.go(AppRoutes.login);
+                  // _onSubmit
+                },
+                borderRadius: 25,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}

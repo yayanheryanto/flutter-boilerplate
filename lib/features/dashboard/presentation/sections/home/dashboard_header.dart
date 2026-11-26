@@ -1,5 +1,5 @@
 import 'package:emas/core/constants/images.dart';
-import 'package:emas/core/firebase/notification_handler.dart';
+import 'package:emas/shared/widgets/notification/notification_widgets.dart';
 import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';

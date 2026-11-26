@@ -30,33 +30,39 @@ import '../../features/auth/domain/usecases/auth/login_usecase.dart' as _i985;
 import '../../features/auth/domain/usecases/auth/logout_usecase.dart' as _i726;
 import '../../features/auth/domain/usecases/auth/register_usecase.dart' as _i47;
 import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
-import '../../features/dashboard/data/datasources/auction_datasource.dart'
+import '../../features/auction/data/datasources/auction_datasource.dart'
     as _i688;
-import '../../features/dashboard/data/datasources/live_auction_socket_datasource.dart'
+import '../../features/live_auction/data/datasources/live_auction_socket_datasource.dart'
     as _i702;
-import '../../features/dashboard/data/repositories/auction_repository_impl.dart'
+import '../../features/auction/data/repositories/auction_repository_impl.dart'
     as _i1069;
-import '../../features/dashboard/domain/repositories/auction_repository.dart'
+import '../../features/auction/domain/repositories/auction_repository.dart'
     as _i746;
-import '../../features/dashboard/domain/usecases/get_auction_list_usecase.dart'
+import '../../features/auction/domain/usecases/get_auction_list_usecase.dart'
     as _i962;
-import '../../features/dashboard/domain/usecases/get_auctions_by_category_usecase.dart'
+import '../../features/auction/domain/usecases/get_auctions_by_category_usecase.dart'
     as _i217;
-import '../../features/dashboard/presentation/bloc/auction_detail/auction_detail_bloc.dart'
+import '../../features/auction/presentation/bloc/auction_detail/auction_detail_bloc.dart'
     as _i339;
-import '../../features/dashboard/presentation/bloc/auction_list/auction_list_bloc.dart'
+import '../../features/auction/presentation/bloc/auction_list/auction_list_bloc.dart'
     as _i237;
-import '../../features/dashboard/presentation/bloc/buy_npl_confirmation/buy_npl_confirmation_bloc.dart'
+import '../../features/npl/presentation/bloc/buy_npl_confirmation/buy_npl_confirmation_bloc.dart'
     as _i592;
-import '../../features/dashboard/presentation/bloc/buy_npl_detail/buy_npl_detail_bloc.dart'
+import '../../features/npl/presentation/bloc/buy_npl_detail/buy_npl_detail_bloc.dart'
     as _i841;
-import '../../features/dashboard/presentation/bloc/category/category_bloc.dart'
+import '../../features/auction/presentation/bloc/category/category_bloc.dart'
     as _i157;
 import '../../features/dashboard/presentation/bloc/dashboard/dashboard_bloc.dart'
     as _i72;
-import '../../features/dashboard/presentation/bloc/join_auction/join_auction_bloc.dart'
+import '../../features/auction/presentation/bloc/join_auction/join_auction_bloc.dart'
     as _i959;
-import '../../features/dashboard/presentation/bloc/live_auction/live_auction_bloc.dart'
+import '../../features/live_auction/data/repositories/live_auction_repository_impl.dart'
+    as _i2001;
+import '../../features/live_auction/domain/repositories/live_auction_repository.dart'
+    as _i2002;
+import '../../features/live_auction/domain/usecases/live_auction_usecases.dart'
+    as _i2003;
+import '../../features/live_auction/presentation/bloc/live_auction_bloc.dart'
     as _i899;
 import '../bloc/notification_bloc.dart' as _i1015;
 import '../firebase/firebase_services.dart' as _i454;
@@ -65,7 +71,7 @@ import '../network/dio_client.dart' as _i667;
 import '../network/interceptors/auth_interceptor.dart' as _i745;
 import '../network/interceptors/logging_interceptor.dart' as _i344;
 import '../network/interceptors/retry_interceptor.dart' as _i914;
-import '../router/app_router.dart' as _i81;
+import '../../app/router/app_router.dart' as _i81;
 import '../services/camera_service.dart' as _i860;
 import '../services/connectivity_service.dart' as _i47;
 import '../services/file_picker_service.dart' as _i108;
@@ -128,8 +134,26 @@ extension GetItInjectableX on _i174.GetIt {
         _i702.LiveAuctionSocketDataSourceImpl(gh<_i145.AppSocketService>()));
     gh.factory<_i1015.NotificationBloc>(
         () => _i1015.NotificationBloc(gh<_i650.NotificationService>()));
-    gh.factory<_i899.LiveAuctionBloc>(
-        () => _i899.LiveAuctionBloc(gh<_i702.LiveAuctionSocketDataSource>()));
+    gh.factory<_i2002.LiveAuctionRepository>(() =>
+        _i2001.LiveAuctionRepositoryImpl(gh<_i702.LiveAuctionSocketDataSource>()));
+    gh.factory<_i2003.WatchLiveAuctionEventsUseCase>(() =>
+        _i2003.WatchLiveAuctionEventsUseCase(gh<_i2002.LiveAuctionRepository>()));
+    gh.factory<_i2003.WatchLiveAuctionConnectionUseCase>(() =>
+        _i2003.WatchLiveAuctionConnectionUseCase(
+            gh<_i2002.LiveAuctionRepository>()));
+    gh.factory<_i2003.JoinLiveAuctionUseCase>(() =>
+        _i2003.JoinLiveAuctionUseCase(gh<_i2002.LiveAuctionRepository>()));
+    gh.factory<_i2003.PlaceLiveBidUseCase>(() =>
+        _i2003.PlaceLiveBidUseCase(gh<_i2002.LiveAuctionRepository>()));
+    gh.factory<_i2003.LeaveLiveAuctionUseCase>(() =>
+        _i2003.LeaveLiveAuctionUseCase(gh<_i2002.LiveAuctionRepository>()));
+    gh.factory<_i899.LiveAuctionBloc>(() => _i899.LiveAuctionBloc(
+          gh<_i2003.WatchLiveAuctionEventsUseCase>(),
+          gh<_i2003.WatchLiveAuctionConnectionUseCase>(),
+          gh<_i2003.JoinLiveAuctionUseCase>(),
+          gh<_i2003.PlaceLiveBidUseCase>(),
+          gh<_i2003.LeaveLiveAuctionUseCase>(),
+        ));
     gh.singleton<_i667.DioClient>(() => _i667.DioClient(
           gh<_i745.AuthInterceptor>(),
           gh<_i344.LoggingInterceptor>(),

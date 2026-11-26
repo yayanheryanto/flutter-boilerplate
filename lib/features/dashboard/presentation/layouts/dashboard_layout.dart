@@ -12,7 +12,7 @@ import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:emas/features/dashboard/presentation/sections/home/dashboard_dummy_data.dart';
+import 'package:emas/features/dashboard/presentation/dummy/home_dummy_data.dart';
 
 class DashboardLayout extends StatelessWidget {
   final PageController bannerCtrl;

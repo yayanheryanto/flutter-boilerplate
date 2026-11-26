@@ -1,8 +1,8 @@
 import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
-import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
-import 'package:emas/features/dashboard/presentation/widgets/home/auction_card.dart';
-import 'package:emas/features/dashboard/presentation/widgets/home/live_badge.dart';
+import 'package:emas/features/auction/domain/entities/auction_item.dart';
+import 'package:emas/features/auction/presentation/widgets/auction_card.dart';
+import 'package:emas/shared/widgets/display/live_badge.dart';
 import 'package:emas/features/dashboard/presentation/widgets/home/section_header.dart';
 import 'package:flutter/material.dart';
 

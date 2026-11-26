@@ -1,6 +1,6 @@
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/constants/images.dart';
-import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
+import 'package:emas/features/auction/domain/entities/auction_item.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

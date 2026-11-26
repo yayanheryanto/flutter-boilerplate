@@ -1,0 +1,375 @@
+import 'dart:convert';
+
+import 'package:emas/core/constants/app_routes.dart';
+import 'package:emas/features/kyc/presentation/pages/face_detection_page.dart';
+import 'package:emas/features/kyc/domain/entities/account_type.dart';
+import 'package:emas/features/kyc/presentation/pages/account_processed_page.dart';
+import 'package:emas/features/kyc/presentation/pages/address_verification_page.dart';
+import 'package:emas/features/kyc/presentation/pages/bank_verification_page.dart';
+import 'package:emas/features/kyc/presentation/pages/camera_pick_page.dart';
+import 'package:emas/features/auth/presentation/pages/change_password_page.dart';
+import 'package:emas/features/kyc/presentation/pages/confirmation_verification_page.dart';
+import 'package:emas/features/kyc/presentation/pages/face_verification_guide_page.dart';
+import 'package:emas/features/kyc/presentation/pages/face_verification_page.dart';
+import 'package:emas/features/kyc/presentation/pages/id_card_guide_page.dart';
+import 'package:emas/features/kyc/presentation/pages/id_card_verification_page.dart';
+import 'package:emas/features/auth/presentation/pages/verify_old_password_page.dart';
+import 'package:emas/features/profile/presentation/pages/profile_settings_page.dart';
+import 'package:emas/features/auth/presentation/pages/register_page.dart';
+import 'package:emas/features/kyc/presentation/pages/tax_id_verification_page.dart';
+import 'package:emas/features/kyc/presentation/pages/verification_preparation_page.dart';
+import 'package:emas/features/npl/presentation/pages/buy_npl_confirmation_page.dart';
+import 'package:emas/features/npl/presentation/pages/buy_npl_detail_page.dart';
+import 'package:emas/features/npl/presentation/pages/buy_npl_page.dart';
+import 'package:emas/features/auction/presentation/pages/join_auction_page.dart';
+import 'package:emas/features/auction/presentation/pages/auction_detail_page.dart';
+import 'package:emas/features/auction/presentation/pages/auction_list_page.dart';
+import 'package:emas/features/live_auction/presentation/pages/live_auction_page.dart';
+import 'package:emas/features/payment/presentation/pages/payment_guide_page.dart';
+import 'package:emas/features/payment/presentation/pages/payment_page.dart';
+import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
+import 'package:emas/core/utils/navigator_key.dart';
+import 'package:emas/features/auth/presentation/pages/login_page.dart';
+import 'package:emas/features/auth/presentation/pages/otp_page.dart';
+import 'package:emas/features/auction/domain/entities/auction_item.dart';
+import 'package:emas/features/auction/presentation/pages/category_page.dart';
+import 'package:emas/features/dashboard/presentation/pages/dashboard_page.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:injectable/injectable.dart';
+
+import 'package:emas/features/auth/presentation/pages/forgot_password_page.dart';
+
+@singleton
+class AppRouter {
+  late final GoRouter router;
+
+  AppRouter() {
+    router = GoRouter(
+      // Shares the same navigatorKey used by AppToast, AppPopover, etc.
+      navigatorKey: AppNavigator.navigatorKey,
+      initialLocation: AppRoutes.login,
+      debugLogDiagnostics: true,
+      extraCodec: const _AppExtraCodec(),
+      routes: [
+        // ── Auth ─────────────────────────────────────────────────────────────
+        GoRoute(
+          path: AppRoutes.login,
+          name: 'login',
+          builder: (context, state) => const LoginPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.forgotPassword,
+          name: 'forgot-password',
+          builder: (context, state) => const ForgotPasswordPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.otp,
+          name: 'otp',
+          builder: (context, state) {
+            final extra = state.extra as Map<String, dynamic>? ?? {};
+            final phone = extra['phone'] as String? ?? '';
+            return OtpPage(phone: phone);
+          },
+        ),
+
+        GoRoute(
+          path: AppRoutes.verificationPreparation,
+          name: 'verification-preparation',
+          builder: (context, state) => const VerificationPreparationPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.idCardGuide,
+          name: 'id-card-guide',
+          builder: (context, state) {
+            final accountType = state.extra as AccountType? ?? AccountType.personal;
+            return IdCardGuidePage(
+              accountType: accountType,
+            );
+          },
+        ),
+
+        GoRoute(
+          path: AppRoutes.idCardVerification,
+          name: 'id-card-verification',
+          builder: (context, state) {
+            final accountType = state.extra as AccountType? ?? AccountType.personal;
+            return IdCardVerificationPage(
+              accountType: accountType,
+            );
+          },
+        ),
+
+        GoRoute(
+          path: AppRoutes.taxIdVerification,
+          name: 'tax-id-verification',
+          builder: (context, state) {
+            final accountType = state.extra as AccountType? ?? AccountType.personal;
+            return TaxIdVerificationPage(
+              accountType: accountType,
+            );
+          },
+        ),
+
+        GoRoute(
+          path: AppRoutes.faceGuide,
+          name: 'face-guide',
+          builder: (context, state) {
+            final accountType = state.extra as AccountType? ?? AccountType.personal;
+            return FaceVerificationGuidePage(
+              accountType: accountType,
+            );
+          },
+        ),
+
+        GoRoute(
+          path: AppRoutes.faceVerification,
+          name: 'face-verification',
+          builder: (context, state) {
+            final accountType = state.extra as AccountType? ?? AccountType.personal;
+            return FaceVerificationPage(
+              accountType: accountType,
+            );
+          },
+        ),
+
+        GoRoute(
+          path: AppRoutes.confirmationVerification,
+          name: 'confirmation-verification',
+          builder: (context, state) => const ConfirmationVerificationPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.changePassword,
+          name: 'change-password',
+          builder: (context, state) => const ChangePasswordPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.inputOldPassword,
+          name: 'input-old-password',
+          builder: (context, state) => const VerifyOldPasswordPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.cameraPick,
+          name: 'camera-pick',
+          builder: (context, state) => const CameraPickPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.facePick,
+          name: 'face-pick',
+          builder: (context, state) => const FaceDetectionPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.addressVerification,
+          name: 'address-verification',
+          builder: (context, state) => const AddressVerificationPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.bankVerification,
+          name: 'bank-verification',
+          builder: (context, state) => const BankVerificationPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.accountProcessed,
+          name: 'account-processed',
+          builder: (context, state) => const AccountProcessedPage(),
+        ),
+
+        // ── App ──────────────────────────────────────────────────────────────
+        GoRoute(
+          path: AppRoutes.dashboard,
+          name: 'dashboard',
+          builder: (context, state) => const DashboardPage(),
+          routes: [
+            // /dashboard/category/:slug
+            GoRoute(
+              path: 'category/:slug',
+              name: 'category-detail',
+              builder: (_, state) {
+                final slug = state.pathParameters['slug'] ?? '';
+                final category = AuctionCategory.fromSlug(slug);
+                return CategoryPage(category: category);
+              },
+            ),
+          ],
+        ),
+
+        GoRoute(
+          path: AppRoutes.joinAuction,
+          name: 'join-auction',
+          builder: (context, state) => const JoinAuctionPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.auctionList,
+          name: 'auction-list',
+          builder: (context, state) => const AuctionListPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.auctionDetail,
+          name: 'auction-detail',
+          builder: (context, state) => const AuctionDetailPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.liveAuction,
+          name: 'live-auction',
+          builder: (context, state) => const LiveAuctionPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.buyNplDetail,
+          name: 'buy-npl-detail',
+          builder: (context, state) => const BuyNplDetailPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.buyNplConfirmation,
+          name: 'buy-npl-confirmation',
+          builder: (context, state) => const BuyNplConfirmationPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.profile,
+          name: 'profile',
+          builder: (context, state) => const _PlaceholderPage(title: 'Profile'),
+        ),
+        GoRoute(
+          path: AppRoutes.profileSettings,
+          name: 'profile-settings',
+          builder: (context, state) => const ProfileSettingsPage(),
+        ),
+        GoRoute(
+          path: AppRoutes.settings,
+          name: 'settings',
+          builder: (context, state) => const _PlaceholderPage(title: 'Settings'),
+        ),
+        GoRoute(
+          path: AppRoutes.register,
+          name: 'register',
+          builder: (context, state) => const RegisterPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.payment,
+          name: 'payment',
+          builder: (context, state) => const PaymentPage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.paymentGuide,
+          name: 'payment-guide',
+          builder: (context, state) => const PaymentGuidePage(),
+        ),
+
+        GoRoute(
+          path: AppRoutes.buyNpl,
+          name: 'buy-npl',
+          builder: (context, state) => const BuyNplPage(),
+        ),
+      ],
+
+      errorBuilder: (context, state) => _ErrorPage(error: state.error),
+
+      redirect: (context, state) {
+        // TODO: implement auth guard using AuthBloc/TokenService
+        // Example:
+        //   final isLoggedIn = getIt<TokenService>().hasToken();
+        //   if (!isLoggedIn && state.matchedLocation != AppRoutes.login) {
+        //     return AppRoutes.login;
+        //   }
+        return null;
+      },
+    );
+  }
+}
+
+// ── Extra codec — handles complex types passed via context.go/push ─────────────
+
+class _AppExtraCodec extends Codec<Object?, Object?> {
+  const _AppExtraCodec();
+
+  @override
+  Converter<Object?, Object?> get encoder => const _AppExtraEncoder();
+
+  @override
+  Converter<Object?, Object?> get decoder => const _AppExtraDecoder();
+}
+
+class _AppExtraEncoder extends Converter<Object?, Object?> {
+  const _AppExtraEncoder();
+
+  @override
+  Object? convert(Object? input) {
+    if (input == null) return null;
+
+    if (input is AccountType) {
+      return {'__type': 'AccountType', 'value': input.name};
+    }
+
+    if (input is Map<String, dynamic>) return input;
+    if (input is String || input is int || input is double || input is bool) {
+      return input;
+    }
+
+    return input;
+  }
+}
+
+class _AppExtraDecoder extends Converter<Object?, Object?> {
+  const _AppExtraDecoder();
+
+  @override
+  Object? convert(Object? input) {
+    if (input == null) return null;
+
+    if (input is Map<String, dynamic>) {
+      final type = input['__type'];
+
+      if (type == 'AccountType') {
+        return AccountType.values.byName(input['value'] as String);
+      }
+
+      return input;
+    }
+
+    return input;
+  }
+}
+
+// ── Placeholder pages (replace with real pages) ───────────────────────────────
+
+class _PlaceholderPage extends StatelessWidget {
+  final String title;
+
+  const _PlaceholderPage({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppScaffoldWrapper(
+      appBar: AppBar(title: Text(title)),
+      body: Center(child: Text(title)),
+    );
+  }
+}
+
+class _ErrorPage extends StatelessWidget {
+  final Exception? error;
+
+  const _ErrorPage({this.error});
+
+  @override
+  Widget build(BuildContext context) {
+    return AppScaffoldWrapper(
+      appBar: AppBar(title: const Text('Page Not Found')),
+      body: Center(
+        child: Text(error?.toString() ?? '404 — Page not found'),
+      ),
+    );
+  }
+}

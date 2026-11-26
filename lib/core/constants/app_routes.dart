@@ -1,5 +1,3 @@
-import 'package:emas/features/dashboard/domain/entities/auction_item.dart';
-
 class AppRoutes {
   AppRoutes._();
 
@@ -26,7 +24,7 @@ class AppRoutes {
   static const String dashboard = '/dashboard';
 
   // ── Category ──────────────────────────────────────────────────────────────
-  /// Param: :slug  (value of [AuctionCategory.slug])
+  /// Param: :slug  (nilai `AuctionCategory.slug` dari fitur auction)
   static const categoryDetail = '/dashboard/category/:slug';
   static String category(String slug) => '/dashboard/category/$slug';
 
