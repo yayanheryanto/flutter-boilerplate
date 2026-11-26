@@ -15,6 +15,11 @@ yang dibaca `ErrorMapper`:
 }
 ```
 
+`code` opsional: kode error yang bisa dibaca mesin (mis. `OTP_EXPIRED`,
+`OTP_INVALID`, `ACCOUNT_NOT_VERIFIED`) untuk membedakan sebab dengan status
+HTTP yang sama — aplikasi sebaiknya bercabang berdasarkan `code`, bukan teks
+`message`.
+
 `errors` opsional dan hanya untuk `422`. Key-nya = nama field request; pesan
 pertama tampil langsung di bawah field terkait pada form.
 
@@ -168,8 +173,8 @@ Respons `200` — sesi login (sama dengan respons login):
 
 | Status | Kapan |
 |---|---|
-| 422 | Kode salah (`errors.code`) |
-| 410 | Kode kedaluwarsa |
+| 422 | Kode salah (`"code": "OTP_INVALID"`, `errors.code`) |
+| 422 | Kode kedaluwarsa (`"code": "OTP_EXPIRED"`, `errors.code`) |
 | 404 | `verification_id` tidak dikenal |
 
 ### `POST /auth/otp/resend`
@@ -220,8 +225,8 @@ login.
 | HP `081299999999` | 500 — server error saat register |
 | HP `081288888888` | Register berhasil, request OTP gagal 503 → tekan "Kirim ulang" |
 | OTP `123456` | Berhasil, login, masuk dashboard |
-| OTP `000000` | 410 — kedaluwarsa |
-| OTP lain | 422 — kode salah |
+| OTP `000000` | 422 `OTP_EXPIRED` — kedaluwarsa |
+| OTP lain | 422 `OTP_INVALID` — kode salah |
 | Kirim ulang ke-4 | 429 — batas tercapai |
 
 Latensi mock default 800 ms (`MockRegistry.defaultDelay`).

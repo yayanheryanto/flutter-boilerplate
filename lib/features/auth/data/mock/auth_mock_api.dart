@@ -7,7 +7,8 @@ import 'package:emas/features/auth/data/datasources/auth_endpoints.dart';
 /// - Email `terdaftar@emas.id` atau HP `081200000000` → 422 sudah terdaftar
 /// - HP `081299999999` → 500 (simulasi server error)
 /// - HP `081288888888` → daftar berhasil, tapi request OTP gagal 503
-/// - OTP `123456` → benar; OTP lain → 422; OTP `000000` → 410 kedaluwarsa
+/// - OTP `123456` → benar; OTP lain → 422 `OTP_INVALID`;
+///   OTP `000000` → 422 `OTP_EXPIRED`
 /// - Kirim ulang OTP maksimal 3x per sesi → 429
 /// - Login: akun demo [demoPhone] / [demoPassword]; [unverifiedPhone] → 403
 ///   belum verifikasi; password salah 3x → 429 terkunci 1 menit
@@ -110,12 +111,10 @@ class AuthMockApi {
     _lockedUntil.remove(phone);
 
     if (!user.isVerified) {
-      return MockResponse(
+      return MockResponse.error(
         403,
-        data: {
-          'message': 'Nomor handphone belum diverifikasi. Kami kirim kode OTP ke nomor Anda',
-          'code': 'ACCOUNT_NOT_VERIFIED',
-        },
+        'Nomor handphone belum diverifikasi. Kami kirim kode OTP ke nomor Anda',
+        code: 'ACCOUNT_NOT_VERIFIED',
       );
     }
 
@@ -216,12 +215,20 @@ class AuthMockApi {
       return MockResponse.error(404, 'Sesi verifikasi tidak ditemukan, silakan minta OTP lagi');
     }
     if (code == expiredOtp) {
-      return MockResponse.error(410, 'Kode OTP sudah kedaluwarsa, silakan kirim ulang');
+      return MockResponse.error(
+        422,
+        'Kode OTP sudah kedaluwarsa, silakan kirim ulang',
+        code: 'OTP_EXPIRED',
+        errors: {
+          'code': ['Kode OTP sudah kedaluwarsa'],
+        },
+      );
     }
     if (code != validOtp) {
       return MockResponse.error(
         422,
         'Kode OTP salah',
+        code: 'OTP_INVALID',
         errors: {
           'code': ['Kode OTP salah'],
         },

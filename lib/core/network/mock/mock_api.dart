@@ -20,17 +20,21 @@ class MockResponse {
 
   const MockResponse.created(Object? data, {Duration? delay}) : this(201, data: data, delay: delay);
 
-  /// Error dengan bentuk body standar `{ "message": ..., "errors": {...} }`
-  /// — bentuk yang dibaca `ErrorMapper`.
+  /// Error dengan bentuk body standar
+  /// `{ "message": ..., "code": ..., "errors": {...} }` — bentuk yang dibaca
+  /// `ErrorMapper`. [code] adalah kode error yang bisa dibaca mesin
+  /// (mis. `OTP_EXPIRED`) untuk membedakan sebab dengan status HTTP yang sama.
   MockResponse.error(
     int statusCode,
     String message, {
+    String? code,
     Map<String, List<String>>? errors,
     Duration? delay,
   }) : this(
           statusCode,
           data: <String, dynamic>{
             'message': message,
+            if (code != null) 'code': code,
             if (errors != null) 'errors': errors,
           },
           delay: delay,
