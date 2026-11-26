@@ -13,6 +13,26 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:image_picker/image_picker.dart' as _i183;
 import 'package:injectable/injectable.dart' as _i526;
 
+import '../../app/di/mock_module.dart' as _i53;
+import '../../app/router/app_router.dart' as _i180;
+import '../../features/auction/data/datasources/auction_datasource.dart'
+    as _i595;
+import '../../features/auction/data/repositories/auction_repository_impl.dart'
+    as _i350;
+import '../../features/auction/domain/repositories/auction_repository.dart'
+    as _i256;
+import '../../features/auction/domain/usecases/get_auction_list_usecase.dart'
+    as _i297;
+import '../../features/auction/domain/usecases/get_auctions_by_category_usecase.dart'
+    as _i687;
+import '../../features/auction/presentation/bloc/auction_detail/auction_detail_bloc.dart'
+    as _i875;
+import '../../features/auction/presentation/bloc/auction_list/auction_list_bloc.dart'
+    as _i189;
+import '../../features/auction/presentation/bloc/category/category_bloc.dart'
+    as _i423;
+import '../../features/auction/presentation/bloc/join_auction/join_auction_bloc.dart'
+    as _i847;
 import '../../features/auth/data/datasources/auth_local_datasource.dart'
     as _i992;
 import '../../features/auth/data/datasources/auth_remote_datasource.dart'
@@ -28,57 +48,37 @@ import '../../features/auth/domain/usecases/auth/get_cached_usecase.dart'
     as _i25;
 import '../../features/auth/domain/usecases/auth/login_usecase.dart' as _i985;
 import '../../features/auth/domain/usecases/auth/logout_usecase.dart' as _i726;
+import '../../features/auth/domain/usecases/auth/otp_usecase.dart' as _i880;
 import '../../features/auth/domain/usecases/auth/register_usecase.dart' as _i47;
 import '../../features/auth/presentation/bloc/auth_bloc.dart' as _i797;
-import '../../features/auth/domain/usecases/auth/otp_usecase.dart' as _i3001;
-import '../../features/auth/presentation/bloc/otp/otp_bloc.dart' as _i3002;
+import '../../features/auth/presentation/bloc/otp/otp_bloc.dart' as _i75;
 import '../../features/auth/presentation/bloc/register/register_bloc.dart'
-    as _i3003;
-import '../../app/di/mock_module.dart' as _i3004;
-import '../network/mock/mock_api.dart' as _i3005;
-import '../network/interceptors/mock_interceptor.dart' as _i3006;
-import '../../features/auction/data/datasources/auction_datasource.dart'
-    as _i688;
-import '../../features/live_auction/data/datasources/live_auction_socket_datasource.dart'
-    as _i702;
-import '../../features/auction/data/repositories/auction_repository_impl.dart'
-    as _i1069;
-import '../../features/auction/domain/repositories/auction_repository.dart'
-    as _i746;
-import '../../features/auction/domain/usecases/get_auction_list_usecase.dart'
-    as _i962;
-import '../../features/auction/domain/usecases/get_auctions_by_category_usecase.dart'
-    as _i217;
-import '../../features/auction/presentation/bloc/auction_detail/auction_detail_bloc.dart'
-    as _i339;
-import '../../features/auction/presentation/bloc/auction_list/auction_list_bloc.dart'
-    as _i237;
-import '../../features/npl/presentation/bloc/buy_npl_confirmation/buy_npl_confirmation_bloc.dart'
-    as _i592;
-import '../../features/npl/presentation/bloc/buy_npl_detail/buy_npl_detail_bloc.dart'
-    as _i841;
-import '../../features/auction/presentation/bloc/category/category_bloc.dart'
-    as _i157;
+    as _i210;
 import '../../features/dashboard/presentation/bloc/dashboard/dashboard_bloc.dart'
     as _i72;
-import '../../features/auction/presentation/bloc/join_auction/join_auction_bloc.dart'
-    as _i959;
+import '../../features/live_auction/data/datasources/live_auction_socket_datasource.dart'
+    as _i302;
 import '../../features/live_auction/data/repositories/live_auction_repository_impl.dart'
-    as _i2001;
+    as _i439;
 import '../../features/live_auction/domain/repositories/live_auction_repository.dart'
-    as _i2002;
+    as _i57;
 import '../../features/live_auction/domain/usecases/live_auction_usecases.dart'
-    as _i2003;
+    as _i891;
 import '../../features/live_auction/presentation/bloc/live_auction_bloc.dart'
-    as _i899;
+    as _i470;
+import '../../features/npl/presentation/bloc/buy_npl_confirmation/buy_npl_confirmation_bloc.dart'
+    as _i544;
+import '../../features/npl/presentation/bloc/buy_npl_detail/buy_npl_detail_bloc.dart'
+    as _i520;
 import '../bloc/notification_bloc.dart' as _i1015;
 import '../firebase/firebase_services.dart' as _i454;
 import '../firebase/notification_service.dart' as _i650;
 import '../network/dio_client.dart' as _i667;
 import '../network/interceptors/auth_interceptor.dart' as _i745;
 import '../network/interceptors/logging_interceptor.dart' as _i344;
+import '../network/interceptors/mock_interceptor.dart' as _i392;
 import '../network/interceptors/retry_interceptor.dart' as _i914;
-import '../../app/router/app_router.dart' as _i81;
+import '../network/mock/mock_api.dart' as _i1005;
 import '../services/camera_service.dart' as _i860;
 import '../services/connectivity_service.dart' as _i47;
 import '../services/file_picker_service.dart' as _i108;
@@ -99,21 +99,19 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    final mockModule = _$MockModule();
     final appModule = _$AppModule();
     final authModule = _$AuthModule();
-    final mockModule = _$MockModule();
-    gh.singleton<_i3005.MockRegistry>(() => mockModule.mockRegistry);
-    gh.singleton<_i3006.MockInterceptor>(
-        () => _i3006.MockInterceptor(gh<_i3005.MockRegistry>()));
-    gh.factory<_i339.AuctionDetailBloc>(() => _i339.AuctionDetailBloc());
-    gh.factory<_i592.BuyNplConfirmationBloc>(
-        () => _i592.BuyNplConfirmationBloc());
-    gh.factory<_i841.BuyNplDetailBloc>(() => _i841.BuyNplDetailBloc());
+    gh.factory<_i875.AuctionDetailBloc>(() => _i875.AuctionDetailBloc());
+    gh.factory<_i847.JoinAuctionBloc>(() => _i847.JoinAuctionBloc());
     gh.factory<_i72.DashboardBloc>(() => _i72.DashboardBloc());
-    gh.factory<_i959.JoinAuctionBloc>(() => _i959.JoinAuctionBloc());
+    gh.factory<_i544.BuyNplConfirmationBloc>(
+        () => _i544.BuyNplConfirmationBloc());
+    gh.factory<_i520.BuyNplDetailBloc>(() => _i520.BuyNplDetailBloc());
+    gh.singleton<_i180.AppRouter>(() => _i180.AppRouter());
     gh.singleton<_i344.LoggingInterceptor>(() => _i344.LoggingInterceptor());
     gh.singleton<_i914.RetryInterceptor>(() => _i914.RetryInterceptor());
-    gh.singleton<_i81.AppRouter>(() => _i81.AppRouter());
+    gh.singleton<_i1005.MockRegistry>(() => mockModule.mockRegistry);
     gh.lazySingleton<_i183.ImagePicker>(() => appModule.imagePicker);
     gh.lazySingleton<_i895.Connectivity>(() => appModule.connectivity);
     gh.lazySingleton<_i454.CrashlyticsService>(
@@ -124,57 +122,64 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i165.PermissionServiceImpl());
     gh.lazySingleton<_i992.AuthLocalDataSource>(
         () => _i992.HiveAuthLocalDataSource());
+    gh.factory<_i595.AuctionDataSource>(() => _i595.AuctionDummyDataSource());
     gh.lazySingleton<_i454.AnalyticsService>(
         () => _i454.FirebaseAnalyticsService());
-    gh.factory<_i688.AuctionDataSource>(() => _i688.AuctionDummyDataSource());
+    gh.singleton<_i392.MockInterceptor>(
+        () => _i392.MockInterceptor(gh<_i1005.MockRegistry>()));
     gh.lazySingleton<_i145.AppSocketService>(() => _i436.DummySocketService());
     gh.lazySingleton<_i454.RemoteConfigService>(
         () => _i454.FirebaseRemoteConfigService());
     gh.lazySingleton<_i227.TokenService>(() => _i227.HiveTokenService());
     gh.lazySingleton<_i650.NotificationService>(
         () => _i650.AppNotificationService());
+    gh.factory<_i302.LiveAuctionSocketDataSource>(() =>
+        _i302.LiveAuctionSocketDataSourceImpl(gh<_i145.AppSocketService>()));
     gh.lazySingleton<_i860.CameraService>(
         () => _i860.CameraServiceImpl(gh<_i183.ImagePicker>()));
+    gh.factory<_i57.LiveAuctionRepository>(() =>
+        _i439.LiveAuctionRepositoryImpl(
+            gh<_i302.LiveAuctionSocketDataSource>()));
     gh.singleton<_i745.AuthInterceptor>(
         () => _i745.AuthInterceptor(gh<_i227.TokenService>()));
     gh.lazySingleton<_i47.ConnectivityService>(
         () => _i47.ConnectivityServiceImpl(gh<_i895.Connectivity>()));
-    gh.lazySingleton<_i746.AuctionRepository>(
-        () => _i1069.AuctionRepositoryImpl(gh<_i688.AuctionDataSource>()));
-    gh.factory<_i702.LiveAuctionSocketDataSource>(() =>
-        _i702.LiveAuctionSocketDataSourceImpl(gh<_i145.AppSocketService>()));
+    gh.lazySingleton<_i256.AuctionRepository>(
+        () => _i350.AuctionRepositoryImpl(gh<_i595.AuctionDataSource>()));
     gh.factory<_i1015.NotificationBloc>(
         () => _i1015.NotificationBloc(gh<_i650.NotificationService>()));
-    gh.factory<_i2002.LiveAuctionRepository>(() =>
-        _i2001.LiveAuctionRepositoryImpl(gh<_i702.LiveAuctionSocketDataSource>()));
-    gh.factory<_i2003.WatchLiveAuctionEventsUseCase>(() =>
-        _i2003.WatchLiveAuctionEventsUseCase(gh<_i2002.LiveAuctionRepository>()));
-    gh.factory<_i2003.WatchLiveAuctionConnectionUseCase>(() =>
-        _i2003.WatchLiveAuctionConnectionUseCase(
-            gh<_i2002.LiveAuctionRepository>()));
-    gh.factory<_i2003.JoinLiveAuctionUseCase>(() =>
-        _i2003.JoinLiveAuctionUseCase(gh<_i2002.LiveAuctionRepository>()));
-    gh.factory<_i2003.PlaceLiveBidUseCase>(() =>
-        _i2003.PlaceLiveBidUseCase(gh<_i2002.LiveAuctionRepository>()));
-    gh.factory<_i2003.LeaveLiveAuctionUseCase>(() =>
-        _i2003.LeaveLiveAuctionUseCase(gh<_i2002.LiveAuctionRepository>()));
-    gh.factory<_i899.LiveAuctionBloc>(() => _i899.LiveAuctionBloc(
-          gh<_i2003.WatchLiveAuctionEventsUseCase>(),
-          gh<_i2003.WatchLiveAuctionConnectionUseCase>(),
-          gh<_i2003.JoinLiveAuctionUseCase>(),
-          gh<_i2003.PlaceLiveBidUseCase>(),
-          gh<_i2003.LeaveLiveAuctionUseCase>(),
+    gh.factory<_i687.GetAuctionsByCategoryUseCase>(() =>
+        _i687.GetAuctionsByCategoryUseCase(gh<_i256.AuctionRepository>()));
+    gh.factory<_i297.GetAuctionListUseCase>(
+        () => _i297.GetAuctionListUseCase(gh<_i256.AuctionRepository>()));
+    gh.factory<_i891.WatchLiveAuctionEventsUseCase>(() =>
+        _i891.WatchLiveAuctionEventsUseCase(gh<_i57.LiveAuctionRepository>()));
+    gh.factory<_i891.WatchLiveAuctionConnectionUseCase>(() =>
+        _i891.WatchLiveAuctionConnectionUseCase(
+            gh<_i57.LiveAuctionRepository>()));
+    gh.factory<_i891.JoinLiveAuctionUseCase>(
+        () => _i891.JoinLiveAuctionUseCase(gh<_i57.LiveAuctionRepository>()));
+    gh.factory<_i891.PlaceLiveBidUseCase>(
+        () => _i891.PlaceLiveBidUseCase(gh<_i57.LiveAuctionRepository>()));
+    gh.factory<_i891.LeaveLiveAuctionUseCase>(
+        () => _i891.LeaveLiveAuctionUseCase(gh<_i57.LiveAuctionRepository>()));
+    gh.factory<_i470.LiveAuctionBloc>(() => _i470.LiveAuctionBloc(
+          gh<_i891.WatchLiveAuctionEventsUseCase>(),
+          gh<_i891.WatchLiveAuctionConnectionUseCase>(),
+          gh<_i891.JoinLiveAuctionUseCase>(),
+          gh<_i891.PlaceLiveBidUseCase>(),
+          gh<_i891.LeaveLiveAuctionUseCase>(),
         ));
+    gh.factory<_i423.CategoryBloc>(
+        () => _i423.CategoryBloc(gh<_i687.GetAuctionsByCategoryUseCase>()));
     gh.singleton<_i667.DioClient>(() => _i667.DioClient(
           gh<_i745.AuthInterceptor>(),
           gh<_i344.LoggingInterceptor>(),
           gh<_i914.RetryInterceptor>(),
-          gh<_i3006.MockInterceptor>(),
+          gh<_i392.MockInterceptor>(),
         ));
-    gh.factory<_i217.GetAuctionsByCategoryUseCase>(() =>
-        _i217.GetAuctionsByCategoryUseCase(gh<_i746.AuctionRepository>()));
-    gh.factory<_i962.GetAuctionListUseCase>(
-        () => _i962.GetAuctionListUseCase(gh<_i746.AuctionRepository>()));
+    gh.factory<_i189.AuctionListBloc>(
+        () => _i189.AuctionListBloc(gh<_i297.GetAuctionListUseCase>()));
     gh.lazySingleton<_i161.AuthRemoteDataSource>(
         () => authModule.authRemoteDataSource(gh<_i667.DioClient>()));
     gh.lazySingleton<_i787.AuthRepository>(() => _i153.AuthRepositoryImpl(
@@ -182,10 +187,6 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i992.AuthLocalDataSource>(),
           gh<_i227.TokenService>(),
         ));
-    gh.factory<_i157.CategoryBloc>(
-        () => _i157.CategoryBloc(gh<_i217.GetAuctionsByCategoryUseCase>()));
-    gh.factory<_i237.AuctionListBloc>(
-        () => _i237.AuctionListBloc(gh<_i962.GetAuctionListUseCase>()));
     gh.factory<_i911.ForgotPasswordUseCase>(
         () => _i911.ForgotPasswordUseCase(gh<_i787.AuthRepository>()));
     gh.factory<_i25.GetCachedAuthUseCase>(
@@ -196,18 +197,16 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i726.LogoutUseCase(gh<_i787.AuthRepository>()));
     gh.factory<_i47.RegisterUseCase>(
         () => _i47.RegisterUseCase(gh<_i787.AuthRepository>()));
-    gh.factory<_i3001.RequestOtpUseCase>(
-        () => _i3001.RequestOtpUseCase(gh<_i787.AuthRepository>()));
-    gh.factory<_i3001.VerifyOtpUseCase>(
-        () => _i3001.VerifyOtpUseCase(gh<_i787.AuthRepository>()));
-    gh.factory<_i3001.ResendOtpUseCase>(
-        () => _i3001.ResendOtpUseCase(gh<_i787.AuthRepository>()));
-    gh.factory<_i3003.RegisterBloc>(
-        () => _i3003.RegisterBloc(gh<_i47.RegisterUseCase>()));
-    gh.factory<_i3002.OtpBloc>(() => _i3002.OtpBloc(
-          gh<_i3001.RequestOtpUseCase>(),
-          gh<_i3001.VerifyOtpUseCase>(),
-          gh<_i3001.ResendOtpUseCase>(),
+    gh.factory<_i880.RequestOtpUseCase>(
+        () => _i880.RequestOtpUseCase(gh<_i787.AuthRepository>()));
+    gh.factory<_i880.VerifyOtpUseCase>(
+        () => _i880.VerifyOtpUseCase(gh<_i787.AuthRepository>()));
+    gh.factory<_i880.ResendOtpUseCase>(
+        () => _i880.ResendOtpUseCase(gh<_i787.AuthRepository>()));
+    gh.factory<_i75.OtpBloc>(() => _i75.OtpBloc(
+          gh<_i880.RequestOtpUseCase>(),
+          gh<_i880.VerifyOtpUseCase>(),
+          gh<_i880.ResendOtpUseCase>(),
           gh<_i454.AnalyticsService>(),
           gh<_i454.CrashlyticsService>(),
         ));
@@ -219,12 +218,14 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i454.AnalyticsService>(),
           gh<_i454.CrashlyticsService>(),
         ));
+    gh.factory<_i210.RegisterBloc>(
+        () => _i210.RegisterBloc(gh<_i47.RegisterUseCase>()));
     return this;
   }
 }
 
+class _$MockModule extends _i53.MockModule {}
+
 class _$AppModule extends _i460.AppModule {}
 
 class _$AuthModule extends _i433.AuthModule {}
-
-class _$MockModule extends _i3004.MockModule {}

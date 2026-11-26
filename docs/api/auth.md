@@ -53,7 +53,7 @@ Request — seluruh isi form:
 `phone` sudah dinormalisasi aplikasi ke format `08…` (tanpa spasi/strip,
 `+62`/`62` → `0`). `email` di-lowercase.
 
-Respons `201`
+Respons `200`
 
 ```json
 {

@@ -81,7 +81,7 @@ class AuthMockApi {
     );
     _users[phone] = user;
 
-    return MockResponse.created(user.toJson());
+    return MockResponse.ok(user.toJson());
   }
 
   // ── POST /auth/otp/request ─────────────────────────────────────────────────

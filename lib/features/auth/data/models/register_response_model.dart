@@ -1,6 +1,6 @@
 import 'package:emas/features/auth/domain/entities/registered_user.dart';
 
-/// Respons `201` dari `POST AuthEndpoints.register`.
+/// Respons `200` dari `POST AuthEndpoints.register`.
 ///
 /// ```json
 /// {
