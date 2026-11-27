@@ -2,6 +2,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:emas/core/network/mock/mock_api.dart';
 import 'package:emas/features/auth/data/mock/auth_mock_api.dart';
+import 'package:emas/features/promo/data/mock/promo_mock_api.dart';
 
 /// Mendaftarkan seluruh backend palsu per fitur ke `MockInterceptor`.
 ///
@@ -14,5 +15,6 @@ abstract class MockModule {
   @singleton
   MockRegistry get mockRegistry => MockRegistry([
         ...AuthMockApi().routes,
+        ...PromoMockApi().routes,
       ]);
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:emas/core/constants/images.dart';
 import 'package:emas/core/constants/app_radius.dart';
 import 'package:emas/core/di/injection.dart';
@@ -9,6 +7,7 @@ import 'package:emas/features/transaction/presentation/layouts/transaction_layou
 import 'package:emas/features/auction/presentation/pages/join_auction_page.dart';
 import 'package:emas/features/dashboard/presentation/layouts/dashboard_layout.dart';
 import 'package:emas/features/dashboard/presentation/bloc/dashboard/dashboard_bloc.dart';
+import 'package:emas/features/promo/presentation/bloc/promo_list/promo_list_bloc.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/design_system.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
@@ -22,8 +21,15 @@ class DashboardPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<DashboardBloc>(
-      create: (_) => getIt<DashboardBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<DashboardBloc>(create: (_) => getIt<DashboardBloc>()),
+        // Di level halaman (bukan di carousel) agar pull-to-refresh tab
+        // Beranda juga bisa memuat ulang promo.
+        BlocProvider<PromoListBloc>(
+          create: (_) => getIt<PromoListBloc>()..add(const PromoListRequested()),
+        ),
+      ],
       child: const _DashboardView(),
     );
   }
@@ -37,46 +43,16 @@ class _DashboardView extends StatefulWidget {
 }
 
 class _DashboardViewState extends State<_DashboardView> {
-  late final PageController _bannerCtrl;
-  Timer? _bannerTimer;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _bannerCtrl = PageController();
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) return;
-
-      _bannerTimer = Timer.periodic(
-        const Duration(seconds: 4),
-        (_) async {
-          if (!mounted || !_bannerCtrl.hasClients) return;
-
-          final bloc = context.read<DashboardBloc>();
-          final currentIndex = bloc.state.bannerIndex;
-          final nextPage = (currentIndex + 1) % 3;
-
-          await _bannerCtrl.animateToPage(
-            nextPage,
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-          );
-
-          if (!mounted) return;
-
-          bloc.add(DashboardBannerChanged(nextPage));
-        },
-      );
-    });
-  }
-
-  @override
-  void dispose() {
-    _bannerTimer?.cancel();
-    _bannerCtrl.dispose();
-    super.dispose();
+  /// Pull-to-refresh tab Beranda: muat ulang promo dan tunggu selesai
+  /// agar indikator refresh berhenti tepat waktu.
+  Future<void> _refreshHome() async {
+    final promoBloc = context.read<PromoListBloc>();
+    final done = promoBloc.stream.firstWhere(
+      (s) => s is! PromoListLoading && !(s is PromoListLoaded && s.isRefreshing),
+    );
+    context.read<DashboardBloc>().add(const DashboardRefreshRequested());
+    promoBloc.add(const PromoListRequested());
+    await done;
   }
 
   @override
@@ -126,21 +102,10 @@ class _DashboardViewState extends State<_DashboardView> {
     BuildContext context,
     DashboardState state,
   ) {
-    final bloc = context.read<DashboardBloc>();
-
     return IndexedStack(
       index: state.navigationIndex,
       children: [
-        DashboardLayout(
-          bannerCtrl: _bannerCtrl,
-          bannerPage: state.bannerIndex,
-          onBannerChanged: (index) {
-            bloc.add(DashboardBannerChanged(index));
-          },
-          onRefresh: () async {
-            bloc.add(const DashboardRefreshRequested());
-          },
-        ),
+        DashboardLayout(onRefresh: _refreshHome),
         const BuyNPLLayout(),
         const JoinAuctionPage(),
         const TransactionLayout(),

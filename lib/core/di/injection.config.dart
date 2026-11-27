@@ -73,6 +73,18 @@ import '../../features/npl/presentation/bloc/buy_npl_detail/buy_npl_detail_bloc.
     as _i520;
 import '../../features/profile/presentation/bloc/logout/logout_cubit.dart'
     as _i4001;
+import '../../features/promo/data/datasources/promo_remote_datasource.dart'
+    as _i5001;
+import '../../features/promo/data/repositories/promo_repository_impl.dart'
+    as _i5002;
+import '../../features/promo/di/promo_module.dart' as _i5003;
+import '../../features/promo/domain/repositories/promo_repository.dart'
+    as _i5004;
+import '../../features/promo/domain/usecases/promo_usecases.dart' as _i5005;
+import '../../features/promo/presentation/bloc/promo_detail/promo_detail_bloc.dart'
+    as _i5006;
+import '../../features/promo/presentation/bloc/promo_list/promo_list_bloc.dart'
+    as _i5007;
 import '../bloc/notification_bloc.dart' as _i1015;
 import '../firebase/firebase_services.dart' as _i454;
 import '../firebase/notification_service.dart' as _i650;
@@ -106,6 +118,7 @@ extension GetItInjectableX on _i174.GetIt {
     final mockModule = _$MockModule();
     final appModule = _$AppModule();
     final authModule = _$AuthModule();
+    final promoModule = _$PromoModule();
     gh.factory<_i875.AuctionDetailBloc>(() => _i875.AuctionDetailBloc());
     gh.factory<_i847.JoinAuctionBloc>(() => _i847.JoinAuctionBloc());
     gh.factory<_i72.DashboardBloc>(() => _i72.DashboardBloc());
@@ -187,6 +200,18 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i189.AuctionListBloc>(
         () => _i189.AuctionListBloc(gh<_i297.GetAuctionListUseCase>()));
+    gh.lazySingleton<_i5001.PromoRemoteDataSource>(
+        () => promoModule.promoRemoteDataSource(gh<_i667.DioClient>()));
+    gh.lazySingleton<_i5004.PromoRepository>(
+        () => _i5002.PromoRepositoryImpl(gh<_i5001.PromoRemoteDataSource>()));
+    gh.factory<_i5005.GetPromosUseCase>(
+        () => _i5005.GetPromosUseCase(gh<_i5004.PromoRepository>()));
+    gh.factory<_i5005.GetPromoDetailUseCase>(
+        () => _i5005.GetPromoDetailUseCase(gh<_i5004.PromoRepository>()));
+    gh.factory<_i5007.PromoListBloc>(
+        () => _i5007.PromoListBloc(gh<_i5005.GetPromosUseCase>()));
+    gh.factory<_i5006.PromoDetailBloc>(
+        () => _i5006.PromoDetailBloc(gh<_i5005.GetPromoDetailUseCase>()));
     gh.lazySingleton<_i161.AuthRemoteDataSource>(
         () => authModule.authRemoteDataSource(gh<_i667.DioClient>()));
     gh.lazySingleton<_i787.AuthRepository>(() => _i153.AuthRepositoryImpl(
@@ -246,3 +271,5 @@ class _$MockModule extends _i53.MockModule {}
 class _$AppModule extends _i460.AppModule {}
 
 class _$AuthModule extends _i433.AuthModule {}
+
+class _$PromoModule extends _i5003.PromoModule {}

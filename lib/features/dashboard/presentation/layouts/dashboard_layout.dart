@@ -5,8 +5,8 @@ import 'package:emas/core/constants/app_spacings.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/auction_schedule_card.dart';
 import 'package:emas/shared/theme/app_colors.dart';
 import 'package:emas/shared/widgets/display/app_display.dart';
-import 'package:emas/features/dashboard/presentation/sections/home/banner_carousel.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/category_section.dart';
+import 'package:emas/features/promo/presentation/widgets/promo_carousel.dart';
 import 'package:emas/features/dashboard/presentation/sections/home/dashboard_header.dart';
 import 'package:emas/shared/widgets/typography/app_text.dart';
 import 'package:flutter/material.dart';
@@ -15,16 +15,10 @@ import 'package:go_router/go_router.dart';
 import 'package:emas/features/dashboard/presentation/dummy/home_dummy_data.dart';
 
 class DashboardLayout extends StatelessWidget {
-  final PageController bannerCtrl;
-  final int bannerPage;
-  final ValueChanged<int> onBannerChanged;
   final Future<void> Function() onRefresh;
 
   const DashboardLayout({
     super.key,
-    required this.bannerCtrl,
-    required this.bannerPage,
-    required this.onBannerChanged,
     required this.onRefresh,
   });
 
@@ -40,12 +34,9 @@ class DashboardLayout extends StatelessWidget {
           const SliverToBoxAdapter(
             child: DashboardHeader(),
           ),
-          SliverToBoxAdapter(
-            child: BannerCarousel(
-              ctrl: bannerCtrl,
-              currentPage: bannerPage,
-              onPageChanged: onBannerChanged,
-            ),
+          // Promo dari API (mock) — tap gambar → detail promo.
+          const SliverToBoxAdapter(
+            child: PromoCarousel(),
           ),
           const SliverToBoxAdapter(
             child: Padding(

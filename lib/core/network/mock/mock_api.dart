@@ -90,15 +90,27 @@ class MockRequest {
   String? header(String name) => options.headers[name]?.toString();
 }
 
-/// Satu endpoint palsu: method + path (boleh berisi `:param`) → resolver.
+/// Satu endpoint palsu: method + path → resolver.
+///
+/// Path param boleh ditulis `{id}` (format Retrofit, jadi konstanta endpoint
+/// yang sama bisa dipakai) atau `:id`.
 class MockRoute {
   final String method;
   final String path;
   final MockResolver resolve;
 
   late final RegExp _pattern = RegExp(
-    '^${path.split('/').map((s) => s.startsWith(':') ? '(?<${s.substring(1)}>[^/]+)' : RegExp.escape(s)).join('/')}\$',
+    '^${path.split('/').map(_segmentPattern).join('/')}\$',
   );
+
+  static String _segmentPattern(String segment) {
+    final name = segment.startsWith(':')
+        ? segment.substring(1)
+        : segment.startsWith('{') && segment.endsWith('}')
+            ? segment.substring(1, segment.length - 1)
+            : null;
+    return name == null ? RegExp.escape(segment) : '(?<$name>[^/]+)';
+  }
 
   MockRoute(this.method, this.path, this.resolve);
 

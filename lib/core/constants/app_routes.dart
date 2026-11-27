@@ -44,4 +44,8 @@ class AppRoutes {
   static const String paymentGuide = '/payment-guide';
 
   static const String buyNpl = '/buy-npl';
+
+  /// Detail promo. Pakai [promoDetailPath] untuk navigasi.
+  static const String promoDetail = '/promo/:id';
+  static String promoDetailPath(String id) => '/promo/$id';
 }

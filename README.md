@@ -395,7 +395,7 @@ Respons sukses backend berbentuk `{ "reff_no": "...", "response": { ... } }`;
 `ApiEnvelopeInterceptor` membuka amplop ini sehingga model cukup memetakan isi
 `response`. Mock otomatis memakai format yang sama.
 
-Kontrak & skenario uji: [`docs/api/auth.md`](docs/api/auth.md)
+Kontrak & skenario uji: [`docs/api/auth.md`](docs/api/auth.md), [`docs/api/promo.md`](docs/api/promo.md)
 (mis. OTP `123456` = benar, email `terdaftar@emas.id` = sudah terdaftar).
 
 ---

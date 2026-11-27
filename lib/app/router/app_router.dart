@@ -15,6 +15,7 @@ import 'package:emas/features/live_auction/presentation/routes/live_auction_rout
 import 'package:emas/features/npl/presentation/routes/npl_routes.dart';
 import 'package:emas/features/payment/presentation/routes/payment_routes.dart';
 import 'package:emas/features/profile/presentation/routes/profile_routes.dart';
+import 'package:emas/features/promo/presentation/routes/promo_routes.dart';
 import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 
 /// Router aplikasi. Setiap fitur mendefinisikan route-nya sendiri di
@@ -42,6 +43,7 @@ class AppRouter {
         ...nplRoutes,
         ...paymentRoutes,
         ...profileRoutes,
+        ...promoRoutes,
 
         // TODO: ganti placeholder dengan halaman sungguhan.
         GoRoute(

@@ -13,13 +13,6 @@ class DashboardTabChanged extends DashboardEvent {
   List<Object?> get props => [index];
 }
 
-class DashboardBannerChanged extends DashboardEvent {
-  final int index;
-  const DashboardBannerChanged(this.index);
-  @override
-  List<Object?> get props => [index];
-}
-
 class DashboardRefreshRequested extends DashboardEvent {
   const DashboardRefreshRequested();
 }
