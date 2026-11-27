@@ -10,9 +10,6 @@ class RegisterRequestModel {
   final String passwordConfirmation;
   final bool termsAccepted;
 
-  /// ID instalasi aplikasi (lihat `DeviceIdService`).
-  final String deviceId;
-
   const RegisterRequestModel({
     required this.name,
     required this.phone,
@@ -20,7 +17,6 @@ class RegisterRequestModel {
     required this.password,
     required this.passwordConfirmation,
     required this.termsAccepted,
-    required this.deviceId,
   });
 
   Map<String, dynamic> toJson() => {
@@ -30,6 +26,5 @@ class RegisterRequestModel {
         'password': password,
         'password_confirmation': passwordConfirmation,
         'terms_accepted': termsAccepted,
-        'device_id': deviceId,
       };
 }

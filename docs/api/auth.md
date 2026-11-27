@@ -66,10 +66,9 @@ Request
 
 `phone` dinormalisasi aplikasi ke format `08…`.
 
-`device_id` = **ID instalasi** aplikasi: UUID v4 yang dibuat sekali saat
-pertama dibutuhkan lalu disimpan di Hive (`settings_box`). Sama untuk login &
-register di perangkat yang sama, tetap setelah logout, dan berubah bila
-aplikasi di-uninstall. Lihat `lib/core/services/device_id_service.dart`.
+`device_id` (hanya di login) = **ID instalasi** aplikasi: UUID v4 yang dibuat
+sekali saat pertama dibutuhkan lalu disimpan di Hive (`settings_box`). Tetap
+sama setelah logout, dan berubah bila aplikasi di-uninstall. Lihat `lib/core/services/device_id_service.dart`.
 
 Respons `200` — sesi login (sama dengan respons `/auth/otp/verify`):
 
@@ -124,8 +123,7 @@ Request — seluruh isi form:
   "email": "dinar@gmail.com",
   "password": "rahasia123",
   "password_confirmation": "rahasia123",
-  "terms_accepted": true,
-  "device_id": "3f2b8c1e-9a4d-4f6b-8e21-7c5d0a9b1e44"
+  "terms_accepted": true
 }
 ```
 

@@ -134,7 +134,6 @@ class AuthMockApi {
     final password = body['password'] as String? ?? '';
     final confirmation = body['password_confirmation'] as String? ?? '';
     final termsAccepted = body['terms_accepted'] == true;
-    final deviceId = (body['device_id'] as String? ?? '').trim();
 
     final emailTaken = email == takenEmail || _users.values.any((u) => u.email == email);
     final phoneTaken = phone == takenPhone || _users.containsKey(phone);
@@ -152,7 +151,6 @@ class AuthMockApi {
       if (password.length < 8) 'password': ['Password minimal 8 karakter'],
       if (confirmation != password) 'password_confirmation': ['Konfirmasi password tidak sama'],
       if (!termsAccepted) 'terms_accepted': ['Syarat & Ketentuan wajib disetujui'],
-      if (deviceId.isEmpty) 'device_id': ['Device ID wajib dikirim'],
     };
 
     if (errors.isNotEmpty) {
@@ -170,7 +168,7 @@ class AuthMockApi {
       email: email,
       password: password,
       createdAt: now,
-    )..lastDeviceId = deviceId;
+    );
     _users[phone] = user;
 
     return MockResponse.ok(user.toJson());
@@ -305,7 +303,7 @@ class _MockUser {
   final DateTime createdAt;
   bool isVerified = false;
 
-  /// Device terakhir yang dipakai register/login (hanya disimpan di mock).
+  /// Device terakhir yang dipakai login (hanya disimpan di mock).
   String? lastDeviceId;
 
   _MockUser({

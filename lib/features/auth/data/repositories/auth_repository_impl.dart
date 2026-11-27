@@ -69,7 +69,6 @@ class AuthRepositoryImpl implements AuthRepository {
           password: password,
           passwordConfirmation: passwordConfirmation,
           termsAccepted: termsAccepted,
-          deviceId: await _deviceIdService.getDeviceId(),
         ),
       );
       return model.toEntity();
