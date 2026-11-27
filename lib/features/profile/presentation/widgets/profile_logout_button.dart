@@ -7,6 +7,7 @@ import 'package:emas/core/di/injection.dart';
 import 'package:emas/features/profile/presentation/bloc/logout/logout_cubit.dart';
 import 'package:emas/shared/widgets/buttons/app_button.dart';
 import 'package:emas/shared/widgets/dialogs/app_dialog.dart';
+import 'package:emas/shared/widgets/loading/app_loading.dart';
 
 /// Tombol "Keluar" dengan dialog konfirmasi. Menyediakan [LogoutCubit]
 /// sendiri sehingga bisa diletakkan di mana saja.
@@ -22,25 +23,45 @@ class ProfileLogoutButton extends StatelessWidget {
   }
 }
 
-class _LogoutButtonView extends StatelessWidget {
+class _LogoutButtonView extends StatefulWidget {
   const _LogoutButtonView();
 
   @override
+  State<_LogoutButtonView> createState() => _LogoutButtonViewState();
+}
+
+class _LogoutButtonViewState extends State<_LogoutButtonView> {
+  /// Overlay loading layar penuh — sama seperti saat login. Lewat
+  /// OverlayPortal karena tombol ini berada di dalam list tab Profil.
+  final _loadingOverlay = OverlayPortalController();
+
+  @override
   Widget build(BuildContext context) {
-    return BlocConsumer<LogoutCubit, LogoutStatus>(
-      listenWhen: (prev, curr) => curr == LogoutStatus.success,
-      // go (bukan push) → seluruh stack dibersihkan, tombol back tidak bisa
-      // kembali ke halaman yang butuh login.
-      listener: (context, _) => context.go(AppRoutes.login),
-      builder: (context, status) {
-        return AppButton(
-          label: 'Keluar',
-          variant: AppButtonVariant.danger,
-          size: AppButtonSize.large,
-          isLoading: status == LogoutStatus.inProgress,
-          onPressed: () async => _confirmLogout(context),
-        );
-      },
+    return OverlayPortal(
+      controller: _loadingOverlay,
+      overlayChildBuilder: (_) => const Stack(children: [AppLoading()]),
+      child: BlocConsumer<LogoutCubit, LogoutStatus>(
+        listener: (context, status) {
+          switch (status) {
+            case LogoutStatus.inProgress:
+              _loadingOverlay.show();
+            case LogoutStatus.success:
+              _loadingOverlay.hide();
+              // go (bukan push) → seluruh stack dibersihkan, tombol back tidak
+              // bisa kembali ke halaman yang butuh login.
+              context.go(AppRoutes.login);
+            case LogoutStatus.idle:
+              _loadingOverlay.hide();
+          }
+        },
+        builder: (context, status) {
+          return AppButton(
+            label: 'Keluar',
+            size: AppButtonSize.large,
+            onPressed: status == LogoutStatus.inProgress ? null : () async => _confirmLogout(context),
+          );
+        },
+      ),
     );
   }
 
