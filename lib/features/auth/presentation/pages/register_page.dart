@@ -46,6 +46,10 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
 
   bool _agreedToTerms = false;
 
+  /// Tampilkan error S&K di bawah checkbox (seperti error text field) setelah
+  /// user menekan Daftar tanpa mencentang.
+  bool _showTermsError = false;
+
   @override
   void dispose() {
     _nameController.dispose();
@@ -57,16 +61,11 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
   }
 
   void _onSubmit() {
-    // Tombol selalu aktif; validasi form & S&K dijalankan saat ditekan.
-    if (!validateForm()) return;
-
-    if (!_agreedToTerms) {
-      AppSnackbar.error(
-        context,
-        'Anda harus menyetujui Syarat & Ketentuan untuk melanjutkan',
-      );
-      return;
-    }
+    // Tombol selalu aktif; form & S&K divalidasi bersamaan saat ditekan
+    // sehingga semua error langsung terlihat sekaligus.
+    final isFormValid = validateForm();
+    setState(() => _showTermsError = !_agreedToTerms);
+    if (!isFormValid || !_agreedToTerms) return;
 
     context.read<RegisterBloc>().add(
           RegisterSubmitted(
@@ -240,18 +239,18 @@ class _RegisterPageContentState extends State<_RegisterPageContent> with AppForm
                           _TermsCheckbox(
                             value: _agreedToTerms,
                             onChanged: (v) {
-                              setState(() => _agreedToTerms = v ?? false);
+                              setState(() {
+                                _agreedToTerms = v ?? false;
+                                if (_agreedToTerms) _showTermsError = false;
+                              });
                               _clearServerError('terms_accepted');
                             },
                           ),
-                          if (fieldErrors['terms_accepted'] case final termsError?) ...[
-                            const AppSpacer.sm(),
-                            AppText(
-                              termsError,
-                              variant: AppTextVariant.bodySmall,
-                              color: Theme.of(context).colorScheme.error,
-                            ),
-                          ],
+                          _FieldErrorText(
+                            _showTermsError
+                                ? 'Anda harus menyetujui Syarat & Ketentuan untuk melanjutkan'
+                                : fieldErrors['terms_accepted'],
+                          ),
                           const AppSpacer.xl(),
                           AppButton(
                             label: 'Daftar',
@@ -351,6 +350,29 @@ class _TermsCheckbox extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+/// Teks error di bawah input non-TextField (mis. checkbox) dengan gaya yang
+/// sama seperti `errorText` pada `AppTextField`.
+class _FieldErrorText extends StatelessWidget {
+  final String? message;
+
+  const _FieldErrorText(this.message);
+
+  @override
+  Widget build(BuildContext context) {
+    final text = message;
+    if (text == null || text.isEmpty) return const SizedBox.shrink();
+
+    final theme = Theme.of(context);
+    final base = theme.inputDecorationTheme.errorStyle ?? theme.textTheme.bodySmall;
+    final style = base?.copyWith(color: base.color ?? theme.colorScheme.error);
+
+    return Padding(
+      padding: const EdgeInsets.only(top: AppSpacings.xs),
+      child: Text(text, style: style),
     );
   }
 }
