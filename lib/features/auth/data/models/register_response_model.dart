@@ -1,6 +1,7 @@
 import 'package:emas/features/auth/domain/entities/registered_user.dart';
 
-/// Respons `200` dari `POST AuthEndpoints.register`.
+/// Isi `response` dari `POST AuthEndpoints.register` (amplop `{reff_no, response}`
+/// sudah dibuka `ApiEnvelopeInterceptor`).
 ///
 /// ```json
 /// {

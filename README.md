@@ -391,6 +391,10 @@ features/<fitur>/data/mock/<fitur>_mock_api.dart          # backend palsu per fi
 app/di/mock_module.dart                         # mendaftarkan semua mock
 ```
 
+Respons sukses backend berbentuk `{ "reff_no": "...", "response": { ... } }`;
+`ApiEnvelopeInterceptor` membuka amplop ini sehingga model cukup memetakan isi
+`response`. Mock otomatis memakai format yang sama.
+
 Kontrak & skenario uji: [`docs/api/auth.md`](docs/api/auth.md)
 (mis. OTP `123456` = benar, email `terdaftar@emas.id` = sudah terdaftar).
 

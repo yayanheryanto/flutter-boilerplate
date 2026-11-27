@@ -5,11 +5,27 @@ Kontrak ini dipakai bersama oleh aplikasi (`AuthRemoteDataSource`) dan mock
 `lib/features/auth/data/datasources/auth_endpoints.dart`; base URL di
 `lib/core/config/app_config.dart`.
 
-Semua body & respons memakai JSON `snake_case`. Error memakai bentuk standar
-yang dibaca `ErrorMapper`:
+Semua body & respons memakai JSON `snake_case`.
+
+**Respons sukses (200)** dibungkus amplop berisi `reff_no` (ID pelacakan,
+UUID) dan `response` (data):
 
 ```json
 {
+  "reff_no": "79465b44-3f8e-4b9c-b43b-1626cea61ee6",
+  "response": { "user_id": "usr_1717000000000", "name": "Testing", "email": "test@gmail.com" }
+}
+```
+
+`ApiEnvelopeInterceptor` membuka amplop ini di satu tempat, jadi model &
+datasource hanya memetakan isi `response`. `reff_no` disimpan di
+`Response.extra['reff_no']` dan dicatat di log.
+
+**Respons error** memakai bentuk standar yang dibaca `ErrorMapper`, plus `reff_no`:
+
+```json
+{
+  "reff_no": "79465b44-3f8e-4b9c-b43b-1626cea61ee6",
   "message": "Data pendaftaran tidak valid",
   "errors": { "email": ["Email sudah terdaftar"] }
 }
@@ -50,13 +66,16 @@ Respons `200` — sesi login (sama dengan respons `/auth/otp/verify`):
 
 ```json
 {
-  "user_id": "usr_demo",
-  "email": "demo@emas.id",
-  "display_name": "Pengguna Demo",
-  "photo_url": null,
-  "access_token": "…",
-  "refresh_token": "…",
-  "token_expiry": "2026-11-27T14:00:00.000"
+  "reff_no": "79465b44-3f8e-4b9c-b43b-1626cea61ee6",
+  "response": {
+    "user_id": "usr_demo",
+    "email": "demo@emas.id",
+    "display_name": "Pengguna Demo",
+    "photo_url": null,
+    "access_token": "…",
+    "refresh_token": "…",
+    "token_expiry": "2026-11-27T14:00:00.000"
+  }
 }
 ```
 
@@ -107,12 +126,15 @@ Respons `200`
 
 ```json
 {
-  "user_id": "usr_1717000000000",
-  "name": "Dinar Daniswara",
-  "phone": "081234567889",
-  "email": "dinar@gmail.com",
-  "status": "pending_verification",
-  "created_at": "2026-11-26T14:00:00.000"
+  "reff_no": "79465b44-3f8e-4b9c-b43b-1626cea61ee6",
+  "response": {
+    "user_id": "usr_1717000000000",
+    "name": "Dinar Daniswara",
+    "phone": "081234567889",
+    "email": "dinar@gmail.com",
+    "status": "pending_verification",
+    "created_at": "2026-11-26T14:00:00.000"
+  }
 }
 ```
 
@@ -136,10 +158,13 @@ Respons `200`
 
 ```json
 {
-  "verification_id": "otp_1717000000000",
-  "destination": "08******7889",
-  "expires_in": 300,
-  "resend_in": 60
+  "reff_no": "79465b44-3f8e-4b9c-b43b-1626cea61ee6",
+  "response": {
+    "verification_id": "otp_1717000000000",
+    "destination": "08******7889",
+    "expires_in": 300,
+    "resend_in": 60
+  }
 }
 ```
 
@@ -161,13 +186,16 @@ Respons `200` — sesi login (sama dengan respons login):
 
 ```json
 {
-  "user_id": "usr_1717000000000",
-  "email": "dinar@gmail.com",
-  "display_name": "Dinar Daniswara",
-  "photo_url": null,
-  "access_token": "…",
-  "refresh_token": "…",
-  "token_expiry": "2026-11-27T14:00:00.000"
+  "reff_no": "79465b44-3f8e-4b9c-b43b-1626cea61ee6",
+  "response": {
+    "user_id": "usr_1717000000000",
+    "email": "dinar@gmail.com",
+    "display_name": "Dinar Daniswara",
+    "photo_url": null,
+    "access_token": "…",
+    "refresh_token": "…",
+    "token_expiry": "2026-11-27T14:00:00.000"
+  }
 }
 ```
 
@@ -201,7 +229,12 @@ Tanpa body; token dikirim lewat header `Authorization: Bearer …`.
 Respons `200`
 
 ```json
-{ "message": "Berhasil keluar" }
+{
+  "reff_no": "79465b44-3f8e-4b9c-b43b-1626cea61ee6",
+  "response": {
+    "message": "Berhasil keluar"
+  }
+}
 ```
 
 Sesi lokal (token & data user di Hive) **selalu** dihapus aplikasi, apa pun

@@ -1,8 +1,14 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:dio/dio.dart';
 
 /// Respons palsu yang dikembalikan sebuah [MockRoute].
+///
+/// [data] cukup berisi **isi** respons. `MockInterceptor` membungkusnya ke
+/// format backend:
+/// - 2xx → `{ "reff_no": "<uuid>", "response": <data> }`
+/// - error → `<data>` + `"reff_no"` (`{ "reff_no", "message", "code", "errors" }`)
 ///
 /// Status 2xx diteruskan sebagai respons sukses; selain itu diubah menjadi
 /// `DioException.badResponse` sehingga alurnya sama persis dengan error
@@ -41,6 +47,25 @@ class MockResponse {
         );
 
   bool get isSuccess => statusCode >= 200 && statusCode < 300;
+
+  /// Body akhir yang dikirim ke aplikasi, sesuai format backend.
+  Object? envelope(String reffNo) {
+    if (isSuccess) return <String, dynamic>{'reff_no': reffNo, 'response': data};
+    final body = data;
+    if (body is Map<String, dynamic>) return <String, dynamic>{'reff_no': reffNo, ...body};
+    return body;
+  }
+}
+
+/// `reff_no` palsu berformat UUID v4, mis. `79465b44-3f8e-4b9c-b43b-1626cea61ee6`.
+String generateMockReffNo() {
+  final random = Random();
+  final bytes = List<int>.generate(16, (_) => random.nextInt(256));
+  bytes[6] = (bytes[6] & 0x0f) | 0x40; // versi 4
+  bytes[8] = (bytes[8] & 0x3f) | 0x80; // varian RFC 4122
+  final hex = bytes.map((b) => b.toRadixString(16).padLeft(2, '0')).join();
+  return '${hex.substring(0, 8)}-${hex.substring(8, 12)}-${hex.substring(12, 16)}-'
+      '${hex.substring(16, 20)}-${hex.substring(20)}';
 }
 
 typedef MockResolver = FutureOr<MockResponse> Function(MockRequest request);

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
+import 'package:emas/core/network/interceptors/api_envelope_interceptor.dart';
 import 'package:emas/core/network/interceptors/logging_interceptor.dart';
 import 'package:emas/core/network/interceptors/mock_interceptor.dart';
 import 'package:emas/core/services/token_service.dart';
@@ -28,11 +29,13 @@ class AuthInterceptor extends QueuedInterceptor {
 
   /// Dipanggil oleh `DioClient` setelah Dio utama dibuat.
   void attach(Dio dio) {
-    // Hanya logging & mock yang ikut; Dio baru sudah memasang interceptor
-    // bawaannya sendiri, dan Auth/Retry sengaja tidak disertakan.
+    // Hanya logging, envelope & mock yang ikut; Dio baru sudah memasang
+    // interceptor bawaannya sendiri, dan Auth/Retry sengaja tidak disertakan.
     _retryDio = Dio(dio.options)
       ..interceptors.addAll(
-        dio.interceptors.where((i) => i is LoggingInterceptor || i is MockInterceptor),
+        dio.interceptors.where(
+          (i) => i is LoggingInterceptor || i is ApiEnvelopeInterceptor || i is MockInterceptor,
+        ),
       );
   }
 
@@ -110,11 +113,17 @@ class AuthInterceptor extends QueuedInterceptor {
       data: {'refresh_token': refreshToken},
     );
 
-    final newToken = response.data?['access_token'] as String?;
+    // Dio refresh tanpa interceptor → buka amplop `{reff_no, response}` di sini.
+    final body = response.data;
+    final data = body?[ApiEnvelopeInterceptor.dataKey] is Map<String, dynamic>
+        ? body![ApiEnvelopeInterceptor.dataKey] as Map<String, dynamic>
+        : body;
+
+    final newToken = data?['access_token'] as String?;
     if (newToken == null || newToken.isEmpty) return null;
 
     await _tokenService.saveToken(newToken);
-    final newRefreshToken = response.data?['refresh_token'] as String?;
+    final newRefreshToken = data?['refresh_token'] as String?;
     if (newRefreshToken != null && newRefreshToken.isNotEmpty) {
       await _tokenService.saveRefreshToken(newRefreshToken);
     }

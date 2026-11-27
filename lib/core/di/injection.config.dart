@@ -77,6 +77,7 @@ import '../bloc/notification_bloc.dart' as _i1015;
 import '../firebase/firebase_services.dart' as _i454;
 import '../firebase/notification_service.dart' as _i650;
 import '../network/dio_client.dart' as _i667;
+import '../network/interceptors/api_envelope_interceptor.dart' as _i4003;
 import '../network/interceptors/auth_interceptor.dart' as _i745;
 import '../network/interceptors/logging_interceptor.dart' as _i344;
 import '../network/interceptors/mock_interceptor.dart' as _i392;
@@ -114,6 +115,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i180.AppRouter>(() => _i180.AppRouter());
     gh.singleton<_i344.LoggingInterceptor>(() => _i344.LoggingInterceptor());
     gh.singleton<_i914.RetryInterceptor>(() => _i914.RetryInterceptor());
+    gh.singleton<_i4003.ApiEnvelopeInterceptor>(
+        () => _i4003.ApiEnvelopeInterceptor());
     gh.singleton<_i1005.MockRegistry>(() => mockModule.mockRegistry);
     gh.lazySingleton<_i183.ImagePicker>(() => appModule.imagePicker);
     gh.lazySingleton<_i895.Connectivity>(() => appModule.connectivity);
@@ -180,6 +183,7 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i344.LoggingInterceptor>(),
           gh<_i914.RetryInterceptor>(),
           gh<_i392.MockInterceptor>(),
+          gh<_i4003.ApiEnvelopeInterceptor>(),
         ));
     gh.factory<_i189.AuctionListBloc>(
         () => _i189.AuctionListBloc(gh<_i297.GetAuctionListUseCase>()));

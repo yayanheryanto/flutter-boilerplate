@@ -3,6 +3,7 @@ import 'package:injectable/injectable.dart';
 
 import 'package:emas/core/config/app_config.dart';
 import 'package:emas/core/constants/constants.dart';
+import 'package:emas/core/network/interceptors/api_envelope_interceptor.dart';
 import 'package:emas/core/network/interceptors/auth_interceptor.dart';
 import 'package:emas/core/network/interceptors/logging_interceptor.dart';
 import 'package:emas/core/network/interceptors/mock_interceptor.dart';
@@ -17,6 +18,7 @@ class DioClient {
     LoggingInterceptor loggingInterceptor,
     RetryInterceptor retryInterceptor,
     MockInterceptor mockInterceptor,
+    ApiEnvelopeInterceptor envelopeInterceptor,
   ) {
     _dio = Dio(
       BaseOptions(
@@ -41,6 +43,8 @@ class DioClient {
       authInterceptor,
       retryInterceptor,
       loggingInterceptor,
+      // Setelah logging (log tetap menampilkan body mentah), sebelum mock.
+      envelopeInterceptor,
       // Harus paling akhir: lihat dokumentasi MockInterceptor.
       mockInterceptor,
     ]);

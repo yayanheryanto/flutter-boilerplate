@@ -42,7 +42,7 @@ class MockInterceptor extends Interceptor {
       final response = Response<dynamic>(
         requestOptions: options,
         statusCode: mock.statusCode,
-        data: mock.data,
+        data: mock.envelope(generateMockReffNo()),
       );
 
       if (mock.isSuccess) {
