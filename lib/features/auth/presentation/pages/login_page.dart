@@ -22,7 +22,8 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => getIt<LoginBloc>()..add(const LoginStarted()),
+      // Sesi tersimpan dicek oleh redirect AppRouter sebelum halaman ini dibuat.
+      create: (_) => getIt<LoginBloc>(),
       child: const _LoginPageContent(),
     );
   }
@@ -88,12 +89,12 @@ class _LoginPageContentState extends State<_LoginPageContent> with AppFormMixin<
               await _onNeedsVerification(needsVerification);
             case LoginFailure(:final message):
               AppSnackbar.error(context, message);
-            case LoginInitial() || LoginCheckingSession() || LoginInProgress():
+            case LoginInitial() || LoginInProgress():
               break;
           }
         },
         builder: (context, state) {
-          final isLoading = state is LoginInProgress || state is LoginCheckingSession;
+          final isLoading = state is LoginInProgress;
           final fieldErrors = state.fieldErrors;
 
           return Stack(

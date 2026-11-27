@@ -7,44 +7,29 @@ import 'package:injectable/injectable.dart';
 import 'package:emas/core/errors/app_failure.dart';
 import 'package:emas/core/firebase/firebase_services.dart';
 import 'package:emas/features/auth/domain/entities/auth_entity.dart';
-import 'package:emas/features/auth/domain/usecases/auth/get_cached_usecase.dart';
 import 'package:emas/features/auth/domain/usecases/auth/login_usecase.dart';
 import 'package:emas/features/auth/domain/usecases/auth/register_usecase.dart';
 
 part 'login_event.dart';
 part 'login_state.dart';
 
-/// Halaman login: cek sesi tersimpan (auto-login) dan submit form login.
+/// Submit form login.
+///
+/// Auto-login (sesi tersimpan) ditangani `redirect` di `AppRouter`, sehingga
+/// halaman login tidak pernah dibangun bila user sudah login.
 @injectable
 class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final LoginUseCase _loginUseCase;
-  final GetCachedAuthUseCase _getCachedAuth;
   final AnalyticsService _analytics;
   final CrashlyticsService _crashlytics;
 
   LoginBloc(
     this._loginUseCase,
-    this._getCachedAuth,
     this._analytics,
     this._crashlytics,
   ) : super(const LoginInitial()) {
-    on<LoginStarted>(_onStarted);
     on<LoginSubmitted>(_onSubmitted);
     on<LoginFieldEdited>(_onFieldEdited);
-  }
-
-  /// Sesi masih valid → langsung masuk tanpa isi form.
-  Future<void> _onStarted(LoginStarted event, Emitter<LoginState> emit) async {
-    emit(const LoginCheckingSession());
-
-    final result = await _getCachedAuth();
-    final auth = result.getOrElse((_) => null);
-
-    if (auth != null && !auth.isTokenExpired) {
-      emit(LoginSuccess(auth, restored: true));
-    } else {
-      emit(const LoginInitial());
-    }
   }
 
   Future<void> _onSubmitted(LoginSubmitted event, Emitter<LoginState> emit) async {

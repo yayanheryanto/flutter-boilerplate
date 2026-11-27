@@ -7,11 +7,6 @@ sealed class LoginEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-/// Halaman login dibuka — cek sesi tersimpan.
-final class LoginStarted extends LoginEvent {
-  const LoginStarted();
-}
-
 final class LoginSubmitted extends LoginEvent {
   final String phone;
   final String password;

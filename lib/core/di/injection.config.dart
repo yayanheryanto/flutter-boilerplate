@@ -126,7 +126,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i544.BuyNplConfirmationBloc>(
         () => _i544.BuyNplConfirmationBloc());
     gh.factory<_i520.BuyNplDetailBloc>(() => _i520.BuyNplDetailBloc());
-    gh.singleton<_i180.AppRouter>(() => _i180.AppRouter());
     gh.singleton<_i344.LoggingInterceptor>(() => _i344.LoggingInterceptor());
     gh.singleton<_i914.RetryInterceptor>(() => _i914.RetryInterceptor());
     gh.singleton<_i4003.ApiEnvelopeInterceptor>(
@@ -227,6 +226,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i911.ForgotPasswordUseCase(gh<_i787.AuthRepository>()));
     gh.factory<_i25.GetCachedAuthUseCase>(
         () => _i25.GetCachedAuthUseCase(gh<_i787.AuthRepository>()));
+    gh.singleton<_i180.AppRouter>(
+        () => _i180.AppRouter(gh<_i25.GetCachedAuthUseCase>()));
     gh.factory<_i985.LoginUseCase>(
         () => _i985.LoginUseCase(gh<_i787.AuthRepository>()));
     gh.factory<_i726.LogoutUseCase>(
@@ -248,7 +249,6 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i4002.LoginBloc>(() => _i4002.LoginBloc(
           gh<_i985.LoginUseCase>(),
-          gh<_i25.GetCachedAuthUseCase>(),
           gh<_i454.AnalyticsService>(),
           gh<_i454.CrashlyticsService>(),
         ));

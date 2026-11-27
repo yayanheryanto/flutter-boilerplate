@@ -7,6 +7,7 @@ import 'package:injectable/injectable.dart';
 import 'package:emas/core/constants/app_routes.dart';
 import 'package:emas/core/utils/navigator_key.dart';
 import 'package:emas/features/auction/presentation/routes/auction_routes.dart';
+import 'package:emas/features/auth/domain/usecases/auth/get_cached_usecase.dart';
 import 'package:emas/features/auth/presentation/routes/auth_routes.dart';
 import 'package:emas/features/dashboard/presentation/routes/dashboard_routes.dart';
 import 'package:emas/features/kyc/domain/entities/account_type.dart';
@@ -25,9 +26,11 @@ import 'package:emas/shared/layouts/app_scaffold_wrapper.dart';
 /// daftar `routes` di bawah — tidak perlu menyentuh fitur lain.
 @singleton
 class AppRouter {
+  final GetCachedAuthUseCase _getCachedAuth;
+
   late final GoRouter router;
 
-  AppRouter() {
+  AppRouter(this._getCachedAuth) {
     router = GoRouter(
       // Shares the same navigatorKey used by AppToast, AppPopover, etc.
       navigatorKey: AppNavigator.navigatorKey,
@@ -60,16 +63,25 @@ class AppRouter {
 
       errorBuilder: (context, state) => _ErrorPage(error: state.error),
 
-      redirect: (context, state) {
-        // TODO: implement auth guard using AuthBloc/TokenService
-        // Example:
-        //   final isLoggedIn = getIt<TokenService>().hasToken();
-        //   if (!isLoggedIn && state.matchedLocation != AppRoutes.login) {
-        //     return AppRoutes.login;
-        //   }
+      redirect: (context, state) async {
+        // Sudah login → jangan tampilkan halaman login. Dicek di sini (bukan di
+        // halaman login) supaya saat aplikasi dibuka router langsung membangun
+        // dashboard tanpa halaman login sempat terlihat.
+        if (state.matchedLocation == AppRoutes.login && await _hasValidSession()) {
+          return AppRoutes.dashboard;
+        }
+        // TODO: guard sebaliknya (halaman yang butuh login → /login bila belum
+        // login) setelah semua alur masuk/keluar memakai sesi sungguhan.
         return null;
       },
     );
+  }
+
+  /// Sesi tersimpan di Hive dan token belum kedaluwarsa.
+  Future<bool> _hasValidSession() async {
+    final result = await _getCachedAuth();
+    final auth = result.getOrElse((_) => null);
+    return auth != null && !auth.isTokenExpired;
   }
 }
 
@@ -103,6 +115,13 @@ class _AppExtraEncoder extends Converter<Object?, Object?> {
 
     return input;
   }
+
+  /// Sesi tersimpan di Hive dan token belum kedaluwarsa.
+  Future<bool> _hasValidSession() async {
+    final result = await _getCachedAuth();
+    final auth = result.getOrElse((_) => null);
+    return auth != null && !auth.isTokenExpired;
+  }
 }
 
 class _AppExtraDecoder extends Converter<Object?, Object?> {
@@ -124,6 +143,13 @@ class _AppExtraDecoder extends Converter<Object?, Object?> {
 
     return input;
   }
+
+  /// Sesi tersimpan di Hive dan token belum kedaluwarsa.
+  Future<bool> _hasValidSession() async {
+    final result = await _getCachedAuth();
+    final auth = result.getOrElse((_) => null);
+    return auth != null && !auth.isTokenExpired;
+  }
 }
 
 // ── Placeholder pages (replace with real pages) ───────────────────────────────
@@ -139,6 +165,13 @@ class _PlaceholderPage extends StatelessWidget {
       appBar: AppBar(title: Text(title)),
       body: Center(child: Text(title)),
     );
+  }
+
+  /// Sesi tersimpan di Hive dan token belum kedaluwarsa.
+  Future<bool> _hasValidSession() async {
+    final result = await _getCachedAuth();
+    final auth = result.getOrElse((_) => null);
+    return auth != null && !auth.isTokenExpired;
   }
 }
 

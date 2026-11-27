@@ -13,11 +13,6 @@ final class LoginInitial extends LoginState {
   const LoginInitial();
 }
 
-/// Mengecek sesi tersimpan saat halaman dibuka.
-final class LoginCheckingSession extends LoginState {
-  const LoginCheckingSession();
-}
-
 final class LoginInProgress extends LoginState {
   const LoginInProgress();
 }
@@ -25,13 +20,10 @@ final class LoginInProgress extends LoginState {
 final class LoginSuccess extends LoginState {
   final AuthEntity auth;
 
-  /// `true` bila berasal dari sesi tersimpan (bukan submit form).
-  final bool restored;
-
-  const LoginSuccess(this.auth, {this.restored = false});
+  const LoginSuccess(this.auth);
 
   @override
-  List<Object?> get props => [auth, restored];
+  List<Object?> get props => [auth];
 }
 
 /// Kredensial benar tapi nomor HP belum diverifikasi OTP (403).
