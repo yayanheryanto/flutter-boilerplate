@@ -32,7 +32,7 @@ Respons `200`
         "id": "promo-1",
         "title": "Cashback 10% Lelang Motor",
         "subtitle": "Untuk kemenangan lelang pertama kamu",
-        "image_url": "https://…/promo1.jpeg",
+        "image_url": "https://picsum.photos/seed/emas-promo-1/1200/600",
         "description": "Menangkan lelang motor pertamamu …",
         "valid_until": "2026-12-31T23:59:59.000"
       }
@@ -60,4 +60,5 @@ Respons `200` — satu objek promo (bentuk sama dengan item di atas) di dalam
 | `promo-2` | Gratis Biaya Admin Beli NPL |
 | `promo-3` | Bonus Bid Lelang Live |
 
+Gambar mock diambil dari `picsum.photos` (publik, butuh koneksi internet).
 `description` berupa teks biasa; baris baru (`\n`) ditampilkan apa adanya.
