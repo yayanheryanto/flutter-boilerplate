@@ -5,6 +5,7 @@ import 'package:injectable/injectable.dart';
 import 'package:emas/core/errors/app_exception.dart';
 import 'package:emas/core/errors/app_failure.dart';
 import 'package:emas/core/errors/error_mapper.dart';
+import 'package:emas/core/services/device_id_service.dart';
 import 'package:emas/core/services/token_service.dart';
 import 'package:emas/features/auth/data/datasources/auth_local_datasource.dart';
 import 'package:emas/features/auth/data/datasources/auth_remote_datasource.dart';
@@ -23,11 +24,13 @@ class AuthRepositoryImpl implements AuthRepository {
   final AuthRemoteDataSource _remoteDataSource;
   final AuthLocalDataSource _localDataSource;
   final TokenService _tokenService;
+  final DeviceIdService _deviceIdService;
 
   AuthRepositoryImpl(
     this._remoteDataSource,
     this._localDataSource,
     this._tokenService,
+    this._deviceIdService,
   );
 
   @override
@@ -37,7 +40,11 @@ class AuthRepositoryImpl implements AuthRepository {
   }) {
     return _guard(() async {
       final model = await _remoteDataSource.login(
-        LoginRequestModel(phone: phone, password: password),
+        LoginRequestModel(
+          phone: phone,
+          password: password,
+          deviceId: await _deviceIdService.getDeviceId(),
+        ),
       );
       await _saveAuth(model);
       return model.toEntity();
@@ -62,6 +69,7 @@ class AuthRepositoryImpl implements AuthRepository {
           password: password,
           passwordConfirmation: passwordConfirmation,
           termsAccepted: termsAccepted,
+          deviceId: await _deviceIdService.getDeviceId(),
         ),
       );
       return model.toEntity();

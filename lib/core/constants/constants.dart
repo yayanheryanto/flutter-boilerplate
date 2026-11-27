@@ -15,6 +15,7 @@ class Constants {
   static const String tokenKey = 'token';
   static const String refreshTokenKey = 'refresh_token';
   static const String userKey = 'user';
+  static const String deviceIdKey = 'device_id';
 
   // Shared Prefs keys
   static const String themeKey = 'theme_mode';

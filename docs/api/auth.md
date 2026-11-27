@@ -57,10 +57,19 @@ POST /auth/login ──200──▶ token disimpan ──▶ /dashboard
 Request
 
 ```json
-{ "phone": "081234567890", "password": "Rahasia123" }
+{
+  "phone": "081234567890",
+  "password": "Rahasia123",
+  "device_id": "3f2b8c1e-9a4d-4f6b-8e21-7c5d0a9b1e44"
+}
 ```
 
 `phone` dinormalisasi aplikasi ke format `08…`.
+
+`device_id` = **ID instalasi** aplikasi: UUID v4 yang dibuat sekali saat
+pertama dibutuhkan lalu disimpan di Hive (`settings_box`). Sama untuk login &
+register di perangkat yang sama, tetap setelah logout, dan berubah bila
+aplikasi di-uninstall. Lihat `lib/core/services/device_id_service.dart`.
 
 Respons `200` — sesi login (sama dengan respons `/auth/otp/verify`):
 
@@ -83,7 +92,7 @@ Respons `200` — sesi login (sama dengan respons `/auth/otp/verify`):
 |---|---|
 | 401 | Nomor HP atau password salah |
 | 403 | Nomor belum diverifikasi — body berisi `"code": "ACCOUNT_NOT_VERIFIED"`; aplikasi membuka halaman OTP |
-| 422 | Format input tidak valid (`errors.phone` / `errors.password`) |
+| 422 | Format input tidak valid (`errors.phone` / `errors.password` / `errors.device_id`) |
 | 429 | Terlalu banyak percobaan gagal (terkunci sementara) |
 | 500 | Server error |
 
@@ -115,7 +124,8 @@ Request — seluruh isi form:
   "email": "dinar@gmail.com",
   "password": "rahasia123",
   "password_confirmation": "rahasia123",
-  "terms_accepted": true
+  "terms_accepted": true,
+  "device_id": "3f2b8c1e-9a4d-4f6b-8e21-7c5d0a9b1e44"
 }
 ```
 

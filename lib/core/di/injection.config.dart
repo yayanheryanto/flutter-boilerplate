@@ -97,6 +97,7 @@ import '../network/interceptors/retry_interceptor.dart' as _i914;
 import '../network/mock/mock_api.dart' as _i1005;
 import '../services/camera_service.dart' as _i860;
 import '../services/connectivity_service.dart' as _i47;
+import '../services/device_id_service.dart' as _i6001;
 import '../services/file_picker_service.dart' as _i108;
 import '../services/permission_service.dart' as _i165;
 import '../services/socket/app_socket_service.dart' as _i145;
@@ -150,6 +151,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i454.RemoteConfigService>(
         () => _i454.FirebaseRemoteConfigService());
     gh.lazySingleton<_i227.TokenService>(() => _i227.HiveTokenService());
+    gh.lazySingleton<_i6001.DeviceIdService>(
+        () => _i6001.HiveDeviceIdService());
     gh.lazySingleton<_i650.NotificationService>(
         () => _i650.AppNotificationService());
     gh.factory<_i302.LiveAuctionSocketDataSource>(() =>
@@ -218,6 +221,7 @@ extension GetItInjectableX on _i174.GetIt {
           gh<_i161.AuthRemoteDataSource>(),
           gh<_i992.AuthLocalDataSource>(),
           gh<_i227.TokenService>(),
+          gh<_i6001.DeviceIdService>(),
         ));
     gh.factory<_i911.ForgotPasswordUseCase>(
         () => _i911.ForgotPasswordUseCase(gh<_i787.AuthRepository>()));
