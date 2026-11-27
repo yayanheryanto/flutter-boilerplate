@@ -115,13 +115,6 @@ class _AppExtraEncoder extends Converter<Object?, Object?> {
 
     return input;
   }
-
-  /// Sesi tersimpan di Hive dan token belum kedaluwarsa.
-  Future<bool> _hasValidSession() async {
-    final result = await _getCachedAuth();
-    final auth = result.getOrElse((_) => null);
-    return auth != null && !auth.isTokenExpired;
-  }
 }
 
 class _AppExtraDecoder extends Converter<Object?, Object?> {
@@ -143,13 +136,6 @@ class _AppExtraDecoder extends Converter<Object?, Object?> {
 
     return input;
   }
-
-  /// Sesi tersimpan di Hive dan token belum kedaluwarsa.
-  Future<bool> _hasValidSession() async {
-    final result = await _getCachedAuth();
-    final auth = result.getOrElse((_) => null);
-    return auth != null && !auth.isTokenExpired;
-  }
 }
 
 // ── Placeholder pages (replace with real pages) ───────────────────────────────
@@ -165,13 +151,6 @@ class _PlaceholderPage extends StatelessWidget {
       appBar: AppBar(title: Text(title)),
       body: Center(child: Text(title)),
     );
-  }
-
-  /// Sesi tersimpan di Hive dan token belum kedaluwarsa.
-  Future<bool> _hasValidSession() async {
-    final result = await _getCachedAuth();
-    final auth = result.getOrElse((_) => null);
-    return auth != null && !auth.isTokenExpired;
   }
 }
 
